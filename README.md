@@ -1,20 +1,20 @@
-# The Rust Programming Language
+# Мова програмування Rust
 
-[![Build Status](https://travis-ci.org/rust-lang/book.svg?branch=master)](https://travis-ci.org/rust-lang/book)
-
-To read this book online, visit [rust-lang.github.io/book/][html].
+Оригінал цієї книжки розміщений на [rust-lang.github.io/book/][html].
+Цей переклад поки що знаходиться в початковому стані, ласкаво прошу всіх 
+долучатися.
 
 [html]: http://rust-lang.github.io/book/
 
-This is the next iteration of “The Rust Programming Language” ([source][src],
-[read online][prod]).
+Це наступна ітерація книжки "Мова програмування Rust" ([сирці][src], 
+[текст онлайн][prod]).
 
 [src]: https://github.com/rust-lang/rust/tree/master/src/doc/book
 [prod]: https://doc.rust-lang.org/book/
 
-## Requirements
+## Вимоги
 
-Building the book requires [mdBook] >= v0.0.13. To get it:
+Побудова цієї книжки вимагає [mdBook] >= v0.0.13. Встановити його можна так:
 
 [mdBook]: https://github.com/azerupi/mdBook
 
@@ -22,16 +22,15 @@ Building the book requires [mdBook] >= v0.0.13. To get it:
 $ cargo install mdbook
 ```
 
-## Building
+## Збирання
 
-To build the book, type:
+Щоб зібрати книжку, наберіть:
 
 ```
 $ mdbook build
 ```
 
-The output will be in the `book` subdirectory. To check it out, open it in
-your web browser.
+Результат буде в підтеці `book`. Для перевірки, відкрийте її у веб-переглядачі.
 
 _Firefox:_
 ```
@@ -45,17 +44,20 @@ $ google-chrome book/index.html           # Linux
 $ open -a "Google Chrome" book/index.html # OS X
 ```
 
-To run the tests:
+Для виконання тестів:
 
 ```
 $ mdbook test
 ```
 
-## Contributing
+## Участь в проекті
 
-We'd love your help! Please see [CONTRIBUTING.md][contrib].
+Нам дуже важлива ваша допомога! Перегляньте [CONTRIBUTING.md][contrib] щоб 
+дізнатися, як допомогти оригінальному проекту, і [CONTRIBUTING.md][contrib-uk] 
+для допомоги цьому перекладу.
 
 [contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
+[contrib-uk]: sdfghj 
 
 ### Translations 
 
