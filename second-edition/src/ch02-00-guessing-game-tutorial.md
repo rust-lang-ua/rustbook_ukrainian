@@ -1,33 +1,32 @@
-# Guessing Game
+# Гра "відгадай число"
 
-Let’s jump into Rust by working through a hands-on project together! This
-chapter introduces you to a few common Rust concepts by showing you how to use
-them in a real program. You’ll learn about `let`, `match`, methods, associated
-functions, using external crates, and more! The following chapters will explore
-these ideas in more detail. In this chapter, you’ll practice the fundamentals.
+Розпочнемо вивчення Rust зі спільної розробки проекта! Цей розділ ознайомить вас
+із кількома поширеними концепціями Rust, показавши вам, як вони використовуються
+у реальній програмі. Ви дізнаєтеся про `let`, `match`, методи, асоційовані 
+функції, використання зовнішніх ящиків (crate), і навіть більше! Наступні 
+розділи розкриють більше деталей цих ідей. У цьому розділі, ви займатиметеся
+основами.
 
-We’ll implement a classic beginner programming problem: a guessing game. Here’s
-how it works: the program will generate a random integer between 1 and 100. It
-will then prompt the player to enter a guess. After entering a guess, it will
-indicate whether the guess is too low or too high. If the guess is correct, the
-game will print congratulations and exit.
+Ми розв'язуватимемо класичну задачу для програмістів-початківців: гру "відгадай
+число". Умови такі: програма генерує випадкове ціле число між 1 та 100. Потім
+пропонує гравцю відгадати. Ввівши спробу, вона скаже, чи число більше або менше
+за неї. Якщо відгадано правильно, гра виведе вітання і припиниться.
 
-## Setting Up a New Project
+## Початок нового проекту
 
-To set up a new project, go to the *projects* directory that you created in
-Chapter 1, and make a new project using Cargo, like so:
+Щоб розпочати новий проект, перейдіть до папки *projects*, яку ви створили у 
+Розділі 1, і створіть новий проект за допомогою Cargo, ось так:
 
 ```text
 $ cargo new guessing_game --bin
 $ cd guessing_game
 ```
 
-The first command, `cargo new`, takes the name of the project (`guessing_game`)
-as the first argument. The `--bin` flag tells Cargo to make a binary project,
-similar to the one in Chapter 1. The second command changes to the new
-project’s directory.
+Перша команда, `cargo new`, приймає першим параметром ім'я проекту 
+(`guessing_game`). Прапорець `--bin` каже Cargo зробити двійковий проект, так
+само, як і в Розділі 1. Друга команда переходить до теки нового проекту.
 
-Look at the generated *Cargo.toml* file:
+Переглянемо щойно створений файл *Cargo.toml*:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -35,16 +34,16 @@ Look at the generated *Cargo.toml* file:
 [package]
 name = "guessing_game"
 version = "0.1.0"
-authors = ["Your Name <you@example.com>"]
+authors = ["Ваше ім'я <адреса@поштовий.сайт>"]
 
 [dependencies]
 ```
 
-If the author information that Cargo obtained from your environment is not
-correct, fix that in the file and save it again.
+Якщо інформація про автора, отримана Cargo з вашого середовища, неправильна,
+виправіть це і знову збережіть файл.
 
-As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
-you. Check out the *src/main.rs* file:
+Як ви вже бачили у Розділі 1, `cargo new` створює програму "Hello, world!". 
+Подивимося, що міститься у файлі *src/main.rs*:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -54,8 +53,8 @@ fn main() {
 }
 ```
 
-Now let’s compile this “Hello, world!” program and run it in the same step
-using the `cargo run` command:
+Скомпілюймо цю програму “Hello, world!” і запустимо її за один крок за допомогою
+команди `cargo run`: 
 
 ```text
 $ cargo run
