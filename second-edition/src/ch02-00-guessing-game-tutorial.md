@@ -90,7 +90,7 @@ fn main() {
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("Не вдалося прочитати рядок.");
+        .expect("Не вдалося прочитати рядок");
 
     println!("Ваша здогадка: {}", guess);
 }
@@ -184,91 +184,92 @@ let mut bar = 5; // може змінюватися
 цьому випадку `String`, а не на конкретному екземплярі `String`. В деяких мовах
 це зветься *статичним методом*.
 
-This `new` function creates a new, empty `String`. You’ll find a `new` function
-on many types, because it’s a common name for a function that makes a new value
-of some kind.
+Ця функція `new` створює нову, пусту `String`. Функція `new` зустрінеться вам у
+багатьох типах, оскільки це звичайна назва функції, що створює нове значення
+певного виду.
 
-To summarize, the `let mut guess = String::new();` line has created a mutable
-variable that is currently bound to a new, empty instance of a `String`. Whew!
+Підсумуємо: рядок `let mut guess = String::new();` створив змінну, що може 
+змінюватися, зараз прив'язану до нового, пустого екземпляру `String`. Фух.
+variable that is currently bound to a new, empty instance of a `String`. Уф!
 
-Recall that we included the input/output functionality from the standard
-library with `use std::io;` on the first line of the program. Now we’ll call an
-associated function, `stdin`, on `io`:
+Згадаймо, що ми додали функціональність введення/виведення зі стандартної 
+бібліотеки за допогою `use std::io;` у першому рядку програми. Тепер ми 
+викличемо асоційовану функцію, `stdin`, з `io`.
 
 ```rust,ignore
 io::stdin().read_line(&mut guess)
-    .expect("Failed to read line");
+    .expect("Не вдалося прочитати рядок.");
 ```
 
-If we didn’t have the `use std::io` line at the beginning of the program, we
-could have written this function call as `std::io::stdin`. The `stdin` function
-returns an instance of [`std::io::Stdin`][iostdin]<!-- ignore -->, which is a
-type that represents a handle to the standard input for your terminal.
+Якби на початку програми не було рядка `use std::io`, ми могли б записати цей
+виклик функції як `std::io::stdin`. Функциія `stdin` повертає екземпляр
+[`std::io::Stdin`][iostdin]<!-- ignore -->; цей тип репрезентує дескриптор
+(handle) стандартного потоку введення терміналу.
 
 [iostdin]: ../std/io/struct.Stdin.html
 
-The next part of the code, `.read_line(&mut guess)`, calls the
-[`read_line`][read_line]<!-- ignore --> method on the standard input handle to
-get input from the user. We’re also passing one argument to `read_line`: `&mut
-guess`.
+Наступна частина коду, `.read_line(&mut guess)`, викликає метод
+[`read_line`][read_line]<!-- ignore --> на дескрипторі стандартного потоку 
+введення, щоб отримати, що ввів користувач. Також ми передаємо `read_line` один 
+параметр: `&mut guess`.
 
 [read_line]: ../std/io/struct.Stdin.html#method.read_line
 
-The job of `read_line` is to take whatever the user types into standard input
-and place that into a string, so it takes that string as an argument. The
-string argument needs to be mutable so the method can change the string’s
-content by adding the user input.
+`read_line` бере все, що користувач вводить у стандартний потік введення, і 
+розміщує це в стрічці, тому приймає цю стрічку аргументом. Цей аргумент мусить
+мати можливість змінюватися, щоб метод змінив вміст стрічки, додавши те, що ввів
+користувач.
 
-The `&` indicates that this argument is a *reference*, which gives you a way to
-let multiple parts of your code access one piece of data without needing to
-copy that data into memory multiple times. References are a complex feature,
-and one of Rust’s major advantages is how safe and easy it is to use
-references. You don’t need to know a lot of those details to finish this
-program: Chapter 4 will explain references more thoroughly. For now, all you
-need to know is that like variables, references are immutable by default.
-Hence, we need to write `&mut guess` rather than `&guess` to make it mutable.
+`&` позначає, що цей аргумент - *посилання* (*reference*), що дає вам можливість
+надати кільком частинам вашого коду доступ до одного фрагменту даних без 
+кількаразового копіювання цих даних. Посилання - складна тема, але одна з 
+основних переваг Rust полягає в безпеці і легкості використання посилань. Для
+завершення цієї програми вам не знадобляться особливо детальні знання про 
+посилання; в Розділі 4 будуть надані докладніші пояснення. Поки що, все, що вам
+треба знати - що посилання, як і зміні, типово не можуть бути зміненими. Тому
+необхідно писати `&mut guess`, а не просто `&guess`, щоб надати їй можливість 
+змінюватися.
 
-We’re not quite done with this line of code. Although it’s a single line of
-text, it’s only the first part of the single logical line of code. The second
-part is this method:
-
-```rust,ignore
-.expect("Failed to read line");
-```
-
-When you call a method with the `.foo()` syntax, it’s often wise to introduce a
-newline and other whitespace to help break up long lines. We could have
-written this code as:
+Ми ще не закінчили розбиратися із цим рядком коду. Хоча це один рядок тексту, це
+лише перша частина єдиного логічного рядка коду. Друга частина - це ось цей 
+метод:
 
 ```rust,ignore
-io::stdin().read_line(&mut guess).expect("Failed to read line");
+.expect("Не вдалося прочитати рядок");
 ```
 
-However, one long line is difficult to read, so it’s best to divide it, two
-lines for two method calls. Now let’s discuss what this line does.
+Коли ви викликаєте метод за допомогою синтаксичної конструкції `.foo()` часто 
+має сенс розпочати новий рядок і додати відступи, щоб розділити довгі рядки. Ми
+могли б написати цей код так:
 
-### Handling Potential Failure with the `Result` Type
+```rust,ignore
+io::stdin().read_line(&mut guess).expect("Не вдалося прочитати рядок");
+```
 
-As mentioned earlier, `read_line` puts what the user types into the string we’re
-passing it, but it also returns a value—in this case, an
-[`io::Result`][ioresult]<!-- ignore -->. Rust has a number of types named
-`Result` in its standard library: a generic [`Result`][result]<!-- ignore --> as
-well as specific versions for submodules, such as `io::Result`.
+Але довгий рядок важко читати, тому краще поділити його на два рядки для виклику
+двох методів. Тепер розглянемо, що цей рядок робить.
+
+### Керування потенційною невдачую за допомогою типу `Result`
+
+Як вже було сказано, `read_line` виводить те, що ввів користувач, у стрічку, яку
+ми їй передали, але також повертає значення - в цьому випадку, 
+[`io::Result`][ioresult]<!-- ignore -->. В стандартній бібліотеці Rust є кілька 
+типів, що звуться Result: як звичайний [`Result`][result]<!-- ignore -->, так і
+спеціалізовані версії в підмодулях, як-от `io::Result`.
 
 [ioresult]: ../std/io/type.Result.html
 [result]: ../std/result/enum.Result.html
 
-The `Result` types are [*enumerations*][enums]<!-- ignore -->, often referred
-to as *enums*. An enumeration is a type that can have a fixed set of values,
-and those values are called the enum’s *variants*. Chapter 6 will cover enums
-in more detail.
+Типи `Result` - це [*переліки* (*enumeration*)][enums]<!-- ignore -->, які часто
+звуть просто *енум*. Перелік - це тип, який може набувати значення з визначеного
+набору, і ці значення звуться *варіантами* переліку. Розділ 6 детальніше розкриє
+роботу енумів.
 
 [enums]: ch06-00-enums.html
 
-For `Result`, the variants are `Ok` or `Err`. `Ok` indicates the operation was
-successful, and inside the `Ok` variant is the successfully generated value.
-`Err` means the operation failed, and `Err` contains information about how or
-why the operation failed.
+`Result` має варіанти `Ok` та `Err`. `Ok` показує, що операція була вдалою, і
+всередині варіанту `Ok` знаходиться успішно згенероване значення. `Err` позначає
+відмову, і містить інформацію, як і чому операція була невдалою.
 
 The purpose of these `Result` types is to encode error handling information.
 Values of the `Result` type, like any type, have methods defined on them. An
