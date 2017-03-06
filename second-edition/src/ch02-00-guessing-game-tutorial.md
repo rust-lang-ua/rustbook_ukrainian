@@ -285,7 +285,8 @@ io::stdin().read_line(&mut guess).expect("Не вдалося прочитати
 
 [expect]: ../std/result/enum.Result.html#method.expect
 
-If we don’t call `expect`, the program will compile, but we’ll get a warning:
+Якщо ми не викличемо `expect`, програма скомпілюється, проте ми отримаємо
+попередження:
 
 ```text
 $ cargo build
@@ -296,35 +297,36 @@ src/main.rs:10     io::stdin().read_line(&mut guess);
                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ```
 
-Rust warns that we haven’t used the `Result` value returned from `read_line`,
-indicating that the program hasn’t handled a possible error. The right way to
-suppress the warning is to actually write error handling, but since we just
-want to crash this program when a problem occurs, we can use `expect`. You’ll
-learn about recovering from errors in Chapter 9.
+Rust попереджає, що ми не використали значення `Result`, повернуте з 
+`read_line`, що означає, що програма не обробила можливу помилку. Правильний 
+спосіб пригнітити попередження - власне, обробити помилку, але оскільки ми 
+просто хочемо, щоб програма аварійно завершилася, якщо виникне проблема, можна
+скористатися `expect`. Ви дізнаєтеся про те, як відновити роботу програми при
+помилці, у Розділі 9.
 
-### Printing Values with `println!` Placeholders
+### Вивід значень за допомогою заповнювачів `println!`
 
-Aside from the closing curly brace, there’s only one more line to discuss in
-the code added so far, which is the following:
+Якщо не враховувати закриваючої фігурної дужки, поки щолишився лише один рядок,
+який ми ще не обговорили, а саме:
 
 ```rust,ignore
 println!("You guessed: {}", guess);
 ```
 
-This line prints out the string we saved the user’s input in. The set of `{}`
-is a placeholder that holds a value in place. You can print more than one value
-using `{}`: the first set of `{}` holds the first value listed after the format
-string, the second set holds the second value, and so on. Printing out multiple
-values in one call to `println!` would look like this:
+Цей рядок виводить стрічку, в якій ми зберегли те, що ввів користувач. Символи
+`{}` - це заповнювач, який замінюється значенням. Ви можете вивести більше 
+одного значення за допомогою `{}`: перший набір `{}` замінюється першим 
+значенням після форматної стрічки, другий набір - другим значенням і так далі.
+Вивід багатьох значень за один виклик `println!` виглядатиме так:
 
 ```rust
 let x = 5;
 let y = 10;
 
-println!("x = {} and y = {}", x, y);
+println!("x = {} і y = {}", x, y);
 ```
 
-This code would print out `x = 5 and y = 10`.
+Цей код виведе `x = 5 і y = 10`.
 
 ### Testing the First Part
 
