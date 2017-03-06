@@ -63,17 +63,18 @@ $ cargo run
 Hello, world!
 ```
 
-The `run` command comes in handy when you need to rapidly iterate on a project,
-and this game is such a project: we want to quickly test each iteration
-before moving on to the next one.
+Команда `run` стає в нагоді, коли треба швидко розвивати проект, і ця гра є
+якраз таким проектом: ви хочемо швидко тестувати кожну ітерацію перед тим, як
+переходити до наступної.
 
-Reopen the *src/main.rs* file. You’ll be writing all the code in this file.
+Знову відкрийте файл *src/main.rs*. Весь код ви будете писати у ньому.
 
-## Processing a Guess
+## Обробляємо здогадку
 
-The first part of the program will ask for user input, process that input, and
-check that the input is in the expected form. To start, we’ll allow the player
-to input a guess. Enter the code in Listing 2-1 into *src/main.rs*.
+Перша частина програми буде запитувати у користувача ввести здогадку, обробляти
+те, що він увів, і перевіряти, чи ввів він дані у потрібній формі. Для початку,
+дозволимо користувачеві ввести здогадку. Введіть код з Роздруку 2-1 до 
+*src/main.rs*.
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -82,106 +83,106 @@ to input a guess. Enter the code in Listing 2-1 into *src/main.rs*.
 use std::io;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Відгадай число!");
 
-    println!("Please input your guess.");
+    println!("Введіть здогадку.");
 
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+        .expect("Не вдалося прочитати рядок.");
 
-    println!("You guessed: {}", guess);
+    println!("Ваша здогадка: {}", guess);
 }
 ```
 
 <figcaption>
 
-Listing 2-1: Code to get a guess from the user and print it out
+Роздрук 2-1: Код, що отримує здогадку у користувача і виводить її
 
 </figcaption>
 </figure>
 
-This code contains a lot of information, so let’s go over it bit by bit. To
-obtain user input and then print the result as output, we need to bring the
-`io` (input/output) library into scope. The `io` library comes from the
-standard library (which is known as `std`):
+Цей код містить багато інформації, тому розбиратимемо його шматок за шматком. 
+Щоб отримати, що ввів користувач, і вивести результат, нам треба ввести 
+бібліотеку `io` (ввід/вивід, англ. input/output) в область видимості. Бібліотека
+`io` входить до стандартної бібліотеки, яка зветься `std`.
 
 ```rust,ignore
 use std::io;
 ```
 
-By default, Rust brings only a few types into the scope of every program in
-[the *prelude*][prelude]<!-- ignore -->. If a type you want to use isn’t in the
-prelude, you have to bring that type into scope explicitly with a `use`
-statement. Using the `std::io` library provides you with a number of useful
-`io`-related features, including the functionality to accept user input.
+Типово, Rust вводить в область видимості тільки декілька типів у [*прелюдії* (*prelude*)][prelude]<!-- ignore -->. Якщо типу, який ви хочете використати, 
+нема у прелюдії, вам доведеться явно вносити цей тип у область видимості за
+допомогою виразу `use`.  Використання бібліотеки `std::io` надає вам ряд 
+корисних речей, пов'язаних із введенням-виведенням, включно з функціональністю
+для користувацького вводу.
 
 [prelude]: https://doc.rust-lang.org/std/prelude/
 
-As you saw in Chapter 1, the `main` function is the entry point into the
-program:
+Як ви бачили у Розділі 1, функція `main` - це точка входу в програму:
 
 ```rust,ignore
 fn main() {
 ```
 
-The `fn` syntax declares a new function, the `()` indicate there are no
-parameters, and `{` starts the body of the function.
+Синтаксична конструкція `fn` проголошує нову функцію, `()` показує, що вона не 
+має параметрів, і `{` починає тіло функції.
 
-As you also learned in Chapter 1, `println!` is a macro that prints a string to
-the screen:
+Як ви вже знаєте з Розділу 1, `println!` - це макрос, що виводить стрічку на
+екран:
 
 ```rust,ignore
-println!("Guess the number!");
+println!("Відгадай число!");
 
-println!("Please input your guess.");
+println!("Введіть здогадку.");
 ```
 
-This code is just printing a prompt stating what the game is and requesting
-input from the user.
+Цей код просто виводить повідомлення, що це за гра і запит введення у 
+користувача.
 
-### Storing Values with Variables
+### Зберігання значень у змінних
 
-Next, we’ll create a place to store the user input, like this:
+Тепер створімо місце для зберігання вводу користувача:
 
 ```rust,ignore
 let mut guess = String::new();
 ```
 
-Now the program is getting interesting! There’s a lot going on in this little
-line. Notice that this is a `let` statement, which is used to create
-*variables*. Here’s another example:
+Тепер програма стає цікавішою! В цьому коротенькому рядку відбувається багато
+всього. Зверніть увагу, що це оператор `let`, що використовується для створення 
+*змінних* (*variable*). Ось інший приклад:
 
 ```rust,ignore
 let foo = bar;
 ```
 
-This line will create a new variable named `foo` and bind it to the value
-`bar`. In Rust, variables are immutable by default. The following example shows
-how to use `mut` before the variable name to make a variable mutable:
+Цей рядок створить нову змінну з назвою `foo` і зв'яже (bind) її зі значенням 
+`bar`. У Rust, змінні типово не можуть змінюватися (immutable). Наступний 
+приклад показує, як використовується `mut` перед іменем змінної, щоб надати їй 
+можливість змінюватися (mutable):
 
 ```rust
-let foo = 5; // immutable
-let mut bar = 5; // mutable
+let foo = 5;     // не може змінюватися
+let mut bar = 5; // може змінюватися
 ```
 
-> Note: The `//` syntax starts a comment that continues until the end of the
-> line. Rust ignores everything in comments.
+> Зверніть увагу: синаксична конструкція `//` починає коментар, що продовжується
+> до кінця рядка. Rust ігнорує весь вміст коментаря.
 
-Now you know that `let mut guess` will introduce a mutable variable named
-`guess`. On the other side of the equal sign (`=`) is the value that `guess` is
-bound to, which is the result of calling `String::new`, a function that returns
-a new instance of a `String`. [`String`][string]<!-- ignore --> is a string
-type provided by the standard library that is a growable, UTF-8 encoded bit of
-text.
+Тепео ви знаєте, що `let mut guess` створить змінну, що може змінюватися, на
+ім'я `guess`. З іншого боку знаку рівності `=` знаходиться значення, з яким 
+зв'язується `guess`, а саме - результат виклику `String::new`, функції, що 
+повертає новий екземпляр (instance) стрічки String. [`String`][string]
+<!-- ignore --> - це тип стрічки, що надається стандартною бібліотекою; це 
+кодовані в UTF-8 шматки тексту, які можна нарощувати.
 
 [string]: ../std/string/struct.String.html
 
-The `::` syntax in the `::new` line indicates that `new` is an *associated
-function* of the `String` type. An associated function is implemented on a type,
-in this case `String`, rather than on a particular instance of a `String`. Some
-languages call this a *static method*.
+Синаксична конструкція `::` в рядку `::new` позначає, що `new` - це *асоційована 
+функція* типу `String`. Асоційована функція є втіленою (implemented) на типі, в
+цьому випадку `String`, а не на конкретному екземплярі `String`. В деяких мовах
+це зветься *статичним методом*.
 
 This `new` function creates a new, empty `String`. You’ll find a `new` function
 on many types, because it’s a common name for a function that makes a new value
