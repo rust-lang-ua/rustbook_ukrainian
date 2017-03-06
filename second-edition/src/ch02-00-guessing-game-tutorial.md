@@ -112,11 +112,12 @@ fn main() {
 use std::io;
 ```
 
-Типово, Rust вводить в область видимості тільки декілька типів у [*прелюдії* (*prelude*)][prelude]<!-- ignore -->. Якщо типу, який ви хочете використати, 
-нема у прелюдії, вам доведеться явно вносити цей тип у область видимості за
-допомогою виразу `use`.  Використання бібліотеки `std::io` надає вам ряд 
-корисних речей, пов'язаних із введенням-виведенням, включно з функціональністю
-для користувацького вводу.
+Типово, Rust вводить в область видимості тільки декілька типів у 
+[*прелюдії* (*prelude*)][prelude]<!-- ignore -->. Якщо типу, який ви хочете 
+використати, нема у прелюдії, вам доведеться явно вносити цей тип у область 
+видимості за допомогою виразу `use`.  Використання бібліотеки `std::io` надає 
+вам ряд корисних речей, пов'язаних із введенням-виведенням, включно з 
+функціональністю для користувацького вводу.
 
 [prelude]: https://doc.rust-lang.org/std/prelude/
 
@@ -271,17 +272,16 @@ io::stdin().read_line(&mut guess).expect("Не вдалося прочитати
 всередині варіанту `Ok` знаходиться успішно згенероване значення. `Err` позначає
 відмову, і містить інформацію, як і чому операція була невдалою.
 
-The purpose of these `Result` types is to encode error handling information.
-Values of the `Result` type, like any type, have methods defined on them. An
-instance of `io::Result` has an [`expect` method][expect]<!-- ignore --> that
-you can call. If this instance of `io::Result` is an `Err` value, `expect` will
-cause the program to crash and display the message that you passed as an
-argument to `expect`. If the `read_line` method returns an `Err`, it would
-likely be the result of an error coming from the underlying operating system.
-If this instance of `io::Result` is an `Ok` value, `expect` will take the
-return value that `Ok` is holding and return just that value to you so you
-could use it. In this case, that value is the number of characters the user
-entered into standard input.
+Призначення типів `Result` - кодувати інформацію про обробку помилок. Значення 
+типу `Result`, які інших типів, мають методи, визначені для них. Екземпляр 
+`io::Result` має [метод `expect`][expect]<!-- ignore -->, який можна викликати.
+Якщо цей екземпляр `io::Result` має значення `Err`, то `expect` викличе аварійне
+завершення програми і виведе повідомлення, яке ви передали параметром `expect`.
+Якщо метод `read_line` поверне `Err`, це, швидше за все, буде результатом 
+помилки в операційній системі. Якщо цей екземлпяр `io::Result` має значення 
+`Ok`, `expect` візьме значення, яке знаходиться в `Ok`, і поверне тільки це 
+значення, щоб їм можна було скористатися. В цьому випадку це значення - 
+кількість байтів, введених користувачем до стандартного потоку.
 
 [expect]: ../std/result/enum.Result.html#method.expect
 
