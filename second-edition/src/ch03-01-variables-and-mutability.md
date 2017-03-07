@@ -1,31 +1,32 @@
-## Variables and Mutability
+## Змінні і можливість змінюватися
 
-As mentioned in Chapter 2, by default variables are *immutable*. This is one of
-many nudges in Rust that encourages you to write your code in a way that takes
-advantage of the safety and easy concurrency that Rust offers. However, you
-still have the option to make your variables mutable. Let’s explore how and why
-Rust encourages you to favor immutability, and why you might want to opt out.
+Я вже згадувалося у Розділі 2, типопо змінні є *сталими* (*immutable*). Це - 
+один з численних штурханців, якими Rust заохочує вас писати код, що користується
+перевагами у безпеці та швидкості, які надає Rust. Тим не менш, ви все ж маєте 
+можливість зробити змінні несталими. Дослідимо, як і чому Rust заохочує вас 
+надавати перевагу сталості, та чому ви можете захотіти відмовитися від цього.
 
-When a variable is immutable, that means once a value is bound to a name, you
-can’t change that value. To illustrate, let’s generate a new project called
-*variables* in your *projects* directory by using `cargo new --bin variables`.
+Якщо змінна є сталою, це означає, що відколи значення стає прив'язаним до імені,
+ви не можете змінити це значення. Для прикладу згенеруємо новий проект з назвою
+*variables* ("змінні") у вашій теці *projects* за допомгою 
+`cargo new --bin variables`.
 
-Then, in your new *variables* directory, open *src/main.rs* and replace its
-code with the following:
+Потім, у новоствореній теці *variables*, відкрийте *src/main.rs* і замініть його
+код таким:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
     let x = 5;
-    println!("The value of x is: {}", x);
+    println!("Значення x: {}", x);
     x = 6;
-    println!("The value of x is: {}", x);
+    println!("Значення x: {}", x);
 }
 ```
 
-Save and run the program using `cargo run`. You should receive an error
-message, as shown in this output:
+Збережіть і запустіть програму за допомогою `cargo run`. Ви дістанете 
+повідомлення про помилку, як показано тут:
 
 ```text
 $ cargo run
@@ -35,39 +36,39 @@ error[E0384]: re-assignment of immutable variable `x`
   |
 2 |     let x = 5;
   |         - first assignment to `x`
-3 |     println!("The value of x is: {}", x);
+3 |     println!("Значення x: {}", x);
 4 |     x = 6;
   |     ^^^^^ re-assignment of immutable variable
 ```
 
-This example shows how the compiler helps you find errors in your programs.
-Even though compiler errors can be frustrating, they only mean your program
-isn’t safely doing what you want it to do yet; they do *not* mean that you’re
-not a good programmer! Experienced Rustaceans still get compiler errors. The
-error indicates that the cause of the error is `re-assignment of immutable
-variable`, because we tried to assign a second value to the immutable `x`
-variable.
+Цей приклад показує, як компілятор допомагає вам знаходити помилки у ваших 
+програмах. Хоча повідомлення компілятора про помилки й можуть бути неприємними,
+вони лише означають, що ваша програма не ще робить те, що ви хотіли, у безпечний
+спосіб; вони *не* означають, що ви поганий програміст! Досвідчені растацеанці
+також отримують повідомлення про помилки від компілятора. Повідомлення вказує,
+що причиною помилки є "переприсвоєння сталій змінній" (`re-assignment of 
+immutable variable`), бо ми намагалися присвоїти друге значення сталій змінній 
+`x`.
 
-It’s important that we get compile-time errors when we attempt to change a
-value that we previously designated as immutable because this very situation
-can lead to bugs. If one part of our code operates on the assumption that a
-value will never change and another part of our code changes that value, it’s
-possible that the first part of the code won’t do what it was designed to do.
-This cause of bugs can be difficult to track down after the fact, especially
-when the second piece of code changes the value only *sometimes*.
+Важливо, що ми отримали помилку часу компіляції, коли намагалися змінити 
+значення, яке раніше визначили як стале, тому що ця ситуація може призвести до
+вад у програмі. Якщо одна частина нашого коду працює з припущенням, що значення
+не буде змінене, а інша частина нашого коду змінює це значення, можливо, що 
+перша частина коду буде робити не те, для чого вона була зроблена. Цю причину 
+вад важко відслідкувати після виявлення, особливо коли другий шмат коду змінює
+значення лише *іноді*.
 
-In Rust the compiler guarantees that when we state that a value won’t change,
-it really won’t change. That means that when you’re reading and writing code,
-you don’t have to keep track of how and where a value might change, which can
-make code easier to reason about.
+У Rust компілятор гарантує, що, якщо ми заявили, що змінна не зміниться, вона і
+дійсно не зміниться. Це означає, що коли ви читаєте і пишете код, вам не треба
+відстежувати, як і де значення може змінитися, що може полегшити обмірковування
+коду.
 
-But mutability can be very useful. Variables are immutable only by default; we
-can make them mutable by adding `mut` in front of the variable name. In
-addition to allowing this value to change, it conveys intent to future readers
-of the code by indicating that other parts of the code will be changing this
-variable value.
+Але несталість може бути вкрай корисною. Змінні є сталими тільки типово; ми 
+можемо зробити їх несталими, додавши `mut` перед іменем змінної. На додачу до
+дозволу змінювати це значення, це попереджає майбутніх читачим коду про ваші 
+наміри, вказуючи, що інші частини коду будуть змінювати значення цієї змінної.
 
-For example, change *src/main.rs* to the following:
+Наприклад, змінимо *src/main.rs* на такий код:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -80,7 +81,7 @@ fn main() {
 }
 ```
 
-When we run this program, we get the following:
+Запустивши програму, ми отримаємо:
 
 ```text
 $ cargo run

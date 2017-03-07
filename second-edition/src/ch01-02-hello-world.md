@@ -44,7 +44,7 @@ Windows:
 
 Тепер відкрийте файл *main.rs*, який ви щойно створили, і наберіть такий код:
 
-<span class="filename">Filename: main.rs</span>
+<span class="filename">Файл: main.rs</span>
 
 ```rust
 fn main() {
@@ -242,7 +242,7 @@ version control system, by using the `--vcs` flag.
 Open up *Cargo.toml* in your text editor of choice. It should look something
 like this:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Файл: Cargo.toml</span>
 
 ```toml
 [package]
