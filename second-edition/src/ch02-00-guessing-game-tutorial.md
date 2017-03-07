@@ -328,44 +328,45 @@ println!("x = {} і y = {}", x, y);
 
 Цей код виведе `x = 5 і y = 10`.
 
-### Testing the First Part
+### Тестування першої частини
 
-Let’s test the first part of the guessing game. You can run it using `cargo run`:
+Протестуймо першу частину гри "відгадай число". Запустіть її за допомогою
+`cargo run`:
 
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
-Guess the number!
-Please input your guess.
+Відгадай число!
+Введіть здогадку.     
 6
-You guessed: 6
+Ваша здогадка: 6
 ```
 
-At this point, the first part of the game is done: we’re getting input from the
-keyboard and then printing it.
+На цей момент, перша частина гри завершена: ви отримуємо дані з клавіатури і
+виводимо їх.
 
-## Generating a Secret Number
+## Генерація таємного числа
 
-Next, we need to generate a secret number that the user will try to guess. The
-secret number should be different every time so the game is fun to play more
-than once. Let’s use a random number between 1 and 100 so the game isn’t too
-difficult. Rust doesn’t yet include random number functionality in its standard
-library. However, the Rust team does provide a [`rand` crate][randcrate].
+Тепер нам треба згенерувати таємне число, яке користувач пробуватиме відгадати.
+Таємне число має бути різним кожного разу, щоб у гру було цікаво грати більше
+одного разу. Використаймо випадкове число від 1 до 100, щоб гра була не надто
+складною. Rust поки що не має функціональності для генерації випадкових чисел у
+стандартній бібліотеці; натомість команда Rust надає [ящик `rand`][randcrate].
 
 [randcrate]: https://crates.io/crates/rand
 
-### Using a Crate to Get More Functionality
+### Використання ящика для отримання додаткової функціональності
 
-Remember that a *crate* is a package of Rust code. The project we’ve been
-building is a *binary crate*, which is an executable. The `rand` crate is a
-*library crate*, which contains code intended to be used in other programs.
+Згадаймо, що *ящик* - це пакет коду на Rust. Проект, який ми робимо - 
+*двійковий ящик* і є виконанним. Ящик `rand` - *бібліотечний ящик*, і містить
+код, призначений для використання в інших програмах.
 
-Cargo’s use of external crates is where it really shines. Before we can write
-code that uses `rand`, we need to modify the *Cargo.toml* file to include the
-`rand` crate as a dependency. Open that file now and add the following line to
-the bottom beneath the `[dependencies]` section header that Cargo created for
-you:
+Використання зовнішніх ящиків - найсильніший бік Cargo. Перед тим, як писати 
+код, що використовує `rand`, ми маємо модифікувати файл *Cargo.toml*, додавши 
+туди ящик `rand` як залежність. Відкрийте цей файл і додайте такий рядок униз,
+під заголовком секції `[dependencies]` ("залежності"), яку Cargo створив для 
+вас:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -374,6 +375,11 @@ you:
 
 rand = "0.3.14"
 ```
+
+У файлі *Cargo.toml* все, що йде після заголовку - частина секції, що 
+продовжується до початку нової секції. У секції `[dependencies]` ви повідомляєте
+Cargo, від яких зовнішніх ящиків залежить і які версії цих ящиків вам потрібні. 
+У цьому випадку, 
 
 In the *Cargo.toml* file, everything that follows a header is part of a section
 that continues until another section starts. The `[dependencies]` section is
