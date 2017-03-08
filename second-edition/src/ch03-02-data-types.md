@@ -1,24 +1,24 @@
-## Data Types
+## Типи даних
 
-Every value in Rust is of a certain *type*, which tells Rust what kind of data
-is being specified so it knows how to work with that data. In this section,
-we’ll look at a number of types that are built into the language. We split the
-types into two subsets: scalar and compound.
+Кожне значення в Rust має певний *тип*, який каже Rust, дані якого виду 
+визначаються, щоб компілятор знав, як працювати з цими даними. У цьому 
+підрозділі ми розберемо ряд типів, вбудованих у мову. Ми поділимо типи на дві
+категорії: скалярні і складені.
 
-Throughout this section, keep in mind that Rust is a *statically typed*
-language, which means that it must know the types of all variables at compile
-time. The compiler can usually infer what type we want to use based on the
-value and how we use it. In cases when many types are possible, such as when we
-converted a `String` to a numeric type using `parse` in Chapter 2, we must add
-a type annotation, like this:
+У цьому підрозділі майте на увазі, що Rust - *статично типізована* мова, тобто
+тип всіх змінних має бути відомим під час компіляції. Компілятор зазвичай може
+вивести, який тип ми хочемо використати, виходячи зі значення і того, як ми його
+використовуємо. У випадках, коли можливл багато типів, наприклад якщо ми 
+перетворюємо стрічку `String` на число за допомогою `parse` у Розділі 2, треба
+додавати позначку типу:
 
 ```rust
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the type annotation here, Rust will display the following
-error, which means the compiler needs more information from us to know which
-possible type we want to use:
+Якщо ми не додамо позначку типу, Rust покаже помилку, яка означає, що 
+компілятору треба більше інфомрації від нас, щоб зрозуміти, який з можливих 
+типів ми хочемо використати:
 
 ```text
 error[E0282]: unable to infer enough type information about `_`
@@ -30,18 +30,22 @@ error[E0282]: unable to infer enough type information about `_`
   = note: type annotations or generic parameter binding required
 ```
 
-You’ll see different type annotations as we discuss the various data types.
+Під час подальшого обговорення різних типів даних ви побачите різні позначки 
+типів.
 
-### Scalar Types
+### Скалярні типи
 
-A *scalar* type represents a single value. Rust has four primary scalar types:
-integers, floating-point numbers, booleans, and characters. You’ll likely
-recognize these from other programming languages, but let’s jump into how they
-work in Rust.
+*Скалярний* тип представляє єдине значення. У Rust є чотири первинні скалярні 
+типи: цілі, числа з рухомою комою, булівські та символи. Ви, швидше за все, 
+знаєте їх з інших мов програмування, але давайте поглянемо детальніше на їхню
+роботу в Rust.
+ 
+#### Цілі типи
 
-#### Integer Types
+*Ціле* - це число без дробової частини. Ви використали один цілий тип раніше в
+цьому розділі, а саме `i32`. 
 
-An *integer* is a number without a fractional component. We used one integer
+ is a number without a fractional component. We used one integer
 type earlier in this chapter, the `i32` type. This type declaration indicates
 that the value it’s associated with should be a signed integer (hence the `i`,
 as opposed to a `u` for unsigned) for a 32-bit system. Table 3-1 shows the
