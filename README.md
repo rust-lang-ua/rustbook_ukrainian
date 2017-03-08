@@ -59,6 +59,13 @@ $ mdbook test
 [contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 [contrib-uk]: https://github.com/pavloslav/rust-book-ukrainian/blob/master/CONTRIBUTING.md
 
+### Словник
+
+Для перекладу формується невеликий [словничок][dictionary], пропозиції і 
+зауваження заохочуються.
+
+[dictionary] https://github.com/pavloslav/rust-book-ukrainian/blob/master/DICTIONARY.md
+
 ### Інші переклади
 
 Особливо важлива ваша допомога в перекладанні! Прогляньте повідомлення, 

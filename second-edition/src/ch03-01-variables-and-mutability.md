@@ -75,79 +75,77 @@ immutable variable`), бо ми намагалися присвоїти друг
 ```rust
 fn main() {
     let mut x = 5;
-    println!("The value of x is: {}", x);
+    println!("Значення x: {}", x);
     x = 6;
-    println!("The value of x is: {}", x);
+    println!("Значення x: {}", x);
 }
 ```
 
-Запустивши програму, ми отримаємо:
+Запустивши програму ми отримаємо:
 
 ```text
 $ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
      Running `target/debug/variables`
-The value of x is: 5
-The value of x is: 6
+Значення x: 5
+Значення x: 6
 ```
 
-Using `mut`, we’re allowed to change the value that `x` binds to from `5` to
-`6`. In some cases, you’ll want to make a variable mutable because it makes the
-code more convenient to write than an implementation that only uses immutable
-variables.
+Застосувавши `mut`, ми дозволили змінити значення, прив'язане до `x`, з `5` на
+`6`. У деяких випадках, вам захочеться робити зміннні несталими, бо так зручніше
+писати код, ніж в реалізації з виключно сталими змінними.
 
-There are multiple trade-offs to consider, in addition to the prevention of
-bugs. For example, in cases where you’re using large data structures, mutating
-an instance in place may be faster than copying and returning newly allocated
-instances. With smaller data structures, always creating new instances and
-writing in a more functional programming style may be easier to reason about,
-so the lower performance penalty might be worth it to gain that clarity.
+Варто розглядати й інші аспекти, крім запобігання вадам. Наприклад, якщо ви
+використовуєте великі структури даних, змінювати екземпляр на місці може бути 
+швидше, ніж копіювати і повертати наново виділений екземпляр. Для менших
+структур даних може бути зручнішим розмірковувати про код, написаний у більш 
+функціональному стилі, з постійним створенням нових екземплярів, тому може бути
+варто знизити продуктивність заради збільшення ясності.
 
-### Differences Between Variables and Constants
+### Різниця між змінними та константами
 
-Not being able to change the value of a variable might have reminded you of
-another programming concept that most languages have: *constants*. Constants
-are also values bound to a name that are not allowed to change, but there are a
-few differences between constants and variables. First, using `mut` with
-constants is not allowed: constants aren't only immutable by default, they're
-always immutable. Constants are declared using the `const` keyword instead of
-the `let` keyword, and the type of the value *must* be annotated. We're about
-to cover types and type annotations in the next section, “Data Types,” so don't
-worry about the details right now. Constants can be declared in any scope,
-including the global scope, which makes them useful for a value that many parts
-of your code need to know about. The last difference is that constants may only
-be set to a constant expression, not the result of a function call or any other
-value that could only be used at runtime.
+Неможливість змінити значення змінної може нагадати вам про іншу концепцію 
+программування, що є в більшості мов: *константи*. Константи - це так само 
+значення, прив'язані до імені, які не можна змінювати, але є кілька різниць між
+константами і змінними. По-перше, використання `mut` з константами неможливе:
+константи не тільки типово незмінні, вони завжди незмінні. Константи 
+проголошуються ключовим словом `const` замість `let`, і тип значення *має* явно 
+позначатися. Ми розкажемо про типи і їхнє позначення в наступному розділі, "Типи
+даних", тому не хвилюйтеся зараз про деталі. Константи можуть проголошуватися
+в будь-якій області видимості, у тому числі глобальній, що робить їх корисними 
+для зберігання значення, яке використовується у багатьох частинах вашого коду.
+Остання відмнінність полягає в тому, що константи можуть набувати тільки 
+значення константних виразів, не результатів виклику функції чи інших значень,
+які можуть бути використані лише під час виконання програми.
 
-Here's an example of a constant declaration where the constant's name is
-`MAX_POINTS` and its value is set to 100,000. Rust constant naming convention
-is to use all upper case with underscores between words:
+Ось приклад проголошення константи, де константа зветься `MAX_POINTS`, а її 
+значення є 100,000. Угода про назви констант в Rust вимагає використання 
+верхнього регістру із підкресленнями між словам:
 
 ```
 const MAX_POINTS: u32 = 100_000;
 ```
 
-Constants are valid for the entire lifetime of a program, within the scope they
-were declared in. That makes constants useful for values in your application
-domain that multiple part of the program might need to know about, such as the
-maximum number of points any player of a game is allowed to earn or the number
-of seconds in a year.
+Константи діють протягом усього часу життя програми, всередині тієї області 
+видимості, де вони були проголошені. Це робить константи корисними для 
+зберігання значень у вашому додатку, про які необхідно знати багатьом частинам
+програми, наприклад максимальна кількість балів, яку може отримати гравець чи
+кількість секунд у році.
 
-Documenting hardcoded values used throughout your program by naming them as
-constants is useful to convey the meaning of that value to future maintainers
-of the code. It also helps to have only one place in your code that you would
-need to change if the hardcoded value needed to be updated in the future.
+Корисно документувати жорстко задані значення, що використовуються по всій 
+програмі, позначаючи їх константами, щоб передати сенс цього значення тим, хто
+супроводжуватиме код. Це також корисно тим, що ви в коді буде тільки одне місце,
+яке буде необхідно змінити, у разі потреби оновити жорстко задане значення.
 
-### Shadowing
+### Затінення
 
-As we saw in the guessing game tutorial in Chapter 2, we can declare new
-variables with the same name as a previous variables, and the new variable
-*shadows* the previous variable. Rustaceans say that the first variable is
-*shadowed* by the second, which means that the second variable’s value is what
-we’ll see when we use the variable. We can shadow a variable by using the same
-variable’s name and repeating the use of the `let` keyword as follows:
+Як ми бачили у Розділі 2, можна проголошувати нові змінні із таким самим іменем,
+як і в минулих змінних, і нова змінна *затінює* (*shadows*) попередню змінну.
+Растацеанці кажуть, що перша змінна *затінена* (*shadowed*) другою, що означає,
+що при використанні змінної ми отримаємо значення другої змінної. Ми можемо 
+затінити змінну за допомогою ключового слова `let` та імені цієї змінної:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -157,53 +155,52 @@ fn main() {
 
     let x = x * 2;
 
-    println!("The value of x is: {}", x);
+    println!("Значення x: {}", x);
 }
 ```
 
-This program first binds `x` to a value of `5`. Then it shadows `x` by
-repeating `let x =`, taking the original value and adding `1` so the value of
-`x` is then `6`. The third `let` statement also shadows `x`, taking the
-previous value and multiplying it by `2` to give `x` a final value of `12`.
-When you run this program, it will output the following:
+Ця програма спершу прив'язує `x` до значення `5`. Потім затінює `x` повторенням
+`let x =`, взявши початкове значення і додавши до нього `1`, так що значення `x`
+стає `6`. Третій оператор `let` також затінює `x`, бере попереднє значення і
+множить його на `1`, щоб надати `x` остатночного значення `12`. Якщо запустити
+цю програму, вона виведе:
 
 ```text
 $ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
      Running `target/debug/variables`
-The value of x is: 12
+Значення x: 12
 ```
 
-This is different than marking a variable as `mut`, because unless we use the
-`let` keyword again, we’ll get a compile-time error if we accidentally try to
-reassign to this variable. We can perform a few transformations on a value but
-have the variable be immutable after those transformations have been completed.
+Це відрізняється від позначення змінної `mut`, адже якщо ми знову не 
+використаємо ключове слово `let`, отримаємо помилку часу компіляції, якщо 
+випадково спробуємо переприсвоїти значення цієї змінної. Ми можемо перетворювати
+значення, але змінна буде сталою після виконання цих перетворень.
 
-The other difference between `mut` and shadowing is that because we’re
-effectively creating a new variable when we use the `let` keyword again, we can
-change the type of the value, but reuse the same name. For example, say our
-program asks a user to show how many spaces they want between some text by
-inputting space characters, but we really want to store that input as a number:
+Інша різниця між `mut` та затіненням полягає в тому, що оскільки коли пишемо 
+знову ключове слово `let`, насправді ми створюємо нову змінну, тоже можемо 
+змінити тип значення, але залишити ім'я. Наприклад, хай наша програма просить
+користувача вказати, скільки пробілів має бути всередині якогось тексту, ввівши
+символи пробілу, але насправді ми хочемо зберігати це значення як число:
 
 ```rust
 let spaces = "   ";
 let spaces = spaces.len();
 ```
 
-This construct is allowed because the first `spaces` variable is a string type,
-and the second `spaces` variable, which is a brand-new variable that happens to
-have the same name as the first one, is a number type. Shadowing thus spares us
-from having to come up with different names, like `spaces_str` and
-`spaces_num`; instead, we can reuse the simpler `spaces` name. However, if we
-try to use `mut` for this, as shown here:
+Ця конструкція можлива, бо перша змінна `spaces` має стрічковий тип, а друга
+змінна `spaces`, що є повністю новою змінною, якій трапилося мати таке саме 
+ім'я, має числовий тип. Затінення, таким чином, позбавляє нас необхідності 
+придумувати різні імена, на кшталт `spaces_str` та `spaces_num`; натомість, ми
+можемо заново використати простіше ім'я `spaces`. Але якщо ми спробуємо 
+скористатися `mut`, як показано:
 
 ```rust,ignore
 let mut spaces = "   ";
 spaces = spaces.len();
 ```
 
-we’ll get a compile-time error because we’re not allowed to mutate a variable’s
-type:
+ми отримаємо помилку часу компіляції, бо не можна змінювати тип змінної:
 
 ```text
 error[E0308]: mismatched types
@@ -216,5 +213,5 @@ error[E0308]: mismatched types
   = note:    found type `usize`
 ```
 
-Now that we’ve explored how variables work, let’s look at more data types they
-can have.
+Тепер, дослідивши, як працюють змінні, погляньмо, які типи данних вони можуть 
+зберігати.
