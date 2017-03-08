@@ -1,16 +1,16 @@
-# The Rust Programming Language
+# Мова програмування Rust
 
-## Getting started
+## З чого почати
 
-- [Introduction](ch01-00-introduction.md)
-    - [Installation](ch01-01-installation.md)
+- [Вступ](ch01-00-introduction.md)
+    - [Встановлення](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
 
-- [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
+- [Гра "відгадай число"](ch02-00-guessing-game-tutorial.md)
 
-- [Common Programming Concepts](ch03-00-common-programming-concepts.md)
-    - [Variables and Mutability](ch03-01-variables-and-mutability.md)
-    - [Data Types](ch03-02-data-types.md)
+- [Загальні концепції програмування](ch03-00-common-programming-concepts.md)
+    - [Змінні і сталість](ch03-01-variables-and-mutability.md)
+    - [Типи даних](ch03-02-data-types.md)
     - [How Functions Work](ch03-03-how-functions-work.md)
     - [Comments](ch03-04-comments.md)
     - [Control Flow](ch03-05-control-flow.md)
