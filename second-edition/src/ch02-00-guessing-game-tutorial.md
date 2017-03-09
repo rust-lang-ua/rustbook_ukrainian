@@ -483,23 +483,22 @@ $ cargo update
 rand = "0.4.0"
 ```
 
-The next time you run `cargo build`, Cargo will update the registry of crates
-available and reevaluate your `rand` requirements according to the new version
-you specified.
+Наступного разу, коли ви запустите `cargo build`, Cargo оновить реєстр доступних
+ящиків і переоцінить вимоги до `rand` відповідно до вказаної вами нової версії.
 
-There’s a lot more to say about [Cargo][doccargo]<!-- ignore --> and [its
-ecosystem][doccratesio]<!-- ignore --> that Chapter 14 will discuss, but for
-now, that’s all you need to know. Cargo makes it very easy to reuse libraries,
-so Rustaceans are able to write smaller projects that are assembled from a
-number of packages.
+Можна багато сказати про [Cargo][doccargo]<!-- ignore --> і 
+[його екосистему][doccratesio]<!-- ignore -->, яка обговорюється у Розділі 14,
+але поки що цього знати достатньо. Cargo робить використання бібліотек дуже 
+простим, що дозволяє растацеанцям писати менші проекти, зібрані з кількох 
+пакетів.
 
 [doccargo]: http://doc.crates.io
 [doccratesio]: http://doc.crates.io/crates-io.html
 
-### Generating a Random Number
+### Генерація випадкового числа
 
-Let’s start *using* `rand`. The next step is to update *src/main.rs*, as shown
-in Listing 2-3:
+Почнемо *використовувати* `rand`. Наступний крок - оновити *src/main.rs*, як
+показано в Роздруку 2-3:
 
 <figure>
 <span class="filename">Файл: src/main.rs</span>
@@ -511,34 +510,34 @@ use std::io;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Відгадай число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+    println!("Таємне число: {}", secret_number);
 
-    println!("Please input your guess.");
+    println!("Будь ласка, введіть здогадку:");
 
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+        .expect("Не вдалося прочитати рядок");
 
-    println!("You guessed: {}", guess);
+    println!("Ваша здогадка: {}", guess);
 }
 ```
 
 <figcaption>
 
-Listing 2-3: Code changes needed in order to generate a random number
+Роздрук 2-3: Зміни в коді, необхідні для генерації випадкового числа
 
 </figcaption>
 </figure>
 
-We’re adding a `extern crate rand;` line to the top that lets Rust know we’ll be
-using that external dependency. This also does the equivalent of calling `use
-rand`, so now we can call anything in the `rand` crate by prefixing it with
-`rand::`.
+Ми додаємо рядок `extern crate rand;` на початок, що дає Rust знати, що ми 
+будемо використовувати зовнішню залежність. Це, на додачу, виконує функцію,
+еквівалентну `use rand`, так що тепер ми можемо викликати будь-що з ящика 
+`rand`, додавши префікс `rand::`.
 
 Next, we’re adding another `use` line: `use rand::Rng`. `Rng` is a trait that
 defines methods that random number generators implement, and this trait must be
