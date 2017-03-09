@@ -376,22 +376,15 @@ rand = "0.3.14"
 У файлі *Cargo.toml* все, що йде після заголовку - частина секції, що 
 продовжується до початку нової секції. У секції `[dependencies]` ви повідомляєте
 Cargo, від яких зовнішніх ящиків залежить і які версії цих ящиків вам потрібні. 
-У цьому випадку, 
-
-In the *Cargo.toml* file, everything that follows a header is part of a section
-that continues until another section starts. The `[dependencies]` section is
-where you tell Cargo which external crates your project depends on and which
-versions of those crates you require. In this case, we’ll specify the `rand`
-crate with the semantic version specifier `0.3.14`. Cargo understands [Semantic
-Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
-standard for writing version numbers. The number `0.3.14` is actually shorthand
-for `^0.3.14`, which means “any version that has a public API compatible with
-version 0.3.14.”
+У цьому випадку, ми зазначаємо ящик `rand` зі семантичним версіонуванням 
+`0.3.14`. Cargo розуміє [семантичне версіонування][semver]<!-- ignore --> 
+(також зване *SemVer*), що є стандартом для запису номеру версії. Запис `0.3.14`
+насправді є скороченням для `^0.3.14`, що означає "будь-яка версія, що має 
+публічний API, сумісний із версією 0.3.14".
 
 [semver]: http://semver.org
 
-Now, without changing any of the code, let’s build the project, as shown in
-Listing 2-2:
+Тепер, не змінюючи коду, побудуємо проект, як показано в Роздруку 2-2:
 
 <figure>
 
@@ -407,78 +400,71 @@ $ cargo build
 
 <figcaption>
 
-Listing 2-2: The output from running `cargo build` after adding the rand crate
-as a dependency
+Роздрук 2-2: Вивід команди `cargo build` після додавання ящика rand як
+залежність.
 
 </figcaption>
 </figure>
 
-You may see different version numbers (but they will all be compatible with
-the code, thanks to SemVer!), and the lines may be in a different order.
+Ви можете побачити інші номери версій (але вони будуть сумісні з кодом завдяки
+SemVer!), і рядки можуть бути в іншому порядку.
 
-Now that we have an external dependency, Cargo fetches the latest versions of
-everything from the *registry*, which is a copy of data from
-[Crates.io][cratesio]. Crates.io is where people in the Rust ecosystem post
-their open source Rust projects for others to use.
+Тепер, коли ми маємо зовнішню залежність, Cargo витягає останні версії всього,
+що нам треба, з *реєстру*, тобто копії даних з [Crates.io][cratesio]. На 
+crates.io в екосистемі Rust люди викладають свої проекти з відкритим кодом, щоб
+ними могли скористатися інші.
 
 [cratesio]: https://crates.io
 
-After updating the registry, Cargo checks the `[dependencies]` section and
-downloads any you don’t have yet. In this case, although we only listed `rand`
-as a dependency, Cargo also grabbed a copy of `libc`, because `rand` depends on
-`libc` to work. After downloading them, Rust compiles them and then compiles
-the project with the dependencies available.
+Після оновлення реєстру, Cargo перевіряє розділ `[dependencies]` і завантажує 
+ті, яких у вас бракує. В цьому випадку, хоча ми вказали тільки залежність від
+`rand`, Cargo також завантажив копію `libc`, тому що `rand` залежить від `libc`.
+Після завантаження, Rust компілює їх і потім компілює проект.
 
-If you immediately run `cargo build` again without making any changes, you won’t
-get any output. Cargo knows it has already downloaded and compiled the
-dependencies, and you haven't changed anything about them in your *Cargo.toml*
-file. Cargo also knows that you haven't changed anything about your code, so it
-doesn't recompile that either. With nothing to do, it simply exits. If you open
-up the *src/main.rs* file, make a trivial change, then save it and build again,
-you’ll only see one line of output:
+Якщо ви знову запустите `cargo build`, не зрозбивши жодних змін, ви не отримаєте
+ніякої відповіді. Cargo знає, що він вже завантажив і скомпілював залежності, а
+ви не змінили нічого у своєму коді, тому він теж не буде перекомпільований.
+Оскільки роботи у Cargo немає, він просто завершує роботу. Якщо ви відкриєте
+файл *src/main.rs*, зробите тривіальну зміну, збережете і знову побудуєте, то
+побачите тільки один рядок виводу:
 
 ```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
-This line shows Cargo only updates the build with your tiny change to the
-*src/main.rs* file. Your dependencies haven't changed, so Cargo knows it can
-reuse what it has already downloaded and compiled for those. It just rebuilds
-your part of the code.
+Цей рядок показує, що Cargo обробив тільки вашу дрібну зміну до файлу 
+*src/main.rs*. Залежності не змінилися, і Cargi знає, що може заново використати
+те, що він вже завантажив і скомпілював. Він перебудовує тільки вашу частину 
+коду.
 
-#### The *Cargo.lock* File Ensures Reproducible Builds
+#### Файл *Cargo.lock* гарантує відтворюваність побудови
 
-Cargo has a mechanism that ensures you can rebuild the same artifact every time
-you or anyone else builds your code: Cargo will use only the versions of the
-dependencies you specified until you indicate otherwise. For example, what
-happens if next week version `v0.3.15` of the `rand` crate comes out and
-contains an important bug fix but also contains a regression that will break
-your code?
+Cargo має механізм, що гарантує, що гарантує однаковість побудувати проекту 
+кожного разу, коли ви чи хтось інший будує ваш код: Cargo використає тільки ті
+версії залежностей, які ви зазначили, доки ви не вкажете інші. Наприклад, якщо
+наступного тижня вийде `rand` версії `0.3.15`, що міститиме важливе виправлення
+вади, але також регресію, що зіпсує ваш код?
 
-The answer to this problem is the *Cargo.lock* file, which was created the
-first time you ran `cargo build` and is now in your *guessing_game* directory.
-When you build a project for the first time, Cargo figures out all the
-versions of the dependencies that fit the criteria and then writes them to
-the *Cargo.lock* file. When you build your project in the future, Cargo will
-see that the *Cargo.lock* file exists and use the versions specified there
-rather than doing all the work of figuring out versions again. This lets you
-have a reproducible build automatically. In other words, your project will
-remain at `0.3.14` until you explicitly upgrade, thanks to the *Cargo.lock*
-file.
+Відповідь на цю задачу - файл *Cargo.lock*, що створюється при першому запуску
+`cargo build` і розміщується у теці *guessing_game*. Коли ви збираєте проект
+вперше, Cargo визначає всі версії залежностей, що відповідають критерію, і 
+записує їх у файл *Cargo.lock*. Коли ви пізніше збиратимете проект, Cargo 
+побачить, що файл *Cargo.lock* існує, і використає версії, зазначені там, а не
+буде наново визначати версії. Це дозволяє вам автоматично мати відтворювану 
+збірку. Іншими словами, ваш проект залишиться на версії `0.3.14`, доки ви самі
+не захочете оновити її, завдяки файлу *Cargo.lock*.
 
-#### Updating a Crate to Get a New Version
+#### Оновлення ящика для отримання нової версії
 
-When you *do* want to update a crate, Cargo provides another command, `update`,
-which will:
+Коли ви *хочете* оновити ящик, Cargo надає іншу команду, `update`, яка:
+1. Ігнорує файл *Cargo.lock* і визначає всі останні версії, що відповідають
+специфікаціям в *Cargo.toml*.
+1. Якщо це вдалося, Cargo напише ці версії до файлу *Cargo.lock*.
 
-1. Ignore the *Cargo.lock* file and figure out all the latest versions that fit
-your specifications in *Cargo.toml*.
-1. If that works, Cargo will write those versions to the *Cargo.lock* file.
-
-But by default, Cargo will only look for versions larger than `0.3.0` and
-smaller than `0.4.0`. If the `rand` crate has released two new versions,
-`0.3.15` and `0.4.0`, you would see the following if you ran `cargo update`:
+Але типово Cargo шукатиме тільки  версії, більші за `0.3.0` і менші `0.4.0`. 
+Якщо ящик `rand` вийшов у двох нових версіях, `0.3.15` та `0.4.0`, ви побачите
+таке, запустивши `cargo update`:
 
 ```text
 $ cargo update
@@ -486,12 +472,11 @@ $ cargo update
     Updating rand v0.3.14 -> v0.3.15
 ```
 
-At this point, you would also notice a change in your *Cargo.lock* file noting
-that the version of the `rand` crate you are now using is `0.3.15`.
+Також можна звернути увагу на зміну у файлі *Cargo.lock* - версія ящика `rand`,
+яку ви використовуєте, тепер `0.3.15`.
 
-If you wanted to use `rand` version `0.4.0` or any version in the `0.4.x`
-series, you’d have to update the *Cargo.toml* file to look like this instead:
-
+Якщо вам потрібен `rand` версії `0.4.0` чи будь-якої версії у гілці `0.4.x`, вам
+доведеться оновити файл *Cargo.toml*, щоб він мав такий рядок:
 ```toml
 [dependencies]
 
