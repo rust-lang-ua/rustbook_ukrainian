@@ -151,7 +151,7 @@ let mut guess = String::new();
 ```
 
 Тепер програма стає цікавішою! В цьому коротенькому рядку відбувається багато
-всього. Зверніть увагу, що це оператор `let`, що використовується для створення 
+всього. Зверніть увагу на оператор `let`, що використовується для створення 
 *змінних* (*variable*). Ось інший приклад:
 
 ```rust,ignore
@@ -159,24 +159,24 @@ let foo = bar;
 ```
 
 Цей рядок створить нову змінну з назвою `foo` і зв'яже (bind) її зі значенням 
-`bar`. У Rust, змінні типово не можуть змінюватися (immutable). Наступний 
-приклад показує, як використовується `mut` перед іменем змінної, щоб надати їй 
-можливість змінюватися (mutable):
+`bar`. У Rust, змінні типово є сталими (immutable). Наступний 
+приклад показує, як використовується `mut` перед іменем змінної, зробити її 
+несталою (mutable):
 
 ```rust
-let foo = 5;     // не може змінюватися
-let mut bar = 5; // може змінюватися
+let foo = 5;     // стала
+let mut bar = 5; // нестала
 ```
 
 > Зверніть увагу: синаксична конструкція `//` починає коментар, що продовжується
 > до кінця рядка. Rust ігнорує весь вміст коментаря.
 
-Тепео ви знаєте, що `let mut guess` створить змінну, що може змінюватися, на
-ім'я `guess`. З іншого боку знаку рівності `=` знаходиться значення, з яким 
-зв'язується `guess`, а саме - результат виклику `String::new`, функції, що 
-повертає новий екземпляр (instance) стрічки String. [`String`][string]
-<!-- ignore --> - це тип стрічки, що надається стандартною бібліотекою; це 
-кодовані в UTF-8 шматки тексту, які можна нарощувати.
+Тепео ви знаєте, що `let mut guess` створить несталу змінну, на ім'я `guess`. З 
+іншого боку знаку рівності `=` знаходиться значення, з яким зв'язується `guess`, 
+а саме - результат виклику `String::new`, функції, що повертає новий екземпляр 
+(instance) стрічки String. [`String`][string]<!-- ignore --> - це тип стрічки, 
+що надається стандартною бібліотекою; це кодовані в UTF-8 шматки тексту, які 
+можна нарощувати.
 
 [string]: ../std/string/struct.String.html
 
@@ -189,9 +189,8 @@ let mut bar = 5; // може змінюватися
 багатьох типах, оскільки це звичайна назва функції, що створює нове значення
 певного виду.
 
-Підсумуємо: рядок `let mut guess = String::new();` створив змінну, що може 
-змінюватися, зараз прив'язану до нового, пустого екземпляру `String`. Фух.
-variable that is currently bound to a new, empty instance of a `String`. Уф!
+Підсумуємо: рядок `let mut guess = String::new();` створив несталу змінну, зараз
+прив'язану до нового, пустого екземпляру `String`. Уф!
 
 Згадаймо, що ми додали функціональність введення/виведення зі стандартної 
 бібліотеки за допогою `use std::io;` у першому рядку програми. Тепер ми 
@@ -218,8 +217,7 @@ io::stdin().read_line(&mut guess)
 
 `read_line` бере все, що користувач вводить у стандартний потік введення, і 
 розміщує це в стрічці, тому приймає цю стрічку аргументом. Цей аргумент мусить
-мати можливість змінюватися, щоб метод змінив вміст стрічки, додавши те, що ввів
-користувач.
+бути несталим, щоб метод змінив вміст стрічки, додавши те, що ввів користувач.
 
 `&` позначає, що цей аргумент - *посилання* (*reference*), що дає вам можливість
 надати кільком частинам вашого коду доступ до одного фрагменту даних без 
@@ -227,9 +225,8 @@ io::stdin().read_line(&mut guess)
 основних переваг Rust полягає в безпеці і легкості використання посилань. Для
 завершення цієї програми вам не знадобляться особливо детальні знання про 
 посилання; в Розділі 4 будуть надані докладніші пояснення. Поки що, все, що вам
-треба знати - що посилання, як і зміні, типово не можуть бути зміненими. Тому
-необхідно писати `&mut guess`, а не просто `&guess`, щоб надати їй можливість 
-змінюватися.
+треба знати - що посилання, як і зміні, типово є сталими. Тому необхідно писати 
+`&mut guess`, а не просто `&guess`, щоб зробити її несталою.
 
 Ми ще не закінчили розбиратися із цим рядком коду. Хоча це один рядок тексту, це
 лише перша частина єдиного логічного рядка коду. Друга частина - це ось цей 
@@ -368,7 +365,7 @@ $ cargo run
 під заголовком секції `[dependencies]` ("залежності"), яку Cargo створив для 
 вас:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Файл: Cargo.toml</span>
 
 ```toml
 [dependencies]
@@ -520,7 +517,7 @@ Let’s start *using* `rand`. The next step is to update *src/main.rs*, as shown
 in Listing 2-3:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;
@@ -614,7 +611,7 @@ Now that we have user input and a random number, we can compare them. That
 step is shown in Listing 2-4:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;
@@ -733,7 +730,7 @@ Ultimately, we want to convert the `String` the program reads as input into a
 real number type so we can compare it to the guess numerically. We can do
 that by adding the following two lines to the `main` function body:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;
@@ -845,7 +842,7 @@ Let’s change that by adding a loop!
 The `loop` keyword gives us an infinite loop. Add that now to give users more
 chances at guessing the number:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;
@@ -928,7 +925,7 @@ stop when the correct number is guessed.
 
 Let’s program the game to quit when the user wins by adding a `break`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;

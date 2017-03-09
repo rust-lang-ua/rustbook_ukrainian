@@ -1,24 +1,24 @@
-## Data Types
+## Типи даних
 
-Every value in Rust is of a certain *type*, which tells Rust what kind of data
-is being specified so it knows how to work with that data. In this section,
-we’ll look at a number of types that are built into the language. We split the
-types into two subsets: scalar and compound.
+Кожне значення в Rust має певний *тип*, який каже Rust, дані якого виду 
+визначаються, щоб компілятор знав, як працювати з цими даними. У цьому 
+підрозділі ми розберемо ряд типів, вбудованих у мову. Ми поділимо типи на дві
+категорії: скалярні і складені.
 
-Throughout this section, keep in mind that Rust is a *statically typed*
-language, which means that it must know the types of all variables at compile
-time. The compiler can usually infer what type we want to use based on the
-value and how we use it. In cases when many types are possible, such as when we
-converted a `String` to a numeric type using `parse` in Chapter 2, we must add
-a type annotation, like this:
+У цьому підрозділі майте на увазі, що Rust - *статично типізована* мова, тобто
+тип всіх змінних має бути відомим під час компіляції. Компілятор зазвичай може
+вивести, який тип ми хочемо використати, виходячи зі значення і того, як ми його
+використовуємо. У випадках, коли можливл багато типів, наприклад якщо ми 
+перетворюємо стрічку `String` на число за допомогою `parse` у Розділі 2, треба
+додавати позначку типу:
 
 ```rust
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the type annotation here, Rust will display the following
-error, which means the compiler needs more information from us to know which
-possible type we want to use:
+Якщо ми не додамо позначку типу, Rust покаже помилку, яка означає, що 
+компілятору треба більше інфомрації від нас, щоб зрозуміти, який з можливих 
+типів ми хочемо використати:
 
 ```text
 error[E0282]: unable to infer enough type information about `_`
@@ -30,103 +30,104 @@ error[E0282]: unable to infer enough type information about `_`
   = note: type annotations or generic parameter binding required
 ```
 
-You’ll see different type annotations as we discuss the various data types.
+Під час подальшого обговорення різних типів даних ви побачите різні позначки 
+типів.
 
-### Scalar Types
+### Скалярні типи
 
-A *scalar* type represents a single value. Rust has four primary scalar types:
-integers, floating-point numbers, booleans, and characters. You’ll likely
-recognize these from other programming languages, but let’s jump into how they
-work in Rust.
+*Скалярний* тип представляє єдине значення. У Rust є чотири первинні скалярні 
+типи: цілі, числа з рухомою комою, булівські та символи. Ви, швидше за все, 
+знаєте їх з інших мов програмування, але давайте поглянемо детальніше на їхню
+роботу в Rust.
+ 
+#### Цілі типи
 
-#### Integer Types
-
-An *integer* is a number without a fractional component. We used one integer
-type earlier in this chapter, the `i32` type. This type declaration indicates
-that the value it’s associated with should be a signed integer (hence the `i`,
-as opposed to a `u` for unsigned) for a 32-bit system. Table 3-1 shows the
-built-in integer types in Rust. Each variant in the Signed and Unsigned columns
-(for example, *i32*) can be used to declare the type of an integer value.
-
-<figure>
-<figcaption>
-
-Table 3-1: Integer Types in Rust
-
-</figcaption>
-
-| Length | Signed | Unsigned |
-|--------|--------|----------|
-| 8-bit  | i8     | u8       |
-| 16-bit | i16    | u16      |
-| 32-bit | i32    | u32      |
-| 64-bit | i64    | u64      |
-| arch   | isize  | usize    |
-
-</figure>
-
-Each variant can be either signed or unsigned and has an explicit size.
-Signed and unsigned refers to whether it’s possible for the number to be
-negative or positive; in other words, whether the number needs to have a sign
-with it (signed) or whether it will only ever be positive and can therefore be
-represented without a sign (unsigned). It’s like writing numbers on paper: when
-the sign matters, a number is shown with a plus sign or a minus sign; however,
-when it’s safe to assume the number is positive, it’s shown with no sign.
-Signed numbers are stored using two’s complement representation (if you’re
-unsure what this is, you can search for it online; an explanation is outside
-the scope of this book).
-
-Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
-1</sup> - 1 inclusive, where `n` is the number of bits that variant uses. So an
-`i8` can store numbers from -(2<sup>7</sup>) to 2<sup>7</sup> - 1, which equals
--128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
-so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
-
-Additionally, the `isize` and `usize` types depend on the kind of computer your
-program is running on: 64-bits if you’re on a 64-bit architecture and 32-bits
-if you’re on a 32-bit architecture.
-
-You can write integer literals in any of the forms shown in Table 3-2. Note
-that all number literals except the byte literal allow a type suffix, such as
-`57u8`, and `_` as a visual separator, such as `1_000`.
+*Ціле* (*integer*) - це число без дробової частини. Ви використали один цілий 
+тип раніше в цьому розділі, а саме `i32`. Оголошення цього типу означає, що 
+асоційонване з ним значення має бути знаковим цілим (це і позначається `i` від 
+англ. integer, на відміну від беззнакового `u` від англ. unsigned) для з 32
+двійковими розрядами. Таблиця 3-1 показує вбудовані цілі типи в Rust. Кожен 
+варіант в колонках "Знаковий" і "Беззнаковий" (наприклад, *i32*) може використовуватися для проголошення значення цілого типу.
 
 <figure>
 <figcaption>
 
-Table 3-2: Integer Literals in Rust
+Таблиця 3-1: Цілі типи в Rust
 
 </figcaption>
 
-| Number literals  | Example       |
-|------------------|---------------|
-| Decimal          | `98_222`      |
-| Hex              | `0xff`        |
-| Octal            | `0o77`        |
-| Binary           | `0b1111_0000` |
-| Byte (`u8` only) | `b'A'`        |
+| Довжина | Знаковий | Беззнаковий |
+|---------|----------|-------------|
+| 8 біт   | i8       | u8          |
+| 16 біт  | i16      | u16         |
+| 32 біти | i32      | u32         |
+| 64 біти | i64      | u64         |
+| архіт.  | isize    | usize       |
 
 </figure>
 
-So how do you know which type of integer to use? If you’re unsure, Rust’s
-defaults are generally good choices, and integer types default to `i32`: it’s
-generally the fastest, even on 64-bit systems. The primary situation in which
-you’d use `isize` or `usize` is when indexing some sort of collection.
+Кожен варіант може бути знаковим чи беззнаковим і має явно зазначений розмір.
+"Знаковий" і "беззнаковий" стосується того, чи може число бути від'ємним чи лише
+додатним; іншими словами, чи має число знак (знакове) чи воно буде лише додатним
+і, відтак, буде представлене без знаку (беззнакове). Це як запис чисел на 
+папері: якщо знак має значення, число записується зі знаком плюс чи знаком 
+мінус; але, якщо можна вважати, що число буде додатним, воно записується без 
+знаку. Знакові числа зберігаються у [доповняльному коді][compliment].
 
-#### Floating-Point Types
+[compliment]: https://uk.wikipedia.org/wiki/Доповняльний_код
 
-Rust also has two primitive types for *floating-point numbers*, which are
-numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
-which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because it’s roughly the same speed as `f32` but is capable of more precision.
-It’s possible to use an `f64` type on 32-bit systems, but it will be slower
-than using an `f32` type on those systems. Most of the time, trading potential
-worse performance for better precision is a reasonable initial choice, and you
-should benchmark your code if you suspect floating-point size is a problem in
-your situation.
+Кожен знаковий варіант може зберігати числа від -(2<sup>n - 1</sup>) до 2<sup>n -
+1</sup> - 1 включно, де `n` - кількість біт, які цей варіант використовує. Так,
+`i8` може зберігати числа від -(2<sup>7</sup>) до 2<sup>7</sup> - 1, тобто від 
+-128 до 127. Беззнакові варіанти зберігають числа від 0 до 2<sup>n</sup> - 1, 
+так, `u8` може зберігати числа від 0 до 2<sup>8</sup> - 1, тобто від 0 до 255.
 
-Here’s an example that shows floating-point numbers in action:
+На додачу, типи `isize` та `usize` залежать від різновиду комп'ютера, на якому 
+працює ваша програма: 64 біти, якщо це 64-бітна архітектура, чи 32 біти, якщо
+32-бітна.
 
-<span class="filename">Filename: src/main.rs</span>
+Ви можете писати цілі літерали в будь-якій формі, вказаній у Таблиці 3-2. 
+Зверніть увагу, що всі числові літерали, крім байтових літералів, дозволяють
+використовувати суфікс типу на кшталт `57u8`, і `_` як роздільник для поліпшення 
+читання, як-от `1_000` (те саме, що й `1000`).
+
+<figure>
+<figcaption>
+
+Таблиця 3-2: Цілі літерали в Rust
+
+</figcaption>
+
+| Числові літерали   | Приклад       |
+|--------------------|---------------|
+| Десятковий         | `98_222`      |
+| Шістнадцятковий    | `0xff`        |
+| Вісімковий         | `0o77`        |
+| Двійковий          | `0b1111_0000` |
+| Байт (тільки `u8`) | `b'A'`        |
+
+</figure>
+
+Як же здогадатися, який тип цілого використати? Якщо ви непевні, типовий вібір
+Rust зазвичай непоганий, а типовий цилий тип в Rust - `i32`: він зазвичай
+найшвидший, навіть на 64-бітних системах. Основна ситуація, в якій варто
+використовувати `isize` та `usize` - індексація якого виду колекції.
+
+#### Числа з рухомою комою
+
+Також Rust має два первинні типи для *чисел з рухомою комою*, тобто чисел з 
+десятковою комою. Числа з рухомою комою в Rust - це `f32` та `f64`, які мають
+розмір у 32 біти та 64 біти відповідно. Типовий тип - `f64`, оскільки його 
+швидкість приблизно така ж сама, як і в `f32`, але він має вищу точність. На
+32-бітних системах можна використовувати тип `f64`, але він буде повільнішим за
+`f32` на цих системах. У більшості випадків, вища точність краща за потенційно 
+гіршу продуктивність, і варто провести оцінку часу виконання коду (англ. 
+benchmark), якщо ви підозрюєте, що розмір чисел з рухомою комою створює проблему
+у вашій ситуації.
+
+Ось приклад, що демонструє числа з рухомою комою у дії:
+
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -136,67 +137,67 @@ fn main() {
 }
 ```
 
-Floating-point numbers are represented according to the IEEE-754 standard. The
-`f32` type is a single-precision float, and `f64` has double precision.
+Числа з рухомою комою представлені у відповідності зі страндартом IEEE-754. Тип
+`f32` є числом одинарної точності, а `f64` має подвійну точність.
 
-#### Numeric Operations
+#### Числові операції
 
-Rust supports the usual basic mathematic operations you’d expect for all of the
-number types: addition, subtraction, multiplication, division, and remainder.
-The following code shows how you’d use each one in a `let` statement:
+Rust підтримує звичайні математичні операції, які ви очікуєте для будь-яких 
+типів чисел: додавання, віднімання, множення, ділення і остача. Наступний код
+демонструє, як використовувати їх у операторії `let`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
-    // addition
+    // додавання
     let sum = 5 + 10;
 
-    // subtraction
+    // віднімання
     let difference = 95.5 - 4.3;
 
-    // multiplication
+    // множення
     let product = 4 * 30;
 
-    // division
+    // ділення
     let quotient = 56.7 / 32.2;
 
-    // remainder
+    // остача
     let remainder = 43 % 5;
 }
 ```
 
-Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. Appendix B contains a
-list of all operators that Rust provides.
+Кожен вираз використовує математичний оператор і обчислює значення, яке 
+прив'язується до змінної. Додаток B містить список усіх операторів, наданих 
+мовою Rust.
 
-#### The Boolean Type
+#### Булівський тип
 
-As in most other programming languages, a boolean type in Rust has two possible
-values: `true` and `false`. The boolean type in Rust is specified using `bool`.
-For example:
+Як і в більшості інших мов програмування, булівський тип у Rust має два можливі
+значення: `true` ("істина") та `false` ("неправда"). Булівський тип у Rust 
+позначається `bool`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
     let t = true;
 
-    let f: bool = false; // with explicit type annotation
+    let f: bool = false; // із явною позначкою типу
 }
 ```
 
-The main way to consume boolean values is through conditionals, such as an `if`
-statement. We’ll cover how `if` statements work in Rust in the “Control Flow”
-section.
+Основний спосіб використання булівських значень - умовні вирази, такі, як 
+оператор `if`. Про ці вирази розповідається в розділі "Управління потоком 
+виконання".
 
-#### The Character Type
+#### Символьний тип
 
-So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
-`char` type is the language’s most primitive alphabetic type, and the following
-code shows one way to use it:
+Досі ми працювали тільки з числами, але Rust підтримує також літери. Тип `char`
+в Rust є найпростішим алфавітним типом, і цей код демонструє один зі способів
+його використання:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -205,15 +206,14 @@ fn main() {
    let heart_eyed_cat = '😻';
 }
 ```
-
-Rust’s `char` type represents a Unicode Scalar Value, which means it can
-represent a lot more than just ASCII. Accented letters, Chinese/Japanese/Korean
-ideographs, emoji, and zero width spaces are all valid `char` types in Rust.
-Unicode Scalar Values range from `U+0000` to `U+D7FF` and `U+E000` to
-`U+10FFFF` inclusive. However, a “character” isn’t really a concept in Unicode,
-so your human intuition for what a “character” is may not match up with what a
-`char` is in Rust. We’ll discuss this topic in detail in the “Strings” section
-in Chapter 8.
+Тип `char` в Rust представляє Скалярне значення Юнікоду, тобто може представляти
+значно більше, ніж самий лише ASCII. Наголошені літери, 
+китайські/японські/корейські ідеографи, емоджі, і пробіли нульової довжини є
+коректними значеннями типу `char` в Rust. Скалярні значення Юнікоду варіюються
+від `U+0000` до `U+D7FF` і від `U+E000` до `U+10FFFF` включно. Тим не менш, 
+"символ" насправді не є концепцією Юнікоду, тому інтуїція стосовно того, що таке
+"символ" може не збігатися із `char` в Rust. Ми обговорюємо це питання 
+детальніше у підрозділі "Стрічки" в Розділі 8.
 
 ### Compound Types
 
