@@ -127,6 +127,9 @@ fn main() {
 </figcaption>
 </figure>
 
+Ця програма компілюється без помилок, і також скопмілювалася б, якби ви 
+використали `word` після виклику `s.clear()`. `word` ніяк не пов'язано зі станом
+`s`, і тому `word` міститиме значення `5`
 This program compiles without any errors and also would if we used `word` after
 calling `s.clear()`. `word` isn’t connected to the state of `s` at all, so
 `word` still contains the value `5`. We could use that value `5` with the

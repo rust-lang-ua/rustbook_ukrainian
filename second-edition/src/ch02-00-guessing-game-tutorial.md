@@ -539,48 +539,48 @@ fn main() {
 еквівалентну `use rand`, так що тепер ми можемо викликати будь-що з ящика 
 `rand`, додавши префікс `rand::`.
 
-Next, we’re adding another `use` line: `use rand::Rng`. `Rng` is a trait that
-defines methods that random number generators implement, and this trait must be
-in scope for us to use those methods. Chapter 10 will cover traits in detail.
+Далі ми додаємо ще один рядок із `use` - `use rand::Rng`. `Rng` - це риса, що 
+визначає методи, втілені генераторами випадкових чисел, і ця риса має бути в 
+області видимості, щоб можна було використовувати ці методи. Риси детальніше
+розкриваються у Розділі 10.
 
-Also, we’re adding two more lines in the middle. The `rand::thread_rng` function
-will give us the particular random number generator that we’re going to use:
-one that is local to the current thread of execution and seeded by the
-operating system. Next, we call the `gen_range` method on the random number
-generator. This method is defined by the `Rng` trait that we brought into
-scope with the `use rand::Rng` statement. The `gen_range` method takes two
-numbers as arguments and generates a random number between them. It’s inclusive
-on the lower bound but exclusive on the upper bound, so we need to specify `1`
-and `101` to request a number between 1 and 100.
+Також, ми додали ще два рядки всередині. Функція `rand::thread_rng` дає нам
+конкретний генератор випадкових чисел, який ми будемо використовувати: локальний
+для чинного потоку виконання і ініціалізований операційною системою. Далі, ви
+викликаємо метод `gen_range` цього генератора. Цей метод визначений рисою `Rng`,
+яку ми внесли до області видимості за допомогою оператора `use rand::Rng`. Метод
+`gen_range` приймає два числа параметрами і генерує випадкове число між ними,
+включно з нижньою межею, але виключаючи верхню, тому треба вказувати `1` та 
+`101`, щоб отримати число між 1 та 100 включно.
 
-Knowing which traits to use and which functions and methods to call from a
-crate isn’t something that you’ll just *know*. Instructions for using a crate
-are in each crate’s documentation. Another neat feature of Cargo is that you
-can run the `cargo doc --open` command that will build documentation provided
-by all of your dependencies locally and open it in your browser. If you’re
-interested in other functionality in the `rand` crate, for example, run `cargo
-doc --open` and click `rand` in the sidebar on the left.
+Знання, які риси використати і які функції та методи викликати з ящика не є 
+чимось таким, що треба знати напам'ять. Інструкції з використання ящика є в 
+документації цього ящика. Ще одна корисна особливість Cargo полягає в тому, що
+запуск команди `cargo doc --open` побудує на вашому комп'ютері документацію, 
+надану всіма залежностями, і відкриє її у вашому переглядачі. Якщо вам цікава
+інша функціональність ящика `rand`, запустіть `cargo doc --open` і клацніть
+`rand` на боковій панелі ліворуч.
 
-The second line that we added to the code prints the secret number. This is
-useful while we’re developing the program to be able to test it, but we’ll
-delete it from the final version. It’s not much of a game if the program prints
-the answer as soon as it starts!
+Другий рядок, який ми додали до коду, виводить таємне число. Це корисно, коли
+ми розробляємо програму, щоб можна було перевірити її роботу, але ми видалимо її
+у фінальній версії. Буде не дуже цікаво, якщо програма виводитиме відповідь \
+одразу по запуску!
 
-Try running the program a few times:
+Спробуємо запустити програму кілька разів:
 
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
-Guess the number!
-The secret number is: 7
+Відгадай число!
+Таємне число: 7
 Please input your guess.
 4
 You guessed: 4
 $ cargo run
      Running `target/debug/guessing_game`
-Guess the number!
-The secret number is: 83
+Відгадай число!
+Таємне число: 83
 Please input your guess.
 5
 You guessed: 5
@@ -609,7 +609,7 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+    println!("Таємне число: {}", secret_number);
 
     println!("Please input your guess.");
 
@@ -728,7 +728,7 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+    println!("Таємне число: {}", secret_number);
 
     println!("Please input your guess.");
 
@@ -806,7 +806,7 @@ $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
-The secret number is: 58
+Таємне число: 58
 Please input your guess.
   76
 You guessed: 76
@@ -840,7 +840,7 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+    println!("Таємне число: {}", secret_number);
 
     loop {
         println!("Please input your guess.");
@@ -881,7 +881,7 @@ $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
-The secret number is: 59
+Таємне число: 59
 Please input your guess.
 45
 You guessed: 45
@@ -923,7 +923,7 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+    println!("Таємне число: {}", secret_number);
 
     loop {
         println!("Please input your guess.");
@@ -998,7 +998,7 @@ $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
-The secret number is: 61
+Таємне число: 61
 Please input your guess.
 10
 You guessed: 10
