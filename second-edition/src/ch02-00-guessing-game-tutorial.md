@@ -307,7 +307,7 @@ Rust попереджає, що ми не використали значенн�
 який ми ще не обговорили, а саме:
 
 ```rust,ignore
-println!("You guessed: {}", guess);
+println!("Ваша здогадка: {}", guess);
 ```
 
 Цей рядок виводить стрічку, в якій ми зберегли те, що ввів користувач. Символи
@@ -574,25 +574,24 @@ $ cargo run
      Running `target/debug/guessing_game`
 Відгадай число!
 Таємне число: 7
-Please input your guess.
+Будь ласка, введіть здогадку:
 4
-You guessed: 4
+Ваша здогадка: 4
 $ cargo run
      Running `target/debug/guessing_game`
 Відгадай число!
 Таємне число: 83
-Please input your guess.
+Будь ласка, введіть здогадку:
 5
-You guessed: 5
+Ваша здогадка: 5
 ```
 
-You should get different random numbers, and they should all be numbers between
-1 and 100. Great job!
+Ви маєте побачити різні випадкові числа, і вони мають бути між 1 та 100. Чудово!
 
-## Comparing the Guess to the Secret Number
+## Порівняння здогадки з таємним числом
 
-Now that we have user input and a random number, we can compare them. That
-step is shown in Listing 2-4:
+Тепер, коли ми маємо введене користувачем і випадкове числа, ми можемо їх 
+порівняти. Цей крок показано в Роздруку 2-4:
 
 <figure>
 <span class="filename">Файл: src/main.rs</span>
@@ -611,63 +610,64 @@ fn main() {
 
     println!("Таємне число: {}", secret_number);
 
-    println!("Please input your guess.");
+    println!("Будь ласка, введіть здогадку:");
 
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+        .expect("Не вдалося прочитати рядок");
 
-    println!("You guessed: {}", guess);
+    println!("Ваша здогадка: {}", guess);
 
     match guess.cmp(&secret_number) {
-        Ordering::Less    => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal   => println!("You win!"),
+        Ordering::Less    => println!("Замало!"),
+        Ordering::Greater => println!("Забагато!"),
+        Ordering::Equal   => println!("Ви перемогли!"),
     }
 }
 ```
 
 <figcaption>
 
-Listing 2-4: Handling the possible return values of comparing two numbers
+Роздрук 2-4: Різні дії в залежності від порівняння двох чисел
 
 </figcaption>
 </figure>
 
-The first new bit here is another `use`, bringing a type called
-`std::cmp::Ordering` into scope from the standard library. `Ordering` is
-another enum, like `Result`, but the variants for `Ordering` are `Less`,
-`Greater`, and `Equal`. These are the three outcomes that are possible when you
-compare two values.
+Перше нововведення - ще один `use`, який вводить тип `std::cmp::Ordering` зі
+стандартної бібліотеки до області видимості. `Ordering` ("впорядкування") - це 
+ще один енум, як і `Result`, але варіанти `Ordering` такі: `Less` ("менше"),
+`Greater` ("більше"), and `Equal` ("рівно"). Це три можливі результати при
+порівнянні двох чисел.
 
+Потім ми додємо п'ять нових рядків
 Then we add five new lines at the bottom that use the `Ordering` type:
 
 ```rust,ignore
 match guess.cmp(&secret_number) {
-    Ordering::Less    => println!("Too small!"),
-    Ordering::Greater => println!("Too big!"),
-    Ordering::Equal   => println!("You win!"),
+    Ordering::Less    => println!("Замало!"),
+    Ordering::Greater => println!("Забагато!"),
+    Ordering::Equal   => println!("Ви перемогли!"),
 }
 ```
 
-The `cmp` method compares two values and can be called on anything that can be
-compared. It takes a reference to whatever you want to compare with: here it’s
-comparing the `guess` to the `secret_number`. `cmp` returns a variant of the
-`Ordering` enum we brought into scope with the `use` statement. We use a
-[`match`][match]<!-- ignore --> expression to decide what to do next based on
-which variant of `Ordering` was returned from the call to `cmp` with the values
-in `guess` and `secret_number`.
+Метод `cmp` порівнює два значення і може бути викликаний для всього, що можна
+порівнювати. Він приймає параметром посилання на те, що ви хочете порівнювати із
+ним: тут він порівнює `guess` із `secret_number`. `cmp` повертає варіант з енуму
+`Ordering`, який ми внесли у область видимості за допомогою оператора `use`. Ми
+скористалися виразом [`match`][match]<!-- ignore -->, щоб визначити, що робити
+далі залежно від варіанту `Ordering`, що його повернув виклик `cmp` зі 
+значеннями `guess` та `secret_number`.
 
 [match]: ch06-02-match.html
 
-A `match` expression is made up of *arms*. An arm consists of a *pattern* and
-the code that should be run if the value given to the beginning of the `match`
-expression fits that arm’s pattern. Rust takes the value given to `match` and
-looks through each arm’s pattern in turn. The `match` construct and patterns
-are powerful features in Rust that let you express a variety of situations your
-code might encounter and helps ensure that you handle them all. These features
-will be covered in detail in Chapter 6 and Chapter 19, respectively.
+Вираз `match` збирається з *рукавів*. Рукав складається зі *зразка* (*pattern*) 
+та коду, який буде виконано, якщо значення, передане виразу `match`, відповідає
+зразку цього рукава. Rust бере значення, передане `match`, і по черзі переверіє
+зразки рукавів. Конструкція `match` і зразки - потужні засоби мови Rust, які
+дозволяють вам виражати різноманітні ситуації, які можуть трапитися вам при 
+програмуванні, і допомагають переконатися, що ви обробили їх усіх. Детально ці
+можливості будуть розглянуті в Розділах 5 і 18, відповідно.
 
 Let’s walk through an example of what would happen with the `match` expression
 used here. Say that the user has guessed 50, and the randomly generated secret
@@ -678,7 +678,7 @@ pattern, `Ordering::Less`, but the value `Ordering::Greater` does not match
 `Ordering::Less`. So it ignores the code in that arm and moves to the next arm.
 The next arm’s pattern, `Ordering::Greater`, *does* match
 `Ordering::Greater`! The associated code in that arm will execute and print
-`Too big!` to the screen. The `match` expression ends because it has no need to
+`Забагато!` to the screen. The `match` expression ends because it has no need to
 look at the last arm in this particular scenario.
 
 However, the code in Listing 2-4 won’t compile yet. Let’s try it:
@@ -730,22 +730,22 @@ fn main() {
 
     println!("Таємне число: {}", secret_number);
 
-    println!("Please input your guess.");
+    println!("Будь ласка, введіть здогадку:");
 
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+        .expect("Не вдалося прочитати рядок");
 
     let guess: u32 = guess.trim().parse()
         .expect("Please type a number!");
 
-    println!("You guessed: {}", guess);
+    println!("Ваша здогадка: {}", guess);
 
     match guess.cmp(&secret_number) {
-        Ordering::Less    => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal   => println!("You win!"),
+        Ordering::Less    => println!("Замало!"),
+        Ordering::Greater => println!("Забагато!"),
+        Ordering::Equal   => println!("Ви перемогли!"),
     }
 }
 ```
@@ -807,10 +807,10 @@ $ cargo run
      Running `target/guessing_game`
 Guess the number!
 Таємне число: 58
-Please input your guess.
+Будь ласка, введіть здогадку:
   76
-You guessed: 76
-Too big!
+Ваша здогадка: 76
+Забагато!
 ```
 
 Nice! Even though spaces were added before the guess, the program still figured
@@ -843,22 +843,22 @@ fn main() {
     println!("Таємне число: {}", secret_number);
 
     loop {
-        println!("Please input your guess.");
+        println!("Будь ласка, введіть здогадку:");
 
         let mut guess = String::new();
 
         io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
+            .expect("Не вдалося прочитати рядок");
 
         let guess: u32 = guess.trim().parse()
             .expect("Please type a number!");
 
-        println!("You guessed: {}", guess);
+        println!("Ваша здогадка: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal   => println!("You win!"),
+            Ordering::Less    => println!("Замало!"),
+            Ordering::Greater => println!("Забагато!"),
+            Ordering::Equal   => println!("Ви перемогли!"),
         }
     }
 }
@@ -882,19 +882,19 @@ $ cargo run
      Running `target/guessing_game`
 Guess the number!
 Таємне число: 59
-Please input your guess.
+Будь ласка, введіть здогадку:
 45
-You guessed: 45
-Too small!
-Please input your guess.
+Ваша здогадка: 45
+Замало!
+Будь ласка, введіть здогадку:
 60
-You guessed: 60
-Too big!
-Please input your guess.
+Ваша здогадка: 60
+Забагато!
+Будь ласка, введіть здогадку:
 59
-You guessed: 59
-You win!
-Please input your guess.
+Ваша здогадка: 59
+Ви перемогли!
+Будь ласка, введіть здогадку:
 quit
 thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidDigit }', src/libcore/result.rs:785
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
@@ -926,23 +926,23 @@ fn main() {
     println!("Таємне число: {}", secret_number);
 
     loop {
-        println!("Please input your guess.");
+        println!("Будь ласка, введіть здогадку:");
 
         let mut guess = String::new();
 
         io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
+            .expect("Не вдалося прочитати рядок");
 
         let guess: u32 = guess.trim().parse()
             .expect("Please type a number!");
 
-        println!("You guessed: {}", guess);
+        println!("Ваша здогадка: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
+            Ordering::Less    => println!("Замало!"),
+            Ordering::Greater => println!("Забагато!"),
             Ordering::Equal   => {
-                println!("You win!");
+                println!("Ви перемогли!");
                 break;
             }
         }
@@ -950,7 +950,7 @@ fn main() {
 }
 ```
 
-By adding the `break` line after `You win!`, the program will exit the loop
+By adding the `break` line after `Ви перемогли!`, the program will exit the loop
 when the user guesses the secret number correctly. Exiting the loop also means
 exiting the program, because the loop is the last part of `main`.
 
@@ -999,20 +999,20 @@ $ cargo run
      Running `target/guessing_game`
 Guess the number!
 Таємне число: 61
-Please input your guess.
+Будь ласка, введіть здогадку:
 10
-You guessed: 10
-Too small!
-Please input your guess.
+Ваша здогадка: 10
+Замало!
+Будь ласка, введіть здогадку:
 99
-You guessed: 99
-Too big!
-Please input your guess.
+Ваша здогадка: 99
+Забагато!
+Будь ласка, введіть здогадку:
 foo
-Please input your guess.
+Будь ласка, введіть здогадку:
 61
-You guessed: 61
-You win!
+Ваша здогадка: 61
+Ви перемогли!
 ```
 
 Awesome! With one tiny final tweak, we will finish the guessing game: recall
@@ -1036,25 +1036,25 @@ fn main() {
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
     loop {
-        println!("Please input your guess.");
+        println!("Будь ласка, введіть здогадку:");
 
         let mut guess = String::new();
 
         io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
+            .expect("Не вдалося прочитати рядок");
 
         let guess: u32 = match guess.trim().parse() {
             Ok(num) => num,
             Err(_) => continue,
         };
 
-        println!("You guessed: {}", guess);
+        println!("Ваша здогадка: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
+            Ordering::Less    => println!("Замало!"),
+            Ordering::Greater => println!("Забагато!"),
             Ordering::Equal   => {
-                println!("You win!");
+                println!("Ви перемогли!");
                 break;
             }
         }
