@@ -1,38 +1,38 @@
-## How Functions Work
+## Як працюють функції.
 
-Functions are pervasive in Rust code. You’ve already seen one of the most
-important functions in the language: the `main` function, which is the entry
-point of many programs. You’ve also seen the `fn` keyword, which allows you to
-declare new functions.
+Функції використовуються скрізь у коді на Rust. Ви вже бачили одну з 
+найважливіших функцій у мові - функцію `main`, яка є точкою входу багатьох 
+програм. Ви також бачили ключове слово `fn`, яке дозволяє вам оголошувати нові 
+функції.
 
-Rust code uses *snake case* as the conventional style for function and variable
-names. In snake case, all letters are lowercase and underscores separate words.
-Here’s a program that contains an example function definition:
+У мові Rust для назв функцій і змінних прийнято використовувати *зміїний 
+регістр* - тобто всі літери маленькі, а слова відокремлюються підкресленянми.
+Ось приклад програми, що містить визначення функції:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
-    println!("Hello, world!");
+    println!("Привіт, світ!");
 
     another_function();
 }
 
 fn another_function() {
-    println!("Another function.");
+    println!("Інша функція.");
 }
 ```
 
-Function definitions in Rust start with `fn` and have a set of parentheses
-after the function name. The curly braces tell the compiler where the function
-body begins and ends.
+Визначення функцій у Rust починаються з `fn` і мають кілька пар дужок після 
+назви функції. Фігурні дужки кажуть компілятору, де починається і закінчується 
+тіло функції.
 
-We can call any function we’ve defined by entering its name followed by a set
-of parentheses. Because `another_function` is defined in the program, it can be
-called from inside the `main` function. Note that we defined `another_function`
-*after* the `main` function in the source code; we could have defined it before
-as well. Rust doesn’t care where you define your functions, only that they’re
-defined somewhere.
+Ми можемо викликати будь-яку визначену нами функцію, написавши її назву і пару
+дужок. Оскільки `another_function` визначена в програмі, її можна викликати
+зсередини функції `main`. Зверніть увагу, що ми визначили `another_function` 
+у сирцевому коді *після* функції `main`; так само її можна було визначити до
+функції `main`. Для Rust не має значення, де ви визначаєте функції, важливо,
+щоб вони були визначені хоч десь.
 
 Let’s start a new binary project named *functions* to explore functions
 further. Place the `another_function` example in *src/main.rs* and run it. You

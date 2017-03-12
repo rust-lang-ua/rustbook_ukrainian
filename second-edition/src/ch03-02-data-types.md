@@ -281,17 +281,17 @@ fn main() {
 за допомогою їхніх індексів. Як і в більшості мов програмування, перший індекс
 в кортежі - 0.
 
-#### Arrays
+#### Масиви
 
-Another way to have a collection of multiple values is with an *array*. Unlike
-a tuple, every element of an array must have the same type. Arrays in Rust are
-different than arrays in some other languages because arrays in Rust have a
-fixed length: once declared, they cannot grow or shrink in size.
+Інший спосіб організувати колекцію з багатьох значень - це *масив*. На відміну
+від кортежу, всі елементи масиву мають один тип. Масиви в Rust відрізняються
+від масивів у деяких інших мовах, бо в Rust вони мають фіксовану довжину: після
+проголошення, їхній розмір не може зростати чи скорочуватися.
 
-In Rust, the values going into an array are written as a comma-separated list
-inside square brackets:
+У Rust, значення, що потрапляють до масиву, пишуться у вигляді списку, 
+розділеного комами, в квадратних дужках:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -299,30 +299,30 @@ fn main() {
 }
 ```
 
-Arrays are useful when you want your data allocated on the stack rather than
-the heap (we will discuss the stack and the heap more in Chapter 4), or when
-you want to ensure you always have a fixed number of elements. They aren’t as
-flexible as the vector type, though. The vector type is a similar collection
-type provided by the standard library that *is* allowed to grow or shrink in
-size. If you’re unsure whether to use an array or a vector, you should probably
-use a vector: Chapter 8 discusses vectors in more detail.
+Масиви корисні, коли дані мають бути розмішені в стеку, а не в купі (детальніше
+про це йдеться у Розділі 4), чи коли ви хочете бути певним, що завжди маєте 
+фіксовану кількість елементів. Втім, масиви не такі гнучкі, як вектори. Вектор -
+це схожий тип-колекція, які можуть зростати і скорочуватися. Якщо ви не певні,
+використовувати вам масив чи вектор, швидше за все варто використати вектор. 
+Детальніше про це можна прочитати у Розділі 8.
 
-An example of when you might want to use an array rather than a vector is in a
-program that needs to know the names of the months of the year. It’s very
-unlikely that such a program will need to add or remove months, so you can use
-an array because you know it will always contain 12 items:
+Приклад випадку, коли вам може знадобитися масив, а не вектор - програма, що
+використовує назви місяців року. Навряд чи така програма потребуватиме додавання
+чи усунення місяців, тому можна скористатися масивом, бо ви знаєте, що у ньому
+завжди буде 12 елементів:
 
 ```rust
-let months = ["January", "February", "March", "April", "May", "June", "July",
-              "August", "September", "October", "November", "December"];
+let months = ["Січень",   "Лютий",   "Березень", "Квітень", 
+              "Травень",  "Червень", "Липень",   "Серпень", 
+              "Вересень", "Жовтень", "Листопад", "Грудень"];
 ```
 
-##### Accessing Array Elements
+##### Доступ до елементів масиву
 
-An array is a single chunk of memory allocated on the stack. We can access
-elements of an array using indexing, like this:
+Масив - це єдиний фрагмент пам'яті, віділений у стеку. До елементів масиву можна
+отримати доступ за допомогою індексації, ось так:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -333,16 +333,16 @@ fn main() {
 }
 ```
 
-In this example, the variable named `first` will get the value `1`, because
-that is the value at index `[0]` in the array. The variable named `second` will
-get the value `2` from index `[1]` in the array.
+У цьому прикладі, змінна з назвою `first` отримає значення `1`, бо це значення,
+розташоване за індексом `[0]` у масиві. Змінна з назвою `second` отримає 
+значення `2` з індексу `[1]` в масиві.
 
-##### Invalid Array Element Access
+##### Некоректний доступ до елементів масиву
 
-What happens if we try to access an element of an array that is past the end of
-the array? Say we change the example to the following:
+Що станеться, якщо ми спробуємо дістатися до елементів масиву, що знаходяться
+за кінцем масиву? Змінимо приклад на такий:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -350,11 +350,11 @@ fn main() {
 
     let element = a[10];
 
-    println!("The value of element is: {}", element);
+    println!("Значення елементу: {}", element);
 }
 ```
 
-Running this code using `cargo run` produces the following result:
+Запуск цього коду за допомогою `cargo run` видає такий результат:
 
 ```text
 $ cargo run
@@ -366,14 +366,14 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 ```
 
-The compilation didn’t produce any errors, but the program results in a
-*runtime* error and didn’t exit successfully. When you attempt to access an
-element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than the length, Rust will
-*panic*, which is the term Rust uses when a program exits with an error.
+Компіляція не повідомила про помилку, але програма аварійно завершилася помилкою
+*часу виконання*. Коли ви намагаєтеся отримати доступ до елементу масиву, Rust
+перевіряє, чи зазначений індекс менший за довжину масиву. Якщо індекс більший,
+Rust *панікує*, що в Rust означає, що програма завершується помилкою.
 
-This is the first example of Rust’s safety principles in action. In many
-low-level languages, this kind of check is not done, and when you provide an
-incorrect index, invalid memory can be accessed. Rust protects you against this
-kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling.
+Це перший приклад принципів безпеки Rust у дії. В багатьох мовах нищького рівня
+такої перевірки не відбувається, і при запиті елементу з некоректним індексом,
+відбувається доступ до пам'яті за межами масиву. Rust захищає вас від такої 
+помилки, одразу перериваючи роботу програми замість того, щоб дозволити 
+некоректний доступ і продовжити роботу. Розділ 9 розповідає більше про обробку
+помилок у Rust.
