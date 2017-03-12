@@ -604,7 +604,7 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Відгадай число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
@@ -640,8 +640,8 @@ fn main() {
 `Greater` ("більше"), and `Equal` ("рівно"). Це три можливі результати при
 порівнянні двох чисел.
 
-Потім ми додємо п'ять нових рядків
-Then we add five new lines at the bottom that use the `Ordering` type:
+Потім ми додали в кінець коду п'ять нових рядків, в яких використали тип 
+`Ordering`:
 
 ```rust,ignore
 match guess.cmp(&secret_number) {
@@ -661,27 +661,26 @@ match guess.cmp(&secret_number) {
 
 [match]: ch06-02-match.html
 
-Вираз `match` збирається з *рукавів*. Рукав складається зі *зразка* (*pattern*) 
-та коду, який буде виконано, якщо значення, передане виразу `match`, відповідає
-зразку цього рукава. Rust бере значення, передане `match`, і по черзі переверіє
-зразки рукавів. Конструкція `match` і зразки - потужні засоби мови Rust, які
-дозволяють вам виражати різноманітні ситуації, які можуть трапитися вам при 
-програмуванні, і допомагають переконатися, що ви обробили їх усіх. Детально ці
-можливості будуть розглянуті в Розділах 5 і 18, відповідно.
+Вираз `match` збирається з *рукавів* (у інших мовах такі конструкції зазвичай 
+звуться гілками). Рукав складається зі *зразка* (*pattern*) та коду, який буде 
+виконано, якщо значення, передане виразу `match`, відповідає зразку цього 
+рукава. Rust бере значення, передане `match`, і по черзі переверяє зразки 
+рукавів. Конструкція `match` і зразки - потужні засоби мови Rust, які дозволяють
+вам виражати різноманітні ситуації, які можуть трапитися вам при програмуванні, 
+і допомагають переконатися, що ви обробили їх усіх. Детально ці можливості 
+будуть розглянуті в Розділах 5 і 18, відповідно.
 
-Let’s walk through an example of what would happen with the `match` expression
-used here. Say that the user has guessed 50, and the randomly generated secret
-number this time is 38. When the code compares 50 to 38, the `cmp` method will
-return `Ordering::Greater`, because 50 is greater than 38. `Ordering::Greater`
-is the value that the `match` expression gets. It looks at the first arm’s
-pattern, `Ordering::Less`, but the value `Ordering::Greater` does not match
-`Ordering::Less`. So it ignores the code in that arm and moves to the next arm.
-The next arm’s pattern, `Ordering::Greater`, *does* match
-`Ordering::Greater`! The associated code in that arm will execute and print
-`Забагато!` to the screen. The `match` expression ends because it has no need to
-look at the last arm in this particular scenario.
+Давайте розберемо, як спрацює в цьому коді вираз `match`. Нехай користувач увів
+50, а випадково згенероване цього разу таємне число - 38. Коли код порівнює 50
+і 38, метод `cmp` поверне `Ordering::Greater`, бо 50 більше за 38. Це значення
+отримує вираз `match`. Він перевіряє зразок першого рукава, `Ordering::Less`,
+але значення `Ordering::Greater` не відповідає `Ordering::Less`. Тому код цього
+рукава ігнорується і ми переходимо до наступного рукава. Зразок другого рукава,
+`Ordering::Greater`, *відповідає* `Ordering::Greater`! Код цього рукава буде 
+виконано і виведе на екран `Забагато!`. Вираз `match` завершується, бо в цьому
+конкретному випадку більше нема сенсу перевіряти останній рукав.
 
-However, the code in Listing 2-4 won’t compile yet. Let’s try it:
+Але код у Роздруку 2-4 все ще не компілюється. Спробуємо його скопмілювати:
 
 ```text
 $ cargo build
@@ -699,20 +698,20 @@ error: aborting due to previous error
 Could not compile `guessing_game`.
 ```
 
-The core of the error states that there are *mismatched types*. Rust has a
-strong, static type system. However, it also has type inference. When we wrote
-`let guess = String::new()`, Rust was able to infer that `guess` should be a
-`String` and didn’t make us write the type. The `secret_number`, on the other
-hand, is a number type. A few number types can have a value between 1 and 100:
-`i32`, a 32-bit number; `u32`, an unsigned 32-bit number; `i64`, a 64-bit
-number; as well as others. Rust defaults to an `i32`, which is the type of
-`secret_number` unless we add type information elsewhere that would cause Rust
-to infer a different numerical type. The reason for the error is that Rust will
-not compare a string and a number type.
+Суть цієї помилки в тому, що тут є *невідопвідні типи*. Rust має сильну, 
+статичну систему типів. Разом із тим, він має систему виведення типів. Коли ви
+писали `let guess = String::new()`, Rust зміг вивести, що `guess` має бути типу
+`String` і не просив нас написати тип. `secret_number`, з іншого боку, числового
+типу. Кілька числових типів можуть мати значення між 1 та 100: `i32`, знакове 
+32-бітне число; `u32`, беззнакове 32-бітне число; `i64`, знакове 64-бітне число
+і кілька інших. Типовий вибір Rust `i32`, і це й буде типом `secret_number`, 
+якщо ми не додамо інформацію про тип деінде, щоб змусити Rust вивести інший 
+числовий тип. Причина ж цієї помилки полягає в тому, що Rust не може порівнювати
+стрічку і числовий тип.
 
-Ultimately, we want to convert the `String` the program reads as input into a
-real number type so we can compare it to the guess numerically. We can do
-that by adding the following two lines to the `main` function body:
+Зрештою, ми хочемо перетворити стрічку `String`, яку програма прочитала з 
+клавіатури, в числовий тип, щоб можна було порівняти його зі таємним числом. Це
+можна зробити, додавши такі рядки до функції `main`:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -724,7 +723,7 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Відгадай число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
@@ -738,7 +737,7 @@ fn main() {
         .expect("Не вдалося прочитати рядок");
 
     let guess: u32 = guess.trim().parse()
-        .expect("Please type a number!");
+        .expect("Будь ласка, введіть число!");
 
     println!("Ваша здогадка: {}", guess);
 
@@ -750,62 +749,61 @@ fn main() {
 }
 ```
 
-The two new lines are:
+Ось два нові рядки:
 
 ```rust,ignore
 let guess: u32 = guess.trim().parse()
-    .expect("Please type a number!");
+    .expect("Будь ласка, введіть число!");
 ```
 
-We create a variable named `guess`. But wait, doesn’t the program
-already have a variable named `guess`? It does, but Rust allows us to
-*shadow* the previous value of `guess` with a new one. This feature is often
-used in similar situations in which you want to convert a value from one type
-to another type. Shadowing lets us reuse the `guess` variable name rather than
-forcing us to create two unique variables, like `guess_str` and `guess` for
-example. (Chapter 3 covers shadowing in more detail.)
+Ми створили змінну з назвою `guess`. Але чекайте, в програмі вже ніби існує 
+змінна з назвою `guess`? Так, але Rust дозволяє *затінювати* попереднє значення
+`guess` новим. Ця особливість часто використовується у схожих ситуаціях, коли
+нам треба перевторити значення з одного типу в інший. Затінення дозволяє нам
+наново використати ім'я змінної `guess`, щобне довелося створювати дві окремі 
+змінні на кшталт `guess_str` і `guess`. Розділ 3 детальніше розповідає про 
+затінення.
 
-We bind `guess` to the expression `guess.trim().parse()`. The `guess` in the
-expression refers to the original `guess` that was a `String` with the input in
-it. The `trim` method on a `String` instance will eliminate any whitespace at
-the beginning and end. `u32` can only contain numerical characters, but the
-user must press the Return key to satisfy `read_line`. When the user presses
-Return, a newline character is added to the string. For example, if the user
-types 5 and presses return, `guess` looks like this: `5\n`. The `\n` represents
-“newline,” the return key. The `trim` method eliminates `\n`, resulting in just
-`5`.
+Ми зв'зали `guess` з виразом `guess.trim().parse()`. `guess` в цьому виразі - 
+це перша змінна `guess`, яка має тип `String`, в якій міститься те, що ввів
+користувач. Метод `trim`, застосований до екземпляру `String`, видалить всі 
+пробільні символи на початки і в кінці. `u32` може бути створений лише зі 
+стрічки, яка містить тільки цифри, але користувач має натиснути на Enter, щоб 
+спрацював метод `read_line`. При цьому в кінець стрічки додається символ нового
+рядка. Наприклад, якщо користувач набере 5 і натисне Enter, `guess` буде 
+виглядати як `5\n`, де `\n` представляє символ нового рядка. Метод `trim` 
+видалить `\n`, і залишиться просто `5`.
 
-The [`parse` method on strings][parse]<!-- ignore --> parses a string into some
-kind of number. Because this method can parse a variety of number types, we
-need to tell Rust the exact number type we want by using `let guess: u32`. The
-colon (`:`) after `guess` tells Rust we’ll annotate the variable’s type. Rust
-has a few built-in number types; the `u32` seen here is an unsigned, 32-bit
-integer. It’s a good default choice for a small positive number. You’ll learn
-about other number types in Chapter 3. Additionally, the `u32` annotation in
-this example program and the comparison with `secret_number` means that Rust
-will infer that `secret_number` should be a `u32` as well. So now the
-comparison will be between two values of the same type!
+[Метод `parse` для стрічок][parse]<!-- ignore --> розбирає стрічку, виділяючи 
+число певного виду. Оскільки цей метод може виділяти різні числові типи, там 
+необхідно вказати Rust, який саме числовий тип ми хочемо отримати - за допогомою
+`let guess: u32`. Двокрапка `:` після `guess` каже Rust, що ми познааємо тип 
+змінної. В Rust є кільки вбудованих числових типів; ми вибрали `u32` - 
+беззнакове 32-бітне ціле. Це непоганий вибір для невеликих додатних чисел. Про 
+інші типи ви дізнаєтеся у Розділі 3. На додачу, саме позначка `u32` у цьому 
+прикладі і порівняння із `secret_number` дає Rust можливість вивести, що 
+`secret_number` теж має бути `u32`. І тепер порівнюватимуться два значення 
+одного типу!
 
 [parse]: ../std/primitive.str.html#method.parse
 
-The call to `parse` could easily cause an error. If, for example, the string
-contained `A👍%`, there would be no way to convert that to a number. Because it
-might fail, the `parse` method returns a `Result` type, much like the
-`read_line` method does as discussed earlier in “Handling Potential Failure
-with the Result Type” on page XX. We’ll treat this `Result` the same way by
-using the `expect` method again. If `parse` returns an `Err` `Result` variant
-because it couldn’t create a number from the string, the `expect` call will
-crash the game and print the message we give it. If `parse` can successfully
-convert the string to a number, it will return the `Ok` variant of `Result`,
-and `expect` will return the number that we want from the `Ok` value.
+Виклик `parse` може легко призвести до помилки. Якщо, наприклад, стрічка містить
+`A👍%`, її неможливо перетворити на число. Оскільки метод може завержитися 
+невдачею, він повертає `Result`, майже так само, які  метод `read_line`, про 
+який ми вже говорили раніше в підрозділі "Керування потенційною невдачую за 
+допомогою типу `Result`". Ви обробимо цей `Result` так само - за допомогою 
+методу `expect`. Якщо `parse` поверне варіант `Err`, значить, він не зміг 
+створити число зі стрічки, `expect` припинить гру і виведе повідомлення, яке ми
+йому надали. Якщо `parse` вдало створив число зі стрічки, він поверне варіант
+`Ok`, а `expect` поверне потрібне нам число зі значення `Ok`.
 
-Let’s run the program now!
+А тепер запустімо програму!
 
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
-Guess the number!
+Відгадай число!
 Таємне число: 58
 Будь ласка, введіть здогадку:
   76
@@ -813,18 +811,18 @@ Guess the number!
 Забагато!
 ```
 
-Nice! Even though spaces were added before the guess, the program still figured
-out that the user guessed 76. Run the program a few times to verify the
-different behavior with different kinds of input: guess the number correctly,
-guess a number that is too high, and guess a number that is too low.
+Чудово! Хоча ми й додали пробіли перед здогадкою, програма все одно зрозуміла,
+що користувач увів 76. Запустіть програму кілька разів, щоб перевірити різну
+поведінку на різних введених даних: введіть таємне число, більше за нього і 
+менше.
 
-We have most of the game working now, but the user can make only one guess.
-Let’s change that by adding a loop!
+Гра тепер майже працює, але користувачеві надається тільки одна можливість 
+вгадати. Змінимо це, додавши цикл!
 
-## Allowing Multiple Guesses with Looping
+## Введення кількох здогадок за допомогою циклів
 
-The `loop` keyword gives us an infinite loop. Add that now to give users more
-chances at guessing the number:
+Ключове слово `loop` створює нескінчений цикл. Додамо його, щоб дати 
+користувачам більше можливостей відгадати число:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -836,7 +834,7 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Відгадай число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
@@ -851,7 +849,7 @@ fn main() {
             .expect("Не вдалося прочитати рядок");
 
         let guess: u32 = guess.trim().parse()
-            .expect("Please type a number!");
+            .expect("Будь ласка, введіть число!");
 
         println!("Ваша здогадка: {}", guess);
 
@@ -864,23 +862,23 @@ fn main() {
 }
 ```
 
-As you can see, we’ve moved everything into a loop from the guess input prompt
-onward. Be sure to indent those lines another four spaces each, and run the
-program again. Notice that there is a new problem because the program is doing
-exactly what we told it to do: ask for another guess forever! It doesn’t seem
-like the user can quit!
+Як ви можете бачити, ми перенесли в цикл все від запрошення ввести здогадку і до
+кінця. Зсуньте ці рядки ще чотирма пробіли кожен і знову запустіть програму.
+Зверніть увагу, що виникла нова проблема, бо програма робить саме те, що ми їй
+сказали: запрошує ввести нову здогадку до нескінченості! Схоже, користувач не
+може вийти!
 
-The user could always halt the program by using the keyboard shortcut `Ctrl-C`.
-But there’s another way to escape this insatiable monster that we mentioned in
-the `parse` discussion in “Comparing the Guesses” on page XX: if the user
-enters a non-number answer, the program will crash. The user can take advantage
-of that in order to quit, as shown here:
+Користувач завжди може перервати програму, натиснувши клавіатурне скорочення
+`Ctrl-C`. Але є інший спосіб втекти від цього ненажерного чудовиська - згаданий
+при обговоренні `parse` в підрозділі “Порівняння здогадки з таємним числом”: 
+якщо користувач введе якесь не-числа, програма аварійно завершиться. Користувач 
+може цим скористатися, щоб вийти з програми:
 
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
-Guess the number!
+Відгадай число!
 Таємне число: 59
 Будь ласка, введіть здогадку:
 45
@@ -895,19 +893,19 @@ Guess the number!
 Ваша здогадка: 59
 Ви перемогли!
 Будь ласка, введіть здогадку:
-quit
-thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidDigit }', src/libcore/result.rs:785
+вийти
+thread 'main' panicked at 'Будь ласка, введіть число!: ParseIntError { kind: InvalidDigit }', src/libcore/result.rs:785
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 ```
 
-Typing `quit` actually quits the game, but so will any other non-number input.
-However, this is suboptimal to say the least. We want the game to automatically
-stop when the correct number is guessed.
+Введення `вийти` дійсно призводить до виходу з гри, але так само спрацює 
+будь-що, що не є числом. Тим не менше, це щонайменше не найкращий спосіб. Ми 
+хочемо, щоб гра сама зупинялася, коли ми відгадали число.
 
-### Quitting After a Correct Guess
+### Вихід після вдалої здогадки
 
-Let’s program the game to quit when the user wins by adding a `break`:
+Запрограмуймо гру виходити, якщо користувач виграв, додавши `break`:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -919,7 +917,7 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Відгадай число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
@@ -934,7 +932,7 @@ fn main() {
             .expect("Не вдалося прочитати рядок");
 
         let guess: u32 = guess.trim().parse()
-            .expect("Please type a number!");
+            .expect("Будь ласка, введіть число!");
 
         println!("Ваша здогадка: {}", guess);
 
@@ -950,16 +948,15 @@ fn main() {
 }
 ```
 
-By adding the `break` line after `Ви перемогли!`, the program will exit the loop
-when the user guesses the secret number correctly. Exiting the loop also means
-exiting the program, because the loop is the last part of `main`.
+Додавання `break;` після `println!("Ви перемогли!");` примусить програму вийти з
+циклу, якщо користувач відгадав таємне число. Вихід із циклу призведе до виходу
+з програми, бо цикл - це остання частина функції `main`.
 
-### Handling Invalid Input
+### Обробка неправильного вводу
 
-To further refine the game’s behavior, rather than crashing the program when
-the user inputs a non-number, let’s make the game ignore a non-number so the
-user can continue guessing. We can do that by altering the line where `guess` is
-converted from a `String` to a `u32`:
+Для покращення роботи гри, замінимо аварійний вихід при введені не-числа на
+ігнорування, щоб користувач міг продовжувати відгадувати. Ми можемо зробити це,
+попрацювавши з рядком, де `guess` перетворюється з `String` на `u32`:
 
 ```rust,ignore
 let guess: u32 = match guess.trim().parse() {
@@ -968,36 +965,35 @@ let guess: u32 = match guess.trim().parse() {
 };
 ```
 
-Switching from an `expect` call to a `match` expression is how you generally
-move from crash on error to actually handling the error. Remember that `parse`
-returns a `Result` type, and `Result` is an enum that has the variants `Ok` or
-`Err`. We’re using a `match` expression here, like we did with the `Ordering`
-result of the `cmp` method.
+Заміна виклику `expect` на вираз `match` - загальний спосіб переходу від 
+аварійного завершення програми до реальної обробки помилки. Згадаємо, що метод
+`parse` повертає тип `Result`, а `Result` - це енум, що має варіанти `Ok` та 
+`Err`. Ми використовуємо тут вираз `match`, так само, як робили з `Ordering`,
+що його повертає метод `cmp`.
 
-If `parse` is able to successfully turn the string into a number, it will return
-an `Ok` value that contains the resulting number. That `Ok` value will match the
-first arm’s pattern, and the `match` expression will just return the `num` value
-that `parse` produced and put inside the `Ok` value. That number will end up
-right where we want it in the new `guess` variable we’re creating.
+Якщо `parse` зможе вдало перетворити стрічку на число, він поверне значення 
+`Ok`, що міститиме число - результат. Це значення `Ok` буде відповідати зразку 
+першого рукава, і весь вираз `match` поверне значення `num`, яке `parse` 
+обчислив і поклав всередину значення `Ok`. Це число потрапить саме туди, куди 
+нам треба - в нову змінну `guess`, яку ми створюємо.
 
-If `parse` is *not* able to turn the string into a number, it will return an
-`Err` value that contains more information about the error. The `Err` value
-does not match the `Ok(num)` pattern in the first `match` arm, but it does match
-the `Err(_)` pattern in the second arm. The `_` is a catchall value; in this
-example, we’re saying we want to match all `Err` values, no matter what
-information they have inside them. So the program will execute the second arm’s
-code, `continue`, which means to go to the next iteration of the `loop` and ask
-for another guess. So effectively, the program ignores all errors that `parse`
-might encounter!
+Якщо `parse` не зможе перетворити стрічку на число, він поверне значення `Err`,
+що міститиме більше інформації про помилку. Значення `Err` не відпвідає зразку
+`Ok(num)` у першому рукаві `match`, але відповідає зразку `Err(_)` у другому. 
+`_` - це узагальнене значення; в цьому випадку, ви кажемо, що хочемо відповідати
+будь-якому `Err`, незалежно від інформації, що міститься у ньому. Програма 
+виконає код другого рукава, `continue`, що означає - перейти на наступну 
+ітерацію циклу `loop` і, відтак, попросити про наступну спробу. Таким чином,
+програма ігнорує всі помилки, які можуть зустрітися `parse`!
 
-Now everything in the program should work as expected. Let’s try it by running
+Нарешті все у нашій програмі має працювати як треба. Спробуємо запустити
 `cargo run`:
 
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
-Guess the number!
+Відгадай число!
 Таємне число: 61
 Будь ласка, введіть здогадку:
 10
@@ -1015,13 +1011,14 @@ foo
 Ви перемогли!
 ```
 
-Awesome! With one tiny final tweak, we will finish the guessing game: recall
-that the program is still printing out the secret number. That worked well for
-testing, but it ruins the game. Let’s delete the `println!` that outputs the
-secret number. Listing 2-5 shows the final code:
+
+Відмінно! Лишилася тільки одна дрібна правка, і робота буде завершена: програма
+все ще виводить таємне число. Це було необхідно для тестування, але псує гру.
+Видаляємо `println!`, який виводить таємне число, і маємо на Роздруку 2-5 
+остаточний код:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;
@@ -1031,7 +1028,7 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Відгадай число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
@@ -1064,20 +1061,19 @@ fn main() {
 
 <figcaption>
 
-Listing 2-5: Complete code of the guessing game
+Роздрук 2-5: Повний код гри "відгадай число!"
 
 </figcaption>
 </figure>
 
-## Summary
+## Підсумок
 
-At this point, you’ve successfully built the guessing game! Congratulations!
+Отже, ви зуміли вдало побудувати гри "відгадай число"! Вітаємо!
 
-This project was a hands-on way to introduce you to many new Rust concepts:
-`let`, `match`, methods, associated functions, using external crates, and more.
-In the next few chapters, you’ll learn about these concepts in more detail.
-Chapter 3 covers concepts that most programming languages have, such as
-variables, data types, and functions, and shows how to use them in Rust.
-Chapter 4 explores ownership, which is a Rust feature that is most different
-from other languages. Chapter 5 discusses structs and method syntax, and
-Chapter 6 endeavors to explain enums.
+Цей проект був вступом до багатьох концепції мови Rust через практику: `let`,
+`match`, методи, асоційонвані функції, використання зовнішніх ящиків і т.ін. У
+кількох наступних розділах ми детальніше розберемо ці концепції. Розділ 3 
+розповідає про концепції, які є у більшості мов програмування, такі як змінні,
+типи даних, функції і показує, як ними користуватися в Rust. Розділ 4 розповідає
+про належність, концепцію мови Rust, що є найбільш відмінною від інших мов.
+Розділ 5 обговорює структури і методи, а Розділ 6 детально розкриває енуми.

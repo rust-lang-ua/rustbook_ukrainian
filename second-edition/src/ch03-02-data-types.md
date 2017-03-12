@@ -215,22 +215,21 @@ fn main() {
 "символ" може не збігатися із `char` в Rust. Ми обговорюємо це питання 
 детальніше у підрозділі "Стрічки" в Розділі 8.
 
-### Compound Types
+### Складені типи
 
-*Compound types* can group multiple values of other types into one type. Rust
-has two primitive compound types: tuples and arrays.
+*Складені типи* дозволяють об'єднувати багато значень інших типів у один тип.
+Rust має два базових складених типи: кортежі (tuple) та масиви (array).
 
-#### Grouping Values into Tuples
+#### Об'єднання значень у кортежі
 
-A tuple is a general way of grouping together some number of other values with
-a variety of types into one compound type.
+Кортеж - основний спосіб збирати до купи різні числа і інші значення *різних*
+типів у один складений тип.
 
-We create a tuple by writing a comma-separated list of values inside
-parentheses. Each position in the tuple has a type, and the types of the
-different values in the tuple don’t have to be the same. We’ve added optional
-type annotations in this example:
+Кортеж утворюється списком значень, розділених комою, в дужках. Кожна позиція в
+кортежі має тип, і типи різних значень у кортежі можуть різнитися. Ми додали 
+необов'язкову позначку типу у цьому прикладі:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -238,11 +237,12 @@ fn main() {
 }
 ```
 
-The variable `tup` binds to the entire tuple, since a tuple is considered a
-single compound element. To get the individual values out of a tuple, we can
-use pattern matching to destructure a tuple value, like this:
+Змінна `tup` зв'язується з усім кортежем, оскільки кортеж розглядається як 
+єдиний складений елемент. Щоб отримати окремі значення з кортежу, можна 
+скористатися співставлянням зі зразком, щоб деструктуризувати значення кортежу,
+на кшталт цього:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -250,21 +250,20 @@ fn main() {
 
     let (x, y, z) = tup;
 
-    println!("The value of y is: {}", y);
+    println!("Значення y: {}", y);
 }
 ```
 
-This program first creates a tuple and binds it to the variable `tup`. It then
-uses a pattern with `let` to take `tup` and turn it into three separate
-variables, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
-the single tuple into three parts. Finally, the program prints the value of
-`y`, which is `6.4`.
+Ця програма спершу створює кортеж і прив'язує його до змінної `tup`. Потім вона
+використовує зразок із `let`, щоб взяти `tup` і перетворити його на три окремі
+змінні, `x`, `y` та `z`. Це зветься *деструктуризацією*, бо розбирає структуру
+кортежу на частини. Нарешті, програма виводить значення `y`, тобто `6.4`.
 
-In addition to destructuring through pattern matching, we can also access a
-tuple element directly by using a period (`.`) followed by the index of the
-value we want to access. For example:
+На додачу до деструктуризації через співставлення зі зразком, ми можемо також
+досягати елементів кортежу напряму через точку(`.`), за якою написаний індекс
+значення, яке ми хочемо отримати. Наприклад:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -278,9 +277,9 @@ fn main() {
 }
 ```
 
-This program creates a tuple, `x`, and then makes new variables for each
-element by using their index. As with most programming languages, the first
-index in a tuple is 0.
+Ця програма створює кортеж `x`, а потім створює нові змінні для кожного елементу
+за допомогою їхніх індексів. Як і в більшості мов програмування, перший індекс
+в кортежі - 0.
 
 #### Arrays
 
