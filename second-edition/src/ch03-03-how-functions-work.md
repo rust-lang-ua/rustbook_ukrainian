@@ -34,36 +34,36 @@ fn another_function() {
 функції `main`. Для Rust не має значення, де ви визначаєте функції, важливо,
 щоб вони були визначені хоч десь.
 
-Let’s start a new binary project named *functions* to explore functions
-further. Place the `another_function` example in *src/main.rs* and run it. You
-should see the following output:
+Почнемо новий бінарний проект з назвою *functions*, щоб глибше дослідити 
+функції. Помістіть приклад `another_function` до файлу *src/main.rs* і запустіть
+його. Ви побачите таке:
 
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
-Hello, world!
-Another function.
+Привіт, світ!
+Інша функція.
 ```
 
-The lines execute in the order in which they appear in the `main` function.
-First, the “Hello, world!” message prints, and then `another_function` is
-called and its message is printed.
+Рядки виконуються в порядку, в якому вони знаходяться в функції `main`. Спершу
+виводиться повідомлення “Привіт, світ!”, а потім викликається `another_function`
+і виводить своє повідомлення.
 
-### Function Parameters
+### Параметри функції
 
-Functions can also be defined to have *parameters*, which are special variables
-that are part of a function's signature. When a function has parameters, we can
-provide it with concrete values for those parameters. Technically, the concrete
-values are called *arguments*, but in casual conversation people tend to use
-the words "parameter" and "argument" interchangeably for either the variables in
-a function's definition or the concrete values passed in when you call a
-function.
+При визначення функціям можна визначати *параметри* - особливі змінні, що є 
+частиною визначення функції. Коли функція має параметри, ми можемо надати 
+функції конкретні значення для цих параметрів. Формально, конкретні значення 
+звуться *аргументами* або *фактичними параметрами*, а параметри у визначенні
+функції - *формальними параметрами*, але зазвичай слова "параметр" та "аргумент"
+використовуються як для частини визначення функції, так і для конкретних 
+значень, які були передані при виклику функції.
 
-The following rewritten version of `another_function` shows what parameters
-look like in Rust:
+Це переписана версія `another_function` демонструє, як виглядають параметри в 
+Rust:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -71,33 +71,32 @@ fn main() {
 }
 
 fn another_function(x: i32) {
-    println!("The value of x is: {}", x);
+    println!("Значення x: {}", x);
 }
 ```
 
-Try running this program; you should get the following output:
+Запустіть цю програму; ви маєте побачити таке:
 
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
-The value of x is: 5
+Значення x: 5
 ```
 
-The declaration of `another_function` has one parameter named `x`. The type of
-`x` is specified as `i32`. When `5` is passed to `another_function`, the
-`println!` macro puts `5` where the pair of curly braces were in the format
-string.
+Проголошення `another_function` містить один параметр під назвою `x`. Тип `x` 
+визначено як `i32`. Коли в `another_function` передається `5`, макрос `println!`
+виведе `5` на місце фігурних дужок у рядку формату.
 
-In function signatures, you *must* declare the type of each parameter. This is
-a deliberate decision in Rust’s design: requiring type annotations in function
-definitions means the compiler almost never needs you to use them elsewhere in
-the code to figure out what you mean.
+У проголошенні функції ви *обов'язково* маєте проголошувати тип кожного 
+параметру. Це свідоме рішення у дизайні мови Rust: вимога позначати тип у 
+визначенні функції означає, що компілятору дуже рідко знадобиться просити вас
+використовувати їх де-інде ще в коді, щоб зрозуміти, який тип вам потрібен.
 
-When you want a function to have multiple parameters, separate the parameter
-declarations with commas, like this:
+Якщо ви хочете, щоб у функції було багато параметрів, відокремлюйте проголошення
+параметрів комами, ось так:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -105,8 +104,8 @@ fn main() {
 }
 
 fn another_function(x: i32, y: i32) {
-    println!("The value of x is: {}", x);
-    println!("The value of y is: {}", y);
+    println!("Значення x: {}", x);
+    println!("Значення y: {}", y);
 }
 ```
 
@@ -123,7 +122,7 @@ project’s *src/main.rs* file with the preceding example, and run it using
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
-The value of x is: 5
+Значення x: 5
 The value of y is: 6
 ```
 
@@ -256,7 +255,7 @@ fn five() -> i32 {
 fn main() {
     let x = five();
 
-    println!("The value of x is: {}", x);
+    println!("Значення x: {}", x);
 }
 ```
 
@@ -269,7 +268,7 @@ running this code; the output should look like this:
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
-The value of x is: 5
+Значення x: 5
 ```
 
 The `5` in `five` is the function’s return value, which is why the return type
@@ -293,7 +292,7 @@ example:
 fn main() {
     let x = plus_one(5);
 
-    println!("The value of x is: {}", x);
+    println!("Значення x: {}", x);
 }
 
 fn plus_one(x: i32) -> i32 {
@@ -301,7 +300,7 @@ fn plus_one(x: i32) -> i32 {
 }
 ```
 
-Running this code will print `The value of x is: 6`. What happens if we place a
+Running this code will print `Значення x: 6`. What happens if we place a
 semicolon at the end of the line containing `x + 1`, changing it from an
 expression to a statement?
 
@@ -311,7 +310,7 @@ expression to a statement?
 fn main() {
     let x = plus_one(5);
 
-    println!("The value of x is: {}", x);
+    println!("Значення x: {}", x);
 }
 
 fn plus_one(x: i32) -> i32 {
