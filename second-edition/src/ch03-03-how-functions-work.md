@@ -109,47 +109,44 @@ fn another_function(x: i32, y: i32) {
 }
 ```
 
-This example creates a function with two parameters, both of which are `i32`
-types. The function then prints out the values in both of its parameters. Note
-that function parameters don't all need to be the same type - they just happen
-to be in this example.
+Цей приклад створює функцію з двома параметрами, обидва мають тип `i32`. Функція
+виводить значення обох своїх параметрів. Звісно, параметрам функції зовсім не 
+обов'язково мати один тип - просто так зроблено в цьому прикладі.
 
-Let’s try running this code. Replace the program currently in your *function*
-project’s *src/main.rs* file with the preceding example, and run it using
-`cargo run`:
+Спробуймо запустити цей код. Замініть програму у файлі *src/main.rs* вашого
+проекту *function* кодом вище, і запустіть його командою `cargo run`:
 
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 Значення x: 5
-The value of y is: 6
+Значення y: 6
 ```
 
-Because we called the function with `5` as the value for `x` and `6` as the
-value for `y`, the two strings are printed using those values.
+Оскільки ми викликали функцію зі значенням `5` для параметру `x` і значенням `6` 
+для `y`, обидві стрічки виведені зі цими значеннями. 
 
-### Function Bodies
+### Тіла функцій
 
-Function bodies are made up of a series of statements optionally ending in an
-expression. So far, we’ve only covered functions without an ending expression,
-but we have seen expressions as parts of statements. Because Rust is an
-expression-based language, this is an important distinction to understand.
-Other languages don’t have the same distinctions, so let’s look at what
-statements and expressions are and how their differences affect the bodies of
-functions.
+Тіла функцій складаються з серії операторів, яка може закінчуватися виразом. 
+Поки що ми описували тільки функції без виразу наприкінці, але використовували
+вирази як частини операторів. Оскільки Rust є мовою, базованою на виразах, 
+важливо розуміти цю відмінність. Інші мови можуть не мати таких відмінностей, 
+тому давайте розглянемо, що таке оператори і вирази і як різниця між ними 
+впливає на тіла функцій.
 
-### Statements and Expressions
+### Оператори і вирази
 
-We’ve actually already used statements and expressions. *Statements* are
-instructions that perform some action and do not return a value. *Expressions*
-evaluate to a resulting value. Let’s look at some examples.
+Насправді ми вже використовували оператори і вирази. *Оператори* - це 
+інструкції, що виконують певні дії і не повертають значення. *Вирази* 
+обчислюються, в результаті даючи певне значення. Поглянемо на приклади.
 
-Creating a variable and assigning a value to it with the `let` keyword is a
-statement. In Listing 3-3, `let y = 6;` is a statement:
+Створення змінної і надання їй значення за допомогою ключового слова `let` - це
+оператор. У Роздруку 3-3 `let y = 6;` є оператором:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -159,18 +156,18 @@ fn main() {
 
 <figcaption>
 
-Listing 3-3: A `main` function declaration containing one statement.
+Listing 3-3: Проголошення функції `main`, що містить один оператор.
 
 </figcaption>
 </figure>
 
-Function definitions are also statements; the entire preceding example is a
-statement in itself.
+Проголошення функцій - також оператори; весь попередній приклад є одним складним 
+оператором.
 
-Statements do not return values. Therefore, you can’t assign a `let` statement
-to another variable, as the following code tries to do:
+Оператори не повертають значень. Таким чином, не можна присвоїти оператор `let`
+іншій змінній, на кшталт такого:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -178,7 +175,7 @@ fn main() {
 }
 ```
 
-When you run this program, you’ll get an error like this:
+При спробі запустити цю програму, ви отримаєте повідомлення про помилку:
 
 ```text
 $ cargo run
@@ -192,12 +189,12 @@ error: expected expression, found statement (`let`)
   = note: variable declaration using `let` is a statement
 ```
 
-The `let y = 6` statement does not return a value, so there isn’t anything for
-`x` to bind to. This is different than in other languages, such as C and Ruby,
-where the assignment returns the value of the assignment. In those languages,
-you can write `x = y = 6` and have both `x` and `y` have the value `6`; that is
-not the case in Rust.
+Оператор `let y = 6` не повертає значення, тому немає нічого, з чим можна було б
+зв'язати `x`. Це відрізняється від інших мов, таких як C чи Ruby, де присвоєння
+повертає значення, яке воно присвоїло. В тих мовах можна написати `x = y = 6` і
+обидві змінні `x` та `y` набудуть значення `6`; в Rust так робити не можна.
 
+Вирази
 Expressions evaluate to something and make up most of the rest of the code that
 you’ll write in Rust. Consider a simple math operation, such as `5 + 6`, which
 is an expression that evaluates to the value `11`. Expressions can be part of
