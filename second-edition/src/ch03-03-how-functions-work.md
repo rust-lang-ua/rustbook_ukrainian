@@ -129,21 +129,22 @@ $ cargo run
 
 ### Тіла функцій
 
-Тіла функцій складаються з серії операторів, яка може закінчуватися виразом. 
-Поки що ми описували тільки функції без виразу наприкінці, але використовували
-вирази як частини операторів. Оскільки Rust є мовою, базованою на виразах, 
-важливо розуміти цю відмінність. Інші мови можуть не мати таких відмінностей, 
-тому давайте розглянемо, що таке оператори і вирази і як різниця між ними 
-впливає на тіла функцій.
+Тіла функцій складаються з послідовності інструкцій, яка може закінчуватися 
+виразом. Поки що ми описували тільки функції без виразу наприкінці, але 
+використовували вирази як частини інструкцій. Оскільки Rust є мовою, базованою 
+на виразах, важливо розуміти цю відмінність. Інші мови можуть не мати таких 
+відмінностей, тому давайте розглянемо, що таке інструкції і вирази і як різниця 
+між ними впливає на тіла функцій.
 
-### Оператори і вирази
+### Інструкції і вирази
 
-Насправді ми вже використовували оператори і вирази. *Оператори* - це 
-інструкції, що виконують певні дії і не повертають значення. *Вирази* 
-обчислюються, в результаті даючи певне значення. Поглянемо на приклади.
+Насправді ми вже використовували інструкції і вирази. *Інструкції* (statement) - 
+це команди, що виконують певні дії і не повертають значення. *Вирази* 
+(expression) обчислюються, в результаті даючи певне значення. Розглянемо 
+приклади.
 
 Створення змінної і надання їй значення за допомогою ключового слова `let` - це
-оператор. У Роздруку 3-3 `let y = 6;` є оператором:
+інструкція. У Роздруку 3-3 `let y = 6;` є інструкцією:
 
 <figure>
 <span class="filename">Файл: src/main.rs</span>
@@ -156,16 +157,16 @@ fn main() {
 
 <figcaption>
 
-Listing 3-3: Проголошення функції `main`, що містить один оператор.
+Listing 3-3: Проголошення функції `main`, що містить одну інструкцію.
 
 </figcaption>
 </figure>
 
-Проголошення функцій - також оператори; весь попередній приклад є одним складним 
-оператором.
+Проголошення функцій - також інструкції; весь попередній приклад є однією 
+складною інструкцією. 
 
-Оператори не повертають значень. Таким чином, не можна присвоїти оператор `let`
-іншій змінній, на кшталт такого:
+Інструкції не повертають значень. Таким чином, не можна присвоїти інструкцію 
+`let` іншій змінній, на кшталт такого:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -189,21 +190,21 @@ error: expected expression, found statement (`let`)
   = note: variable declaration using `let` is a statement
 ```
 
-Оператор `let y = 6` не повертає значення, тому немає нічого, з чим можна було б
-зв'язати `x`. Це відрізняється від інших мов, таких як C чи Ruby, де присвоєння
-повертає значення, яке воно присвоїло. В тих мовах можна написати `x = y = 6` і
-обидві змінні `x` та `y` набудуть значення `6`; в Rust так робити не можна.
+Інструкція `let y = 6` не повертає значення, тому немає нічого, з чим можна було
+б зв'язати `x`. Це відрізняється від інших мов, таких як C чи Ruby, де 
+присвоєння повертає значення, яке воно присвоїло. В тих мовах можна написати 
+`x = y = 6` і обидві змінні `x` та `y` набудуть значення `6`; у Rust так робити 
+не можна.
 
 Вирази
-Expressions evaluate to something and make up most of the rest of the code that
-you’ll write in Rust. Consider a simple math operation, such as `5 + 6`, which
-is an expression that evaluates to the value `11`. Expressions can be part of
-statements: in Listing 3-3 that had the statement `let y = 6;`, `6` is an
-expression that evaluates to the value `6`. Calling a function is an
-expression. Calling a macro is an expression. The block that we use to create
-new scopes, `{}`, is an expression, for example:
+Вирази обчислюються у певне значення і складають більшу частину решти коду, який
+ви писатимете на Rust. Розглянемо просту математичну операцію, таку, як `5 + 6`,
+яка є виразом, що обчислюється у значення `11`. Вирази можуть бути частинами
+інструкцій: у Роздруку 3-3 в інструкції `let y = 6;`, `6` - це вираз, що 
+обчислюється у значення `6`. Виразами також є виклик функції чи макросу; блок, 
+що створює нову область видимості, `{}` - це також вираз, наприклад:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -214,11 +215,11 @@ fn main() {
         x + 1
     };
 
-    println!("The value of y is: {}", y);
+    println!("Значення y: {}", y);
 }
 ```
 
-This expression:
+Цей вираз:
 
 ```rust,ignore
 {
@@ -227,22 +228,21 @@ This expression:
 }
 ```
 
-is a block that, in this case, evaluates to `4`. That value gets bound to `y`
-as part of the `let` statement. Note the line without a semicolon at the end,
-unlike most of the lines you’ve seen so far. Expressions do not include ending
-semicolons. If you add a semicolon to the end of an expression, you turn it
-into a statement, which will then not return a value. Keep this in mind as you
-explore function return values and expressions next.
+є блоком, який, в цьому випадку, обчислюється у `4`. Це значення прив'язується 
+до `y`, як частина інструкції `let`. Зверніть увагу на рядок без крапки з комою
+наприкінці блоку, на відміну від більшості рядків, які нам поки що траплялися.
+Вирази не мають крапки з комою наприкінці. Якщо ви додасьте крапу з комою в 
+кінець виразу, ви зробите його інструкцією, яка не повертає значення. Пам'ятайте
+це, коли вивчатимете далі значення, які повертають функції та вирази.
 
-### Functions with Return Values
+### Функції і значення, які вони повертають
 
-Functions can return values to the code that calls them. We don’t name return
-values, but we do declare their type after an arrow (`->`). In Rust, the return
-value of the function is synonymous with the value of the final expression in
-the block of the body of a function. Here’s an example of a function that
-returns a value:
+Функції можуть повертать значення в код, який їх викликав. Ці значення не мають
+власних імен, а їхній тип вказується після стрілочки (`->`). У Rust значення, що
+його повертає функція - це те саме, що значення останнього виразу в блоці - тілі
+функції. Ось приклад функції, що повертає значення:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn five() -> i32 {
@@ -256,10 +256,10 @@ fn main() {
 }
 ```
 
-There are no function calls, macros, or even `let` statements in the `five`
-function—just the number `5` by itself. That’s a perfectly valid function in
-Rust. Note that the function’s return type is specified, too, as `-> i32`. Try
-running this code; the output should look like this:
+У функції `five` немає викликів інших функцій, макросів чи навіть інструкцій 
+`let` - тільки саме число `5`. Це коректна функція в мові Rust. Зверніть увагу,
+що тут зазначено тип значення, яке функція повертає - `-> i32`. Запустімо цей 
+код; вивід має виглядати так:
 
 ```text
 $ cargo run
@@ -268,22 +268,21 @@ $ cargo run
 Значення x: 5
 ```
 
-The `5` in `five` is the function’s return value, which is why the return type
-is `i32`. Let’s examine this in more detail. There are two important bits:
-first, the line `let x = five();` shows that we’re using the return value of a
-function to initialize a variable. Because the function `five` returns a `5`,
-that line is the same as the following:
+`5` у `five` є значенням, яке повертає функція, і тому тип, який повертає 
+функція - `i32`. Розглянемо це детальніше. Є два важливі моменти: по-перше, 
+рядок `let x = five();` показує, що ми використовуємо значення, яке повернула
+функція, для ініціалізації змінної. Оскільки функція `five` повертає `5`, цей 
+рядок робить те саме, що й такий:
 
 ```rust
 let x = 5;
 ```
 
-Second, the `five` function has no parameters and defines the type of the
-return value, but the body of the function is a lonely `5` with no semicolon
-because it’s an expression whose value we want to return. Let’s look at another
-example:
+По-друге, функція `five` не має параматрів і визначає тип значення, яке вона
+повертає, але тіло функції складається лише з `5` без крапи з комою, оскільки
+значення цього виразу ми хочемо повернути. Подивимося інший приклад:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -297,11 +296,11 @@ fn plus_one(x: i32) -> i32 {
 }
 ```
 
-Running this code will print `Значення x: 6`. What happens if we place a
-semicolon at the end of the line containing `x + 1`, changing it from an
-expression to a statement?
+Якщо виконати цей код, він виведе `Значення x: 6`. Що ж станеться, якщо ми 
+поставимо крапку з комою в кінець рядка `x + 1`, щоб він став інструкцією, а не
+виразом?
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -315,7 +314,7 @@ fn plus_one(x: i32) -> i32 {
 }
 ```
 
-Running this code produces an error, as follows:
+Виконання цього коду призводить до такої помилки:
 
 ```text
 error[E0269]: not all control paths return a value
@@ -331,9 +330,10 @@ help: consider removing this semicolon:
   |          ^
 ```
 
-The main error message, “not all control paths return a value,” reveals the
-core issue with this code. The definition of the function `plus_one` says that
-it will return an `i32`, but statements don’t evaluate to a value. Therefore,
-nothing is returned, which contradicts the function definition and results in
-an error. In this output, Rust provides a message to possibly help rectify this
-issue: it suggests removing the semicolon, which would fix the error.
+Основне повідомлення про помилку “not all control paths return a value” (“не всі
+шляхи виконання повертають значення”) розкриває основну проблему цього коду.
+Визначення функції `plus_one` каже, що вона має повернути `i32`, але інструкції
+не обчислюються в значення. Таким чином, нічого не повертається, що суперечить
+визначенню функції й призводить до помилки. Далі, Rust повідомляє про можливість
+виправити цю проблему: він радить прибрати крапку з комою, що дійсно виправить
+помилку.
