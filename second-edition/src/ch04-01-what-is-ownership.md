@@ -1,24 +1,24 @@
-## What Is Ownership?
+## Що таке володіння?
 
-Rust’s central feature is *ownership*. Although the feature is straightforward
-to explain, it has deep implications for the rest of the language.
+Основна особливість Rust - це *володіння*. Хоча її досить легко пояснити, вона
+має глибокі наслідки для решти мови.
 
-All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection that constantly looks for no longer used
-memory as the program runs; in other languages, the programmer must explicitly
-allocate and free the memory. Rust uses a third approach: memory is managed
-through a system of ownership with a set of rules that the compiler checks at
-compile time. No run-time costs are incurred for any of the ownership features.
+Всі програми мають управляти своїм використанням пам'яті комп'ютера під час 
+роботи. Деякі мови мають збирача сміття, який постійно шукає пам'ять, що її вже
+не використовують, під час роботи програми; в інших мовах, програміст має явно
+виділяти і звільняти пам'ять. Rust використовує третій підхід: пам'ять 
+управляється системою володіння з набором правил, які компілятор перевіряє під 
+час компіляції. Під час виконання володіння не додає жодних додаткових витрат.
 
-Because ownership is a new concept for many programmers, it does take some time
-to get used to. The good news is that the more experienced you become with Rust
-and the rules of the ownership system, the more you’ll be able to naturally
-develop code that is safe and efficient. Keep at it!
+Оскільки володіння - нова концепція для багатьох програмістів, потрібен деякий
+час, щоб звикнути до нього. Добра новина - що досвідченішим ви ставатимете в
+Rust і правилах системи володіння, тим здатнішим до створення безпечного і
+ефективного коду ви ставатимете. Так тримати!
 
-When you understand ownership, you’ll have a solid foundation for understanding
-the features that make Rust unique. In this chapter, you’ll learn ownership by
-working through some examples that focus on a very common data structure:
-strings.
+Коли ви зрозумієте володіння, ви матимете стійку основу для розуміння 
+особливостей, що роблять Rust унікальною мовою. В цьому розділі, ви вивчете 
+володіння, працюючи з прикладами, що концентруються на добре відомих структурах
+даних: рядках.
 
 <!-- PROD: START BOX -->
 
