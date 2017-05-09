@@ -22,171 +22,166 @@ Rust і правилах системи володіння, тим здатні�
 
 <!-- PROD: START BOX -->
 
-> ### The Stack and the Heap
+> ### Стек і купа
+
+> У багатьох мовах програмування програміст нечасто має думати про стек і купу.
+> Але в системних мовах, таких, як Rust, розташування значення в стеку чи в купі
+> більше впливає на поведінку програми і вибір, який ми робимо. Ви пояснимо те,
+> як стек і купа впливають на володіння пізніше у цьому розділі, а тут даємо
+> коротке попедеднє пояснення.
 >
-> In many programming languages, we don’t have to think about the stack and the
-> heap very often. But in a systems programming language like Rust, whether a
-> value is on the stack or the heap has more of an effect on how the language
-> behaves and why we have to make certain decisions. We’ll describe parts of
-> ownership in relation to the stack and the heap later in this chapter, so here
-> is a brief explanation in preparation.
+> Стек і купа - частини пам'яті, до яких ваш код має доступ під час виконання,
+> але вони мають різну структуру. Стек зберігає значення в порядку, в якому їх
+> отримує, і видаляє їх у зворотньому порядку. Це зветься *останнім надійшов, 
+> першим пішов* (англ. "*last in, first out*"). Стек можна уявити, як стос 
+> тарілок: коли ви додаєте тарілки, треба ставити їх зверху, а коли треба зняти 
+> тарілку, то доводиться брати теж зверху. Додавання чи прибирання тарілок з 
+> середини чи знизу стосу матимуть значно гірший наслідок. Додавання данних у
+> стек також зветься заштовхуванням, а видалення - відповідно, виштовхуванням.
 >
-> Both the stack and the heap are parts of memory that is available to your code
-> to use at runtime, but they are structured in different ways. The stack stores
-> values in the order it gets them and removes the values in the opposite order.
-> This is referred to as *last in, first out*. Think of a stack of plates: when
-> you add more plates, you put them on top of the pile, and when you need a
-> plate, you take one off the top. Adding or removing plates from the middle or
-> bottom wouldn’t work as well! Adding data is called *pushing onto the stack*,
-> and removing data is called *popping off the stack*.
+> Стек працює швидко завдяки його способу доступу до даних: йому ніколи не 
+> доводиться шукати місце для нових даних чи для звільнення, бо це місце завжди
+> на верхівці стеку. Також сприяє швидкій роботі стеку те, що всі дані у ньому
+> мають заздалегідь відомий фіксований розмір.
 >
-> The stack is fast because of the way it accesses the data: it never has to
-> search for a place to put new data or a place to get data from because that
-> place is always the top. Another property that makes the stack fast is that all
-> data on the stack must take up a known, fixed size.
+> Дані, розмір яких невідомий для нас під час компіляції або розмір яких може
+> змінюватися, можна розміщати в купі. Купа менш організована: коли ми 
+> розміщуємо дані в купі, ми запитуємо певний обсяг місця. Операційна система
+> знаходить достатньо велику пусту ділянку в купі, позначає, що вона 
+> використовується, і повертає вказівник на це місце. Цей процес зветься 
+> *розміщенням у купі*, що іноді скорочується до простого "розміщення".
+> Заштовхування значень у стек не вважається розміщенням. Оскільки вказівник має
+> відомий, фіксований розмір, ми можемо зберігати вказівник у стеку, але коли
+> нам потрібні власне дані в купі, ми маємо перейти за вказівником.
 >
-> For data with a size unknown to us at compile time or a size that might change,
-> we can store data on the heap instead. The heap is less organized: when we put
-> data on the heap, we ask for some amount of space. The operating system finds
-> an empty spot somewhere in the heap that is big enough, marks it as being in
-> use, and returns to us a pointer to that location. This process is called
-> *allocating on the heap*, and sometimes we abbreviate the phrase as just
-> “allocating.” Pushing values onto the stack is not considered allocating.
-> Because the pointer is a known, fixed size, we can store the pointer on the
-> stack, but when we want the actual data, we have to follow the pointer.
+> Уявіть собі столи в ресторані. Коли ви входите до ресторану, вам треба назвати
+> кількість людей, що прийшли з вами, тоді офіціант знайде вам пустий стіл, за 
+> який всі зможуть сісти, і відведе вас до нього. Якщо хтось спізнився, він 
+> зможе спитати, де вас розмістили, щоб приєднатися.
 >
-> Think of being seated at a restaurant. When you enter, you state the number of
-> people in your group, and the staff finds an empty table that fits everyone and
-> leads you there. If someone in your group comes late, they can ask where you’ve
-> been seated to find you.
+> Доступ доданих у купі повільніший, ніж у стеку, бо треба переходити за 
+> вказівником, щоб дістатися туди. Сучасні процесори швидше працюють, якщо 
+> відбувається менше переходів у пам'яті. Розвинемо аналогію: уявімо офіціанта у
+> ресторані, який приймає замовлення з багатьох столів. Найефективніше буде 
+> прийняти всі замовлення з одного столу перед тим, як переходити до наступного.
+> Приймати замовлення зі столу A, потім зі столу B, потім знову з A і знову з B
+> буде значно повільніше. З тієї ж причини процесор краще працює з даними, 
+> розташованими поруч (як у стеку), ніж далеко (як може статися в купі). 
+> Розміщення великого обсягу даних у купі також може займати багато часу.
 >
-> Accessing data in the heap is slower than accessing data on the stack because
-> we have to follow a pointer to get there. Contemporary processors are faster if
-> they jump around less in memory. Continuing the analogy, consider a server at a
-> restaurant taking orders from many tables. It’s most efficient to get all the
-> orders at one table before moving on to the next table. Taking an order from
-> table A, then an order from table B, then one from A again, and then one from B
-> again would be a much slower process. By the same token, a processor can do its
-> job better if it works on data that’s close to other data (as it is on the
-> stack) rather than farther away (as it can be on the heap). Allocating a large
-> amount of space on the heap can also take time.
+> Коли ваш код викликає функцію, значення, що передаються у функцію (включно із,
+> можливо, вказівниками на дані у купі) і локальні змінні функції заштовхуються
+> у стек. Коли функція завершується, ці значення виштовхуються зі стеку.
 >
-> When our code calls a function, the values passed into the function (including,
-> potentially, pointers to data on the heap) and the function’s local variables
-> get pushed onto the stack. When the function is over, those values get popped
-> off the stack.
->
-> Keeping track of what parts of code are using what data on the heap, minimizing
-> the amount of duplicate data on the heap, and cleaning up unused data on the
-> heap so we don’t run out of space are all problems that ownership addresses.
-> Once you understand ownership, you won’t need to think about the stack and the
-> heap very often, but knowing that managing heap data is why ownership exists
-> can help explain why it works the way it does.
+> Відстеження, які частини коду використовують які дані в купі, мінімізація 
+> дублювання даних у купі та очищення більше непотрібних даних у купі, щоб не 
+> скінчилося місце - ось ті завдання, які покликане розв'язати володіння. Коли
+> ви зрозумієте цю концепцію, вам більше не треба буде постійно думати про стек
+> і купу, але знання, що причина існування володіння - управління данними у 
+> купі, допоможе вам зрозуміти, чому воно працює саме так.
 >
 <!-- PROD: END BOX -->
 
-### Ownership Rules
+### Правила володіння
 
-First, let’s take a look at the ownership rules. Keep these rules in mind as we
-work through the examples that illustrate the rules:
+По-перше, познайомимося із правилами володіння. Тримайте ці правила на увазі, 
+поки ми працюватимемо із прикладами, що їх ілюструють:
 
-> 1. Each value in Rust has a variable that’s called its *owner*.
-> 2. There can only be one owner at a time.
-> 3. When the owner goes out of scope, the value will be dropped.
+> 1. Кожне значення в Rust має змінну, що зветься її *власником*.
+> 2. У кожен момент може бути лише один власник.
+> 3. Коли власник виходить зі зони видимості, значення буде втрачено.
 
-### Variable Scope
+### Область видимості змінної
 
-We’ve walked through an example of a Rust program already in Chapter 2. Now
-that we’re past basic syntax, we won’t include all the `fn main() {` code in
-examples, so if you’re following along, you’ll have to put the following
-examples inside a `main` function manually. As a result, our examples will be a
-bit more concise, letting us focus on the actual details rather than
-boilerplate code.
+Ми вже розбирали приклад програми на Rust у Розділі 2. Тепер, оскільки ми вже
+знайомі з основами синтаксису, більше не будемо включати всі ці `fn main() {` у
+приклади, тому, щоб випробувати їх, вам доведеться помістити ці приклади до
+функції `main` самостійно. Завдяки цьому приклади стануть лаконічнішими і 
+дозволять зосередитися на важливих деталях, а не на шаблонному коді.
 
-As a first example of ownership, we’ll look at the *scope* of some variables. A
-scope is the range within a program for which an item is valid. Let’s say we
-have a variable that looks like this:
+У першому приклад володіння, розглянемо область видимості деяких змінних. 
+Область видимості - це фрагмент програми, в якому з елементом можна працювати.
+Нехай ми маємо змінну, що виглядає ось так:
 
 ```rust
-let s = "hello";
+let s = "привіт";
 ```
 
-The variable `s` refers to a string literal, where the value of the string is
-hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current *scope*. Listing 4-1 has
-comments annotating where the variable `s` is valid:
+Змінна `s` посилається на стрічковий літерал, значення якого жорстко закодовано
+в тексті нашої програми. Зі змінною можна працювати з моменту її проголошення до
+кінця поточної *області видимості*. Коментарі у Роздруку 4-1 підказують, де 
+змінна `s` доступна:
 
 <figure>
 
 ```rust
-{                      // s is not valid here, it’s not yet declared
-    let s = "hello";   // s is valid from this point forward
+{                      // тут s ще не доступна, її не проголошено
+    let s = "hello";   // s доступна з цього місця і надалі
 
-    // do stuff with s
-}                      // this scope is now over, and s is no longer valid
+    // щось робимо із s
+}                      // область видимості скінчилася, s більше не доступна
 ```
 
 <figcaption>
 
-Listing 4-1: A variable and the scope in which it is valid
+Listing 4-1: Змінна і область видимості, де вона доступна
 
 </figcaption>
 </figure>
 
-In other words, there are two important points in time here:
+Іншими словами, є два важливих моменти часу:
 
-1. When `s` comes *into scope*, it is valid.
-1. It remains so until it goes *out of scope*.
+1. Коли `s` потрапляє у зону видимості, вона стає доступною.
+2. Вона лишається такою доки не вийде зі зони видимості.
 
-At this point, the relationship between scopes and when variables are valid is
-similar to other programming languages. Now we’ll build on top of this
-understanding by introducing the `String` type.
+Поки що, стосунки між областю видимості і доступністю змінних такі ж самі, як і
+в інших мовах програмування. З цього почнемо розвиватися, додавши тип `String`.
 
-### The `String` Type
+### Тип `String`
 
-To illustrate the rules of ownership, we need a data type that is more complex
-than the ones we covered in Chapter 3. All the data types we’ve looked at
-previously are stored on the stack and popped off the stack when their scope is
-over, but we want to look at data that is stored on the heap and explore how
-Rust knows when to clean up that data.
+Щоб проілюструвати правила володіння, нам знадобиться тип даних, складніший за 
+ті, що ми вже розглянули у Розділі 3. Всі типи даних, які ми розглядали раніше,
+зберігаються в стеку і виштовхуються звідти, коли їхня область видимості 
+закінчується, але ми хочемо подивитися на дані, що зберігаються в купі і 
+подивитися, як Rust дізнається, коли вичищати ці дані.
 
-We’ll use `String` as the example here and concentrate on the parts of `String`
-that relate to ownership. These aspects also apply to other complex data types
-provided by the standard library and that you create. We’ll discuss `String` in
-more depth in Chapter 8.
+Скористаємося типом `String` (стрічка) як прикладом і зосередимося на 
+особливостях `String`, що стосуються володіння. Ці аспекти також застосовуються
+до інших складних типів даних, які надає стандартна бібліотека або ви створюєте
+самі. В Розділі 8 ми обговоримо тип `String` детальніше.
 
-We’ve already seen string literals, where a string value is hardcoded into our
-program. String literals are convenient, but they aren’t always suitable for
-every situation in which you want to use text. One reason is that they’re
-immutable. Another is that not every string value can be known when we write
-our code: for example, what if we want to take user input and store it? For
-these situations, Rust has a second string type, `String`. This type is
-allocated on the heap and as such is able to store an amount of text that is
-unknown to us at compile time. You can create a `String` from a string literal
-using the `from` function, like so:
+Ми вже бачили стрічкові літерали, де значення стрічки жорстко вбито в програму.
+Стрічкові літерали зручні, але не завжди підходять для різних ситуацій, де можна
+скористатися текстом. Одна з причин полягає в тому, що вони є сталими. Інша - що
+не кожне значення стрічки є відомим під час написання коду: наприклад, як взяти
+те, що ввів користувач, і зберегти його? Для цих ситуацій, Rust має другий 
+стрічковий тип, `String`. Цей тип розміщується в купі і, відтак, може зберігати
+текст, обсяг якого невідомий під час компіляції. Можна створити `String` зі 
+стрічкового літерали за допомогою функції `from`, ось так:
 
 ```rust
-let s = String::from("hello");
+let s = String::from("привіт");
 ```
 
-The double colon (`::`) is an operator that allows us to namespace this
-particular `from` function under the `String` type rather than using some sort
-of name like `string_from`. We’ll discuss this syntax more in the “Method
-Syntax” section of Chapter 5 and when we talk about namespacing with modules in
-Chapter 7.
+Подвійна двокрапка (`::`) - це оператор, що дозволяє доступ до простору імен, що
+надає нам можливість використати, в цьому випадку, функцію `from` з типу 
+`String`, щоб не довелося використоувати назву на кшталт `string_from`. Цей 
+синтаксис детальніше обговорюється у секції “Синтакис методів” Розділу 5 і в 
+обговоренні простору імен в модулях у Розділі 7.
 
-This kind of string *can* be mutated:
+Цей тип стрічок *може* бути зміненим:
 
 ```rust
-let mut s = String::from("hello");
+let mut s = String::from("привіт");
 
-s.push_str(", world!"); // push_str() appends a literal to a String
+s.push_str(", світе!"); // push_str() дописує літерал до стрічки String
 
-println!("{}", s); // This will print `hello, world!`
+println!("{}", s); // Це виведе `привіт, світе!`
 ```
 
-So, what’s the difference here? Why can `String` be mutated but literals
-cannot? The difference is how these two types deal with memory.
+У чому ж різниця? Чому `String` може бути зміненим, але літерали - ні? Різниця
+полягає в тому, як ці два типи працюють із пам'яттю.
+
 
 ### Memory and Allocation
 
