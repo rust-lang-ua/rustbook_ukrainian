@@ -25,7 +25,7 @@ fn first_word(s: &String) -> ?
 слова. Спробуємо зробити це у Роздруку 4-10:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn first_word(s: &String) -> usize {
@@ -90,9 +90,8 @@ s.len()
 стрічкою, немає гарантії, що воно буде коректним у подальшому. Розглянемо 
 програму у Роздруку 4-11, що використовує функцію `first_word` з Роздруку 4-10:
 
-
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 # fn first_word(s: &String) -> usize {
@@ -114,7 +113,7 @@ fn main() {
 
     s.clear(); // Очищуємо s, так що його значення стає "".
 
-    // word все ще містить значення 5 here, але рядка, в якому можна використати
+    // word все ще містить значення 5, але рядка, в якому можна використати
     // це значення, вже не існує. word має некоректне значення!
 }
 ```
@@ -128,32 +127,28 @@ fn main() {
 </figure>
 
 Ця програма компілюється без помилок, і також скопмілювалася б, якби ви 
-використали `word` після виклику `s.clear()`. `word` ніяк не пов'язано зі станом
-`s`, і тому `word` міститиме значення `5`
-This program compiles without any errors and also would if we used `word` after
-calling `s.clear()`. `word` isn’t connected to the state of `s` at all, so
-`word` still contains the value `5`. We could use that value `5` with the
-variable `s` to try to extract the first word out, but this would be a bug
-because the contents of `s` have changed since we saved `5` in `word`.
+використали `word` після виклику `s.clear()`. `word` ніяк не пов'язане зі станом
+`s`, і тому `word` міститиме значення `5`. Ми можемо використати це значення `5` зі змінною `s`, щоб спробувати видобути з неї перше слово, але це буде помилкою,
+бо вміст `s` змінився відколи ми зберегли `5` до `word`.
 
-Having to worry about the index in `word` getting out of sync with the data in
-`s` is tedious and error prone! Managing these indices is even more brittle if
-we write a `second_word` function. Its signature would have to look like this:
+Необхідність дбати про актуальність індексу в `word` відносно даних в `s` нудно 
+і може спровокувати помилки! Керування такими індексами стає ще більш ламким,
+якщо ми напишемо функцію `second_word`. Її сигнатура буде виглядати так:
 
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking a start *and* an ending index, and we have even more values
-that were calculated from data in a particular state but aren’t tied to that
-state at all. We now have three unrelated variables floating around that need
-to be kept in sync.
+Тепер ми відстежуємо початковий *і* кінцевий індекси, і ми маємо ще більше 
+значень, обчислених з даних у конкретному стані, але ніяк не прив'язаних до 
+цього стану. Тепер ми маємо три непов'язані змінні, підвішені в повітрі, які нам
+треба тримати синхронізованими.
 
-Luckily, Rust has a solution to this problem: string slices.
+На щастя, у Rust є рішення цієї проблеми: зрізи стрічок.
 
-### String Slices
+### Зрізи стрічок
 
-A *string slice* is a reference to part of a `String`, and looks like this:
+*Зріз стрічки* - це посилання на частину стрічки `String`, і виглядає воно так:
 
 ```rust
 let s = String::from("hello world");
@@ -162,24 +157,21 @@ let hello = &s[0..5];
 let world = &s[6..11];
 ```
 
-This is similar to taking a reference to the whole `String` but with the extra
-`[0..5]` bit. Rather than a reference to the entire `String`, it’s a reference
-to an internal position in the `String` and the number of elements that it
-refers to.
+Це схоже на посилання на всю стрічку `String`, але з додатковим шматком 
+`[0..5]`. Замість того, щоб посилатися на всю `String`, воно посилається на 
+внутрішню частину в `String` і число елементів, яких воно стосується.
 
-We create slices with a range of `[starting_index..ending_index]`, but the
-slice data structure actually stores the starting position and the length of
-the slice. So in the case of `let world = &s[6..11];`, `world` would be a slice
-that contains a pointer to the 6th byte of `s` and a length value of 5.
+Ми створюємо зрізи з інтервалом `[початковий_індекс..кінцевий_індекс]`, але структура даних зрізу насправді зберігає початкову позицію і довжину зрізу. Тому
+у випадку `let world = &s[6..11];`, `world` буде зрізом, що складається зі вказівника на 6-й байт `s` і довжини 5.
 
-Figure 4-12 shows this in a diagram.
+Рисунок 4-12 показує це як діаграму.
 
 <figure>
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
 <figcaption>
 
-Figure 4-12: String slice referring to part of a `String`
+Рисунок 4-12: зріз стрічки, що посилається на частину `String`.
 
 </figcaption>
 </figure>
