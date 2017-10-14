@@ -161,13 +161,14 @@ let world = &s[6..11];
 `[0..5]`. Замість того, щоб посилатися на всю `String`, воно посилається на 
 внутрішню частину в `String` і число елементів, яких воно стосується.
 
-Ми створюємо зрізи з інтервалом `[початковий_індекс..кінцевий_індекс]`, але структура даних зрізу насправді зберігає початкову позицію і довжину зрізу. Тому
+Ми створюємо зрізи з межами `[початковий_індекс..кінцевий_індекс]`, але 
+структура даних зрізу насправді зберігає початкову позицію і довжину зрізу. Тому
 у випадку `let world = &s[6..11];`, `world` буде зрізом, що складається зі вказівника на 6-й байт `s` і довжини 5.
 
 Рисунок 4-12 показує це як діаграму.
 
 <figure>
-<img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
+<img alt="world містить вказівник на 6-й байт стрічки s і довжину 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
 <figcaption>
 
@@ -176,8 +177,9 @@ let world = &s[6..11];
 </figcaption>
 </figure>
 
-With Rust’s `..` range syntax, if you want to start at the first index (zero),
-you can drop the value before the two periods. In other words, these are equal:
+Синтаксис меж `..` у Rust дозволяє, якщо ви хочете почати зріз на початковому
+індексі (нуль), пропустити значення перед крапками. Іншими словами, ці рядки
+тотожні:
 
 ```rust
 let s = String::from("hello");
@@ -186,8 +188,8 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if your slice includes the last byte of the `String`, you
-can drop the trailing number. That means these are equal:
+Так само якщо ваш зріз включає останній байт стрічки, ви можете пропустити 
+останнє число. Таким чином, ці рядки також тотжні:
 
 ```rust
 let s = String::from("hello");
@@ -198,8 +200,8 @@ let slice = &s[3..len];
 let slice = &s[3..];
 ```
 
-You can also drop both values to take a slice of the entire string. So these
-are equal:
+Також можна пропустити обидва значення, щоб взяти зріз з усієї стрічки. Це також
+тотожні рядки:
 
 ```rust
 let s = String::from("hello");
@@ -210,10 +212,10 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-With all this information in mind, let’s rewrite `first_word` to return a
-slice. The type that signifies “string slice” is written as `&str`:
+Озброєні цими знаннями, перепишемо `first_word`, щоб вона повертала зріз. Тип, 
+що позначає зріз стрічки, записується як `&str`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn first_word(s: &String) -> &str {
@@ -229,10 +231,9 @@ fn first_word(s: &String) -> &str {
 }
 ```
 
-We get the index for the end of the word in the same way as we did in Listing
-4-10, by looking for the first occurrence of a space. When we find a space, we
-return a string slice using the start of the string and the index of the space
-as the starting and ending indices.
+Ми отримуємо індекс кінця слова тим же чином, що й у Роздруку 4-10, пошуком
+першого стрічного пробілу. Коли ми знаходимо пробіл, ми повертаємо зріз стрічки
+за допомогою початку стрічки і індексу знайденого пробілу як початкового і кінцевого індексів.
 
 Now when we call `first_word`, we get back a single value that is tied to the
 underlying data. The value is made up of a reference to the starting point of

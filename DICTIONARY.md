@@ -10,7 +10,7 @@ enum - енум
 > абощо
 hardcoded - жорстко заданий
 immutable - сталий
-> пор. mutable
+> див. mutable
 implement - втілити
 infer - вивести
 line - рядок
@@ -33,6 +33,6 @@ shadowing - затінення
 statement - інструкція
 >все ж краще за "оператор"
 string - стрічка
-> наприклад, змінна; пор. line
+> наприклад, змінна типу String; пор. line
 trait - риса
 type annotation - позначка типу
