@@ -1,16 +1,16 @@
-## Defining and Instantiating Structs
+## Визначення і інстанціювання структур Struct
 
-Structs are similar to tuples, which were discussed in Chapter 3. Like tuples,
-the pieces of a struct can be different types. Unlike tuples, we name each
-piece of data so it’s clear what the values mean. As a result of these names,
-structs are more flexible than tuples: we don’t have to rely on the order of
-the data to specify or access the values of an instance.
+Структури подібні до кортежів, про які ми говорили в Розділі 3. Як і кортежі,
+частини структур можуть бути різних типів. На відміну від кортежів, ми даємо
+ім'я кожному елементу даних, щоб було зрозуміло, що ці значення означають. 
+Завдяки цим іменам структури гнучкіші за кортежі: ми не мусимо покладатися на 
+порядок даних, щоб визначати чи отримувати доступ до значень екземляра.
 
-To define a struct, we enter the keyword `struct` and name the entire struct. A
-struct’s name should describe the significance of the pieces of data being
-grouped together. Then, inside curly braces, we define the names and types of
-the pieces of data, which we call *fields*. For example, Listing 5-1 shows a
-struct to store information about a user account:
+Для визначення структури, ми вводимо ключове слово `struct` і називаємо всю 
+структуру. Ім'я структури має описувати сенс групування цих елементів даних. 
+Потім, у фігурних дужках, ми визначаємо імена і типи елементів даних, які 
+звуться *полями*. Наприклад, Роздрук 5-1 показує структуру, що зберігає 
+інформацію про обліковий запис користувача:
 
 ```rust
 struct User {
@@ -21,17 +21,17 @@ struct User {
 }
 ```
 
-<span class="caption">Listing 5-1: A `User` struct definition</span>
+<span class="caption">Роздрук 5-1: Визначення структури `User`</span>
 
-To use a struct after we’ve defined it, we create an *instance* of that struct
-by specifying concrete values for each of the fields. We create an instance by
-stating the name of the struct, and then add curly braces containing `key:
-value` pairs where the keys are the names of the fields and the values are the
-data we want to store in those fields. We don’t have to specify the fields in
-the same order in which we declared them in the struct. In other words, the
-struct definition is like a general template for the type, and instances fill
-in that template with particular data to create values of the type. For
-example, we can declare a particular user as shown in Listing 5-2:
+Щоб скористатися структурою по визначенню, ми створюємо *екземляр* цієї 
+структури, визначаючи конкретні значення для кожного поля. Ми створюємо 
+екземляр, вказуючи ім'я структури, а потім в фігурних дужках додаємо пари `ключ:
+значення`, де ключі - це імена полів, а значення - дані, які ми хочемо зберігати
+в цих полях. Поля не обов'язково вказувати у тому ж порядку, в якому вони були 
+проголошені в структурі. Іншими словами, визначення структури - це загальний 
+шаблон типу, а екземпляри заповнюють цей шаблон конкретними даними, щоб створити
+значення цього типу. Наприклад, ми можемо проголосити конкретного користувача,
+як показано в Роздруку 5-2:
 
 ```rust
 # struct User {
@@ -49,8 +49,7 @@ let user1 = User {
 };
 ```
 
-<span class="caption">Listing 5-2: Creating an instance of the `User`
-struct</span>
+<span class="caption">Роздру 5-2: Створення екземпляру структури `User`</span>
 
 To get a specific value from a struct, we can use dot notation. If we wanted
 just this user’s email address, we can use `user1.email` wherever we want to
