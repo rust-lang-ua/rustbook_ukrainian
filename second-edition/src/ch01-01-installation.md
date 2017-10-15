@@ -32,7 +32,7 @@ Rust is installed now. Great!
 
 ### Встановлення на Windows
 
-На Windows, перйдіть на [https://rustup.rs](https://rustup.rs/)<!-- ignore --> 
+На Windows перйдіть на [https://rustup.rs](https://rustup.rs/)<!-- ignore --> 
 і дотримуйтесь інструкцій, щоб завантажити rustup-init.exe. Запустіть його і 
 виконайте подальші інструкції, які він надасть вам.
 
@@ -50,8 +50,8 @@ Rust is installed now. Great!
 
 ### Видалення
 
-Видалення Rust таке саме просте, як і встановлення. З вашої оболонки, запустіть 
-сценарій видалення:
+Видалення Rust таке саме просте, як і встановлення. Запустіть 
+сценарій видалення з вашої оболонки :
 
 ```text
 $ rustup self uninstall

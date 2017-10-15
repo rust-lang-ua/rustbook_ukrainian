@@ -1,24 +1,33 @@
 ## Working with Environment Variables
 
-Let's add one more feature: case insensitive searching. In addition, this
-setting won't be a command line option: it'll be an environment variable
-instead. We could choose to make case insensitivity a command line option, but
-our users have requested an environment variable that they could set once and
-make all their searches case insensitive in that terminal session.
+We’re going to improve our tool with an extra feature: an option for case
+insensitive searching that the user can turn on via an environment variable. We
+could make this a command line option and require that users enter it each time
+they want it to apply, but instead we’re going to use an environment variable.
+This allows our users to set the environment variable once and have all their
+searches be case insensitive in that terminal session.
 
-### Implement and Test a Case-Insensitive `grep` Function
+### Writing a Failing Test for the Case-Insensitive `search` Function
 
-First, let's add a new function that we will call when the environment variable
-is on. Let's start by adding a new test and re-naming our existing one:
+We want to add a new `search_case_insensitive` function that we will call when
+the environment variable is on.
 
-```rust,ignore
+We’re going to continue following the TDD process, so the first step is again
+to write a failing test. We’ll add a new test for the new case-insensitive
+search function, and rename our old test from `one_result` to `case_sensitive`
+to be clearer about the differences between the two tests, as shown in Listing
+12-20:
+
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust
 #[cfg(test)]
 mod test {
-    use {grep, grep_case_insensitive};
+    use super::*;
 
     #[test]
     fn case_sensitive() {
-        let search = "duct";
+        let query = "duct";
         let contents = "\
 Rust:
 safe, fast, productive.
@@ -27,13 +36,13 @@ Duct tape.";
 
         assert_eq!(
             vec!["safe, fast, productive."],
-            grep(search, contents)
+            search(query, contents)
         );
     }
 
     #[test]
     fn case_insensitive() {
-        let search = "rust";
+        let query = "rUsT";
         let contents = "\
 Rust:
 safe, fast, productive.
@@ -42,28 +51,48 @@ Trust me.";
 
         assert_eq!(
             vec!["Rust:", "Trust me."],
-            grep_case_insensitive(search, contents)
+            search_case_insensitive(query, contents)
         );
     }
 }
 ```
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<span class="caption">Listing 12-20: Adding a new failing test for the case
+insensitive function we’re about to add</span>
 
-We're going to define a new function named `grep_case_insensitive`. Its
-implementation will be almost the same as the `grep` function, but with some
-minor changes as shown in Listing 12-16:
+Note that we’ve edited the old test’s `contents` too. We’ve added a new line
+with the text “Duct tape”, with a capital D, that shouldn’t match the query
+“duct” when we’re searching in a case sensitive manner. Changing the old test
+in this way helps ensure that we don’t accidentally break the case sensitive
+search functionality that we’ve already implemented; this test should pass now
+and should continue to pass as we work on the case insensitive search.
 
-<figure>
+The new test for the case *insensitive* search uses “rUsT” as its query. In the
+`search_case_insensitive` function we’re going to add, the query “rUsT” should
+match both the line containing “Rust:” with a capital R and also the line
+“Trust me.” even though both of those have different casing than the query.
+This is our failing test, and it will fail to compile because we haven’t yet
+defined the `search_case_insensitive` function. Feel free to add a skeleton
+implementation that always returns an empty vector in the same way that we did
+for the `search` function in Listing 12-16 in order to see the test compile and
+fail.
+
+### Implementing the `search_case_insensitive` Function
+
+The `search_case_insensitive` function, shown in Listing 12-21, will be almost
+the same as the `search` function. The only difference is that we’ll lowercase
+the `query` and each `line` so that whatever the case of the input arguments,
+they will be the same case when we check whether the line contains the query.
+
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
-    let search = search.to_lowercase();
+fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let query = query.to_lowercase();
     let mut results = Vec::new();
 
     for line in contents.lines() {
-        if line.to_lowercase().contains(&search) {
+        if line.to_lowercase().contains(&query) {
             results.push(line);
         }
     }
@@ -72,70 +101,78 @@ fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<figcaption>
+<span class="caption">Listing 12-21: Defining the `search_case_insensitive`
+function to lowercase both the query and the line before comparing them</span>
 
-Listing 12-16: Implementing a `grep_case_insensitive` function by changing the
-search string and the lines of the contents to lowercase before comparing them
+First, we lowercase the `query` string, and store it in a shadowed variable
+with the same name. Calling `to_lowercase` on the query is necessary so that no
+matter if the user’s query is “rust”, “RUST”, “Rust”, or “rUsT”, we’ll treat
+the query as if it was “rust” and be insensitive to the case.
 
-</figcaption>
-</figure>
+Note that `query` is now a `String` rather than a string slice, because calling
+`to_lowercase` creates new data rather than referencing existing data. Say the
+query is “rUsT”, as an example: that string slice does not contain a lowercase
+“u” or “t” for us to use, so we have to allocate a new `String` containing
+“rust”. When we pass `query` as an argument to the `contains` method now, we
+need to add an ampersand because the signature of `contains` is defined to take
+a string slice.
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+Next, we add a call to `to_lowercase` on each `line` before we check if it
+contains `query` to lowercase all characters. Now that we’ve converted both
+`line` and `query` to lowercase, we’ll find matches no matter what the case of
+the query.
 
-First, we lowercase the `search` string, and store it in a shadowed variable
-with the same name. Note that `search` is now a `String` rather than a string
-slice, so we need to add an ampersand when we pass `search` to `contains` since
-`contains` takes a string slice.
-
-Second, we add a call to `to_lowercase` each `line` before we check if it
-contains `search`. Since we've converted both `line` and `search` into all
-lowercase, we'll find matches no matter what case they used in the file and the
-command line arguments, respectively. Let's see if this passes the tests:
+Let’s see if this implementation passes the tests:
 
 ```text
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target\debug\deps\greprs-e58e9b12d35dc861.exe
-
 running 2 tests
 test test::case_insensitive ... ok
 test test::case_sensitive ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
-
-     Running target\debug\greprs-8a7faa2662b5030a.exe
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
-
-   Doc-tests greprs
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-Great! Now, we have to actually use the new `grep_case_insensitive` function.
-First, let's add a configuration option for it to the `Config` struct:
+Great! Now, let’s actually call the new `search_case_insensitive` function from
+the `run` function. First, we’re going to add a configuration option for
+switching between case sensitive and case insensitive search to the `Config`
+struct:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 pub struct Config {
-    pub search: String,
+    pub query: String,
     pub filename: String,
     pub case_sensitive: bool,
 }
 ```
 
-<!-- Will add ghosting in libreoffice /Carol -->
-
-And then check for that option inside of the `run` function, and decide which
-function to call based on the value of the `case_sensitive` function:
+We add the `case_sensitive` field that holds a boolean. Then we need our `run`
+function to check the `case_sensitive` field’s value and use that to decide
+whether to call the `search` function or the `search_case_insensitive` function
+as shown in Listing 12-22:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust
+# use std::error::Error;
+# use std::fs::File;
+# use std::io::prelude::*;
+#
+# fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+#      vec![]
+# }
+#
+# fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+#      vec![]
+# }
+#
+# struct Config {
+#     query: String,
+#     filename: String,
+#     case_sensitive: bool,
+# }
+#
 pub fn run(config: Config) -> Result<(), Box<Error>>{
     let mut f = File::open(config.filename)?;
 
@@ -143,9 +180,9 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
     f.read_to_string(&mut contents)?;
 
     let results = if config.case_sensitive {
-        grep(&config.search, &contents)
+        search(&config.query, &contents)
     } else {
-        grep_case_insensitive(&config.search, &contents)
+        search_case_insensitive(&config.query, &contents)
     };
 
     for line in results {
@@ -156,101 +193,104 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 }
 ```
 
-<!-- Will add ghosting in libreoffice /Carol -->
+<span class="caption">Listing 12-22: Calling either `search` or
+`search_case_insensitive` based on the value in `config.case_sensitive`</span>
 
-Finally, we need to actually check the environment for the variable. To bring
-the `env` module from the standard library into our project, we add a `use` line
-at the top of *src/lib.rs*:
+Finally, we need to actually check for the environment variable. The functions
+for working with environment variables are in the `env` module in the standard
+library, so we want to bring that module into scope with a `use std::env;` line
+at the top of *src/lib.rs*. Then we’re going to use the `var` method from the
+`env` module to check for an environment variable named `CASE_INSENSITIVE`, as
+shown in Listing 12-23:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 use std::env;
-```
-
-And then use the `vars` method from the `env` module inside of `Config::new`:
-
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust
-# use std::env;
-#
 # struct Config {
-#     search: String,
+#     query: String,
 #     filename: String,
 #     case_sensitive: bool,
 # }
-#
+
+// ...snip...
+
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("not enough arguments");
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
-        let mut case_sensitive = true;
+        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
-        for (name, _) in env::vars() {
-            if name == "CASE_INSENSITIVE" {
-                case_sensitive = false;
-            }
-        }
-
-        Ok(Config {
-            search: search,
-            filename: filename,
-            case_sensitive: case_sensitive,
-        })
+        Ok(Config { query, filename, case_sensitive })
     }
 }
 ```
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<span class="caption">Listing 12-23: Checking for an environment variable named
+`CASE_INSENSITIVE`</span>
 
-Here, we call `env::vars`, which works in a similar way as `env::args`. The
-difference is `env::vars` returns an iterator of environment variables rather
-than command line arguments. Instead of using `collect` to create a vector of
-all of the environment variables, we're using a `for` loop. `env::vars` returns
-tuples: the name of the environment variable and its value. We never care about
-the values, only if the variable is set at all, so we use the `_` placeholder
-instead of a name to let Rust know that it shouldn't warn us about an unused
-variable. Finally, we have a `case_sensitive` variable, which is set to true by
-default. If we ever find a `CASE_INSENSITIVE` environment variable, we set the
-`case_sensitive` variable to false instead. Then we return the value as part of
-the `Config`.
+Here, we create a new variable `case_sensitive`. In order to set its value, we
+call the `env::var` function and pass it the name of the `CASE_INSENSITIVE`
+environment variable. The `env::var` method returns a `Result` that will be the
+successful `Ok` variant that contains the value of the environment variable if
+the environment variable is set. It will return the `Err` variant if the
+environment variable is not set.
 
-Let's give it a try!
+We’re using the `is_err` method on the `Result` to check to see if it’s an
+error, and therefore unset, which means it *should* do a case sensitive search.
+If the `CASE_INSENSITIVE` environment variable is set to anything, `is_err`
+will return false and it will perform a case insensitive search. We don’t care
+about the *value* of the environment variable, just whether it’s set or unset,
+so we’re checking `is_err` rather than `unwrap`, `expect`, or any of the other
+methods we’ve seen on `Result`.
+
+We pass the value in the `case_sensitive` variable to the `Config` instance so
+that the `run` function can read that value and decide whether to call `search`
+or `search_case_insensitive` as we implemented in Listing 12-22.
+
+Let’s give it a try! First, we’ll run our program without the environment
+variable set and with the query “to”, which should match any line that contains
+the word “to” in all lowercase:
 
 ```text
 $ cargo run to poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe to poem.txt`
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 ```
 
+Looks like that still works! Now, let’s run the program with `CASE_INSENSITIVE`
+set to 1 but with the same query “to”, and we should get lines that contain
+“to” that might have uppercase letters:
+
 ```text
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe to poem.txt`
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent! Our `greprs` program can now do case insensitive searching controlled
-by an environment variable. Now you know how to manage options set using
-either command line arguments or environment variables!
+Excellent, we also got lines containing “To”! Our `minigrep` program can now do
+case insensitive searching, controlled by an environment variable. Now you know
+how to manage options set using either command line arguments or environment
+variables!
 
-Some programs allow both arguments _and_ environment variables for the same
-configuration. In those cases, the programs decide that one or the other of
-arguments or environment variables take precedence. For another exercise on
-your own, try controlling case insensitivity through a command line argument as
-well, and decide which should take precedence if you run the program with
-contradictory values.
+Some programs allow both arguments *and* environment variables for the same
+configuration. In those cases, the programs decide that one or the other takes
+precedence. For another exercise on your own, try controlling case
+insensitivity through either a command line argument or an environment
+variable. Decide whether the command line argument or the environment variable
+should take precedence if the program is run with one set to case sensitive and
+one set to case insensitive.
 
 The `std::env` module contains many more useful features for dealing with
-environment variables; check out its documentation to see what's available.
+environment variables; check out its documentation to see what’s available.

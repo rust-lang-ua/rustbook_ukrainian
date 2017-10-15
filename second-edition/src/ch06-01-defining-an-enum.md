@@ -75,8 +75,6 @@ at the moment we don’t have a way to store the actual IP address *data*; we
 only know what *kind* it is. Given that you just learned about structs in
 Chapter 5, you might tackle this problem as shown in Listing 6-1:
 
-<figure>
-
 ```rust
 enum IpAddrKind {
     V4,
@@ -99,13 +97,8 @@ let loopback = IpAddr {
 };
 ```
 
-<figcaption>
-
-Listing 6-1: Storing the data and `IpAddrKind` variant of an IP address using a
-`struct`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-1: Storing the data and `IpAddrKind` variant of
+an IP address using a `struct`</span>
 
 Here, we’ve defined a struct `IpAddr` that has two fields: a `kind` field that
 is of type `IpAddrKind` (the enum we defined previously) and an `address` field
@@ -162,7 +155,7 @@ use!][IpAddr]<!-- ignore --> Let’s look at how the standard library defines
 it embeds the address data inside the variants in the form of two different
 structs, which are defined differently for each variant:
 
-[IpAddr]: ../std/net/enum.IpAddr.html
+[IpAddr]: ../../std/net/enum.IpAddr.html
 
 ```rust
 struct Ipv4Addr {
@@ -192,8 +185,6 @@ more about importing types in Chapter 7.
 Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants:
 
-<figure>
-
 ```rust
 enum Message {
     Quit,
@@ -203,13 +194,8 @@ enum Message {
 }
 ```
 
-<figcaption>
-
-Listing 6-2: A `Message` enum whose variants each store different amounts and
-types of values
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-2: A `Message` enum whose variants each store
+different amounts and types of values</span>
 
 This enum has four variants with different types:
 
@@ -263,7 +249,7 @@ m.call();
 
 The body of the method would use `self` to get the value that we called the
 method on. In this example, we’ve created a variable `m` that has the value
-`Message::Write("hello")`, and that is what `self` will be in the body of the
+`Message::Write(String::from("hello"))`, and that is what `self` will be in the body of the
 `call` method when `m.call()` runs.
 
 Let’s look at another enum in the standard library that is very common and
@@ -292,7 +278,7 @@ null, has this to say:
 > I call it my billion-dollar mistake. At that time, I was designing the first
 > comprehensive type system for references in an object-oriented language. My
 > goal was to ensure that all use of references should be absolutely safe, with
-> checking performed automatically by the compiler. But I couldn't resist the
+> checking performed automatically by the compiler. But I couldn’t resist the
 > temptation to put in a null reference, simply because it was so easy to
 > implement. This has led to innumerable errors, vulnerabilities, and system
 > crashes, which have probably caused a billion dollars of pain and damage in
@@ -312,7 +298,7 @@ that can encode the concept of a value being present or absent. This enum is
 `Option<T>`, and it is [defined by the standard library][option]<!-- ignore -->
 as follows:
 
-[option]: ../std/option/enum.Option.html
+[option]: ../../std/option/enum.Option.html
 
 ```rust
 enum Option<T> {
@@ -341,7 +327,7 @@ let absent_number: Option<i32> = None;
 ```
 
 If we use `None` rather than `Some`, we need to tell Rust what type of
-`Option<T>` we have, because the compiler can't infer the type that the `Some`
+`Option<T>` we have, because the compiler can’t infer the type that the `Some`
 variant will hold by looking only at a `None` value.
 
 When we have a `Some` value, we know that a value is present, and the value is
@@ -352,7 +338,7 @@ the same thing as null: we don’t have a valid value. So why is having
 In short, because `Option<T>` and `T` (where `T` can be any type) are different
 types, the compiler won’t let us use an `Option<T>` value as if it was
 definitely a valid value. For example, this code won’t compile because it’s
-trying to compare an `Option<i8>` to an `i8`:
+trying to add an `i8` to an `Option<i8>`:
 
 ```rust,ignore
 let x: i8 = 5;
@@ -402,7 +388,7 @@ number of methods that are useful in a variety of situations; you can check
 them out in [its documentation][docs]<!-- ignore -->. Becoming familiar with
 the methods on `Option<T>` will be extremely useful in your journey with Rust.
 
-[docs]: ../std/option/enum.Option.html
+[docs]: ../../std/option/enum.Option.html
 
 In general, in order to use an `Option<T>` value, we want to have code that
 will handle each variant. We want some code that will run only when we have a

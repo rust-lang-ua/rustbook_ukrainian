@@ -235,27 +235,25 @@ fn first_word(s: &String) -> &str {
 першого стрічного пробілу. Коли ми знаходимо пробіл, ми повертаємо зріз стрічки
 за допомогою початку стрічки і індексу знайденого пробілу як початкового і кінцевого індексів.
 
-Now when we call `first_word`, we get back a single value that is tied to the
-underlying data. The value is made up of a reference to the starting point of
-the slice and the number of elements in the slice.
+Тепер при виклику `first_word` ми отримаємо одне значення, пов'язане з даними.
+Значення складається з посилання на початкову точку зрізу і кількість елементів
+у зрізі.
 
-Returning a slice would also work for a `second_word` function:
+Повернення зрізу також спрацює для функції `second_word`:
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up, since the
-compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in Listing 4-11, when we got the index to the end of the
-first word but then cleared the string so our index was invalid? That code was
-logically incorrect but didn’t show any immediate errors. The problems would
-show up later if we kept trying to use the first word index with an emptied
-string. Slices make this bug impossible and let us know we have a problem with
-our code much sooner. Using the slice version of `first_word` will throw a
-compile time error:
+Тепер ми маємо нехитрий API, з яким значно складніше потрапити в халепу, 
+оскільки компілятор забезпечіть коректність посилань на стрічку. Пам'ятаєте помилку в програмі з Роздруку 4-11, коли ми мали індекс кінця першого слова, але
+очистили стрічку, чим зробили наш індекс некоректним? Цей код мав логічну 
+помилку, але не призводив до жодних негайних помилок. Проблеми з'явилися б
+надалі, якби ми спробували використовувати індекс першого слова з пустою стрічкою. Зрізи унеможливлюють цю помилку і дають знати про проблему в коді 
+значно раніше. Використання зрізової версії `first_word` призведе до помилки
+під час компіляції:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -263,11 +261,11 @@ fn main() {
 
     let word = first_word(&s);
 
-    s.clear(); // Error!
+    s.clear(); // Помилка!
 }
 ```
 
-Here’s the compiler error:
+Ось текст помилки компілятора:
 
 ```text
 17:6 error: cannot borrow `s` as mutable because it is also borrowed as
@@ -285,47 +283,45 @@ fn main() {
 ^
 ```
 
-Recall from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it tries to take a mutable reference, which fails. Not
-only has Rust made our API easier to use, but it has also eliminated an entire
-class of errors at compile time!
+Пригадаємо, що за правилами позичання, якщо ми маємо стале посилання на щось,
+ми не можемо робити нестале посилання на це ж. Оскільки `clear` має скоротити 
+стрічку, він намагається взяти нестале посилання - невдало. Rust не тільки 
+робить наш API простішим у використанні, а ще й усуває під час компіляції цілий клас помилок!
 
-#### String Literals Are Slices
+#### Стрічкові літерали є зрізами
 
-Recall that we talked about string literals being stored inside the binary. Now
-that we know about slices, we can properly understand string literals:
+Згадайте, що ми говорили про стрічкові літерали, збережені у двійковому файлі. 
+Оскільки тепер ми вже знаємо про зрізи, ми можемо як слід зрозуміти стрічкові
+літерали:
 
 ```rust
 let s = "Hello, world!";
 ```
 
-The type of `s` here is `&str`: it’s a slice pointing to that specific point of
-the binary. This is also why string literals are immutable; `&str` is an
-immutable reference.
+Типом `s` є `&str`: це зріз, що вказує на конкретне місце в двійковому файлі. Це
+також є причиною, чому стрічкові літерали є сталими; `&str` є сталим посиланням.
 
-#### String Slices as Parameters
+#### Стрічкові зрізи як параметри
 
-Knowing that you can take slices of literals and `String`s leads us to one more
-improvement on `first_word`, and that’s its signature:
+Знання того, що можна брати зрізи літералів і `String` веде нас до ще одного
+поліпшення `first_word`. Її сигнатура наразі така:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the following line instead because it
-allows us to use the same function on both `String`s and `&str`s:
+Більш досвідчений растацеанин напише замість цього такий рядок, бо він дозволяє
+нам використовувати одну й ту саму функцію і для `String` і для `&str`:
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
 
-If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the entire `String`. Defining a function to take a string
-slice instead of a reference to a String makes our API more general and useful
-without losing any functionality:
+Якшр у нас є стрічковий зріз, ми можемо передати його прямо. Якщо у нас є 
+`String`, ми можемо передати зріз з усією стрічкою. Визначення функції, що 
+приймає стрічковий зріз замість посилання на стрічку робить наш API більш загальним і корисним без втрати функціональності:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 # fn first_word(s: &str) -> &str {
@@ -342,31 +338,31 @@ without losing any functionality:
 fn main() {
     let my_string = String::from("hello world");
 
-    // first_word works on slices of `String`s
+    // first_word працює зі зрізами `String`а
     let word = first_word(&my_string[..]);
 
     let my_string_literal = "hello world";
 
-    // first_word works on slices of string literals
+    // first_word працює зі зрізами стрічкових літералів
     let word = first_word(&my_string_literal[..]);
 
-    // since string literals *are* string slices already,
-    // this works too, without the slice syntax!
+    // оскільки стрічкові літерали *є* стрічковими зрізами
+    // це також працює, без синтаксису зрізів!
     let word = first_word(my_string_literal);
 }
 ```
 
-### Other Slices
+### Інші зрізи
 
-String slices, as you might imagine, are specific to strings. But there’s a
-more general slice type, too. Consider this array:
+Стрічкові зрізи, як можна зрозуміти, пов'язані зі стрічками. Але є також і більш 
+загальний тип зрізів. Розглянемо такий масив:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-Just like we might want to refer to a part of a string, we might want to refer
-to part of an array and would do so like this:
+Так само, як ми можемо захотіти звернутися до частини стрічки, ми можемо 
+захотіти звернутися до частини масиву і зробити так:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -374,19 +370,18 @@ let a = [1, 2, 3, 4, 5];
 let slice = &a[1..3];
 ```
 
-This slice has the type `&[i32]`. It works the same way as string slices do, by
-storing a reference to the first element and a length. You’ll use this kind of
-slice for all sorts of other collections. We’ll discuss these collections in
-detail when we talk about vectors in Chapter 8.
+Цей зріз має тип `&[i32]`. Він працює тим же чином, що й стрічкові зрізи, 
+зберігаючи посилання на перший елемент і довжину. Цей тип зрізів можна 
+використовувати для всіх інших видів колекцій. Ми поговоримо про ці колекції детальніше, коли будемо обговорювати вектори в Розділі 8.
 
-## Summary
+## Висновки
 
-The concepts of ownership, borrowing, and slices are what ensure memory safety
-in Rust programs at compile time. The Rust language gives you control over your
-memory usage like other systems programming languages, but having the owner of
-data automatically clean up that data when the owner goes out of scope means
-you don’t have to write and debug extra code to get this control.
+Концепції власності, позичання, і зрізів - це те, що гарантує безпеку роботи із
+пам'яттю в програмах на Rust під час компіляції. Мова Rust надає вам контроль 
+над використанням пам'яті так само, як і інші системні мови програмування, але
+те, що наявність власника даних автоматично призводить до очищення даних, коли
+власник виходить з області видимості, означає, що вам не треба писати і відлагоджувати додатковий код, щоб отримати цей контроль.
 
-Ownership affects how lots of other parts of Rust work, so we’ll talk about
-these concepts further throughout the rest of the book. Let’s move on to the
-next chapter and look at grouping pieces of data together in a `struct`.
+Власність впливає на те, як працює велика кількість інших частин Rust, тому ми
+говоритимемо про ці концепції і надалі у цій книзі. Перейдемо далі до наступного
+розділу і поглянемо на групування частинок даних докупи в структури `struct`.

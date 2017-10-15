@@ -1,16 +1,16 @@
-# Мова програмування Rust
+# The Rust Programming Language
 
-## З чого почати
+## Getting started
 
-- [Вступ](ch01-00-introduction.md)
-    - [Встановлення](ch01-01-installation.md)
+- [Introduction](ch01-00-introduction.md)
+    - [Installation](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
 
-- [Гра "відгадай число"](ch02-00-guessing-game-tutorial.md)
+- [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
 
-- [Загальні концепції програмування](ch03-00-common-programming-concepts.md)
-    - [Змінні і сталість](ch03-01-variables-and-mutability.md)
-    - [Типи даних](ch03-02-data-types.md)
+- [Common Programming Concepts](ch03-00-common-programming-concepts.md)
+    - [Variables and Mutability](ch03-01-variables-and-mutability.md)
+    - [Data Types](ch03-02-data-types.md)
     - [How Functions Work](ch03-03-how-functions-work.md)
     - [Comments](ch03-04-comments.md)
     - [Control Flow](ch03-05-control-flow.md)
@@ -20,8 +20,10 @@
     - [References & Borrowing](ch04-02-references-and-borrowing.md)
     - [Slices](ch04-03-slices.md)
 
-- [Structs](ch05-00-structs.md)
-    - [Method Syntax](ch05-01-method-syntax.md)
+- [Using Structs to Structure Related Data](ch05-00-structs.md)
+    - [Defining and Instantiating Structs](ch05-01-defining-structs.md)
+    - [An Example Program Using Structs](ch05-02-example-structs.md)
+    - [Method Syntax](ch05-03-method-syntax.md)
 
 - [Enums and Pattern Matching](ch06-00-enums.md)
     - [Defining an Enum](ch06-01-defining-an-enum.md)
@@ -55,13 +57,13 @@
     - [Running tests](ch11-02-running-tests.md)
     - [Test Organization](ch11-03-test-organization.md)
 
-- [An I/O Project](ch12-00-an-io-project.md)
+- [An I/O Project: Building a Command Line Program](ch12-00-an-io-project.md)
     - [Accepting Command Line Arguments](ch12-01-accepting-command-line-arguments.md)
     - [Reading a File](ch12-02-reading-a-file.md)
-    - [Improving Error Handling and Modularity](ch12-03-improving-error-handling-and-modularity.md)
-    - [Testing the Library's Functionality](ch12-04-testing-the-librarys-functionality.md)
+    - [Refactoring to Improve Modularity and Error Handling](ch12-03-improving-error-handling-and-modularity.md)
+    - [Developing the Library’s Functionality with Test Driven Development](ch12-04-testing-the-librarys-functionality.md)
     - [Working with Environment Variables](ch12-05-working-with-environment-variables.md)
-    - [Writing to `stderr` instead of `stdout`](ch12-06-writing-to-stderr-instead-of-stdout.md)
+    - [Writing Error Messages to Standard Error Instead of Standard Output](ch12-06-writing-to-stderr-instead-of-stdout.md)
 
 ## Thinking in Rust
 
@@ -72,7 +74,7 @@
     - [Performance](ch13-04-performance.md)
 
 - [More about Cargo and Crates.io](ch14-00-more-about-cargo.md)
-    - [Release Profiles](ch14-01-release-profiles.md)
+    - [Customizing Builds with Release Profiles](ch14-01-release-profiles.md)
     - [Publishing a Crate to Crates.io](ch14-02-publishing-to-crates-io.md)
     - [Cargo Workspaces](ch14-03-cargo-workspaces.md)
     - [Installing Binaries from Crates.io with `cargo install`](ch14-04-installing-binaries.md)
@@ -86,25 +88,44 @@
     - [`RefCell<T>` and the Interior Mutability Pattern](ch15-05-interior-mutability.md)
     - [Creating Reference Cycles and Leaking Memory is Safe](ch15-06-reference-cycles.md)
 
-- [Concurrency](ch16-00-concurrency.md)
+- [Fearless Concurrency](ch16-00-concurrency.md)
+    - [Threads](ch16-01-threads.md)
+    - [Message Passing](ch16-02-message-passing.md)
+    - [Shared State](ch16-03-shared-state.md)
+    - [Extensible Concurrency: `Sync` and `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
-- [Is Rust OOP?](ch17-00-oop.md)
+- [Is Rust an Object-Oriented Programming Language?](ch17-00-oop.md)
+    - [What Does Object-Oriented Mean?](ch17-01-what-is-oo.md)
+    - [Trait Objects for Using Values of Different Types](ch17-02-trait-objects.md)
+    - [Object-Oriented Design Pattern Implementations](ch17-03-oo-design-patterns.md)
 
 ## Advanced Topics
 
-- [Patterns](ch18-00-patterns.md) (perhaps an appendix?)
+- [Patterns Match the Structure of Values](ch18-00-patterns.md)
+    - [All the Places Patterns May be Used](ch18-01-all-the-places-for-patterns.md)
+    - [Refutability: Whether a Pattern Might Fail to Match](ch18-02-refutability.md)
+    - [All the Pattern Syntax](ch18-03-pattern-syntax.md)
 
 - [Advanced Features](ch19-00-advanced-features.md)
     - [Unsafe Rust](ch19-01-unsafe-rust.md)
     - [Advanced Lifetimes](ch19-02-advanced-lifetimes.md)
     - [Advanced Traits](ch19-03-advanced-traits.md)
+    - [Advanced Types](ch19-04-advanced-types.md)
+    - [Advanced Functions & Closures](ch19-05-advanced-functions-and-closures.md)
 
-- [Un-named project](ch20-00-unnamed-project.md)
+- [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
+    - [A Single Threaded Web Server](ch20-01-single-threaded.md)
+    - [How Slow Requests Affect Throughput](ch20-02-slow-requests.md)
+    - [Designing the Thread Pool Interface](ch20-03-designing-the-interface.md)
+    - [Creating the Thread Pool and Storing Threads](ch20-04-storing-threads.md)
+    - [Sending Requests to Threads Via Channels](ch20-05-sending-requests-via-channels.md)
+    - [Graceful Shutdown and Cleanup](ch20-06-graceful-shutdown-and-cleanup.md)
 
 - [Appendix](appendix-00.md)
-    - [Keywords](appendix-01-keywords.md)
-    - [Operators](appendix-02-operators.md)
-    - [Derivable Traits](appendix-03-derivable-traits.md)
-    - [Nightly Rust](appendix-04-nightly-rust.md)
-    - [Macros](appendix-05-macros.md)
-    - [Translations](appendix-06-translation.md)
+    - [A - Keywords](appendix-01-keywords.md)
+    - [B - Operators](appendix-02-operators.md)
+    - [C - Derivable Traits]()
+    - [D - Nightly Rust]()
+    - [E - Macros]()
+    - [F - Translations]()
+    - [G - Newest Features](appendix-07-newest-features.md)

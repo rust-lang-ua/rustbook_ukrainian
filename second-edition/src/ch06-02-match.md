@@ -3,7 +3,7 @@
 Rust has an extremely powerful control-flow operator called `match` that allows
 us to compare a value against a series of patterns and then execute code based
 on which pattern matches. Patterns can be made up of literal values, variable
-names, wildcards, and many other things; Chapter 18 will be about all the
+names, wildcards, and many other things; Chapter 18 will cover all the
 different kinds of patterns and what they do. The power of `match` comes from
 the expressiveness of the patterns and the compiler checks that make sure all
 possible cases are handled.
@@ -19,8 +19,6 @@ can write a function that can take an unknown United States coin and, in a
 similar way as the counting machine, determine which coin it is and return its
 value in cents, as shown here in Listing 6-3:
 
-<figure>
-
 ```rust
 enum Coin {
     Penny,
@@ -29,7 +27,7 @@ enum Coin {
     Quarter,
 }
 
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,
@@ -39,13 +37,8 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-<figcaption>
-
-Listing 6-3: An enum and a `match` expression that has the variants of the enum
-as its patterns.
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-3: An enum and a `match` expression that has
+the variants of the enum as its patterns.</span>
 
 Let’s break down the `match` in the `value_in_cents` function. First, we list
 the `match` keyword followed by an expression, which in this case is the value
@@ -83,7 +76,7 @@ with a `Coin::Penny` but would still return the last value of the block, `1`:
 #    Quarter,
 # }
 #
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => {
             println!("Lucky penny!");
@@ -103,13 +96,11 @@ values that match the pattern. This is how we can extract values out of enum
 variants.
 
 As an example, let’s change one of our enum variants to hold data inside it.
-From 1999 through 2008, the United States printed quarters with different
+From 1999 through 2008, the United States minted quarters with different
 designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
-our `enum` by changing the `Quarter` variant to include a `State` value stored
-inside it, which we've done here in Listing 6-4:
-
-<figure>
+our `enum` by changing the `Quarter` variant to include a `UsState` value stored
+inside it, which we’ve done here in Listing 6-4:
 
 ```rust
 #[derive(Debug)] // So we can inspect the state in a minute
@@ -127,13 +118,8 @@ enum Coin {
 }
 ```
 
-<figcaption>
-
-Listing 6-4: A `Coin` enum where the `Quarter` variant also holds a `UsState`
-value
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-4: A `Coin` enum where the `Quarter` variant
+also holds a `UsState` value</span>
 
 Let’s imagine that a friend of ours is trying to collect all 50 state quarters.
 While we sort our loose change by coin type, we’ll also call out the name of
@@ -159,7 +145,7 @@ quarter’s state. Then we can use `state` in the code for that arm, like so:
 #    Quarter(UsState),
 # }
 #
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,
@@ -195,8 +181,6 @@ operations.
 This function is very easy to write, thanks to `match`, and will look like
 Listing 6-5:
 
-<figure>
-
 ```rust
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
@@ -210,12 +194,8 @@ let six = plus_one(five);
 let none = plus_one(None);
 ```
 
-<figcaption>
-
-Listing 6-5: A function that uses a `match` expression on an `Option<i32>`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-5: A function that uses a `match` expression on
+an `Option<i32>`</span>
 
 #### Matching `Some(T)`
 
@@ -234,7 +214,7 @@ next arm.
 Some(i) => Some(i + 1),
 ```
 
-Does `Some(5)` match `Some(i)`? Why yes it does! We have the same variant.
+Does `Some(5)` match `Some(i)`? Well yes it does! We have the same variant.
 The `i` binds to the value contained in `Some`, so `i` takes the value `5`. The
 code in the match arm is then executed, so we add one to the value of `i` and
 create a new `Some` value with our total `6` inside.
