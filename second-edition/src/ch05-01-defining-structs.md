@@ -49,13 +49,13 @@ let user1 = User {
 };
 ```
 
-<span class="caption">Роздру 5-2: Створення екземпляру структури `User`</span>
+<span class="caption">Роздрук 5-2: Створення екземпляру структури `User`</span>
 
-To get a specific value from a struct, we can use dot notation. If we wanted
-just this user’s email address, we can use `user1.email` wherever we want to
-use this value. If the instance is mutable, we can change a value by using the
-dot notation and assigning into a particular field. Listing 5-3 shows how to
-change the value in the `email` field of a mutable `User` instance:
+Щоб отримати конкретне значення зі стріктури, можна скористатися записом через 
+точку. Якщо ми хочемо отримати тільки адресу електронної пошти користувача, ми 
+можемо написати `user1.email` там, де нам потрібне це значення. Якщо екземпляр є
+несталим, ми можемо змінити значення за допомогою запису через точку і присвоюванням конкретному полю. Роздрук 5-3 показує, як змінити значення поля
+`email` несталого екземпляру `User`:
 
 ```rust
 # struct User {
@@ -75,17 +75,15 @@ let mut user1 = User {
 user1.email = String::from("anotheremail@example.com");
 ```
 
-<span class="caption">Listing 5-3: Changing the value in the `email` field of a
-`User` instance</span>
+<span class="caption">Роздрук 5-3: Зміна значення поля `email` екземпляру `User` instance</span>
 
-Note that the entire instance must be mutable; Rust doesn’t allow us to mark
-only certain fields as mutable. Also note that as with any expression, we can
-construct a new instance of the struct as the last expression in the function
-body to implicitly return that new instance.
+Зверніть увагу, що несталим має бути весь екземпляр; Rust не дозволяє позначати
+лише окремі поля як несталі. Також зверніть увагу, що, як і з будь-яким виразом,
+ми можемо написати новий екземпляр останнім виразом у тілі функції, щоб неявно повернути цей новий екземпляр.
 
-Listing 5-4 shows a `build_user` function that returns a `User` instance with
-the given email and username. The `active` field gets the value of `true`, and
-the `sign_in_count` gets a value of `1`.
+Роздрук 5-4 демонструє функцію `build_user`, що повертає екземпляр `User` зі
+встановленими адресою і ім'ям. Поле `active` отримує значення `true`, а 
+`sign_in_count` - значення `1`.
 
 ```rust
 # struct User {
@@ -105,20 +103,18 @@ fn build_user(email: String, username: String) -> User {
 }
 ```
 
-<span class="caption">Listing 5-4: A `build_user` function that takes an email
-and username and returns a `User` instance</span>
+<span class="caption">Роздрук 5-4: Функція `build_user`, що приймає адресу і 
+ім'я і повертає екземпляр `User`</span>
 
-It makes sense to name the function arguments with the same name as the struct
-fields, but having to repeat the `email` and `username` field names and
-variables is a bit tedious. If the struct had more fields, repeating each name
-would get even more annoying. Luckily, there's a convenient shorthand!
+Має сенс називати аргументи такої функції тими ж іменами, що й імена відповідних полів стурктури, але необхідність повторювати імена полів `email` та `username` утомлює. Якщо у структури більше полів, повторення кожного імені дратує ще 
+більшу. На щастя, є зручне скорочення!
 
-### Using the Field Init Shorthand when Variables and Fields Have the Same Name
+### Використання скорочення ініціалізації полів, коли змінні і поля однаково звуться
 
-Because the parameter names and the struct field names are exactly the same in
-Listing 5-4, we can use the *field init shorthand* syntax to rewrite
-`build_user` so that it behaves exactly the same but doesn’t have the
-repetition of `email` and `username` in the way shown in Listing 5-5.
+Оскільки імена параметрів і полів структури повністю збігаються в Родруку 5-4, 
+ми можемо скористатися синтаксисом *скорочення ініціалізації полів* і переписати
+`build_user`, щоб вона робила абсолютно те саме, але без повторень `email` та
+`username`, як показано в Роздруку 5-5.
 
 ```rust
 # struct User {
@@ -138,15 +134,12 @@ fn build_user(email: String, username: String) -> User {
 }
 ```
 
-<span class="caption">Listing 5-5: A `build_user` function that uses field init
-shorthand since the `email` and `username` parameters have the same name as
-struct fields</span>
+<span class="caption">Роздрук 5-5: Функція `build_user`, що використовує скорочення ініціалізації полів, оскільки параметри `email` та `username` мають ті ж назви, що й поля структури</span>
 
-Here, we’re creating a new instance of the `User` struct, which has a field
-named `email`. We want to set the `email` field’s value to the value in the
-`email` parameter of the `build_user` function. Because the `email` field and
-the `email` parameter have the same name, we only need to write `email` rather
-than `email: email`.
+Ми створюємо новий екземпляр структури `User`, яка має поле з назовою `email`. 
+Ми хочемо встановити значення поля `email` у значення параметру `email` функції
+`build_user`. Оскільки поле `email` і параметри `email` мають одну назву, можна
+писати скорочено `email` замість `email: email`.
 
 ### Creating Instances From Other Instances With Struct Update Syntax
 

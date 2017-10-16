@@ -1,11 +1,11 @@
 ## Що таке володіння?
 
 Основна особливість Rust - це *володіння*. Хоча її досить легко пояснити, вона
-має глибокі наслідки для решти мови.
+має глибокі наслідки для усієї мови.
 
-Всі програми мають управляти своїм використанням пам'яті комп'ютера під час 
+Усі програми мають управляти своїм використанням пам'яті комп'ютера під час 
 роботи. Деякі мови мають збирача сміття, який постійно шукає пам'ять, що її вже
-не використовують, під час роботи програми; в інших мовах, програміст має явно
+не використовують, під час роботи програми; в інших мовах програміст має явно
 виділяти і звільняти пам'ять. Rust використовує третій підхід: пам'ять 
 управляється системою володіння з набором правил, які компілятор перевіряє під 
 час компіляції. Під час виконання володіння не додає жодних додаткових витрат.
@@ -182,49 +182,43 @@ println!("{}", s); // Це виведе `привіт, світе!`
 У чому ж різниця? Чому `String` може бути зміненим, але літерали - ні? Різниця
 полягає в тому, як ці два типи працюють із пам'яттю.
 
+### Пам'ять і розмішення
 
-### Memory and Allocation
+У випадку стрічкового літералу, ми знаємо вміст під час компіляції, тому текст
+жорстко заданий прямо у виконуваному файлі, що робить стрічкові літерали 
+швидкими і ефективними. Але ці властивості випливають з його незмінності. На 
+жаль, ми не можемо розмістити в двійковому файлі по шмату пам'яті для кожного
+фрагменту тексту, розмір яких ми не знаємо під час компіляції і чий розмір може
+змінитися під час виконання програми.
 
-In the case of a string literal, we know the contents at compile time so the
-text is hardcoded directly into the final executable, making string literals
-fast and efficient. But these properties only come from its immutability.
-Unfortunately, we can’t put a blob of memory into the binary for each piece of
-text whose size is unknown at compile time and whose size might change while
-running the program.
+З типом `String`, для підтримки несталого шматка тексту, що може зростати, нам
+потрібно виділити певну кількість пам'яті в купі, невідому під час компіляції, 
+для зберігання вмісту. Це означає:
 
-With the `String` type, in order to support a mutable, growable piece of text,
-we need to allocate an amount of memory on the heap, unknown at compile time,
-to hold the contents. This means:
+1. Пам'ять має бути запитана в операційної системи під час виконання.
+2. Нам потрібен спосіб повернення цієї пам'яті операційній системі, коли ми закінчимо роботу з нашою стрічкою.
 
-1. The memory must be requested from the operating system at runtime.
-2. We need a way of returning this memory to the operating system when we’re
-done with our `String`.
+Першу частину робимо ми самі: коли ви викликаємо `String::from`, її реалізація
+запитує потрібну пам'ять. Це дуже поширено серед мов програмування.
 
-That first part is done by us: when we call `String::from`, its implementation
-requests the memory it needs. This is pretty much universal in programming
-languages.
+Але друга частина відбувається інакше. У мовах зі *збирачем сміття* (англ. garbage collector, GC), саме GC стежить і очищує памя'ть, що більше не 
+використовується, і ми, як програмісти, більше можемо не думати про неї. Без GC
+на програміста покладається відповідальність за визначення невикористаної 
+пам'яті і виклик коду для її повернення, так само, як ми її запитали. Правильно
+це робити історично є складною задачею у програмуванні. Якщо ми забудемо, ми
+змарнуємо пам'ять. Якщо ми це зробимо зарано, ми матимемо некоректну змінну. 
+Якщо ми це зробимо двічі, це теж буде помилкою. Потрібно забезпечити, щоб на 
+кожне `виділення` було рівно одне `звільнення` пам'яті.
 
-However, the second part is different. In languages with a *garbage collector
-(GC)*, the GC keeps track and cleans up memory that isn’t being used anymore,
-and we, as the programmer, don’t need to think about it. Without a GC, it’s the
-programmer’s responsibility to identify when memory is no longer being used and
-call code to explicitly return it, just as we did to request it. Doing this
-correctly has historically been a difficult programming problem. If we forget,
-we’ll waste memory. If we do it too early, we’ll have an invalid variable. If
-we do it twice, that’s a bug too. We need to pair exactly one `allocate` with
-exactly one `free`.
-
-Rust takes a different path: the memory is automatically returned once the
-variable that owns it goes out of scope. Here’s a version of our scope example
-from Listing 4-1 using a `String` instead of a string literal:
+Rust іде іншим шляхом: пам'ять автоматично повертається, щойно змінна, що нею володіла, іде з області видимості. Ось версія нашого прикладу з Роздруку 4-1 із використанням `String` замість стрічкового літерала:
 
 ```rust
 {
-    let s = String::from("hello"); // s is valid from this point forward
+    let s = String::from("hello"); // s доступна з цього місця і надалі
 
-    // do stuff with s
-}                                  // this scope is now over, and s is no
-                                   // longer valid
+    // щось робимо із s
+}                                  // область видимості скінчилася, і s тепер
+                                   // більше не доступна
 ```
 
 There is a natural point at which we can return the memory our `String` needs
