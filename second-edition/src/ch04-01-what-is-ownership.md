@@ -196,12 +196,14 @@ println!("{}", s); // Це виведе `привіт, світе!`
 для зберігання вмісту. Це означає:
 
 1. Пам'ять має бути запитана в операційної системи під час виконання.
-2. Нам потрібен спосіб повернення цієї пам'яті операційній системі, коли ми закінчимо роботу з нашою стрічкою.
+2. Нам потрібен спосіб повернення цієї пам'яті операційній системі, коли ми 
+закінчимо роботу з нашою стрічкою.
 
 Першу частину робимо ми самі: коли ви викликаємо `String::from`, її реалізація
 запитує потрібну пам'ять. Це дуже поширено серед мов програмування.
 
-Але друга частина відбувається інакше. У мовах зі *збирачем сміття* (англ. garbage collector, GC), саме GC стежить і очищує памя'ть, що більше не 
+Але друга частина відбувається інакше. У мовах зі *збирачем сміття* (англ. 
+garbage collector, GC), саме GC стежить і очищує памя'ть, що більше не 
 використовується, і ми, як програмісти, більше можемо не думати про неї. Без GC
 на програміста покладається відповідальність за визначення невикористаної 
 пам'яті і виклик коду для її повернення, так само, як ми її запитали. Правильно
@@ -210,7 +212,9 @@ println!("{}", s); // Це виведе `привіт, світе!`
 Якщо ми це зробимо двічі, це теж буде помилкою. Потрібно забезпечити, щоб на 
 кожне `виділення` було рівно одне `звільнення` пам'яті.
 
-Rust іде іншим шляхом: пам'ять автоматично повертається, щойно змінна, що нею володіла, іде з області видимості. Ось версія нашого прикладу з Роздруку 4-1 із використанням `String` замість стрічкового літерала:
+Rust іде іншим шляхом: пам'ять автоматично повертається, щойно змінна, що нею 
+володіла, іде з області видимості. Ось версія нашого прикладу з Роздруку 4-1 із 
+використанням `String` замість стрічкового літерала:
 
 ```rust
 {
@@ -221,26 +225,25 @@ Rust іде іншим шляхом: пам'ять автоматично пов
                                    // більше не доступна
 ```
 
-There is a natural point at which we can return the memory our `String` needs
-to the operating system: when `s` goes out of scope. When a variable goes out
-of scope, Rust calls a special function for us. This function is called `drop`,
-and it’s where the author of `String` can put the code to return the memory.
-Rust calls `drop` automatically at the closing `}`.
+Існує точка, де природньо можна повернути пам'ять, використану нашою стрічкою,
+операційній системі: коли `s` іде з видимості. Коли змінна виходить з видимості,
+Rust викликає для нас спеціальну функцію. Ця функція зветься `drop`, і саме там
+автор `String` може розмістити код для повернення пам'яті. Rust викликає `drop`
+автоматично на закриваючій дужці `}`.
+> Примітка: в C++ цей шаблон звільнення ресурсів наприкінці життя об'єкта іноді
+> зветься *Отримання ресурсу є ініціалізація* (*Resource Acquisition Is 
+> Initialization*, RAII). Функція Rust `drop` знайома вам, якщо ви користувалися
+> шаблонами RAII.
 
-> Note: In C++, this pattern of deallocating resources at the end of an item's
-> lifetime is sometimes called *Resource Acquisition Is Initialization (RAII)*.
-> The `drop` function in Rust will be familiar to you if you’ve used RAII
-> patterns.
+Цей шаблон має глибокий вплив на спосіб написання коду Rust. Він наразі може 
+виглядати простим, але поведінка коду може бути неочікуваною у складніших 
+ситуаціях, коли ми працюватимемо із декількома змінними, що використовують дані,
+виділені в купі. Тепер дослідимо деякі з цих ситуацій.
 
-This pattern has a profound impact on the way Rust code is written. It may seem
-simple right now, but the behavior of code can be unexpected in more
-complicated situations when we want to have multiple variables use the data
-we’ve allocated on the heap. Let’s explore some of those situations now.
+#### Способи взаємодії змінних і даних: переміщення
 
-#### Ways Variables and Data Interact: Move
-
-Multiple variables can interact with the same data in different ways in Rust.
-Let’s look at an example using an integer in Listing 4-2:
+Числені змінні у Rust можуть взаємодіяти з одними і тими ж даними у різні 
+способи. Подивимося на приклад, що використовує ціле число, у Роздруку 4-2:
 
 <figure>
 
@@ -251,96 +254,99 @@ let y = x;
 
 <figcaption>
 
-Listing 4-2: Assigning the integer value of variable `x` to `y`
+Роздрук 4-2: Присвоєння цілого значення змінної `x` змінній `y`
 
 </figcaption>
 </figure>
 
-We can probably guess what this is doing based on our experience with other
-languages: “Bind the value `5` to `x`; then make a copy of the value in `x` and
-bind it to `y`.” We now have two variables, `x` and `y`, and both equal `5`.
-This is indeed what is happening because integers are simple values with a
-known, fixed size, and these two `5` values are pushed onto the stack.
+Ми, мабуть, можемо здогадатися, що робить цей код, з нашого досвіду з іншими 
+мовами: "прив'язати значення `5` до `x`; потім зробити копію значення з `x` і 
+прив'язати її до `y`". Тепер ми маємо дві змінні, `x` та `y`, і обидві 
+дорівнюють `5`. І дійсно це так і відбувається, бо цілі - прості значення із 
+відомим, фіксованим розміром, і ці два значення `5` внесені у стек.
 
-Now let’s look at the `String` version:
+Тепер подивимося на версію зі `String`:
 
 ```rust
 let s1 = String::from("hello");
 let s2 = s1;
 ```
 
-This looks very similar to the previous code, so we might assume that the way
-it works would be the same: that is, the second line would make a copy of the
-value in `s1` and bind it to `s2`. But this isn’t quite what happens.
+Це виглядає дуже схожим на попередній код, тому ми можемо припустити, що воно 
+працює так само, тобто другий рядок створить копію значення з `s1` і прив'яже її 
+до `s2`. Але тут відбувається щось трохи інше.
 
-To explain this more thoroughly, let’s look at what `String` looks like under
-the covers in Figure 4-3. A `String` is made up of three parts, shown on the
-left: a pointer to the memory that holds the contents of the string, a length,
-and a capacity. This group of data is stored on the stack. On the right is the
-memory on the heap that holds the contents.
+Для розлогішого роз'яснення поглянемо на внутрішній устрій 'String' на Рисунку 
+4-3. `String` складається з трьох частин, показаних ліворуч: вказівника на 
+пам'ять, що збергіає вміст стрічки, довжини, і місткості. Цей набір даних 
+зберігається в стеку. Праворуч показана пам'ять у купі, що зберігає вміст.
 
 <figure>
-<img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
+<img alt="String in memory" src="img/trpl04-01.svg" class="center" 
+style="width: 50%;" />
 
 <figcaption>
 
-Figure 4-3: Representation in memory of a `String` holding the value `"hello"`
-bound to `s1`
+Рисунок 4-3: Представлення в пам'яті стрічки `String` зі значенням `"hello"`, 
+прив'язаної до `s1`.
 
 </figcaption>
 </figure>
 
+Довжина - це кількість пам'яті, в байтах, що вміст `String` наразі використовує.
 The length is how much memory, in bytes, the contents of the `String` is
 currently using. The capacity is the total amount of memory, in bytes, that the
 `String` has received from the operating system. The difference between length
 and capacity matters, but not in this context, so for now, it’s fine to ignore
 the capacity.
 
-When we assign `s1` to `s2`, the `String` data is copied, meaning we copy the
-pointer, the length, and the capacity that are on the stack. We do not copy the
-data on the heap that the pointer refers to. In other words, the data
-representation in memory looks like Figure 4-4.
+Коли ми присвоюємо значення `s1` до `s2`, дані `String` копіюються - тобто 
+копіюється вказівник, довжина і місткість, що знаходяться в стеку. Ми не 
+копіюємо даних у купі, на які посилається вказівник. Іншими словами, 
+представлення даних у пам'яті виглядає як на Рисунку 4-4.
+
 
 <figure>
-<img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
+<img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" 
+class="center" style="width: 50%;" />
 
 <figcaption>
 
-Figure 4-4: Representation in memory of the variable `s2` that has a copy of
-the pointer, length, and capacity of `s1`
+Рисунок 4-4: Представлення в пам'яті змінної `s2`, що має копію вказівника, 
+довжини і місткості з `s1`.
 
 </figcaption>
 </figure>
 
-The representation does *not* look like Figure 4-5, which is what memory would
-look like if Rust instead copied the heap data as well. If Rust did this, the
-operation `s2 = s1` could potentially be very expensive in terms of runtime
-performance if the data on the heap was large.
+Представлення *не* виглядає, як показано на Рисунку 4-5, як було б якби Rust 
+дійсно копіювала також і дані в купі. Якби Rust так робила, операція `s2 = s1` 
+була б потенційно надто витратною з точки зору швидкості виконання, якщо в купі
+було б багато даних.
 
 <figure>
-<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
+<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" 
+style="width: 50%;" />
 
 <figcaption>
 
-Figure 4-5: Another possibility of what `s2 = s1` might do if Rust copied the
-heap data as well
+Рисуонк 4-5: Інша можливість того, що могло б робити `s2 = s1`, якби Rust 
+копіювала також дані в купі.
 
 </figcaption>
 </figure>
 
-Earlier, we said that when a variable goes out of scope, Rust automatically
-calls the `drop` function and cleans up the heap memory for that variable. But
-Figure 4-4 shows both data pointers pointing to the same location. This is a
-problem: when `s2` and `s1` go out of scope, they will both try to free the
-same memory. This is known as a *double free* error and is one of the memory
-safety bugs we mentioned previously. Freeing memory twice can lead to memory
-corruption, which can potentially lead to security vulnerabilities.
+Раніше ми казали, що коли змінна виходить з області видимості, Rust автоматично
+викликає функцію `drop` і очищає пам'ять цієї змінної в купі. Але Рисунок 4-4
+показує, що обидва вказівники вказують на одне й те саме місце. Це створює 
+проблему: коли `s2` і `s1` вийдуть з видимості, вони удвох спробують звільнити 
+одну й ту саму пам'ять. Це зветься помилкою *подвійного звільнення*, і ми про 
+неї вже згадували. Звільнення пам'яті двічі може призвести до пошкодження 
+пам'яті, і, потенційно, до вразливостей у безпеці.
 
-To ensure memory safety, there’s one more detail to what happens in this
-situation in Rust. Instead of trying to copy the allocated memory, Rust
-considers `s1` to no longer be valid and therefore, Rust doesn’t need to free
-anything when `s1` goes out of scope. Check out what happens when you try to
-use `s1` after `s2` is created:
+Для убезпечення пам'яті в цій ситуації в Rust відбувається ще одна дія. Замість
+копіювання виділеної пам'яті, Rust вважає `s1` некоректним і, відтак, більше не 
+потрібно нічого звільняти, коли `s1` виходить з області видимості. Перевіримо, 
+що стається, якщо спробувати використати `s1` після створення `s2`:
 
 ```rust,ignore
 let s1 = String::from("hello");
@@ -349,8 +355,8 @@ let s2 = s1;
 println!("{}", s1);
 ```
 
-You’ll get an error like this because Rust prevents you from using the
-invalidated reference:
+Ви отримаєте помилку на кшталт цієї, бо Rust не допускає використання 
+некоректних посилань:
 
 ```text
 error[E0382]: use of moved value: `s1`
@@ -365,29 +371,31 @@ error[E0382]: use of moved value: `s1`
 which does not implement the `Copy` trait
 ```
 
-If you’ve heard the terms “shallow copy” and “deep copy” while working with
-other languages, the concept of copying the pointer, length, and capacity
-without copying the data probably sounds like a shallow copy. But because Rust
-also invalidates the first variable, instead of calling this a shallow copy,
-it’s known as a *move*. Here we would read this by saying that `s1` was *moved*
-into `s2`. So what actually happens is shown in Figure 4-6.
+Якщо ви чули терміни "пласка копія" та "глибока копія" (“shallow copy” та “deep 
+copy” відповідно), коли працювали з іншими мовами, поняття копіювання 
+вказівника, довжини і місткості без копіювання даних виглядають для вас схожими
+на пласку копію. Але оскільки Rust також унепридатнює першу змінну, це зветься
+не пласкою копією, а *переміщенням*. Тут надалі вживатиметься вираз `s1` було 
+*переміщено* в `s2`. Що відбувається в дійсності, показано на Рисунку 4-6.
 
 <figure>
-<img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
+<img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" 
+style="width: 50%;" />
 
 <figcaption>
 
-Figure 4-6: Representation in memory after `s1` has been invalidated
+Рисунок 4-6: Представлення в пам'яті після унепридатнення `s1`
 
 </figcaption>
 </figure>
 
-That solves our problem! With only `s2` valid, when it goes out of scope, it
-alone will free the memory, and we’re done.
+Це вирішує нашу проблему! Якщо коректним зосталося лише `s2`, коли воно вийде з
+видимості, то саме звільнить пам'ять, і готово.
 
-In addition, there’s a design choice that’s implied by this: Rust will never
-automatically create “deep” copies of your data. Therefore, any *automatic*
-copying can be assumed to be inexpensive in terms of runtime performance.
+На додачу, такий дизайн мови неявно гарантує, що Rust ніколи не буде автоматично
+створювати "глибокі" копії ваших даних. Таким чином, будь-яке *автоматичне* 
+копіювання може вважатися недорогим з точки зору продуктивності під час 
+виконання.
 
 #### Ways Variables and Data Interact: Clone
 
