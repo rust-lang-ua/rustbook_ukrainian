@@ -1,8 +1,5 @@
-## Keywords
-
-The following keywords are reserved by the Rust language and may not be used as
-names of functions, variables, macros, modules, crates, constants, static
-values, attributes, struct fields, or parameters.
+## Ключові слова
+Наступні ключові слова зарезервовано мовою Rust і не можуть бути використані як назва функцій, змінних, макросів, модулів, крейтов (пакетов), констант, статичних значень, атрибутів, полів структур або параметрів.
 
 * `abstract`
 * `alignof`
