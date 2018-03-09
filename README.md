@@ -64,7 +64,7 @@ $ mdbook test
 Для перекладу формується невеликий [словничок][dictionary], пропозиції і 
 зауваження заохочуються.
 
-[dictionary] https://github.com/pavloslav/rust-book-ukrainian/blob/master/DICTIONARY.md
+[dictionary]: https://github.com/pavloslav/rust-book-ukrainian/blob/master/DICTIONARY.md
 
 ### Інші переклади
 
