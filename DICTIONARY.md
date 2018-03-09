@@ -3,6 +3,9 @@
 arm (виразу match) - рукав
 bind - зв'язувати 
 borrow - позичити
+data race - гонитва за даними
+drop - ?
+default - уставно
 directory - тека
 > може, замінити на "директорію"?
 enum - енум

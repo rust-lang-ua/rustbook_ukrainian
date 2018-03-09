@@ -50,7 +50,7 @@ example:
 ```rust
 use std::net::IpAddr;
 
-let home = "127.0.0.1".parse::<IpAddr>().unwrap();
+let home: IpAddr = "127.0.0.1".parse().unwrap();
 ```
 
 We’re creating an `IpAddr` instance by parsing a hardcoded string. We can see
@@ -138,7 +138,7 @@ number being in range, like so:
 
 ```rust,ignore
 loop {
-    // snip
+    // --snip--
 
     let guess: i32 = match guess.trim().parse() {
         Ok(num) => num,
@@ -151,7 +151,7 @@ loop {
     }
 
     match guess.cmp(&secret_number) {
-    // snip
+    // --snip--
 }
 ```
 

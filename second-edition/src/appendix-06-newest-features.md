@@ -1,4 +1,4 @@
-# Appendix G - Newest Features
+# Appendix F - Newest Features
 
 This appendix documents features that have been added to stable Rust since the
 main part of the book was completed.
@@ -56,4 +56,38 @@ fn main() {
 
     assert_eq!(result, 20);
 }
+```
+
+
+## Nested groups in `use` declarations
+
+If you have a complex module tree with many different submodules and you need
+to import a few items from each one, it might be useful to group all the
+imports in the same declaration to keep your code clean and avoid repeating the
+base modules' name.
+
+The `use` declaration supports nesting to help you in those cases, both with
+simple imports and glob ones. For example this snippets imports `bar`, `Foo`,
+all the items in `baz` and `Bar`:
+
+```rust
+# #![allow(unused_imports, dead_code)]
+#
+# mod foo {
+#     pub mod bar {
+#         pub type Foo = ();
+#     }
+#     pub mod baz {
+#         pub mod quux {
+#             pub type Bar = ();
+#         }
+#     }
+# }
+#
+use foo::{
+    bar::{self, Foo},
+    baz::{*, quux::Bar},
+};
+#
+# fn main() {}
 ```

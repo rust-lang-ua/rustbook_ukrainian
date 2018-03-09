@@ -16,7 +16,7 @@ Rust і правилах системи володіння, тим здатні�
 ефективного коду ви ставатимете. Так тримати!
 
 Коли ви зрозумієте володіння, ви матимете стійку основу для розуміння 
-особливостей, що роблять Rust унікальною мовою. В цьому розділі, ви вивчете 
+особливостей, що роблять Rust унікальною мовою. В цьому розділі, ви вивчите 
 володіння, працюючи з прикладами, що концентруються на добре відомих структурах
 даних: рядках.
 
@@ -397,14 +397,15 @@ style="width: 50%;" />
 копіювання може вважатися недорогим з точки зору продуктивності під час 
 виконання.
 
-#### Ways Variables and Data Interact: Clone
+#### Як взаємодіють змінні з даними: клонування (clone)
 
-If we *do* want to deeply copy the heap data of the `String`, not just the
-stack data, we can use a common method called `clone`. We’ll discuss method
-syntax in Chapter 5, but because methods are a common feature in many
-programming languages, you’ve probably seen them before.
+Якщо ми *хочемо* зробити глибоку копію даних `String` у купі, а не лише в стеку,
+ми можемо використати загальний метод, що зветься `clone`. Синтаксис 
+використання методів буде обговорено в Розділі 5, але оскільки методи є 
+загальною особливістю багатьох мов програмування, ви, швидше за все, вже бачили
+їх.
 
-Here’s an example of the `clone` method in action:
+Ось приклад дії методу `clone`:
 
 ```rust
 let s1 = String::from("hello");
@@ -413,17 +414,17 @@ let s2 = s1.clone();
 println!("s1 = {}, s2 = {}", s1, s2);
 ```
 
-This works just fine and is how you can explicitly produce the behavior shown
-in Figure 4-5, where the heap data *does* get copied.
+Це чудово працює і так слід робити, щоб отримати поведінку, показану на Рисунку 
+4-5, де дані в купі *дійсно* копіюються.
 
-When you see a call to `clone`, you know that some arbitrary code is being
-executed and that code may be expensive. It’s a visual indicator that something
-different is going on.
+Коли ви бачите виклик `clone`, ви знаєте, що виконується певний визначений код і
+цей код може коштувати продуктивності. Це візуальний індикатор, що відбувається
+певна операція.
 
-#### Stack-Only Data: Copy
+#### Дані в стеку: копіювання (copy)
 
-There’s another wrinkle we haven’t talked about yet. This code using integers,
-part of which was shown earlier in Listing 4-2, works and is valid:
+Є ще одна дрібниця, про яку ми ще не говорили. Цей код, що використовує цілі, 
+частина якого вже була показана раніше в Роздруку 4-2, коректно працює:
 
 ```rust
 let x = 5;
@@ -432,135 +433,137 @@ let y = x;
 println!("x = {}, y = {}", x, y);
 ```
 
-But this code seems to contradict what we just learned: we don’t have a call to
-`clone`, but `x` is still valid and wasn’t moved into `y`.
+Але цей код ніби-то суперечить тому, що ми щойно вивчили: ми не викликаємо 
+clone, то все ж `x` лишається коректним і не переміщується в `y`.
 
-The reason is that types like integers that have a known size at compile time
-are stored entirely on the stack, so copies of the actual values are quick to
-make. That means there’s no reason we would want to prevent `x` from being
-valid after we create the variable `y`. In other words, there’s no difference
-between deep and shallow copying here, so calling `clone` wouldn’t do anything
-differently from the usual shallow copying and we can leave it out.
+Причина у тому, що типи на кшталт цілих, що мають відомий розмір часу 
+компіляції, зберігаються повністю в стеку, тому копіювання їхніх значень 
+відбувається швидко. Це означає, що нема підстав запобігати коректності `x` 
+після створення змінної `y`. Іншими словами, тут немає різниці між глибокою та 
+пласкою копією, і виклик `clone` не зробить нічого відмінного від звичайного
+плаского копіювання, тож можна його не викликати.
 
-Rust has a special annotation called the `Copy` trait that we can place on
-types like integers that are stored on the stack (we’ll talk more about traits
-in Chapter 10). If a type has the `Copy` trait, an older variable is still
-usable after assignment. Rust won’t let us annotate a type with the `Copy`
-trait if the type, or any of its parts, has implemented the `Drop` trait. If
-the type needs something special to happen when the value goes out of scope and
-we add the `Copy` annotation to that type, we’ll get a compile time error.
+Rust має спеціальне позначення, що зветься рисою `Copy`, яку можна додати до 
+типів на кшталт цілих, що зберігаються в стеку (детальніше риси обговорюються в
+Розділі 10). Якщо тип має рису `Copy`, старша змінна лишається придатною до 
+використання після присвоювання. Rust не дозволить позначити тип рисою `Copy`, 
+якщо тип, чи якась з його частин, має втілену рису `Drop`. Якщо тип потребує 
+чогось особливого, коли змінна іде з видимості, і ми додаємо позначення `Copy` 
+до цього типу, ми отримаємо помилку часу компіляції.
 
-So what types are `Copy`? You can check the documentation for the given type to
-be sure, but as a general rule, any group of simple scalar values can be
-`Copy`, and nothing that requires allocation or is some form of resource is
-`Copy`. Here are some of the types that are `Copy`:
+Тож які типи мають рису `Copy` (також кажуть "є `Copy`")? Можна перевірити 
+документацію до певного типу, щоб бути певним, але загальне правило таке: 
+будь-яка група простих скалярних значень може бути `Copy`, і нічого з того, що 
+потребує окремого розміщення в пам'яті чи є ресурсом, не є `Copy`. Ось кілька 
+типів, що є `Copy`:
 
-* All the integer types, like `u32`.
-* The boolean type, `bool`, with values `true` and `false`.
-* All the floating point types, like `f64`.
-* Tuples, but only if they contain types that are also `Copy`. `(i32, i32)` is
-`Copy`, but `(i32, String)` is not.
+* Всі цілі типи, на кшталт `u32`.
+* Булевий тип, `bool`, значення якого `true` та `false`.
+* Всі типи з рухомою комою, на кшталт `f64`.
+* Кортежі, якщо вони містять лише типи, що є `Copy`. `(i32, i32)` є `Copy`, але 
+`(i32, String)` - ні.
 
-### Ownership and Functions
+### Володіння та функції
 
-The semantics for passing a value to a function are similar to assigning a
-value to a variable. Passing a variable to a function will move or copy, just
-like assignment. Listing 4-7 has an example with some annotations showing where
-variables go into and out of scope:
+Семантика передачі значень функції подібна до присвоювання значення змінній. 
+Передача змінної функції є переміщенням чи копією, як і присвоювання. Роздрук 
+4-7 містит приклад з певними поясненнями, що розкривають, де змінні входять і 
+виходять з видимості:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
-    let s = String::from("hello");  // s comes into scope.
+    let s = String::from("hello");  // s входить у видимість.
 
-    takes_ownership(s);             // s's value moves into the function...
-                                    // ... and so is no longer valid here.
-    let x = 5;                      // x comes into scope.
+    takes_ownership(s);             // значення s переміщується у функцію...
+                                    // ...тож s стає нечинним.
+    let x = 5;                      // x входить у видимість.
 
-    makes_copy(x);                  // x would move into the function,
-                                    // but i32 is Copy, so it’s okay to still
-                                    // use x afterward.
+    makes_copy(x);                  // x має бути переміщеним у функцію
+                                    // але i32 є Copy, тож можна використовувати
+                                    // x і надалі
 
-} // Here, x goes out of scope, then s. But since s's value was moved, nothing
-  // special happens.
+} // Тут x виходить з видимості, а потім s. Але оскільки значення s було 
+  // переміщене, нічого особливого не відбувається.
 
-fn takes_ownership(some_string: String) { // some_string comes into scope.
+fn takes_ownership(some_string: String) { // some_string входить у видимість.
     println!("{}", some_string);
-} // Here, some_string goes out of scope and `drop` is called. The backing
-  // memory is freed.
+} // Тут some_string виходить з видимості і викликається `drop`. 
+  // Пам'ять звільняється.
 
-fn makes_copy(some_integer: i32) { // some_integer comes into scope.
+fn makes_copy(some_integer: i32) { // some_integer входить у видимість.
     println!("{}", some_integer);
-} // Here, some_integer goes out of scope. Nothing special happens.
+} // some_integer виходить з видимості. Нічого особливого не відбувається.
 ```
 
 <figcaption>
 
-Listing 4-7: Functions with ownership and scope annotated
+Роздрук 4-7: Функції та володіння з поясненнями
 
 </figcaption>
 </figure>
 
-If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
-compile time error. These static checks protect us from mistakes. Try adding
-code to `main` that uses `s` and `x` to see where you can use them and where
-the ownership rules prevent you from doing so.
+Якби ми спробували використати `s` після виклику `takes_ownership`, Rust 
+повідомить про помилку часу компіляції. Ці статичні перевірки захищають нас від
+помилок. Спробуйте додати в main код, що використовує `s` та `x`, щоб побачити,
+де їх можна використовувати, а де правила володіння запобігають цьому.
 
-### Return Values and Scope
+### Повернення значень та видимість
 
-Returning values can also transfer ownership. Here’s an example with similar
-annotations to those in Listing 4-7:
+Повернення значень також може передавати володіння. Ось приклад зі схожими на 
+Роздрук 4-7 поясненнями:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
-    let s1 = gives_ownership();         // gives_ownership moves its return
-                                        // value into s1.
+    let s1 = gives_ownership();         // gives_ownership переміщує значення, 
+                                        // що повертає, в s1.
 
-    let s2 = String::from("hello");     // s2 comes into scope.
+    let s2 = String::from("hello");     // s2 входить у видимість
 
-    let s3 = takes_and_gives_back(s2);  // s2 is moved into
-                                        // takes_and_gives_back, which also
-                                        // moves its return value into s3.
-} // Here, s3 goes out of scope and is dropped. s2 goes out of scope but was
-  // moved, so nothing happens. s1 goes out of scope and is dropped.
+    let s3 = takes_and_gives_back(s2);  // s2 переміщується в
+                                        // takes_and_gives_back, яка переміщує
+                                        // значення, що повертає, в s3.
+} // s3 виходить з видимості та робить drop. s2 виходить з видимості, але було
+  // переміщене, тож нічого не відобувається. s1 виходить з видимості та робить
+  // drop.
 
-fn gives_ownership() -> String {             // gives_ownership will move its
-                                             // return value into the function
-                                             // that calls it.
+fn gives_ownership() -> String {             // gives_ownership перемістить
+                                             // значення, що повертає, у функцію
+                                             // що його викликала.
 
-    let some_string = String::from("hello"); // some_string comes into scope.
+    let some_string = String::from("hello"); // some_string входить у видимість
 
-    some_string                              // some_string is returned and
-                                             // moves out to the calling
-                                             // function.
+    some_string                              // some_string повертається і
+                                             // переміщується до функції, що 
+                                             // викликала.
 }
 
-// takes_and_gives_back will take a String and return one.
-fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
-                                                      // scope.
+// takes_and_gives_back приймає String і повертає String.
+fn takes_and_gives_back(a_string: String) -> String { // a_string comes входить
+                                                      // у видимість.
 
-    a_string  // a_string is returned and moves out to the calling function.
+    a_string  // a_string повертається і переміщується до функції, що викликала.
 }
 ```
 
-The ownership of variables follows the same pattern every time: assigning a
-value to another variable moves it, and when heap data values’ variables go out
-of scope, if the data hasn’t been moved to be owned by another variable, the
-value will be cleaned up by `drop`.
+Володіння змінними завше дотримується однакової схеми: присвоєння значення іншій
+змінній переміщує його, і коли змінні зі значеннями в купі виходять з видимості,
+якщо дані не були переміщені у володіння іншої змінної, значення буде очищене 
+викликом drop.
 
-Taking ownership and then returning ownership with every function is a bit
-tedious. What if we want to let a function use a value but not take ownership?
-It’s quite annoying that anything we pass in also needs to be passed back if we
-want to use it again, in addition to any data resulting from the body of the
-function that we might want to return as well.
+Взяття володіння і повернення володіння в кожній функції дещо втомлює. Що, як ми
+хочемо довзолити функції використати значення, але не брати володіння? Потреба
+повертати все, що ми передаємо в функції, щоб його можна було знову 
+використовувати, разом із даними, утвореними в результаті роботи функції, 
+дратує.
 
-It’s possible to return multiple values using a tuple, like this:
+Можна повертати багато значень кортежем, на кшталт цього:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -572,12 +575,12 @@ fn main() {
 }
 
 fn calculate_length(s: String) -> (String, usize) {
-    let length = s.len(); // len() returns the length of a String.
+    let length = s.len(); // len() повертає довжину String.
 
     (s, length)
 }
 ```
 
-But this is too much ceremony and a lot of work for a concept that should be
-common. Luckily for us, Rust has a feature for this concept, and it’s called
-*references*.
+Але це б давало забагато ритуальних рухів і зайвої роботи для коцепції, що має
+бути загальновживаною. На щастя для нас, Rust має засоби для такої концепції, що
+зветься *посиланнями*.
