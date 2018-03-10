@@ -1,31 +1,31 @@
-# The Rust Programming Language
+# Мова програмування Rust
 
 [Foreword](foreword.md)
-[Introduction](ch00-00-introduction.md)
+[Вступ](ch00-00-introduction.md)
 
-## Getting started
+## Розпочинаємо
 
 - [Getting Started](ch01-00-getting-started.md)
-    - [Installation](ch01-01-installation.md)
+    - [Встановлення](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
     - [Hello, Cargo!](ch01-03-hello-cargo.md)
 
-- [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
+- [Гра "відгадай число"](ch02-00-guessing-game-tutorial.md)
 
-- [Common Programming Concepts](ch03-00-common-programming-concepts.md)
-    - [Variables and Mutability](ch03-01-variables-and-mutability.md)
-    - [Data Types](ch03-02-data-types.md)
-    - [How Functions Work](ch03-03-how-functions-work.md)
-    - [Comments](ch03-04-comments.md)
-    - [Control Flow](ch03-05-control-flow.md)
+- [Загальні концепції програмування](ch03-00-common-programming-concepts.md)
+    - [Змінні і сталість](ch03-01-variables-and-mutability.md)
+    - [Типи даних](ch03-02-data-types.md)
+    - [Як працюють функції](ch03-03-how-functions-work.md)
+    - [Коментарі](ch03-04-comments.md)
+    - [Управління потоком виконання](ch03-05-control-flow.md)
 
-- [Understanding Ownership](ch04-00-understanding-ownership.md)
-    - [What is Ownership?](ch04-01-what-is-ownership.md)
-    - [References & Borrowing](ch04-02-references-and-borrowing.md)
-    - [Slices](ch04-03-slices.md)
+- [Розуміння володіння](ch04-00-understanding-ownership.md)
+    - [Що таке володіння?](ch04-01-what-is-ownership.md)
+    - [Посилання і позичання](ch04-02-references-and-borrowing.md)
+    - [Зрізи](ch04-03-slices.md)
 
-- [Using Structs to Structure Related Data](ch05-00-structs.md)
-    - [Defining and Instantiating Structs](ch05-01-defining-structs.md)
+- [Використання структур для структурування пов'язаних даних](ch05-00-structs.md)
+    - [Визначення і інстанціювання структур Struct](ch05-01-defining-structs.md)
     - [An Example Program Using Structs](ch05-02-example-structs.md)
     - [Method Syntax](ch05-03-method-syntax.md)
 

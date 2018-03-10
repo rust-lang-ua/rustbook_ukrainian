@@ -1,1 +1,1 @@
-# Using Structs to Structure Related Data
+# Використання структур для структурування пов'язаних даних
