@@ -74,3 +74,5 @@ string - стрічка
 trait - риса
 
 type annotation - позначка типу
+
+unit type - одиничний тип

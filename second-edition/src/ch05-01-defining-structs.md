@@ -54,7 +54,8 @@ let user1 = User {
 Щоб отримати конкретне значення зі стріктури, можна скористатися записом через 
 точку. Якщо ми хочемо отримати тільки адресу електронної пошти користувача, ми 
 можемо написати `user1.email` там, де нам потрібне це значення. Якщо екземпляр є
-несталим, ми можемо змінити значення за допомогою запису через точку і присвоюванням конкретному полю. Роздрук 5-3 показує, як змінити значення поля
+несталим, ми можемо змінити значення за допомогою запису через точку і 
+присвоюванням конкретному полю. Роздрук 5-3 показує, як змінити значення поля
 `email` несталого екземпляру `User`:
 
 ```rust
@@ -75,11 +76,13 @@ let mut user1 = User {
 user1.email = String::from("anotheremail@example.com");
 ```
 
-<span class="caption">Роздрук 5-3: Зміна значення поля `email` екземпляру `User` instance</span>
+<span class="caption">Роздрук 5-3: Зміна значення поля `email` екземпляру `User` 
+instance</span>
 
 Зверніть увагу, що несталим має бути весь екземпляр; Rust не дозволяє позначати
 лише окремі поля як несталі. Також зверніть увагу, що, як і з будь-яким виразом,
-ми можемо написати новий екземпляр останнім виразом у тілі функції, щоб неявно повернути цей новий екземпляр.
+ми можемо написати новий екземпляр останнім виразом у тілі функції, щоб неявно 
+повернути цей новий екземпляр.
 
 Роздрук 5-4 демонструє функцію `build_user`, що повертає екземпляр `User` зі
 встановленими адресою і ім'ям. Поле `active` отримує значення `true`, а 
@@ -106,10 +109,13 @@ fn build_user(email: String, username: String) -> User {
 <span class="caption">Роздрук 5-4: Функція `build_user`, що приймає адресу і 
 ім'я і повертає екземпляр `User`</span>
 
-Має сенс називати аргументи такої функції тими ж іменами, що й імена відповідних полів стурктури, але необхідність повторювати імена полів `email` та `username` утомлює. Якщо у структури більше полів, повторення кожного імені дратує ще 
+Має сенс називати аргументи такої функції тими ж іменами, що й імена відповідних
+полів стурктури, але необхідність повторювати імена полів `email` та `username` 
+утомлює. Якщо у структури більше полів, повторення кожного імені дратує ще 
 більшу. На щастя, є зручне скорочення!
 
-### Використання скорочення ініціалізації полів, коли змінні і поля однаково звуться
+### Використання скорочення ініціалізації полів, коли змінні і поля однаково 
+### звуться
 
 Оскільки імена параметрів і полів структури повністю збігаються в Родруку 5-4, 
 ми можемо скористатися синтаксисом *скорочення ініціалізації полів* і переписати
@@ -134,21 +140,26 @@ fn build_user(email: String, username: String) -> User {
 }
 ```
 
-<span class="caption">Роздрук 5-5: Функція `build_user`, що використовує скорочення ініціалізації полів, оскільки параметри `email` та `username` мають ті ж назви, що й поля структури</span>
+<span class="caption">Роздрук 5-5: Функція `build_user`, що використовує 
+скорочення ініціалізації полів, оскільки параметри `email` та `username` мають 
+ті ж назви, що й поля структури</span>
 
 Ми створюємо новий екземпляр структури `User`, яка має поле з назовою `email`. 
 Ми хочемо встановити значення поля `email` у значення параметру `email` функції
 `build_user`. Оскільки поле `email` і параметри `email` мають одну назву, можна
 писати скорочено `email` замість `email: email`.
 
-### Creating Instances From Other Instances With Struct Update Syntax
+### Створення екземплярів з інших екземплярів за допомогою синтасису оновлення 
+### структури
 
-It’s often useful to create a new instance of a struct that uses most of an old
-instance’s values, but changes some. We do this using *struct update syntax*.
+Часто буває корисним створити новий екземпляр структури, що бере більшу частину
+даних з екземпляру, що вже існує, проте деякі змінює. Це робить за допомогою
+*синтаксису оновлення структури*.
 
-First, Listing 5-6 shows how we create a new `User` instance in `user2` without
-the update syntax. We set new values for `email` and `username`, but otherwise
-use the same values from `user1` that we created in Listing 5-2:
+Для початку, Роздрук 5-6 показує, як створити новий езкемпляр `User`, що зветься
+`user2`, без синтаксису оновлення. Ми виставляємо нові значення полів `email` та 
+`username`, проте решта використовує значення зі структури `user`, створеної у
+Роздруку 5-2:
 
 ```rust
 # struct User {
@@ -173,12 +184,12 @@ let user2 = User {
 };
 ```
 
-<span class="caption">Listing 5-6: Creating a new `User` instance using some of
-the values from `user1`</span>
+<span class="caption">Роздрук 5-6: Створення нового екземпляру `User` з деякими
+значеннями з `user1`</span>
 
-Using struct update syntax, we can achieve the same effect with less code,
-shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
-explicitly set should have the same value as the fields in the given instance.
+Синтаксис оновлення структури дає той самий результат із меншою кількістю коду,
+як показано у Роздруку 5-7. Запис `..` позначає, що решта полів, що їх не було
+явно виставлено, отримають ті значення, що були в заданому екземплярі.
 
 ```rust
 # struct User {
@@ -202,26 +213,25 @@ let user2 = User {
 };
 ```
 
-<span class="caption">Listing 5-7: Using struct update syntax to set a new
-`email` and `username` values for a `User` instance but use the rest of the
-values from the fields of the instance in the `user1` variable</span>
+<span class="caption">Роздрук 5-7: Використання синтаксису оновлення структури
+для задання нових значень `email` та `username` екземпляру структури `User`, 
+решту значень полів взято зі змінної `user1`</span>
 
-The code in Listing 5-7 also creates an instance in `user2` that has a
-different value for `email` and `username` but has the same values for the
-`active` and `sign_in_count` fields from `user1`.
+Код у Роздруку 5-7 також створює екземпляр `user2`, що має відмінні значення 
+`email` та `username`, але має ті ж значення `active` та `sign_in_count`, що й 
+`user1`.
 
-### Tuple Structs without Named Fields to Create Different Types
+### Структури-кортежі без іменованих полів для створення різних типів
 
-We can also define structs that look similar to tuples, called *tuple structs*,
-that have the added meaning the struct name provides, but don’t have names
-associated with their fields, just the types of the fields. Tuple structs are
-useful when you want to give the whole tuple a name and make the tuple be a
-different type than other tuples, but naming each field as in a regular struct
-would be verbose or redundant.
+Ми також можемо визначати структури, які виглядають схожими на кортежі, що 
+звуться *структури-кортежі* (*tuple struct*). Вони надають значення структурі,
+бо мають назву, але не мають назв полів, тільки типи. Структури-кортежі корисні,
+коли ви хочете дати кортежу ім'я і зробити кортеж окремим типом, але називати
+кожне поле, як у звичайній структурі, буде надто багатослівним чи надмірним.
 
-To define a tuple struct you start with the `struct` keyword and the struct
-name followed by the types in the tuple. For example, here are definitions and
-usages of two tuple structs named `Color` and `Point`:
+Щоб визначити структуру-кортеж, треба вказати ключове слово `struct` і ім'я 
+структури, а потім типи в кортежі. Наприклад, ось визначення і приклади 
+застосування двох структур-кортежів, що звуться `Color`(колір) і `Point`(точка):
 
 ```rust
 struct Color(i32, i32, i32);
@@ -231,37 +241,37 @@ let black = Color(0, 0, 0);
 let origin = Point(0, 0, 0);
 ```
 
-Note that the `black` and `origin` values are different types, since they’re
-instances of different tuple structs. Each struct we define is its own type,
-even though the fields within the struct have the same types. For example, a
-function that takes a parameter of type `Color` cannot take a `Point` as an
-argument, even though both types are made up of three `i32` values. Otherwise,
-tuple struct instances behave like tuples, which we covered in Chapter 3: you
-can destructure them into their individual pieces, you can use a `.` followed
-by the index to access an individual value, and so on.
+Зауважте, що значення `black` та `origin` мають різні типи, бо вони є 
+екземплярами різних структур-кортежів. Кожна визначена нами структура має свій
+власний тип, навіть якщо поля структур мають однакові типи. Наприклад, функція,
+що приймає параметр типу `Color`, не може прийняти аргументом `Point`, хоча 
+обидва типи складаються з трьох значень `i32`. В іншому ж структури-кортежі 
+поводяться як кортежі, про які ми говорили в Розділі 3: ви можете 
+деструктуризувати їх на окремі шматки, ви можете використовувати `.` з індексом,
+щоб отримати доступ до окремого значення і так далі.
 
-### Unit-Like Structs without Any Fields
+### Одинично-подібні структури без полів
 
-We can also define structs that don’t have any fields! These are called
-*unit-like structs* since they behave similarly to `()`, the unit type.
-Unit-like structs can be useful in situations such as when you need to
-implement a trait on some type, but you don’t have any data that you want to
-store in the type itself. We’ll be discussing traits in Chapter 10.
+Також можна визначати структури без жодних полів! Вони звуться *одинично-подібні
+структури* (*unit-like struct*), бо поводяться аналогічно до `()`, одничного 
+типу. Одинично-подібні структури можуть бути корисними в ситуаціях, коли вам 
+потрібно втілити рису до якогось типу, але у вас немає потреби зберігати якісь 
+дані. Риси будуть обговорюватися в Розділі 10.
 
-> ### Ownership of Struct Data
+> ### Володіння даними структури
 >
-> In the `User` struct definition in Listing 5-1, we used the owned `String`
-> type rather than the `&str` string slice type. This is a deliberate choice
-> because we want instances of this struct to own all of its data and for that
-> data to be valid for as long as the entire struct is valid.
+> В структурі `User` з Роздруку 5-1 ми використовували тип `String`, що має
+> володіння, а не стрічковий зріз `&str`. Це свідомий вибір, бо ми хочемо, щоб
+> екземпляри цієї структури володіли всіма даними і щоб ці дані були коректні
+> весь час існування структури в цілому.
 >
-> It’s possible for structs to store references to data owned by something else,
-> but to do so requires the use of *lifetimes*, a Rust feature that is discussed
-> in Chapter 10. Lifetimes ensure that the data referenced by a struct is valid
-> for as long as the struct is. Let’s say you try to store a reference in a
-> struct without specifying lifetimes, like this:
+> Структура також може зберігати посилання на дані, якими володіє хтось інший,
+> але це потребує використання *часу життя*, особливості Rust, що обговорюється
+> у Розділі 10. Час життя гарантує, що дані, на які посилається структура, 
+> будуть коректними весь час існування структури. Наприклад, якщо ви спробуєте
+> зберегти посилання у структурі без уточнення часу життя, ось так:
 >
-> <span class="filename">Filename: src/main.rs</span>
+> <span class="filename">Файл: src/main.rs</span>
 >
 > ```rust,ignore
 > struct User {
@@ -281,7 +291,7 @@ store in the type itself. We’ll be discussing traits in Chapter 10.
 > }
 > ```
 >
-> The compiler will complain that it needs lifetime specifiers:
+> Компілятор повідомить, що йому потрібно вказати час життя:
 >
 > ```text
 > error[E0106]: missing lifetime specifier
@@ -297,6 +307,7 @@ store in the type itself. We’ll be discussing traits in Chapter 10.
 >   |            ^ expected lifetime parameter
 > ```
 >
-> We’ll discuss how to fix these errors so you can store references in structs
-> in Chapter 10, but for now, we’ll fix errors like these using owned types like
-> `String` instead of references like `&str`.
+> Ми обговоримо, як це виправити, щоб можна було зберігати посилання у 
+> структурах, у Розділі 10, а поки що, будемо виправляти подібні помилки за 
+> допомогою типів, що володіють своїми даними, на кшталт `String`, замість
+> посилань на кшталт `&str`.
