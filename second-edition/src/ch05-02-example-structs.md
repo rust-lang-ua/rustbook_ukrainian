@@ -1,15 +1,15 @@
-## An Example Program Using Structs
+## Приклад програми, що використовує структури
 
-To understand when we might want to use structs, let’s write a program that
-calculates the area of a rectangle. We’ll start with single variables, and then
-refactor the program until we’re using structs instead.
+Щоб зрозуміти, де можна використовувати структури, напишемо програму, що 
+обчислює площу прямокутника. Почнемо з окремих змінних, а потім рефакторизуємо 
+її так, щоб вона використовувала структури.
 
-Let’s make a new binary project with Cargo called *rectangles* that will take
-the width and height of a rectangle specified in pixels and will calculate the
-area of the rectangle. Listing 5-8 shows a short program with one way of doing
-just that in our project’s *src/main.rs*:
+За допомогою Cargo створімо проект, що зветься *rectangles*, для двійкової 
+програми, яка прийматиме ширину і висоту прямокутника в пікселях і обчислюватиме
+його площу. Роздрук 5-8 показує коротку очевидну програму, що робить саме те, що
+треба:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -17,7 +17,7 @@ fn main() {
     let height1 = 50;
 
     println!(
-        "The area of the rectangle is {} square pixels.",
+        "Площа прямокутника {} квадратних пікселів.",
         area(width1, height1)
     );
 }
@@ -27,43 +27,42 @@ fn area(width: u32, height: u32) -> u32 {
 }
 ```
 
-<span class="caption">Listing 5-8: Calculating the area of a rectangle
-specified by its width and height in separate variables</span>
+<span class="caption">Роздрук 5-8: Обчислення площі прямокутника, заданого 
+шириною та висотою в окремих змінних</span>
 
-Now, run this program using `cargo run`:
+Тепер запустимо програму командою `cargo run`:
 
 ```text
-The area of the rectangle is 1500 square pixels.
+Площа прямокутника 1500 квадратних пікселів.
 ```
 
-### Refactoring with Tuples
+### Рефакторизація за допомогою кортежів
 
-Even though Listing 5-8 works and figures out the area of the rectangle by
-calling the `area` function with each dimension, we can do better. The width
-and the height are related to each other because together they describe one
-rectangle.
+Хоча Роздрук 5-8 працює і знаходить площу прямокутника викликом функції `area`
+з обома вимірами, його можна покращити. Ширина і висота пов'язані одна з одною,
+бо вони описують один прямокутник.
 
-The issue with this code is evident in the signature of `area`:
+Натомість поглянемо на сигнатуру функції `area`:
 
 ```rust,ignore
 fn area(width: u32, height: u32) -> u32 {
 ```
 
-The `area` function is supposed to calculate the area of one rectangle, but the
-function we wrote has two parameters. The parameters are related, but that’s
-not expressed anywhere in our program. It would be more readable and more
-manageable to group width and height together. We’ve already discussed one way
-we might do that in the “Grouping Values into Tuples” section of Chapter 3: by
-using tuples. Listing 5-9 shows another version of our program that uses tuples:
+Функція `area` має обчислювати площу одного прямокутника, але наша функція 
+приймає два параметри. Параметри пов'язані між собою, але це ніде не виражено в
+нашій програмі. Для кращої читаності і керованості буде краще зґрупувати ширину
+і висоту разом. Ми вже обговорювали один зі способів, як це зробити, у 
+підрозділі "Об'єднання значень у кортежі" Розділу 3: за допомогою кортежів. 
+Роздрук 5-9 показує версію нашої програми із кортежами:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
     let rect1 = (30, 50);
 
     println!(
-        "The area of the rectangle is {} square pixels.",
+        "Площа прямокутника {} квадратних пікселів.",
         area(rect1)
     );
 }
@@ -73,29 +72,28 @@ fn area(dimensions: (u32, u32)) -> u32 {
 }
 ```
 
-<span class="caption">Listing 5-9: Specifying the width and height of the
-rectangle with a tuple</span>
+<span class="caption">Роздрук 5-9: визначення ширини і висоти прямокутника 
+кортежем</span>
 
-In one way, this program is better. Tuples let us add a bit of structure, and
-we’re now passing just one argument. But in another way this version is less
-clear: tuples don’t name their elements, so our calculation has become more
-confusing because we have to index into the parts of the tuple.
+З одного боку, ця програма краща. Кортежі додають трохи структурованості, і 
+тепер ми передаємо лише один аргумент. Але з іншого боку ця версія менш 
+зрозуміла: кортежі не мають назв для своїх елементів, тому наші обчислення тепер
+складніше зрозуміти, бо тепер доводиться індексувати частини кортежу.
 
-It doesn’t matter if we mix up width and height for the area calculation, but
-if we want to draw the rectangle on the screen, it would matter! We would have
-to keep in mind that `width` is the tuple index `0` and `height` is the tuple
-index `1`. If someone else worked on this code, they would have to figure this
-out and keep it in mind as well. It would be easy to forget or mix up these
-values and cause errors, because we haven’t conveyed the meaning of our data in
-our code.
+Не має значення, якщо ми переплутаємо ширину і висоту при обчисленні площі, але
+якщо ми захочему намалювати прямокутник на екрані, це матиме значення! Нам 
+доведеться пам'ятати, що ширина має в кортежі індекс 0, а висота - індекс 1. 
+Якби хтось інший працював із цим кодом, йому довелося б до цього здогадатися і
+також пам'ятати. Можна лего забути чи переплутати ці значення, що призведе до
+помилки, оскільки ми не вказали сенс даних у коді.
 
-### Refactoring with Structs: Adding More Meaning
+### Рефакторизація зі структурами: додаємо сенс
 
-We use structs to add meaning by labeling the data. We can transform the tuple
-we’re using into a data type with a name for the whole as well as names for the
-parts, as shown in Listing 5-10:
+Ми використовуємо структури, щоб додати сенс за допомогою "ярликів" до даних. Ми
+можемо перетворити наш кортеж на тип даних з іменами як для цілого, так і для 
+частин, як показано в Роздруку 5-10:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 struct Rectangle {
@@ -107,7 +105,7 @@ fn main() {
     let rect1 = Rectangle { width: 30, height: 50 };
 
     println!(
-        "The area of the rectangle is {} square pixels.",
+        "Площа прямокутника {} квадратних пікселів.",
         area(&rect1)
     );
 }
@@ -117,34 +115,32 @@ fn area(rectangle: &Rectangle) -> u32 {
 }
 ```
 
-<span class="caption">Listing 5-10: Defining a `Rectangle` struct</span>
+<span class="caption">Роздрук 5-10: визначення структури `Rectangle`</span>
 
-Here we’ve defined a struct and named it `Rectangle`. Inside the `{}` we
-defined the fields as `width` and `height`, both of which have type `u32`. Then
-in `main` we create a particular instance of a `Rectangle` that has a width of
-30 and a height of 50.
+Тут ми визначили структуру і назвали її `Rectangle`. Всередині `{}` ми визначили
+поля `width` та `height`, обидва типу `u32`. Далі в `main` ми створюємо окремий
+екземпляр `Rectangle` з шириною 30 і висотою 50.
 
-Our `area` function is now defined with one parameter, which we’ve named
-`rectangle`, whose type is an immutable borrow of a struct `Rectangle`
-instance. As mentioned in Chapter 4, we want to borrow the struct rather than
-take ownership of it. This way, `main` retains its ownership and can continue
-using `rect1`, which is the reason we use the `&` in the function signature and
-where we call the function.
+Наша функція `area` тепер має визначення з одним параметром, який ми назвали
+`rectangle`, тип якого - стале позичення екземпляра структури `Rectangle`. Як ми
+вже казали в Розділі 4, ми можемо позичити структуру замість перебирати 
+володіння ним. Таким чином `main` зберігає володіння і може продовжувати 
+використовувати `rect1`, тому ми застосовуємо `&` у сигнатурі функції та при її
+виклику.
 
-The `area` function accesses the `width` and `height` fields of the `Rectangle`
-instance. Our function signature for `area` now says exactly what we mean:
-calculate the area of a `Rectangle`, using its `width` and `height` fields.
-This conveys that the width and height are related to each other, and gives
-descriptive names to the values rather than using the tuple index values of `0`
-and `1`. This is a win for clarity.
+Функція `area` звертається до полів `width` та `height` екземпляру `Rectangle`.
+Сигнатура функції `area` тепер каже саме те, що ми мали на увазі: обчислити 
+площу `Rectangle` за допомогою полів `width` та `height`. Це сповіщає, що ширина
+і висота пов'язані одна з іншою, і дає змістовні імена значенням замість 
+індексів кортежу `0` та `1`. Чіткість досягнута.
 
-### Adding Useful Functionality with Derived Traits
+### Додаємо корисну функціональність зі успадкованими рисами.
 
-It’d be nice to be able to print out an instance of our `Rectangle` while we’re
-debugging our program and see the values for all its fields. Listing 5-11 tries
-the `println!` macro as we have used it in Chapters 2, 3, and 4:
+Було б непогано мати змогу виводити екземпляр нашого `Rectangle` при зневаджені
+програми і бачити значення його полів. Роздрук 5-11 намагається вжити макрос
+`println!` так само, як було в Розділах 2, 3 і 4:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 struct Rectangle {
@@ -155,61 +151,62 @@ struct Rectangle {
 fn main() {
     let rect1 = Rectangle { width: 30, height: 50 };
 
-    println!("rect1 is {}", rect1);
+    println!("rect1 = {}", rect1);
 }
 ```
 
-<span class="caption">Listing 5-11: Attempting to print a `Rectangle`
-instance</span>
+<span class="caption">Роздрук 5-11: спроба вивести екземпляр `Rectangle`</span>
 
-When we run this code, we get an error with this core message:
+Якщо запустити цей код, ми дістанемо помилку із головним повідомленням:
 
 ```text
 error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 ```
 
-The `println!` macro can do many kinds of formatting, and by default, `{}`
-tells `println!` to use formatting known as `Display`: output intended for
-direct end user consumption. The primitive types we’ve seen so far implement
-`Display` by default, because there’s only one way you’d want to show a `1` or
-any other primitive type to a user. But with structs, the way `println!` should
-format the output is less clear because there are more display possibilities:
-do you want commas or not? Do you want to print the curly brackets? Should all
-the fields be shown? Due to this ambiguity, Rust doesn’t try to guess what we
-want and structs don’t have a provided implementation of `Display`.
+Макрос `println!` може виконувати багато різних видів форматувань, і уставно 
+`{}` каже `println!` використати форматування, відоме як `Display`: вивести те,
+що призначене для читання кінцевим споживачем. Примітивні типи, з яким ми досі
+стикалися, усталено реалізують `Display`, оскільки є лише один спосіб, яким 
+можна показати `1` чи якийсь інший примітивний тип користувачу. Але зі 
+структурами вже не настільки очевидно, як `println!` має форматувати вивід, 
+оскільки є багато можливостей виведення: потрібні коми чи ні? Чи треба виводити
+фігурні дужки? Чи всі поля слід показувати? Через цю невизначеність, Rust не 
+намагається відгадати, чого ми хочемо, і структури не мають підготовленої
+реалізації `Display`.
 
-If we continue reading the errors, we’ll find this helpful note:
+Якщо ми подивимося помилки далі, то знайдемо цю корисну примітку:
 
 ```text
 `Rectangle` cannot be formatted with the default formatter; try using
 `:?` instead if you are using a format string
 ```
 
-Let’s try it! The `println!` macro call will now look like `println!("rect1 is
-{:?}", rect1);`. Putting the specifier `:?` inside the `{}` tells `println!` we
-want to use an output format called `Debug`. `Debug` is a trait that enables us
-to print out our struct in a way that is useful for developers so we can see
-its value while we’re debugging our code.
+Давайте спробуємо! Виклик макросу `println!` тепер виглядає так: 
+`println!("rect1 = {:?}", rect1);`. Додавання специфікатора `:?` в `{}` каже 
+`println!`, що ми хочемо використати формат виведення, що зветься `Debug`. 
+`Debug` - це риса, що дозволяє вивести нашу структуру у спосіб, зручний для 
+розробників, щоб дивитися її значення під час зневадження коду.
 
-Run the code with this change. Drat! We still get an error:
+Запустимо змінений код.
+Run the code with this change. Трясця! Все одно помилка:
 
 ```text
 error[E0277]: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 ```
 
-But again, the compiler gives us a helpful note:
+Але знову компілятор дає нам корисну примітку:
 
 ```text
 `Rectangle` cannot be formatted using `:?`; if it is defined in your
 crate, add `#[derive(Debug)]` or manually implement it
 ```
 
-Rust *does* include functionality to print out debugging information, but we
-have to explicitly opt-in to make that functionality available for our struct.
-To do that, we add the annotation `#[derive(Debug)]` just before the struct
-definition, as shown in Listing 5-12:
+Rust *має* функціональність для виведення інформації для зневадження, та нам 
+доведеться увімкнути її явним способом, щоб зробити її доступною для нашої 
+структури. Щоб зробити це, додамо помітку `#[derive(Debug)]` прямо перед 
+визначенянм структури, як показано в Роздруку 5-12:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 #[derive(Debug)]
@@ -221,25 +218,25 @@ struct Rectangle {
 fn main() {
     let rect1 = Rectangle { width: 30, height: 50 };
 
-    println!("rect1 is {:?}", rect1);
+    println!("rect1 = {:?}", rect1);
 }
 ```
 
-<span class="caption">Listing 5-12: Adding the annotation to derive the `Debug`
-trait and printing the `Rectangle` instance using debug formatting</span>
+<span class="caption">Роздрук 5-12: Додавання помітки для успадкування риси 
+`Debug` і виведення екземпляру `Rectangle`, форматуваним для зневадження</span>
 
-Now when we run the program, we won’t get any errors and we’ll see the
-following output:
+Коли ми знову запустимо програму, то не отримаємо жодної помилки і побачимо 
+таке:
 
 ```text
-rect1 is Rectangle { width: 30, height: 50 }
+rect1 = Rectangle { width: 30, height: 50 }
 ```
 
-Nice! It’s not the prettiest output, but it shows the values of all the fields
-for this instance, which would definitely help during debugging. When we have
-larger structs, it’s useful to have output that’s a bit easier to read; in
-those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string.
-When we use the `{:#?}` style in the example, the output will look like this:
+Чудово! Це не найкрасивіший вивід, але він показує значення всіх полів для
+екземпляру, що точно допоможе при зневадженні. Коли у нас є більші структури,
+корисно мати зручніший для читання вивід; в цих випадках, ми можемо використати
+`{:#?}` замість `{:?}` у стрічці `println!`. Якщо скористатися стилем `{:#?}` у
+цьому прикладі, вивід виглядатиме так:
 
 ```text
 rect1 is Rectangle {
@@ -248,13 +245,13 @@ rect1 is Rectangle {
 }
 ```
 
-Rust has provided a number of traits for us to use with the `derive` annotation
-that can add useful behavior to our custom types. Those traits and their
-behaviors are listed in Appendix C. We’ll cover how to implement these traits
-with custom behavior as well as how to create your own traits in Chapter 10.
+Rust надає низку рис, які можна використати з поміткою `derive`, що можуть 
+додати корисну поведінку проголошеним нами типам. Ці риси і їхня поведінка
+перераховані у Додатку C. Ми покажемо, як реалізовувати ці риси зі власною 
+поведінкою, як і створювати свої власні риси, у Розділі 10.
 
-Our `area` function is very specific: it only computes the area of rectangles.
-It would be helpful to tie this behavior more closely to our `Rectangle`
-struct, because it won’t work with any other type. Let’s look at how we can
-continue to refactor this code by turning the `area` function into an `area`
-*method* defined on our `Rectangle` type.
+Наша функція `area` дуже конкретна: вона вираховує лише площу прямокутників. 
+Було б корисно прив'язати цю поведінку міцніше до структури `Rectangle`, 
+оскільки вона не працює з іншими типами. Давайте подивимося, як ми можемо 
+продовжити рефакторизувати цей код, перетворивши функцію `area` на *метод* 
+`area`, визначений для нашого типу `Rectangle`.

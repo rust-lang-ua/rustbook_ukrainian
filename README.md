@@ -5,7 +5,7 @@
 долучатися.
 
 [html]: http://rust-lang.github.io/book/
-
+z
 Це наступна ітерація книжки "Мова програмування Rust" ([сирці][src], 
 [текст онлайн][prod]).
 
@@ -79,3 +79,6 @@ $ mdbook test
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 [mdbook]: https://github.com/azerupi/mdBook/issues/5
 [the frozen column]: https://github.com/rust-lang/book/projects/1
+
+## Український переклад у вебі
+https://pavloslav.github.io/RustBookUkr/

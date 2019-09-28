@@ -1,20 +1,19 @@
-## Method Syntax
+## Синтаксис методів
 
-*Methods* are similar to functions: they’re declared with the `fn` keyword and
-their name, they can have parameters and a return value, and they contain some
-code that is run when they’re called from somewhere else. However, methods are
-different from functions in that they’re defined within the context of a struct
-(or an enum or a trait object, which we cover in Chapters 6 and 17,
-respectively), and their first parameter is always `self`, which represents the
-instance of the struct the method is being called on.
+*Методи* подібні до функцій: вони проголошуються ключовим словом `fn` і іменем,
+можуть мати параметри і повертати значення, і містять код, що виконується, коли
+їх викликають з деінде. Однак методи відрізняються від функцій тим, що визначені
+в контексті структури (чи енума, чи об'єкта-риси, про що піде мова в Розділах 6
+та 17, відповідно), і їхнім першим параметром завжди є `self`, що представляє
+екземпляр структури, з якої викликається метод.
 
-### Defining Methods
+### Визначення методів
 
-Let’s change the `area` function that has a `Rectangle` instance as a parameter
-and instead make an `area` method defined on the `Rectangle` struct, as shown
-in Listing 5-13:
+Давайте замінимо функцію `area`, що приймає параметром екземпляр `Rectangle`, на
+новий метод `area`, визначений на структурі `Rectangle`, як показано в Роздруку
+5-13:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 #[derive(Debug)]
@@ -33,14 +32,14 @@ fn main() {
     let rect1 = Rectangle { width: 30, height: 50 };
 
     println!(
-        "The area of the rectangle is {} square pixels.",
+        "Площа прямокутника {} квадратних пікселів.",
         rect1.area()
     );
 }
 ```
 
-<span class="caption">Listing 5-13: Defining an `area` method on the
-`Rectangle` struct</span>
+<span class="caption">Роздрук 5-13: Визначення методу `area` на структурі 
+`Rectangle`</span>
 
 To define the function within the context of `Rectangle`, we start an `impl`
 (*implementation*) block. Then we move the `area` function within the `impl`
