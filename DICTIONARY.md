@@ -30,7 +30,7 @@ immutable - сталий
 
 > див. mutable
 
-implement - імплентувати
+implement - реалізовувати
 
 impl - *не перекладається*
 

@@ -1,36 +1,34 @@
-## Hello, Cargo!
+## Привіт, Cargo!
 
-Cargo is Rust’s build system and package manager. Most Rustaceans will use this
-tool to manage their Rust projects because Cargo takes care of a lot of tasks
-for you, such as building your code, downloading the libraries your code
-depends on, and building those libraries. (We call libraries your code needs
-*dependencies*.)
+Cargo - це система побудови та пакетний менеджер. Більшість Растацеанців 
+використовуватимуть цей інструмент для керування проєктами Rust, бо Cargo 
+виконує багато задач, таких, як побудова коду, завантаження бібліотек, від яких залежить ваш код, та побудова цих бібліотек (бібліотеки, потрібні коду,
+звуться *залежностями* (*dependencies*).
 
-The simplest Rust programs, like the one we’ve written so far, don’t have any
-dependencies, so if we had built the Hello World project with Cargo, it would
-only be using the part of Cargo that takes care of building your code. As you
-write more complex Rust programs, you’ll want to add dependencies, and if you
-start the project off using Cargo, that will be a lot easier to do.
+Найпростіші програми Rust, як та, яку ми щойно написали, не мають жодних 
+залежностей, тому, якби ми побудували проєкт Hello world за допомогою Cargo,
+то скористалися б тільки тією частиною Cargo, що відповідає з побудову коду. 
+Якщо ж писати складніші програми Rust, виникне потреба в залежностях, і якщо 
+почати проєкт за допомогою Cargo, задовольнити її буде значно легше.
 
-As the vast majority of Rust projects use Cargo, the rest of this book will
-assume that you’re using Cargo too. Cargo comes installed with Rust itself, if
-you used the official installers as covered in the “Installation” section. If
-you installed Rust through some other means, you can check if you have Cargo
-installed by entering the following into your terminal:
+Оскільки переважна більшість проєктів Rust використовують Cargo, надалі в книзі
+вважатиметься, що ви теж використовуєте Cargo. Cargo встановлюється з Rust, 
+якщо ви скористалися офіційним встановлювачем, як сказано в розділі 
+“Встановлення”. Якщо ви встановили Rust у інший спосіб, можете перевірити, чи 
+встановлений Cargo, ввівши це у свій термінал:
 
 ```text
 $ cargo --version
 ```
 
-If you see a version number, great! If you see an error like `command not
-found`, then you should look at the documentation for your method of
-installation to determine how to install Cargo separately.
+Якщо ви побачите номер версії, то чудово! Але якщо ви бачите помилку на кшталт
+`не знайдено команду`, вам слід звернутися до документації по вашому методу
+встановлення, щоб визначити, як окремо встановити Cargo.
 
-### Creating a Project with Cargo
+### Створення проєкту за допомогою Cargo
 
-Let’s create a new project using Cargo and look at how it differs from our
-original Hello World project. Navigate back to your *projects* directory (or
-wherever you decided to put your code) and then on any operating system run:
+Створімо новий проєкт за допомогою Cargo і подивимося, як він відрізняється від
+нашого початкового проєкту Hello World. Поверніться до вашої теки *projects* (чи іншої, де знаходиться ваш код) і введіть команди (незалежно від системи):
 
 ```text
 $ cargo new hello_cargo --bin
@@ -49,59 +47,61 @@ because of this change; I think "The `--bin` argument to passed to `cargo new`
 makes an executable application (often just called a *binary*), as opposed to a
 library." lays this out enough. /Carol -->
 
-This creates a new binary executable called `hello_cargo`. The `--bin` argument
-to passed to `cargo new` makes an executable application (often just called a
-*binary*), as opposed to a library. We’ve given `hello_cargo` as the name for
-our project, and Cargo creates its files in a directory of the same name.
+Це створює новий двійковий виконанний проєкт, що зветься hello_cargo. Аргумент
+`--bin`, переданий до `cargo new`, створює виконанний застосунок (який часто 
+просто називають *двійковим файлом*); натомість, він міг створити бібліотеку.
+Ми ввели `hello_cargo` як назву нашого проєкту, і Cargo створює його файли у 
+теці, що зветься так само.
 
-Go into the *hello_cargo* directory and list the files, and you should see that
-Cargo has generated two files and one directory for us: a *Cargo.toml* and a
-*src* directory with a *main.rs* file inside. It has also initialized a new git
-repository, along with a *.gitignore* file.
+Перейдіть до теки *hello_cargo* і перегляньте файли, і ви побачите, що Cargo 
+створив два файли і одну теку: *Cargo.toml* і теку *src* із файлом *main.rs* 
+Також він розпочав новий репозиторій git, додавши файл *.gitignore*.
 
-> Note: Git is a common version control system. You can change `cargo new` to
-> use a different version control system, or no version control system, by
-> using the `--vcs` flag. Run `cargo new --help` to see the available options.
+> Примітка: Git - це поширена система контролю версій (version control system, 
+> VCS). Ви можете сказати `cargo new` використовувати іншу систему контрою 
+> версій чи не використовувати жодної за допомогою прапорця `--vcs`. Запустіть
+> `cargo new --help`, щоб побачити можливі варіанти.
 
-Open up *Cargo.toml* in your text editor of choice. It should look similar to
-the code in Listing 1-2:
+Відкрийте файл *Cargo.toml* у будь-якому текстовому редакторі. Він має 
+виглядати десь так, як показано у Роздруку 1-2:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Файл: Cargo.toml</span>
 
 ```toml
 [package]
 name = "hello_cargo"
 version = "0.1.0"
-authors = ["Your Name <you@example.com>"]
+authors = ["Ваше Ім'я <email@example.com>"]
 
 [dependencies]
 ```
 
-<span class="caption">Listing 1-2: Contents of *Cargo.toml* generated by `cargo
-new`</span>
+<span class="caption">Роздрук 1-2: Вміст файлу *Cargo.toml*, створеного 
+командою `cargo new`</span>
 
-This file is in the [*TOML*][toml]<!-- ignore --> (Tom’s Obvious, Minimal
-Language) format, which is what Cargo uses as its configuration format.
+Це файл у форматі [*TOML*][toml]<!-- ignore --> (Tom’s Obvious, Minimal
+Language - "томова очевидна мінімальна мова"), який Cargo використовує як 
+формат для конфігурації.
 
 [toml]: https://github.com/toml-lang/toml
 
-The first line, `[package]`, is a section heading that indicates that the
-following statements are configuring a package. As we add more information to
-this file, we’ll add other sections.
+Перший рядок, `[package]` (пакет), це заголовок розділу, що показує, що 
+наступні інструкції стосуються конфігурації пакету. Коли ми додамо більше 
+інформації до цього файлу, ми додамо й інші розділи.
 
-The next three lines set the configuration information Cargo needs in order to
-know that it should compile your program: the name, the version, and who wrote
-it. Cargo gets your name and email information from your environment, so if
-that’s not correct, go ahead and fix that and save the file.
+Наступні три рядки встановлюють конфігураційну інформацію, потрібну Cargo для
+компілювання вашої програми: ім'я, версію, і хто її написав. Cargo бере ваше 
+ім'я та адресу електронної пошти з налаштувань середовища, і якщо вони 
+неправильні, можете їх виправити та зберегти файл.
 
-The last line, `[dependencies]`, is the start of a section for you to list any
-of your project’s dependencies. In Rust, packages of code are referred to as
-*crates*. We won’t need any other crates for this project, but we will in the
-first project in Chapter 2, so we’ll use this dependencies section then.
+Останній рядок, `[dependencies]`, розпочинає розділ, де можна вказувати 
+залежності вашого проєкту. Пакети з кодом в Rust звуться *ящиками* (*Crates*).
+Нам не знадобиться інших ящиків для цього проєкту, але вони знадобляться для
+першого проєкту у розділі 2, і тоді ж ми скористаємося цим розділом.
 
-Now open up *src/main.rs* and take a look:
+Тепер відкрийте файл *src/main.rs* і подивіться на його вміст:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
