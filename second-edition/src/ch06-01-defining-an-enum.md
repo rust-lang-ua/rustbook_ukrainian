@@ -1,22 +1,20 @@
-## Defining an Enum
+## Визначення enum-а
 
-Let’s look at a situation we might want to express in code and see why enums
-are useful and more appropriate than structs in this case. Say we need to work
-with IP addresses. Currently, two major standards are used for IP addresses:
-version four and version six. These are the only possibilities for an IP
-address that our program will come across: we can *enumerate* all possible
-values, which is where enumeration gets its name.
+Розглянемо ситуацію, яка може виникнути при програмуванні, і побачимо, чому 
+enum-и корисні і краще за struct-и підходять для цієї ситуації. Нехай нам 
+потрібно працювати із IP-адресами. Наразі використовується два стандарти 
+IP-адрес, четверта та шотста версії. Інших варіантів для IP-адрес наша програма
+не зустріне, ми можемо *перелічити* (*enumerate*) усі можливі значення, звідси
+й назва для переліків.
 
-Any IP address can be either a version four or a version six address but not
-both at the same time. That property of IP addresses makes the enum data
-structure appropriate for this case, because enum values can only be one of the
-variants. Both version four and version six addresses are still fundamentally
-IP addresses, so they should be treated as the same type when the code is
-handling situations that apply to any kind of IP address.
+Будь-яка IP-адреса може бути або версії 4, або версії 6, але не одночасно. Ця 
+властивість IP-адрес робить enum відповідним засобом для цієї мети, бо значення
+enum-а можуть бути лише одним із варіантів. Адреси як четвертої, так і шостої 
+версій засадничо є саме IP-адресами, і з ними можна працювати як з одним 
+типом, коли код стосується ситуацій, де можуть використовуватися обидва типи 
+адрес.
 
-We can express this concept in code by defining an `IpAddrKind` enumeration and
-listing the possible kinds an IP address can be, `V4` and `V6`. These are known
-as the *variants* of the enum:
+Цю концепцію можна виразити, визначивши перелік `IpAddrKind` і перерахувавши можливі типи IP-адрес, `V4` та `V6`. Це зветься *варіантами* enum-а:
 
 ```rust
 enum IpAddrKind {
@@ -25,11 +23,12 @@ enum IpAddrKind {
 }
 ```
 
-`IpAddrKind` is now a custom data type that we can use elsewhere in our code.
+`IpAddrKind` тепер є користувацьким типом даних, яким ми можемо користуватися
+деінде в нашому коді.
 
-### Enum Values
+### Значення Enum-а
 
-We can create instances of each of the two variants of `IpAddrKind` like this:
+Ми можемо створити екземпляри обох варіантів `IpAddrKind` таким чином:
 
 ```rust
 # enum IpAddrKind {
@@ -41,11 +40,11 @@ let four = IpAddrKind::V4;
 let six = IpAddrKind::V6;
 ```
 
-Note that the variants of the enum are namespaced under its identifier, and we
-use a double colon to separate the two. The reason this is useful is that now
-both values `IpAddrKind::V4` and `IpAddrKind::V6` are of the same type:
-`IpAddrKind`. We can then, for instance, define a function that takes any
-`IpAddrKind`:
+Зверніть увагу, що варіанти enum-а знаходяться у просторі імен його 
+ідентифікатора, і для з'єднання ми використовуємо подвійну двокрапку. Це 
+корисно, бо значення `IpAddrKind::V4` і `IpAddrKind::V6` належать до одного 
+типу `IpAddrKind`. Тепер можна, скажімо, визначити функцію, що приймає `
+IpAddrKind`:
 
 ```rust
 # enum IpAddrKind {
@@ -56,7 +55,7 @@ both values `IpAddrKind::V4` and `IpAddrKind::V6` are of the same type:
 fn route(ip_type: IpAddrKind) { }
 ```
 
-And we can call this function with either variant:
+І викликати цю функцію для будь-якого з варіантів:
 
 ```rust
 # enum IpAddrKind {
@@ -70,10 +69,10 @@ route(IpAddrKind::V4);
 route(IpAddrKind::V6);
 ```
 
-Using enums has even more advantages. Thinking more about our IP address type,
-at the moment we don’t have a way to store the actual IP address *data*; we
-only know what *kind* it is. Given that you just learned about structs in
-Chapter 5, you might tackle this problem as shown in Listing 6-1:
+Але використання enum-ів дає ще більше переваг. Наразі ми не маємо способу 
+збергіати власне *дані* IP-адреси; ми знаємо лише її *тип*. Оскільки ми щойно 
+дізналися про struct-и у Розділі 5, можна спробувати вирішити цю проблему, як
+показано у Роздруку 6-1:
 
 ```rust
 enum IpAddrKind {
@@ -97,22 +96,21 @@ let loopback = IpAddr {
 };
 ```
 
-<span class="caption">Listing 6-1: Storing the data and `IpAddrKind` variant of
-an IP address using a `struct`</span>
+<span class="caption">Роздрук 6-1: зберігання даних і варіанту `IpAddrKind` 
+IP-адреси за допомогою `struct`</span>
 
-Here, we’ve defined a struct `IpAddr` that has two fields: a `kind` field that
-is of type `IpAddrKind` (the enum we defined previously) and an `address` field
-of type `String`. We have two instances of this struct. The first, `home`, has
-the value `IpAddrKind::V4` as its `kind` with associated address data of
-`127.0.0.1`. The second instance, `loopback`, has the other variant of
-`IpAddrKind` as its `kind` value, `V6`, and has address `::1` associated with
-it. We’ve used a struct to bundle the `kind` and `address` values together, so
-now the variant is associated with the value.
+Так ми визначили struct `IpAddr`, що має два поля: `kind` ("тип") типу `
+IpAddrKind` (щойно визначений нами enum) та `address` типу `String`. Ми маємо 
+два екземпляри цьго struct-а. Перший, `home`, має значення `kind` `
+IpAddrKind::V4` і прив'язані дані адреси `127.0.0.1`. Другий екземпляр, `
+loopback`, має інший варіант `IpAddrKind` значення поля `kind` - `V6`, і має
+прив'язану адресу `::1`. Ми використали struct, щоб пов'язати значення `kind` 
+та `address` разом, таким чином варіант тепер прив'язаний до значення.
 
-We can represent the same concept in a more concise way using just an enum,
-rather than an enum inside a struct, by putting data directly into each enum
-variant. This new definition of the `IpAddr` enum says that both `V4` and `V6`
-variants will have associated `String` values:
+Цю концепцію можна представити у коротший спосіб за допомогою самого enum-а, а
+не enum-а всередині struct-а, розмістивши дані безпосередньо в кожному варіанті
+enum-а. Це нове визначення enum-а `IpAddr` каже, що обидва варіанти `V4` та 
+`V6` мають прив'язані значення `String`:
 
 ```rust
 enum IpAddr {
@@ -125,15 +123,15 @@ let home = IpAddr::V4(String::from("127.0.0.1"));
 let loopback = IpAddr::V6(String::from("::1"));
 ```
 
-We attach data to each variant of the enum directly, so there is no need for an
-extra struct.
+Ми причепили дані безпосередньо до кожного варіанту enum-а, і тепер нема 
+потреби в додатковому struct-і.
 
-There’s another advantage to using an enum rather than a struct: each variant
-can have different types and amounts of associated data. Version four type IP
-addresses will always have four numeric components that will have values
-between 0 and 255. If we wanted to store `V4` addresses as four `u8` values but
-still express `V6` addresses as one `String` value, we wouldn’t be able to with
-a struct. Enums handle this case with ease:
+Є ще одна перевага у використанні enum-а замість struct-а: кожен варіант може
+мати різні типи і кількість прив'язаних даних. IP-адреси четвертої версії 
+завжди складаються з чотрирьох числових компоненів зі значеннями між 0 та 255.
+Якщо ми хочемо зберігати адреси `V4` як чотири значення `u8`, але `V6` - як
+`String`, то struct-ом ми цього зробити не зможемо. Натомість enum-и легко 
+пораються із цим:
 
 ```rust
 enum IpAddr {
