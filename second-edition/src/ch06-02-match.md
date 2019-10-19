@@ -1,23 +1,23 @@
-## The `match` Control Flow Operator
+## Конструкція управління `match`
 
-Rust has an extremely powerful control-flow operator called `match` that allows
-us to compare a value against a series of patterns and then execute code based
-on which pattern matches. Patterns can be made up of literal values, variable
-names, wildcards, and many other things; Chapter 18 covers all the different
-kinds of patterns and what they do. The power of `match` comes from the
-expressiveness of the patterns and the compiler checks that all
-possible cases are handled.
+Rust має вкрай потужну конструкцію управління, що зветься `match`, яка дозволяє
+нам порівнювати значення із кількома шаблонами та потім виконати код, виходячи
+з того, який шаблон відповідає цьому значенню. Шаблони можуть складатися з 
+літеральних значень, імен змінних, байдужих символів і багатьох інших речей; 
+Розділ 18 розкриває усі види шаблонів і що вони роблять. Потужність `match`
+походить виразності шаблонів, а компілятор перевіряє, щоб усі можливі варіанти
+були оброблені.
 
-Think of a `match` expression kind of like a coin sorting machine: coins slide
-down a track with variously sized holes along it, and each coin falls through
-the first hole it encounters that it fits into. In the same way, values go
-through each pattern in a `match`, and at the first pattern the value “fits,”
-the value will fall into the associated code block to be used during execution.
+Вираз `match` можна уявити собі як сортувальну машину для монет: монети 
+ковзають жолобом із отворами різних розмірів, і кожна монета падає крізь 
+перший отвір, в який вона проходить. Так само значення проходить крізь кожен
+шаблон в `match`, і на першому шаблоні, якому воно відповідає, значення 
+"провалюється" в пов'язаний блок коду, де може бути використане.
 
-Because we just mentioned coins, let’s use them as an example using `match`! We
-can write a function that can take an unknown United States coin and, in a
-similar way as the counting machine, determine which coin it is and return its
-value in cents, as shown here in Listing 6-3:
+Оскільки ми згадали монети, використаємо їх як приклад використання `match`! Ми
+можемо написати функцію, що приймає невідому монету Сполучених Штатів і, так 
+само як і лічільна машина, визначає, яка це монета і повертає її значення в
+центах, як показано в Роздруку 6-3:
 
 ```rust
 enum Coin {
@@ -37,36 +37,36 @@ fn value_in_cents(coin: Coin) -> u32 {
 }
 ```
 
-<span class="caption">Listing 6-3: An enum and a `match` expression that has
-the variants of the enum as its patterns.</span>
+<span class="caption">Роздрук 6-3: Enum і вираз `match` із варіантами enum-а 
+як шаблонами.</span>
 
-Let’s break down the `match` in the `value_in_cents` function. First, we list
-the `match` keyword followed by an expression, which in this case is the value
-`coin`. This seems very similar to an expression used with `if`, but there’s a
-big difference: with `if`, the expression needs to return a Boolean value.
-Here, it can be any type. The type of `coin` in this example is the `Coin` enum
-that we defined in Listing 6-3.
+Розберемо `match` у функції `value_in_cents`. По-перше, ми пишемо ключове слово
+`match`, за яким іде вираз, у цьому випадку - значення `coin`. Це дуже схоже на
+вираз, що ми використовувати у `if`, але є велика відмінність: у `if` вираз має
+повертати булеве значення. Тут він може бути будь-якого типу. Тип `coin` у 
+цьому прикладі - enum `Coin`, визначений у Роздруку 6-3.
 
-Next are the `match` arms. An arm has two parts: a pattern and some code. The
-first arm here has a pattern that is the value `Coin::Penny` and then the `=>`
-operator that separates the pattern and the code to run. The code in this case
-is just the value `1`. Each arm is separated from the next with a comma.
+Далій йдуть рукави `match`. Рукав має дві частини: шаблон і код. Перший рукав
+має шаблон, що є значенням `Coin::Penny`, після якого оператор `=>` відокремлює
+шаблон і код, що буде виконано. Код, у цьому випадку - просто значення `1`. 
+Кожен рукав відокремлений від наступного комою.
 
-When the `match` expression executes, it compares the resulting value against
-the pattern of each arm, in order. If a pattern matches the value, the code
-associated with that pattern is executed. If that pattern doesn’t match the
-value, execution continues to the next arm, much like a coin sorting machine.
-We can have as many arms as we need: in Listing 6-3, our `match` has four arms.
+Коли виконується вираз `match`, значення по черзі порівнюється із шаблоном 
+кожного рукава. Якщо шаблон відповідає значенню, виконується пов'язаний із цим
+шаблоном код. Якщо шаблон не відопвідає значенню, виконання передається 
+наступному рукаву, як монетка в сортувальній машині. Рукавів може бути стільки,
+скільки нам потрібно: у Роздруку 6-3 `match` має чотири рукави.
 
-The code associated with each arm is an expression, and the resulting value of
-the expression in the matching arm is the value that gets returned for the
-entire `match` expression.
+Код, пов'язаний з коженим рукавом - вираз, що повертає значення, і кінцеве 
+значення виразу рукава, що підійшов, стає значенням, що повертається усім 
+виразом `match`.
 
-Curly brackets typically aren’t used if the match arm code is short, as it is
-in Listing 6-3 where each arm just returns a value. If you want to run multiple
-lines of code in a match arm, you can use curly brackets. For example, the
-following code would print out “Lucky penny!” every time the method was called
-with a `Coin::Penny` but would still return the last value of the block, `1`:
+Фігурні дужки зазвичай не використовуються, якщо код рукава match невеликий, 
+як у Роздруку 6-3, де кожен рукав просто повертає значення. Якщо ви хочете 
+виконати багато рядків коду у рукаві match, можете скористатися фігурними 
+дужками. Наприклад, наступний код виводитиме “Щаслива монетка!” кожного разу,
+коли метод викличуть для `Coin::Penny`, але також поверне останнє значення 
+блоку, тобто `1`:
 
 ```rust
 # enum Coin {
@@ -79,7 +79,7 @@ with a `Coin::Penny` but would still return the last value of the block, `1`:
 fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => {
-            println!("Lucky penny!");
+            println!("Щаслива монетка!");
             1
         },
         Coin::Nickel => 5,
@@ -89,25 +89,25 @@ fn value_in_cents(coin: Coin) -> u32 {
 }
 ```
 
-### Patterns that Bind to Values
+### Шаблони, що зв'язуються зі значеннями
 
-Another useful feature of match arms is that they can bind to parts of the
-values that match the pattern. This is how we can extract values out of enum
-variants.
+Інша корисна властивість рукавів match полягає в тому, що вони можуть 
+зв'язуватися з частинами значення, що відповідає шаблону. Таким чином ми можемо
+дістати значення з варіантів enum-ів.
 
-As an example, let’s change one of our enum variants to hold data inside it.
-From 1999 through 2008, the United States minted quarters with different
-designs for each of the 50 states on one side. No other coins got state
-designs, so only quarters have this extra value. We can add this information to
-our `enum` by changing the `Quarter` variant to include a `UsState` value stored
-inside it, which we’ve done here in Listing 6-4:
+Наприклад, змінімо один з варіантів enum-а, щоб він мав дані усередині. З 1999 
+по 2008 роки Сполучені Штати карбували чвертаки з різними дизайнами для кожного
+з 50 штатів на одному боці. Інші монети не мають окремих дизайнів для штатів,
+тому лише чвертаки мають таке додаткове значення. Ми можемо додати цю 
+інформацію до нащого `enum`-а, змінивши варіант `Quarter`, аби він включав
+значення `UsState` у собі, що й зроблено в Роздруку 6-4:
 
 ```rust
-#[derive(Debug)] // So we can inspect the state in a minute
+#[derive(Debug)] // Щоб можна було швидко подивитися, що за штат
 enum UsState {
     Alabama,
     Alaska,
-    // ... etc
+    // ... і т.д.
 }
 
 enum Coin {
@@ -118,18 +118,17 @@ enum Coin {
 }
 ```
 
-<span class="caption">Listing 6-4: A `Coin` enum where the `Quarter` variant
-also holds a `UsState` value</span>
+<span class="caption">Listing 6-4: Enum `Coin`, де варіант `Quarter` має 
+всередині значення `UsState`</span>
 
-Let’s imagine that a friend of ours is trying to collect all 50 state quarters.
-While we sort our loose change by coin type, we’ll also call out the name of
-the state associated with each quarter so if it’s one our friend doesn’t have,
-they can add it to their collection.
+Уявімо, що наш друг намагається зібрати всі 50 чвертаків різних штатів. 
+Сортуючи дріб'язок по типах монет, ми також будемо називати назви штатів, пов'язаних з кожним чвертаком, щоб, якщо такого друг такого не має, він зміг би
+додати його до своєї колекції.
 
-In the match expression for this code, we add a variable called `state` to the
-pattern that matches values of the variant `Coin::Quarter`. When a
-`Coin::Quarter` matches, the `state` variable will bind to the value of that
-quarter’s state. Then we can use `state` in the code for that arm, like so:
+У виразі match у цьому коді ми додаємо змінну, що зветься `state` до шаблону, 
+що відповідає значенням варіанту `Coin::Quarter`. Коли шаблон `Coin::Quarter` 
+буде відповідним до виразу, змінна `state` зв'яжеться зі значенням стану цього 
+чвертака. Тоді ми можемо використати `state` у коді цього рукава, ось так:
 
 ```rust
 # #[derive(Debug)]
@@ -151,7 +150,7 @@ fn value_in_cents(coin: Coin) -> u32 {
         Coin::Nickel => 5,
         Coin::Dime => 10,
         Coin::Quarter(state) => {
-            println!("State quarter from {:?}!", state);
+            println!("Чвертак штату {:?}!", state);
             25
         },
     }

@@ -95,3 +95,5 @@ tuple - кортеж
 type annotation - анотація типу
 
 unit type - тип юніт
+
+wildcard - байдужий символ
