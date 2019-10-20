@@ -157,28 +157,28 @@ fn value_in_cents(coin: Coin) -> u32 {
 }
 ```
 
-If we were to call `value_in_cents(Coin::Quarter(UsState::Alaska))`, `coin`
-would be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each
-of the match arms, none of them match until we reach `Coin::Quarter(state)`. At
-that point, the binding for `state` will be the value `UsState::Alaska`. We can
-then use that binding in the `println!` expression, thus getting the inner
-state value out of the `Coin` enum variant for `Quarter`.
+Якщо ми викличемо `value_in_cents(Coin::Quarter(UsState::Alaska))`, значення
+`coin` буде `Coin::Quarter(UsState::Alaska)`. При порівнянні цього значення з
+усіма рукавами не підійде жоден, окрім `Coin::Quarter(state)`. У цьому місці,
+`state` буде зв'язане зі значенням `UsState::Alaska`. Ми можемо тоді 
+скористатися цим зв'язуванням у виразі `println!`, отримавши таким чином 
+внутрішнє значення штату з enum-у `Coin` для варіанту `Quarter`.
 
-### Matching with `Option<T>`
+### Match і `Option<T>`
 
-In the previous section we wanted to get the inner `T` value out of the `Some`
-case when using `Option<T>`; we can also handle `Option<T>` using `match` as we
-did with the `Coin` enum! Instead of comparing coins, we’ll compare the
-variants of `Option<T>`, but the way that the `match` expression works remains
-the same.
+У попередньому підрозділі ми хотіли дістати внутрішнє значення типу `T` з 
+варіанту `Some`, коли працювали з `Option<T>`; з `Option<T>` ми теж можемо 
+скористатися конструкцією `match`, так само, як з enum-ом `Coin`! Замість 
+монет, порівнюватимемо варіанти `Option<T>`, вираз `match` при цьому працює тим
+самим чином.
 
-Let’s say we want to write a function that takes an `Option<i32>`, and if
-there’s a value inside, adds one to that value. If there isn’t a value inside,
-the function should return the `None` value and not attempt to perform any
-operations.
+Хай, скажімо, ми хочемо написати функцію, що приймає `Option<i32>`, і якщо воно
+має значення, додає один до цього значення. А якщо там немає значення 
+всередині, функція має повертати значення `None` і не намагатися виконати 
+жодних дій.
 
-This function is very easy to write, thanks to `match`, and will look like
-Listing 6-5:
+Цю функцію дуже легко написати завдяки `match`, вона виглядатиме так, як у 
+Роздруку 6-5:
 
 ```rust
 fn plus_one(x: Option<i32>) -> Option<i32> {
@@ -193,54 +193,54 @@ let six = plus_one(five);
 let none = plus_one(None);
 ```
 
-<span class="caption">Listing 6-5: A function that uses a `match` expression on
-an `Option<i32>`</span>
+<span class="caption">Роздрук 6-5: функція, що застосовує вираз `match` на
+`Option<i32>`</span>
 
-#### Matching `Some(T)`
+#### Рукав `Some(T)`
 
-Let’s examine the first execution of `plus_one` in more detail. When we call
-`plus_one(five)`, the variable `x` in the body of `plus_one` will have the
-value `Some(5)`. We then compare that against each match arm.
+Розглянемо детальніше перше виконання `plus_one`. Коли ми викликаємо 
+`plus_one(five)`, змінна `x` у тілі `plus_one` матиме значення `Some(5)`. Ми
+можемо порівняти це значення з кожним рукавом match.
 
 ```rust,ignore
 None => None,
 ```
 
-The `Some(5)` value doesn’t match the pattern `None`, so we continue to the
-next arm.
+Значення `Some(5)` не відповідає шаблону `None`, і ми переходимо до наступного
+рукава.
 
 ```rust,ignore
 Some(i) => Some(i + 1),
 ```
 
-Does `Some(5)` match `Some(i)`? Well yes it does! We have the same variant.
-The `i` binds to the value contained in `Some`, so `i` takes the value `5`. The
-code in the match arm is then executed, so we add one to the value of `i` and
-create a new `Some` value with our total `6` inside.
+Чи відповідає `Some(5)` шаблону `Some(i)`? Так, звісно! Це саме наш варіант.
+Змінна `i` зв'язується зі наченням, що міститься в `Some`, тобто `i` набуває
+значення 5. Далі виконується Код у рукаві match, тобто додається один до 
+значення `i` і ствоюється нове значення `Some` із результатом 6 всередині.
 
-#### Matching `None`
+#### Рукав `None`
 
-Now let’s consider the second call of `plus_one` in Listing 6-5 where `x` is
-`None`. We enter the `match` and compare to the first arm.
+Тепер розглянемо другий виклик `plus_one` у Роздруку 6-5, де `x` дорівнює 
+`None`. Ми входимо в match і порівнюємо перший рукав.
 
 ```rust,ignore
 None => None,
 ```
 
-It matches! There’s no value to add to, so the program stops and returns the
-`None` value on the right side of `=>`. Because the first arm matched, no other
-arms are compared.
+Підходить! Немає значення, до якого треба додавати, і програма зупиняється і 
+повертає значення `None`, що стоїть праворуч від `=>`. Оскільки перший рукав
+відповідає значенню, решта рукавів не перевіряються.
 
-Combining `match` and enums is useful in many situations. You’ll see this
-pattern a lot in Rust code: `match` against an enum, bind a variable to the
-data inside, and then execute code based on it. It’s a bit tricky at first, but
-once you get used to it, you’ll wish you had it in all languages. It’s
-consistently a user favorite.
+Комбінування `match` і enum-ів корисне в багатьох ситуаціях. Ви часто 
+бачитимете цей шаблону у коді Rust: `match` із enum-ом, зв'язування змінної з
+даними усередині, і виконання коду відповідно до цього. Це спершу трохи 
+мудровано, але щойно ви звикните до цього, то бажатимете мати таку конструкцію
+в усіх мовах. Ця конструкція - незмінний улюбленець користувачів Rust.
 
-### Matches Are Exhaustive
+### Match вимагає вичерпності
 
-There’s one other aspect of `match` we need to discuss. Consider this version
-of our `plus_one` function:
+Є ще один бік `match`, що ми маємо обговорити. Розглянемо таку версію нашої
+ функції `plus_one`:
 
 ```rust,ignore
 fn plus_one(x: Option<i32>) -> Option<i32> {
@@ -250,9 +250,9 @@ fn plus_one(x: Option<i32>) -> Option<i32> {
 }
 ```
 
-We didn’t handle the `None` case, so this code will cause a bug. Luckily, it’s
-a bug Rust knows how to catch. If we try to compile this code, we’ll get this
-error:
+Ми не обробляємо варіанту `None`, тому цей код призводить до вади. На щастя,
+Rust знає, як виявляти такі вади. Якщо ми спробуємо скомпілювати цей код, то
+отримаємо таке повідомлення про помилку:
 
 ```text
 error[E0004]: non-exhaustive patterns: `None` not covered
@@ -262,37 +262,44 @@ error[E0004]: non-exhaustive patterns: `None` not covered
   |               ^ pattern `None` not covered
 ```
 
-Rust knows that we didn’t cover every possible case and even knows which
-pattern we forgot! Matches in Rust are *exhaustive*: we must exhaust every last
-possibility in order for the code to be valid. Especially in the case of
-`Option<T>`, when Rust prevents us from forgetting to explicitly handle the
-`None` case, it protects us from assuming that we have a value when we might
-have null, thus making the billion dollar mistake discussed earlier.
+Rust знає, що ми не покрили усі можливі випадки, і навіть знає, який саме 
+шаблон ми забули! Match в Rust *вичерпні*: ми маємо вичерпати всі можливі 
+ситації, щоб код був коректним. Особливо у випадку `Option<T>` Rust, 
+запобігаючи тому, щоб ми забули явно обробити випадок `None`, захищає нас від
+припущення, що ми маємо значення, коли ми можемо мати null, таким чином
+припускаючись помилки на мільярд доларів, про яку ми говорили вище.
 
-### The `_` Placeholder
+### Заповнювач `_`
 
-Rust also has a pattern we can use in situations when we don’t want to list all
-possible values. For example, a `u8` can have valid values of 0 through 255. If
-we only care about the values 1, 3, 5, and 7, we don’t want to have to list out
-0, 2, 4, 6, 8, 9 all the way up to 255. Fortunately, we don’t have to: we can
-use the special pattern `_` instead:
+Rust також має шаблон, яким ми можемо скористатися в сиутаціях, коли ми не 
+бажаємо перерраховувати усі можливі занчення. Наприклад, `u8` може мати 
+коректні значення від 0 до 255. Якщо там важливі тільки значення 1, 3, 5 і 7, 
+нам не кортітиме перераховувати 0, 2, 4, 6, 8, 9 і так далі до 255. На щастя, 
+нам і не треба: ми можемо використи натомість спеціальний шаблон `_`:
 
 ```rust
 let some_u8_value = 0u8;
 match some_u8_value {
-    1 => println!("one"),
-    3 => println!("three"),
-    5 => println!("five"),
-    7 => println!("seven"),
+    1 => println!("один"),
+    3 => println!("три"),
+    5 => println!("п'ять"),
+    7 => println!("сім"),
     _ => (),
 }
 ```
 
-The `_` pattern will match any value. By putting it after our other arms, the
-`_` will match all the possible cases that aren’t specified before it. The `()`
-is just the unit value, so nothing will happen in the `_` case. As a result, we
-can say that we want to do nothing for all the possible values that we don’t
-list before the `_` placeholder.
+Шаблон `_` відповідає будь-якому значенню. Розміщений після усіх інших рукавів,
+`_` буде відповідати усім можливим варіантам, які ми ще не розглянули раніше.
+`()` - це просто значення unit, тому нічого не стається у випадку `_`. У 
+результаті ми можемо сказати, що ми не хочемо нічого робити для всіх можливих
+значень, не перерахованих до заповнювача `_`.
 
-However, the `match` expression can be a bit wordy in a situation in which we
-only care about *one* of the cases. For this situation, Rust provides `if let`.
+[Насправді, `_` - це просто ім'я змінної, яке не викликає попередження 
+компілятора, що ми не використали значення цієї змінної. Ми могли б так само 
+написати і `x => ()` в останньому рукаві, цей шаблон очевидно буде відповідати 
+будь-якому значенню; але невикористане значення викликає попередження про 
+можливу помилку, яку притлумлює спеціальна назва змінної. Тобто мова йде не 
+про особливу конструкцію мови, а про особливе ім'я змінної - прим. перекладача]
+
+Однак вираз `match` може бути дещо забагатослівним у випадках, коли нас 
+цікавить лише *один* випадок. Для цих сиутацій Rust надає конструкцію `if let`.

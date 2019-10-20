@@ -65,6 +65,8 @@ pattern - зразок
 
 pattern matching - співставлення з патерном
 
+placeholder - заповнювач
+
 Rustacean - растацеанець
 
 scope - область видимості
