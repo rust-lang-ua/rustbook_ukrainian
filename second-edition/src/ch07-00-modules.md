@@ -1,24 +1,23 @@
-# Using Modules to Reuse and Organize Code
+# Використання модулів для повторного використання і організації коду
 
-When you start writing programs in Rust, your code might live solely in the
-`main` function. As your code grows, you’ll eventually move functionality into
-other functions for reuse and better organization. By splitting your code into
-smaller chunks, each chunk is easier to understand on its own. But what happens
-if you have too many functions? Rust has a module system that enables the reuse
-of code in an organized fashion.
+Коли ви починаєте писати програму Rust, ваш код може весь знаходитися в фунції
+`main`. Зі зростанням коду ви перенесете певну функціональність у інші функції
+для повторного використання і кращої організації. Поділивши код на менші 
+шматки, ви зробите кожен шматок зрозумілішим. Але що станеться, коли у вас буде
+забагато функцій? Rust має систему модулів, що дозволяє повторне використання коду в організований спосіб.
 
-In the same way that you extract lines of code into a function, you can extract
-functions (and other code, like structs and enums) into different modules. A
-*module* is a namespace that contains definitions of functions or types, and
-you can choose whether those definitions are visible outside their module
-(public) or not (private). Here’s an overview of how modules work:
+Так само, як ви виділяєте рядки коду у фунцію, ви можете виділити функції (та 
+інший код, на кшталт struct-ів та enum-ів) у різні модулі. *Модуль* - це 
+простір імен, що містить визначення функцій та типів, ви можете обирати, чи ці
+визначення будуть видимими іззовні їхнього модуля (публічними) чи ні 
+(приватними). Ось загальний огляд того, як працюють модулі:
 
-* The `mod` keyword declares a new module. Code within the module appears
-  either immediately following this declaration within curly brackets or in
-  another file.
-* By default, functions, types, constants, and modules are private. The `pub`
-  keyword makes an item public and therefore visible outside its namespace.
-* The `use` keyword brings modules, or the definitions inside modules, into
-  scope so it’s easier to refer to them.
+* Ключове слово `mod` проголошує новий модуль. Код усередині модуля 
+  розміщується або безпосередньо після цього проголошення у фігурних дужках, 
+  або в іншому файлі.
+* Усталено функції, типи, константи і модулі є приватними. Ключове слово `pub` 
+  робить об'єкт публічним і відтак видимим з-за меж відповідного простору імен.
+* Ключове слово `use` вводуть модулі і визначення всередині модулів у межі дії,
+  щоб можна було легше до них звертатися.
 
-We’ll look at each of these parts to see how they fit into the whole.
+Ми розглянемо кожну з цих частин, щоб побачити, як вони працюють разом.

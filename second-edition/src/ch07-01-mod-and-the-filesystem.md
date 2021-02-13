@@ -1,28 +1,27 @@
-## `mod` and the Filesystem
+## `mod` і файлова система
 
-We’ll start our module example by making a new project with Cargo, but instead
-of creating a binary crate, we’ll make a library crate: a project that other
-people can pull into their projects as a dependency. For example, the `rand`
-crate discussed in Chapter 2 is a library crate that we used as a dependency in
-the guessing game project.
+Ми почнемо наш приклад модуля зі створення нового проєкту за допомогою Cargo, 
+але замість двійкового crate-а створімо бібліотечний crate: проєкт, який інші
+люди можуть втягнути у свої проєкти як залежність. Наприклад, crate `rand`, 
+мова про який йшла у Розділі 2 - бібліотечний crate, що ми використовували як
+залежість у грі "відгадай число".
 
-We’ll create a skeleton of a library that provides some general networking
-functionality; we’ll concentrate on the organization of the modules and
-functions but we won’t worry about what code goes in the function bodies. We’ll
-call our library `communicator`. By default, Cargo will create a library unless
-another type of project is specified: if we omit the `--bin` option that we’ve
-been using in all of the chapters preceding this one, our project will be a
-library:
+Ми створимо основу бібліотеки, що надає деяку загальну мережеву 
+функціональність; сконцентруємося на організації модулів та функцій, але не 
+будемо звертати уваги на код у тілах функцій. Назвемо нашу бібліотеку 
+`communicator`. Усталено Cargo створює бібліотеку, якщо не вказано інший тип 
+проєкту: якщо ми не вкажемо опцію `--bin`, яку ми використовували досі в усіх 
+розділах, наш проєкт буде бібліотекою:
 
 ```text
 $ cargo new communicator
 $ cd communicator
 ```
 
-Notice that Cargo generated *src/lib.rs* instead of *src/main.rs*. Inside
-*src/lib.rs* we’ll find the following:
+Зверніть увагу, що Cargo створив *src/lib.rs* замість *src/main.rs*. Всередині
+*src/lib.rs* ми побачимо таке:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -34,27 +33,27 @@ mod tests {
 }
 ```
 
-Cargo creates an example test to help us get our library started, rather than
-the “Hello, world!” binary that we get when we use the `--bin` option. We’ll
-look at the `#[]` and `mod tests` syntax in the “Using `super` to Access a
-Parent Module” section later in this chapter, but for now, leave this code at
-the bottom of *src/lib.rs*.
+Cargo створює приклад тесту, щоб допомогти нам почати писати бібліотеку, а не
+двійковий файл “Hello, world!”, який ми отримували за допомогою опції `--bin`.
+Ми розглянемо `#[]` та `mod tests` у підрозділі “Використання `super` для 
+доступу до батьківського модуля” далі в цьому розділу, а поки, залишимо цей 
+код в кінці *src/lib.rs*.
 
-Because we don’t have a *src/main.rs* file, there’s nothing for Cargo to
-execute with the `cargo run` command. Therefore, we’ll use the `cargo build`
-command to compile our library crate’s code.
+Оскільки у нас немає файлу *src/main.rs*, Cargo немає чого виконувати командою
+`cargo run`. Відтак ми скористаємося командою `cargo build`, щоб скомпілювати
+код crate-а нашої бібліотеки.
 
-We’ll look at different options for organizing your library’s code that will be
-suitable in a variety of situations, depending on the intent of the code.
+Роздивимося різні способи організації коду вашої бібліотеки, що підійдуть в 
+різноманітних ситуаціях, залежно від призначення коду.
 
-### Module Definitions
+### Визначення модуля
 
-For our `communicator` networking library, we’ll first define a module named
-`network` that contains the definition of a function called `connect`. Every
-module definition in Rust starts with the `mod` keyword. Add this code to the
-beginning of the *src/lib.rs* file, above the test code:
+Для нашої мережевої бібліотеки `communicator` ми спершу визначимо модуль, що
+зветься `network`, що містить визначення функції з назвою `connect`. Кожне
+визначення модулю в Rust починається з ключового слова `mod`. Додайте цей код 
+на початок файлу *src/lib.rs*, вище коду з тестом:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -63,18 +62,17 @@ mod network {
 }
 ```
 
-After the `mod` keyword, we put the name of the module, `network`, and then a
-block of code in curly brackets. Everything inside this block is inside the
-namespace `network`. In this case, we have a single function, `connect`. If we
-wanted to call this function from code outside the `network` module, we
-would need to specify the module and use the namespace syntax `::`, like so:
-`network::connect()` rather than just `connect()`.
+Після ключового слова `mod` розміщується назва модулю, `network`, а потім блок
+коду у фігурних дужках. Усе всередині цього блоку знаходиться у просторі імен
+`network`. У цьому випадку ми маємо одну функцію - `connect`. Якби ми захотіли викликати цю функцію з коду іззовні модуля `network`, нам треба було б вказати
+модуль і скористатися записом для простору імен `::`, ось так: 
+`network::connect()` - а не просто `connect()`.
 
-We can also have multiple modules, side by side, in the same *src/lib.rs* file.
-For example, to also have a `client` module that has a function named `connect`
-as well, we can add it as shown in Listing 7-1:
+Також можна мати декількам модулів, розташованих поруч, в одному файлі 
+*src/lib.rs*. Наприклад, щоб створити модуль `client`, що також має функцію з 
+назвою `connect`, ми можемо додати його, як показано в Роздруку 7-1:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -88,26 +86,26 @@ mod client {
 }
 ```
 
-<span class="caption">Listing 7-1: The `network` module and the `client` module
-defined side by side in *src/lib.rs*</span>
+<span class="caption">Роздрук 7-1: Модулі `network` і `client`, визначені 
+поруч у *src/lib.rs*</span>
 
-Now we have a `network::connect` function and a `client::connect` function.
-These can have completely different functionality, and the function names do
-not conflict with each other because they’re in different modules.
+Тепер ми маємо функції `network::connect` та `client::connect`. Їхня 
+функціональність може бути абсолютно відмінною, а імена функцій не конфліктують
+одне з одним, бо вони розташовані в різних модулях.
 
-In this case, because we’re building a library, the file that serves as the
-entry point for building our library is *src/lib.rs*. However, in respect to
-creating modules, there’s nothing special about *src/lib.rs*. We could also
-create modules in *src/main.rs* for a binary crate in the same way as we’re
-creating modules in *src/lib.rs* for the library crate. In fact, we can put
-modules inside of modules, which can be useful as your modules grow to keep
-related functionality organized together and separate functionality apart. The
-choice of how you organize your code depends on how you think about the
-relationship between the parts of your code. For instance, the `client` code
-and its `connect` function might make more sense to users of our library if
-they were inside the `network` namespace instead, as in Listing 7-2:
+У цьому випадку, оскільки ми розробляємо бібліотеку, файл, що слугує початковою
+точкою для побудови бібліотеки зветься *src/lib.rs*. Однак, якщо мова йде про
+створення модулів, у файлі *src/lib.rs* немає нічого особливого. Ми могли б 
+створювати модулі в *src/main.rs* двійкового крейта так само як і в 
+*src/lib.rs* бібліотечного крейта. Можна навіть розміщувати модулі всередині 
+модулів, що може бути корисно, щоб тримати споріднену функціональність поруч, а
+різну - окремо, коли модулі розростаються. Вибір організації коду залежить від 
+вашого уявлення про взаємозв'язки між частинами вашого коду. Наприклад, код 
+модуля `client` із функцією `connect` можуть виглядати більш логічним для 
+користувачів нашої бібліотеки, якщо розташувати їх у просторі імен `network`, 
+як показано у Роздруку 7-2:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -121,7 +119,7 @@ mod network {
 }
 ```
 
-<span class="caption">Listing 7-2: Moving the `client` module inside the
+<span class="caption">Роздрук 7-2: Модуль `client` перенесено всередину модуля 
 `network` module</span>
 
 In your *src/lib.rs* file, replace the existing `mod network` and `mod client`
