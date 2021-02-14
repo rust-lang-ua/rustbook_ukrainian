@@ -1,12 +1,8 @@
-# Getting Started
+# Початок
 
-<!-- If you want to use this paragraph in the Introduction, can you replace it
-with some other introductory text for the chapter here? Maybe just lay out
-what's in this chapter so they know it's important not to skip it. -->
-<!-- Yep, done! /Carol -->
+Почнемо свою подорож по Rust! Вичати треба багато, але кожна подорож десь 
+починається. У цьому розділі ми обговоримо:
 
-Let’s get your Rust journey started! In this chapter, we’ll discuss:
-
-- Installing Rust on Linux, Mac, or Windows
-- Writing a program that prints “Hello, world!”
-- Using `cargo`, Rust’s package manager and build system
+* Встановлення Rust на Linux, macOS та Windows
+* Написання програми, яка друкує `Hello, world!`
+* Використання `cargo`, менеджера пакунків і системи побудови Rust
