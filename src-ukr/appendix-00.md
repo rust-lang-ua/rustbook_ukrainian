@@ -1,3 +1,3 @@
-# Appendix
+# Довідка
 
-The following sections contain reference material you may find useful in your Rust journey.
+У наступних розділах містяться довідкові матеріали, які можуть виявитися корисними у вашому вивченні Rust.
