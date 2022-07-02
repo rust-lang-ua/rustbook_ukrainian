@@ -1,4 +1,4 @@
-# Generic Types, Traits, and Lifetimes
+# Узагальнені типи, трейти та лайфтайми
 
 Every programming language has tools for effectively handling the duplication of concepts. In Rust, one such tool is *generics*: abstract stand-ins for concrete types or other properties. We can express the behavior of generics or how they relate to other generics without knowing what will be in their place when compiling and running the code.
 
@@ -63,4 +63,4 @@ In summary, here are the steps we took to change the code from Listing 10-2 to L
 
 Next, we’ll use these same steps with generics to reduce code duplication. In the same way that the function body can operate on an abstract `list` instead of specific values, generics allow code to operate on abstract types.
 
-For example, say we had two functions: one that finds the largest item in a slice of `i32` values and one that finds the largest item in a slice of `char` values. How would we eliminate that duplication? Let’s find out!
+For example, say we had two functions: one that finds the largest item in a slice of `i32` values and one that finds the largest item in a slice of `char` values. How would we eliminate that duplication? Давайте дізнаємося!
