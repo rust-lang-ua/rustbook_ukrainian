@@ -1,114 +1,112 @@
-## Невідновлювані помилки з `panic!`
+## Unrecoverable Errors with `panic!`
 
-Інколи у вашому коді відбуваються погані речі і ви нічого з цим не можете зробити. 
-Для таких випадків Rust має для вас макрос `panic!`. Є загалом два способи викликати 
-помилкову ситуацію (т.з. паніку) на практиці: якщо у виконуваному коді є дії, що 
-призводить до паніки (наприклад звернення до елементу масиву за його межами) або 
-викликаючи явно макрокоманду `panic!`. В обох випадках ми отримаємо паніку у нашій 
-програмі. По замовчування, ці паніки будуть виводити повідомлення про помилку, 
-також перерветься виконання, очиститься стек і програма завершить своє виконання. 
-За допомогою змінних середовища, ви також можете вивести стек викликів, коли виникає 
-паніка, щоб простіше відслідкувати причину такої ситуації.
+Sometimes, bad things happen in your code, and there’s nothing you can do about
+it. In these cases, Rust has the `panic!` macro. There are two ways to cause a
+panic in practice: by taking an action that causes our code to panic (such as
+accessing an array past the end) or by explicitly calling the `panic!` macro.
+In both cases, we cause a panic in our program. By default, these panics will
+print a failure message, unwind, clean up the stack, and quit. Via an
+environment variable, you can also have Rust display the call stack when a
+panic occurs to make it easier to track down the source of the panic.
 
-> ### Розгортання по стеку чи переривання роботи у відповідь на паніку
+> ### Unwinding the Stack or Aborting in Response to a Panic
 >
-> По замовчування, коли відбувається паніка, програма починає *розгортатися*, тобто
-> Rust йде вгору по стеку викликів і очищає дані кожної функції, яка викликалась.
-> Однак, такий підхід вимагає багато роботи, тому Rust дозволяє також вибрати альтернативу
-> у вигляді негайного *переривання* виконання, який завершує програму без очищення.
+> By default, when a panic occurs, the program starts *unwinding*, which
+> means Rust walks back up the stack and cleans up the data from each function
+> it encounters. However, this walking back and cleanup is a lot of work. Rust,
+> therefore, allows you to choose the alternative of immediately *aborting*,
+> which ends the program without cleaning up.
 >
-> Пам'ять, яку використовувала програма згодом буде очищеною операційною системою. 
-> Якщо у вашому проекті потрібно зробити зібраний двійковий файл якомога меншого розміру,
-> ви можете перемкнутися з розгортання на переривання у випадку паніки, додавши 
-> `panic = 'abort'` у відповідній `[profile]` секції у вашому  *Cargo.toml* файлі.
-> Для прикладу, якщо ви хочете ввімкнути переривання, коли виникає паніка 
-> в релізному режимі, тоді додайте:
+> Memory that the program was using will then need to be cleaned
+> up by the operating system. If in your project you need to make the resulting
+> binary as small as possible, you can switch from unwinding to aborting upon a
+> panic by adding `panic = 'abort'` to the appropriate `[profile]` sections in
+> your *Cargo.toml* file. For example, if you want to abort on panic in release
+> mode, add this:
 >
 > ```toml
 > [profile.release]
 > panic = 'abort'
 > ```
 
-Давайте спробуємо викликати `panic!` у простій програмі:
+Let’s try calling `panic!` in a simple program:
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-01-panic/src/main.rs}}
 ```
 
-Коли в запустите програму, то маєте побачити щось схоже на це:
+When you run the program, you’ll see something like this:
 
 ```console
 {{#include ../listings/ch09-error-handling/no-listing-01-panic/output.txt}}
 ```
 
-Виклик макросу `panic!` призводить до появи повідомлення про помилку, 
-що містить пояснення в останніх двох рядках. Перший рядок показує повідомлення 
-про помилку і місце в коді, де паніка виникла: *src/main.rs:2:5* показує, 
-що це другий рядок, п'ятий символ у файлі *src/main.rs*.
+The call to `panic!` causes the error message contained in the last two lines.
+The first line shows our panic message and the place in our source code where
+the panic occurred: *src/main.rs:2:5* indicates that it’s the second line,
+fifth character of our *src/main.rs* file.
 
-В даному випадку вказаний рядок є частиною коду, і якщо ми перейдемо до цього рядка, 
-то зможемо побачити виклик `panic!` макросу. В іншому випадку виклик `panic!` макросу 
-може знаходитись в коді, який викликає наш код, а ім'я файлу і номер рядка в повідомленні 
-про помилку можуть вказувати на код когось іншого, де макрос `panic!` був викликаний, 
-а не той номер рядку нашого коду, який в результаті призвів до виклику макросу. 
-Ми можемо використати зворотнє трасування функції, з якої прийшов виклик макросу `panic!`, 
-щоб вияснити яка частина нашого коду є причиною цієї проблеми. Далі ми детальніше 
-розглянемо поняття зворотнього трасування.
+In this case, the line indicated is part of our code, and if we go to that
+line, we see the `panic!` macro call. In other cases, the `panic!` call might
+be in code that our code calls, and the filename and line number reported by
+the error message will be someone else’s code where the `panic!` macro is
+called, not the line of our code that eventually led to the `panic!` call. We
+can use the backtrace of the functions the `panic!` call came from to figure
+out the part of our code that is causing the problem. We’ll discuss backtraces
+in more detail next.
 
-### Використання зворотнього трасування при виклику `panic!` макросу
+### Using a `panic!` Backtrace
 
-Давайте розглянемо інший приклад, щоб зрозуміти, що відбувається, коли виклик макросу 
-`panic!` відбувається не з нашого коду, який викликає його напряму, а з бібліотеки в 
-зв'язку з помилкою у нашому коді. У роздруку 9-1 написаний код, який намагається 
-взяти елемент масиву у векторі по індексу, який виходить за межі допустимого діапазону 
-значень індексу.
+Let’s look at another example to see what it’s like when a `panic!` call comes
+from a library because of a bug in our code instead of from our code calling
+the macro directly. Listing 9-1 has some code that attempts to access an
+index in a vector beyond the range of valid indexes.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-01/src/main.rs}}
 ```
 
-<span class="caption">Роздрук 9-1: Спроба звернутися до елементу за межами вектору,
-що призведе до виклику макросу `panic!`</span>
+<span class="caption">Listing 9-1: Attempting to access an element beyond the
+end of a vector, which will cause a call to `panic!`</span>
 
-Тут ми ми намагаємось отримати доступ до 100-го елементу вектора (який знаходиться під 
-індексом 99, оскільки індексація починається з нуля), але вектор містить тільки 3 
-елементи. В цьому випадку Rust буде в стані паніки. Використання `[]` ймовірно має 
-повертати елемент, але, якщо передається недопустимий індекс, то немає жодного елемента,
-який Rust зміг би повернути.
+Here, we’re attempting to access the 100th element of our vector (which is at
+index 99 because indexing starts at zero), but the vector has only 3 elements.
+In this situation, Rust will panic. Using `[]` is supposed to return an
+element, but if you pass an invalid index, there’s no element that Rust could
+return here that would be correct.
 
-В мові програмування C, доступ по індексу поза допустимими межами структури даних є 
-невизначеною поведінкою. Ви можете отримати що завгодно, що знаходиться у цій ділянці 
-пам'яті, яка відповідає такому елементу у структурі даних. Це називається *переповненням 
-буферу* і може призводити до вразливостей в системі безпеки, якщо зловмисник зможе 
-маніпулювати індексом таким чином, щоб зчитувати дані, які зберігаються за межами 
-масиву і не повинні бути доступними для читання.
+In C, attempting to read beyond the end of a data structure is undefined
+behavior. You might get whatever is at the location in memory that would
+correspond to that element in the data structure, even though the memory
+doesn’t belong to that structure. This is called a *buffer overread* and can
+lead to security vulnerabilities if an attacker is able to manipulate the index
+in such a way as to read data they shouldn’t be allowed to that is stored after
+the data structure.
 
-В цілях захисту програми від такого роду вразливостей, якщо ви будете намагатися 
-прочитати елемент з недопустимим індексом, Rust зупинить виконання і відмовиться далі 
-виконувати програму. давайте спробуємо і побачимо це наочно:
+To protect your program from this sort of vulnerability, if you try to read an
+element at an index that doesn’t exist, Rust will stop execution and refuse to
+continue. Let’s try it and see:
 
 ```console
 {{#include ../listings/ch09-error-handling/listing-09-01/output.txt}}
 ```
 
-Ця помилка вказує на рядок 4 нашого файлу `main.rs` де ми намагаємося отримати 
-доступ до елементу під індексом 99. Наступний рядок говорить нам встановити 
-`RUST_BACKTRACE` змінну середовища, щоб отримати зворотнє трасування того, що 
-насправді стало причиною помилки. *Зворотнє трасування* - це список усіх функцій, 
-які були викликані щоб дійти до цього моменту. Зворотні трасування в Rust працюють 
-так само як і в інших мовах програмування. Ключовим моментом у читанні зворотнього 
-трасування є те, що потрібно починати читати з зверху і до моменту, коли побачите 
-файли, які ви написали. Саме це і буде тим місцем, де виникла проблема. Інші рядки, які
-вище над рядками зі згадуванням наших файлів, це код, який викликається нашим кодом, а 
-рядки нижче є кодом, який викликає наш код. Ці рядки можуть включати вбудований в Rust 
-код, код стандартної бібліотеки або код використаних крейтів. Давайте спробуємо 
-отримати зворотнє трасування через встановлення змінної середовища `RUST_BACKTRACE` у 
-будь-яке значення, окрім 0. Роздрук 9-2 показує вивід аналогічний тому, що можете 
-отримати ви.
+This error points at line 4 of our `main.rs` where we attempt to access index
+99. The next note line tells us that we can set the `RUST_BACKTRACE`
+environment variable to get a backtrace of exactly what happened to cause the
+error. A *backtrace* is a list of all the functions that have been called to
+get to this point. Backtraces in Rust work as they do in other languages: the
+key to reading the backtrace is to start from the top and read until you see
+files you wrote. That’s the spot where the problem originated. The lines above
+that spot are code that your code has called; the lines below are code that
+called your code. These before-and-after lines might include core Rust code,
+standard library code, or crates that you’re using. Let’s try getting a
+backtrace by setting the `RUST_BACKTRACE` environment variable to any value
+except 0. Listing 9-2 shows output similar to what you’ll see.
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/listing-09-01
@@ -140,28 +138,28 @@ stack backtrace:
 note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
 ```
 
-<span class="caption">Роздрук 9-2: Зворотнє трасування спричинене викликом
-`panic!`, коли встановлена змінна середовища `RUST_BACKTRACE`</span>
+<span class="caption">Listing 9-2: The backtrace generated by a call to
+`panic!` displayed when the environment variable `RUST_BACKTRACE` is set</span>
 
-Тут насправді багато виводу! Вивід, який ви бачите, може відрізнятися в залежності 
-від операційної системи і версії Rust. Для того, щоб отримати зворотнє трасування з цією 
-інформацією, мають бути ввімкнутими символи налагодження. Символи налагодження 
-ввімкнуті по замовчуванні коли використовуємо команди `cargo build` або `cargo run` 
-без додаткового прапорця `--release`, як було в нашому прикладі.
+That’s a lot of output! The exact output you see might be different depending
+on your operating system and Rust version. In order to get backtraces with this
+information, debug symbols must be enabled. Debug symbols are enabled by
+default when using `cargo build` or `cargo run` without the `--release` flag,
+as we have here.
 
-У виводі роздруку 9-2 рядок 6 вказує на рядок в нашому проекті, який викликав проблему: 
-рядок 4 файлу  *src/main.rs*. Якщо ми не хочемо, щоб наша програма панікувала, ми 
-повинні почати дослідження з місця, на яке вказує перший рядок зі згадуванням нашого фалу.
-В роздруку, де ми для демонстрації зворотнього трасування спеціально написали код, який 
-призводить до паніки, тому способом виправлення паніки буде в тому, щоб не намагатися 
-отримати елемент за допустимими межами індексів вектора. Коли ваш код згенерує паніку 
-в майбутньому, тоді слід вирішити, яка саме дія в коді і з яким значенням здійснила 
-паніку і що код повинен робити насправді замість цього.
+In the output in Listing 9-2, line 6 of the backtrace points to the line in our
+project that’s causing the problem: line 4 of *src/main.rs*. If we don’t want
+our program to panic, we should start our investigation at the location pointed
+to by the first line mentioning a file we wrote. In Listing 9-1, where we
+deliberately wrote code that would panic, the way to fix the panic is to not
+request an element beyond the range of the vector indexes. When your code
+panics in the future, you’ll need to figure out what action the code is taking
+with what values to cause the panic and what the code should do instead.
 
-Ми повернемось до обговорення макросу `panic!` і того коли нам варто його використовувати 
-і коли не слід для обробки помилок у розділі [“To `panic!` or Not to
-`panic!`”][to-panic-or-not-to-panic]<!-- ignore --> далі у цій главі. Далі ми розглянемо, як відновити виконання програми після помилок, які можливо виправити, що використовують 
-тип `Result`.
+We’ll come back to `panic!` and when we should and should not use `panic!` to
+handle error conditions in the [“To `panic!` or Not to
+`panic!`”][to-panic-or-not-to-panic]<!-- ignore --> section later in this
+chapter. Next, we’ll look at how to recover from an error using `Result`.
 
 [to-panic-or-not-to-panic]:
 ch09-03-to-panic-or-not-to-panic.html#to-panic-or-not-to-panic
