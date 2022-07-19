@@ -1,20 +1,20 @@
 <!-- Old link, do not remove -->
 <a id="installing-binaries-from-cratesio-with-cargo-install"></a>
 
-## crwdns13396:0crwdne13396:0
+## crwdns26916:0crwdne26916:0
 
-crwdns13398:0crwdne13398:0 crwdns13400:0crwdne13400:0<!-- ignore -->crwdns13402:0crwdne13402:0 crwdns13404:0crwdne13404:0 crwdns13406:0crwdne13406:0 crwdns13408:0crwdne13408:0
+crwdns26920:0crwdne26920:0 crwdns26926:0crwdne26926:0<!-- ignore -->crwdns26928:0crwdne26928:0 crwdns26930:0crwdne26930:0 crwdns26934:0crwdne26934:0 crwdns26936:0crwdne26936:0
 
-crwdns13410:0crwdne13410:0 crwdns13412:0$HOMEcrwdne13412:0 crwdns13414:0$PATHcrwdne13414:0
+crwdns26938:0crwdne26938:0 crwdns26944:0$HOMEcrwdne26944:0 crwdns26946:0$PATHcrwdne26946:0
 
-crwdns13416:0crwdne13416:0 crwdns13418:0crwdne13418:0
+crwdns26950:0crwdne26950:0 crwdns26954:0crwdne26954:0
 
 <!-- manual-regeneration
 cargo install something you don't have, copy relevant output below
 -->
 
 ```console
-crwdns13420:0crwdne13420:0
+crwdns26958:0crwdne26958:0
 ```
 
-crwdns13422:0crwdne13422:0 crwdns13424:0$PATHcrwdne13424:0
+crwdns26962:0crwdne26962:0 crwdns26964:0$PATHcrwdne26964:0
