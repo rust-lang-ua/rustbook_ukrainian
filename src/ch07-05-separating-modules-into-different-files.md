@@ -1,127 +1,127 @@
-## Separating Modules into Different Files
+## Розподіл модулів на різні файли
 
-So far, all the examples in this chapter defined multiple modules in one file.
-When modules get large, you might want to move their definitions to a separate
-file to make the code easier to navigate.
+До цього часу всі приклади в цій главі визначали декілька модулів у одному файлі.
+Коли модулі стають великими, ви можете захотіти перемістити їх визначення в окремі 
+файли, щоб спростити навігацію по коду.
 
-For example, let’s start from the code in Listing 7-17 that had multiple
-restaurant modules. We’ll extract modules into files instead of having all the
-modules defined in the crate root file. In this case, the crate root file is
-*src/lib.rs*, but this procedure also works with binary crates whose crate root
-file is *src/main.rs*.
+Наприклад, давайте почнемо з коду із лістингу 7-17, у якому було декілько модулів
+ресторану. Ми будемо вилучати модулі у файли замість того, щоб визначати всі модулі
+в кореневому модулі крейта. У нашому випадку кореневий модуль крейта - *src/lib.rs*,
+но цей розподіл також працює з бінарними крейтами, у яких кореневий 
+модуль крейта - *src/main.rs*
 
-First, we’ll extract the `front_of_house` module to its own file. Remove the
-code inside the curly brackets for the `front_of_house` module, leaving only
-the `mod front_of_house;` declaration, so that *src/lib.rs* contains the code
-shown in Listing 7-21. Note that this won’t compile until we create the
-*src/front_of_house.rs* file in Listing 7-22.
+Спочатку ми вилучемо модуль `front_of_house` в свій власний файл. Видаліть код
+всередині фігурних дужок для модуля `front_of_house`, залишив тільки визначення
+`mod front_of_house;`, так щоб тепер *src/lib.rs* містив код, показаний в 
+лістингу 7-21. Зверніть увагу, що цей варіант не скомпілюється, поки ми не створимо
+файл *src/front_of_house.rs* з лістингу 7-22.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-21: Declaring the `front_of_house` module whose
-body will be in *src/front_of_house.rs*</span>
+<span class="caption">Лістинг 7-21: Визначення модуля `front_of_house` чий вміст буде у *src/front_of_house.rs*</span>
 
-Next, place the code that was in the curly brackets into a new file named
-*src/front_of_house.rs*, as shown in Listing 7-22. The compiler knows to look
-in this file because it came across the module declaration in the crate root
-with the name `front_of_house`.
+Далі, розмістемо код, котрий був у фігурних дужках, у новий файл з ім'ям
+*src/front_of_house.rs*, як показано у лістингу 7-22. Компілятор знає, що потрібно
+шукати у цьому файлі, тому що він натрапив у кореневому модулі крейту на визначення
+модуля з ім'ям `front_of_house`.
 
-<span class="filename">Filename: src/front_of_house.rs</span>
+<span class="filename">Файл: src/front_of_house.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
 ```
 
-<span class="caption">Listing 7-22: Definitions inside the `front_of_house`
-module in *src/front_of_house.rs*</span>
+<span class="caption">Лістинг 7-22: Визначення вмісту модуля `front_of_house` у файлі *src/front_of_house.rs*</span>
 
-Note that you only need to load a file using a `mod` declaration *once* in your
-module tree. Once the compiler knows the file is part of the project (and knows
-where in the module tree the code resides because of where you’ve put the `mod`
-statement), other files in your project should refer to the loaded file’s code
-using a path to where it was declared, as covered in the [“Paths for Referring
-to an Item in the Module Tree”][paths]<!-- ignore --> section. In other words,
-`mod` is *not* an “include” operation that you may have seen in other
-programming languages.
+Зверніть увагу, що вам потрібно тільки *один* раз завантажити файл за допомогою
+оголошення `mod` у вашому дереві модулей. Як тільки компілятор дізнається, що
+файл є частиною проекта (та дізнається, де в дереві модулей знаходиться код за
+допомогою того, де ви розмістили оператор `mod`), інші файли у вашому проекті
+повинні посилатися на код завантаженого файлу, використовуючи шлях до місця, де
+він був оголошен, як описано у розділі [“Шляхи для посилання на елемент у дереві модулів”][paths]<!-- ignore -->.
+Іншими словами, `mod` - це *не* операція “включення”, яку ви могли бачати у інших
+мовах програмування.
 
-Next, we’ll extract the `hosting` module to its own file. The process is a bit
-different because `hosting` is a child module of `front_of_house`, not of the
-root module. We’ll place the file for `hosting` in a new directory that will be
-named for its ancestors in the module tree, in this case *src/front_of_house/*.
+Далі ми вилучемо модуль `hosting` в його власний файл. Процес трохи відрізняється,
+тому що `hosting` є дочірним модулем для `front_of_house`, а не корневого модуля.
+Ми помістемо файл для `hosting` в нову директорію, який буде іменований по ім'ю
+його предка в дереві модулей, у даному випадку це *src/front_of_house/*.
 
-To start moving `hosting`, we change *src/front_of_house.rs* to contain only the
-declaration of the `hosting` module:
+Щоб почати перенесення `hosting`, ми змінюєм *src/front_of_house.rs* таким чином,
+щоб він одержав тільки визначення модуля `hosting`:
 
-<span class="filename">Filename: src/front_of_house.rs</span>
+<span class="filename">Файл: src/front_of_house.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house.rs}}
 ```
 
-Then we create a *src/front_of_house* directory and a file *hosting.rs* to
-contain the definitions made in the `hosting` module:
+Далі ми створюємо директорію *src/front_of_house* та файл
+*hosting.rs*, у якому будуть визначення у модулі `hosting`:
 
-<span class="filename">Filename: src/front_of_house/hosting.rs</span>
+<span class="filename">Файл: src/front_of_house/hosting.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}
 ```
 
-If we instead put *hosting.rs* in the *src* directory, the compiler would
-expect the *hosting.rs* code to be in a `hosting` module declared in the crate
-root, and not declared as a child of the `front_of_house` module. The
-compiler’s rules for which files to check for which modules’ code means the
-directories and files more closely match the module tree.
+Якщо замість цього ми розмістемо *hosting.rs* у директорію *src*, компілятор
+буде думати, що код в *hosting.rs* це модуль `hosting`, визначений у корні крейта,
+а не визначенний як дочірний модуль `front_of_house`. Правила компілятору для
+перевірки того, які файли містять код яких модулей, припускають, що директорії та файли
+точно відповідають дереву модулів.
 
-> ### Alternate File Paths
+> ### Альтернативні шляхи до файлів
 >
-> So far we’ve covered the most idiomatic file paths the Rust compiler uses,
-> but Rust also supports an older style of file path. For a module named
-> `front_of_house` declared in the crate root, the compiler will look for the
-> module’s code in:
+> Досі ми розглядали найбільш ідіоматичні шляхи до файлів, які 
+> використовуються компілятором Rust, але Rust також підтримує
+> старий стиль шляху до файлу.
+> Для модуля з ім'ям `front_of_house` визначеного в кореневому 
+> модулі крейту, компілятор буде шукати код модуля в:
 >
-> * *src/front_of_house.rs* (what we covered)
-> * *src/front_of_house/mod.rs* (older style, still supported path)
+> * *src/front_of_house.rs* (що ми розглядали)
+> * *src/front_of_house/mod.rs* (старий стиль, який ще підтримується)
 >
-> For a module named `hosting` that is a submodule of `front_of_house`, the
-> compiler will look for the module’s code in:
+> Для модуля з ім'ям `hosting`, який є підмодулем `front_of_house`,
+> компілятор буде шукати код модуля в:
 >
-> * *src/front_of_house/hosting.rs* (what we covered)
-> * *src/front_of_house/hosting/mod.rs* (older style, still supported path)
+> * *src/front_of_house/hosting.rs* (що ми розглядали)
+> * *src/front_of_house/hosting/mod.rs* (старий стиль, який ще підтримується)
 >
-> If you use both styles for the same module, you’ll get a compiler error. Using
-> a mix of both styles for different modules in the same project is allowed, but
-> might be confusing for people navigating your project.
+> Якщо ви використовуєте обидва стиля для одного й того ж модуля, ви отримаєте
+> помилку компілятора. Використання суміші обох стилей для різних модулів у
+> одному проекті дозволено, але це може збивати з пантелику людей, що 
+> переміщаються по вашому проектові.
 >
-> The main downside to the style that uses files named *mod.rs* is that your
-> project can end up with many files named *mod.rs*, which can get confusing
-> when you have them open in your editor at the same time.
+> Основним недоліком стиля, в якому використовуються файли з іменами *mod.rs*
+> є те, що у вашему проектові можуть опинитися багато файлів з іменами  *mod.rs*,
+> що можуть призвести до плутанини, якщо ви одночасно відкриєте їх в редакторі.
 
-We’ve moved each module’s code to a separate file, and the module tree remains
-the same. The function calls in `eat_at_restaurant` will work without any
-modification, even though the definitions live in different files. This
-technique lets you move modules to new files as they grow in size.
+Ми перенесли код кожного модуля в окремий файл, а дерево модулів залишилось
+без змін. Виклики функцій в `eat_at_restaurant` будуть працювати без яких-небудь
+змін, не дивлячись на те, що визначення знаходятся у різних файлах. Цей метод
+дозволяє переміщати модулі в нові файли по мірі збільшення їх розмірів.
 
-Note that the `pub use crate::front_of_house::hosting` statement in
-*src/lib.rs* also hasn’t changed, nor does `use` have any impact on what files
-are compiled as part of the crate. The `mod` keyword declares modules, and Rust
-looks in a file with the same name as the module for the code that goes into
-that module.
+Зверніть увагу, що оператор `pub use crate::front_of_house::hosting` у
+*src/lib.rs* також не змінився, та `use` не впливає на те, які файли
+компілюються як частина крейта. Ключове слово `mod` визначає модулі, і Rust шукає
+в файлі з таким же ім'ям, що й у модуля, який входить у цей модуль.
 
-## Summary
+## Підсумок
 
-Rust lets you split a package into multiple crates and a crate into modules
-so you can refer to items defined in one module from another module. You can do
-this by specifying absolute or relative paths. These paths can be brought into
-scope with a `use` statement so you can use a shorter path for multiple uses of
-the item in that scope. Module code is private by default, but you can make
-definitions public by adding the `pub` keyword.
+Rust дозволяє розбити пакет на декілька крейтів, та крейт - на модулі,
+таким чином ви маєте змогу посилатися на елементи, визначенні в одному модулі,
+з іншого модуля. Це можна робити за допомогою вказання абсолютних чи відносних
+шляхів. Ці шляхи можна додати в область видимості оператором `use`, тому ми можете
+користуватися більш короткими шляхами для багаторазового використання елементів у
+цій області видимості. Код модуля за замовчуванням є приватним, але можна зробити
+визначення загальнодоступними, додавши ключеве слово `pub`.
 
-In the next chapter, we’ll look at some collection data structures in the
-standard library that you can use in your neatly organized code.
+У наступній главі ми подивимося деякі колекції структур данних із стандартної
+бібліотеки, які ви можете використовувати в своєму охайно організованому коді.
 
-[paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
+[paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md
