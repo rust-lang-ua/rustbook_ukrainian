@@ -1,110 +1,110 @@
-## crwdns41070:0crwdne41070:0
+## crwdns41278:0crwdne41278:0
 
-crwdns41072:0crwdne41072:0 crwdns41074:0crwdne41074:0 crwdns41076:0crwdne41076:0
+crwdns41280:0crwdne41280:0 crwdns41282:0crwdne41282:0 crwdns41284:0crwdne41284:0
 
-crwdns41078:0:front_of_house:crwdne41078:0
+crwdns41286:0:front_of_house:crwdne41286:0
 
-<span class="filename">crwdns41080:0crwdne41080:0</span>
+<span class="filename">crwdns41288:0crwdne41288:0</span>
 
 ```rust,noplayground,test_harness
-crwdns6950:0crwdne6950:0
+crwdns38280:0crwdne38280:0
 ```
 
-<span class="caption">crwdns41082:0crwdne41082:0</span>
+<span class="caption">crwdns41290:0crwdne41290:0</span>
 
-crwdns41084:0crwdne41084:0 crwdns41086:0:front_of_house:crwdne41086:0 crwdns41088:0crwdne41088:0
+crwdns41292:0crwdne41292:0 crwdns41294:0:front_of_house:crwdne41294:0 crwdns41296:0crwdne41296:0
 
-crwdns41090:0crwdne41090:0 crwdns41092:0crwdne41092:0
+crwdns41298:0crwdne41298:0 crwdns41300:0crwdne41300:0
 
-<span class="filename">crwdns41094:0crwdne41094:0</span>
+<span class="filename">crwdns41302:0crwdne41302:0</span>
 
 ```rust,noplayground,test_harness,does_not_compile,ignore
-crwdns6966:0crwdne6966:0
+crwdns38298:0crwdne38298:0
 ```
 
-<span class="caption">crwdns41096:0crwdne41096:0</span>
+<span class="caption">crwdns41304:0crwdne41304:0</span>
 
-crwdns41098:0crwdne41098:0
+crwdns41306:0crwdne41306:0
 
 ```console
-crwdns6972:0crwdne6972:0
+crwdns38310:0crwdne38310:0
 ```
 
-crwdns41100:0crwdne41100:0 crwdns41102:0crwdne41102:0
+crwdns41308:0crwdne41308:0 crwdns41310:0crwdne41310:0
 
-### crwdns41104:0crwdne41104:0
+### crwdns41312:0crwdne41312:0
 
-crwdns41106:0:front_of_house:crwdne41106:0
+crwdns41314:0:front_of_house:crwdne41314:0
 
-<span class="filename">crwdns41108:0crwdne41108:0</span>
+<span class="filename">crwdns41316:0crwdne41316:0</span>
 
 ```rust,noplayground,test_harness
-crwdns6984:0crwdne6984:0
+crwdns38332:0crwdne38332:0
 ```
 
-<span class="caption">crwdns41110:0crwdne41110:0</span>
+<span class="caption">crwdns41318:0crwdne41318:0</span>
 
-crwdns41112:0crwdne41112:0 crwdns41114:0crwdne41114:0 crwdns41116:0crwdne41116:0 crwdns41118:0crwdne41118:0
+crwdns41320:0crwdne41320:0 crwdns41322:0crwdne41322:0 crwdns41324:0crwdne41324:0 crwdns41326:0crwdne41326:0
 
-crwdns41120:0crwdne41120:0 crwdns41122:0crwdne41122:0
+crwdns41328:0crwdne41328:0 crwdns41330:0crwdne41330:0
 
-<span class="filename">crwdns41124:0crwdne41124:0</span>
+<span class="filename">crwdns41332:0crwdne41332:0</span>
 
 ```rust
-crwdns7002:0crwdne7002:0
+crwdns38352:0crwdne38352:0
 ```
 
-<span class="caption">crwdns41126:0crwdne41126:0</span>
+<span class="caption">crwdns41334:0crwdne41334:0</span>
 
-crwdns41128:0crwdne41128:0
+crwdns41336:0crwdne41336:0
 
-crwdns41130:0crwdne41130:0 crwdns41132:0crwdne41132:0
+crwdns41338:0crwdne41338:0 crwdns41340:0crwdne41340:0
 
-<span class="filename">crwdns41134:0crwdne41134:0</span>
+<span class="filename">crwdns41342:0crwdne41342:0</span>
 
 ```rust,noplayground
-crwdns7014:0crwdne7014:0
+crwdns38374:0crwdne38374:0
 ```
 
-<span class="caption">crwdns41136:0crwdne41136:0</span>
+<span class="caption">crwdns41344:0crwdne41344:0</span>
 
-crwdns41138:0crwdne41138:0 crwdns41140:0:fmt:crwdnd41140:0:io:crwdne41140:0
+crwdns41346:0crwdne41346:0 crwdns41348:0:fmt:crwdnd41348:0:io:crwdne41348:0
 
-### crwdns41142:0crwdne41142:0
+### crwdns41350:0crwdne41350:0
 
-crwdns41144:0crwdne41144:0 crwdns41146:0crwdne41146:0
+crwdns41352:0crwdne41352:0 crwdns41354:0crwdne41354:0
 
-<span class="filename">crwdns41148:0crwdne41148:0</span>
+<span class="filename">crwdns41356:0crwdne41356:0</span>
 
 ```rust,noplayground
-crwdns7030:0crwdne7030:0
+crwdns38394:0crwdne38394:0
 ```
 
-<span class="caption">crwdns41150:0crwdne41150:0</span>
+<span class="caption">crwdns41358:0crwdne41358:0</span>
 
-crwdns41152:0:io:crwdne41152:0 crwdns41154:0crwdne41154:0 crwdns41156:0crwdne41156:0
+crwdns41360:0:io:crwdne41360:0 crwdns41362:0crwdne41362:0 crwdns41364:0crwdne41364:0
 
-### crwdns41158:0crwdne41158:0
+### crwdns41366:0crwdne41366:0
 
-crwdns41160:0crwdne41160:0 crwdns41162:0crwdne41162:0 crwdns41164:0crwdne41164:0 crwdns41166:0crwdne41166:0
+crwdns41368:0crwdne41368:0 crwdns41370:0crwdne41370:0 crwdns41372:0crwdne41372:0 crwdns41374:0crwdne41374:0
 
-crwdns41168:0crwdne41168:0
+crwdns41376:0crwdne41376:0
 
-<span class="filename">crwdns41170:0crwdne41170:0</span>
+<span class="filename">crwdns41378:0crwdne41378:0</span>
 
 ```rust,noplayground,test_harness
-crwdns7050:0crwdne7050:0
+crwdns38428:0crwdne38428:0
 ```
 
-<span class="caption">crwdns41172:0crwdne41172:0</span>
+<span class="caption">crwdns41380:0crwdne41380:0</span>
 
-crwdns41174:0:front_of_house:crwdnd41174:0:hosting:crwdne41174:0 crwdns41176:0:hosting:crwdne41176:0
+crwdns41382:0:front_of_house:crwdnd41382:0:hosting:crwdne41382:0 crwdns41384:0:hosting:crwdne41384:0
 
-crwdns41178:0crwdne41178:0 crwdns41180:0crwdne41180:0 crwdns41182:0crwdne41182:0 crwdns41184:0crwdne41184:0 crwdns41186:0crwdne41186:0 crwdns41188:0crwdne41188:0<!-- ignore --> crwdns41190:0crwdne41190:0
+crwdns41386:0crwdne41386:0 crwdns41388:0crwdne41388:0 crwdns41390:0crwdne41390:0 crwdns41392:0crwdne41392:0 crwdns41394:0crwdne41394:0 crwdns41396:0crwdne41396:0<!-- ignore --> crwdns41398:0crwdne41398:0
 
-### crwdns41192:0crwdne41192:0
+### crwdns41400:0crwdne41400:0
 
-crwdns41194:0crwdne41194:0 crwdns41196:0crwdne41196:0
+crwdns41402:0crwdne41402:0 crwdns41404:0crwdne41404:0
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -112,83 +112,83 @@ crwdns41194:0crwdne41194:0 crwdns41196:0crwdne41196:0
 * ch14-03-cargo-workspaces.md
 -->
 
-<span class="filename">crwdns41198:0crwdne41198:0</span>
+<span class="filename">crwdns41406:0crwdne41406:0</span>
 
 ```toml
-crwdns7080:0crwdne7080:0
+crwdns38482:0crwdne38482:0
 ```
 
-crwdns41200:0crwdne41200:0
+crwdns41408:0crwdne41408:0
 
-crwdns41202:0crwdne41202:0 crwdns41204:0crwdne41204:0<!-- ignore --> crwdns41206:0crwdne41206:0
+crwdns41410:0crwdne41410:0 crwdns41412:0crwdne41412:0<!-- ignore --> crwdns41414:0crwdne41414:0
 
 ```rust,ignore
-crwdns7090:0crwdne7090:0
+crwdns38502:0crwdne38502:0
 ```
 
-crwdns41208:0crwdne41208:0
+crwdns41416:0crwdne41416:0
 
-crwdns41210:0crwdne41210:0 crwdns41212:0crwdne41212:0 crwdns41214:0crwdne41214:0 crwdns41216:0crwdne41216:0
+crwdns41418:0crwdne41418:0 crwdns41420:0crwdne41420:0 crwdns41422:0crwdne41422:0 crwdns41424:0crwdne41424:0
 
 ```rust
-crwdns7102:0:collections:crwdne7102:0
+crwdns38528:0:collections:crwdne38528:0
 ```
 
-crwdns41218:0crwdne41218:0
+crwdns41426:0crwdne41426:0
 
-### crwdns41220:0crwdne41220:0
+### crwdns41428:0crwdne41428:0
 
-crwdns41222:0crwdne41222:0 crwdns41224:0crwdne41224:0
+crwdns41430:0crwdne41430:0 crwdns41432:0crwdne41432:0
 
-<span class="filename">crwdns41226:0crwdne41226:0</span>
+<span class="filename">crwdns41434:0crwdne41434:0</span>
 
 ```rust,ignore
-crwdns7114:0crwdne7114:0
+crwdns38546:0crwdne38546:0
 ```
 
-crwdns41228:0crwdne41228:0 crwdns41230:0crwdne41230:0
+crwdns41436:0crwdne41436:0 crwdns41438:0crwdne41438:0
 
-<span class="filename">crwdns41232:0crwdne41232:0</span>
+<span class="filename">crwdns41440:0crwdne41440:0</span>
 
 ```rust,ignore
-crwdns7122:0crwdne7122:0
+crwdns38554:0crwdne38554:0
 ```
 
-<span class="caption">crwdns41234:0crwdne41234:0</span>
+<span class="caption">crwdns41442:0crwdne41442:0</span>
 
-crwdns41236:0crwdne41236:0
+crwdns41444:0crwdne41444:0
 
-crwdns41238:0crwdne41238:0 crwdns41240:0:io:crwdne41240:0
+crwdns41446:0crwdne41446:0 crwdns41448:0:io:crwdne41448:0
 
-<span class="filename">crwdns41242:0crwdne41242:0</span>
+<span class="filename">crwdns41450:0crwdne41450:0</span>
 
 ```rust,noplayground
-crwdns7134:0crwdne7134:0
+crwdns38570:0crwdne38570:0
 ```
 
-<span class="caption">crwdns41244:0crwdne41244:0</span>
+<span class="caption">crwdns41452:0crwdne41452:0</span>
 
-crwdns41246:0crwdne41246:0 crwdns41248:0crwdne41248:0
+crwdns41454:0crwdne41454:0 crwdns41456:0crwdne41456:0
 
-<span class="filename">crwdns41250:0crwdne41250:0</span>
+<span class="filename">crwdns41458:0crwdne41458:0</span>
 
 ```rust,noplayground
-crwdns7144:0crwdne7144:0
+crwdns38580:0crwdne38580:0
 ```
 
-<span class="caption">crwdns41252:0crwdne41252:0</span>
+<span class="caption">crwdns41460:0crwdne41460:0</span>
 
-crwdns41254:0:io:crwdne41254:0
+crwdns41462:0:io:crwdne41462:0
 
-### crwdns41256:0crwdne41256:0
+### crwdns41464:0crwdne41464:0
 
-crwdns41258:0crwdne41258:0
+crwdns41466:0crwdne41466:0
 
 ```rust
-crwdns7154:0:collections:crwdne7154:0
+crwdns38600:0:collections:crwdne38600:0
 ```
 
-crwdns41260:0crwdne41260:0 crwdns41262:0crwdne41262:0 crwdns41264:0crwdne41264:0
+crwdns41468:0crwdne41468:0 crwdns41470:0crwdne41470:0 crwdns41472:0crwdne41472:0
 
-crwdns41266:0crwdne41266:0 crwdns41268:0crwdne41268:0<!-- ignore --> crwdns41270:0crwdne41270:0 crwdns41272:0crwdne41272:0 crwdns41274:0crwdne41274:0<!-- ignore -->
-crwdns41276:0crwdne41276:0
+crwdns41474:0crwdne41474:0 crwdns41476:0crwdne41476:0<!-- ignore --> crwdns41478:0crwdne41478:0 crwdns41480:0crwdne41480:0 crwdns41482:0crwdne41482:0<!-- ignore -->
+crwdns41484:0crwdne41484:0
