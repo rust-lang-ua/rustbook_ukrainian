@@ -1,16 +1,16 @@
 ## Hello, World!
 
-Now that you’ve installed Rust, let’s write your first Rust program. It’s traditional when learning a new language to write a little program that prints the text `Hello, world!` to the screen, so we’ll do the same here!
+Після встановлення Rust напишемо першу програму цією мовою. Давно стало традицією при вивченні нової мови програмування писати маленьку програму, що виводить на екран текст `Hello, world!`, і ми не будемо відступати від цієї традиції.
 
-> Note: This book assumes basic familiarity with the command line. Rust makes no specific demands about your editing or tooling or where your code lives, so if you prefer to use an integrated development environment (IDE) instead of the command line, feel free to use your favorite IDE. Many IDEs now have some degree of Rust support; check the IDE’s documentation for details. The Rust team has been focusing on enabling great IDE support via `rust-analyzer`. See [Appendix D][devtools]<!-- ignore --> for more details!
+> Примітка: ця книжка передбачає базове знайомство із командним рядком. Rust як така не висуває особливих вимог до редакторів, інструментів і розміщення коду, тому якщо вам зручніше використовувати інтегрований середовище розробки (IDE) замість командного рядка, можете користуватися вашим улюбленим IDE. Багато сучасних IDE певною мірою підтримують Rust; зверніться до документації IDE, щоб дізнатися більше. Останнім часом команда Rust зосередилася на підтримці IDE, і є значний поступ в цьому питанні.
 
-### Creating a Project Directory
+### Створення теки проєкту
 
-You’ll start by making a directory to store your Rust code. It doesn’t matter to Rust where your code lives, but for the exercises and projects in this book, we suggest making a *projects* directory in your home directory and keeping all your projects there.
+Для початку, створіть теку для розміщення вашого коду на Rust. Для Rust немає значення, де розміщено ваш код, але для вправ і проєктів у цій книжці ми рекомендуємо зробити теку *projects* у вашій домашній теці і тримати всі проєкти там.
 
-Open a terminal and enter the following commands to make a *projects* directory and a directory for the “Hello, world!” project within the *projects* directory.
+Запустіть термінал і введіть такі команди, щоб створити теку *projects* та теку для проєкту “Hello, world!” з цього розділу:
 
-For Linux, macOS, and PowerShell on Windows, enter this:
+У Linux, macOS та PowerShell на Windows, введіть це:
 
 ```console
 $ mkdir ~/projects
@@ -19,7 +19,7 @@ $ mkdir hello_world
 $ cd hello_world
 ```
 
-For Windows CMD, enter this:
+Для cmd.exe в Windows, введіть це:
 
 ```cmd
 > mkdir "%USERPROFILE%\projects"
@@ -28,13 +28,13 @@ For Windows CMD, enter this:
 > cd hello_world
 ```
 
-### Writing and Running a Rust Program
+### Написання і запуск програми на Rust
 
-Next, make a new source file and call it *main.rs*. Rust files always end with the *.rs* extension. If you’re using more than one word in your filename, the convention is to use an underscore to separate them. For example, use *hello_world.rs* rather than *helloworld.rs*.
+Тепер створіть новий сирцевий файл і назвіть його *main.rs*. Файли на Rust завжди закінчуються розширенням *.rs*. Якщо у назві файлу використовується більш ніж одне слово, для розділення використовується підкреслення. Наприклад, можна назвати файл *hello_world.rs*, але не *helloworld.rs*.
 
-Now open the *main.rs* file you just created and enter the code in Listing 1-1.
+Тепер відкрийте файл *main.rs*, який ви щойно створили, і наберіть код з Роздруку 1-1:
 
-<span class="filename">Filename: main.rs</span>
+<span class="filename">Файл: main.rs</span>
 
 ```rust
 fn main() {
@@ -42,9 +42,9 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 1-1: A program that prints `Hello, world!`</span>
+<span class="caption">Роздрук 1-1: програма, що виводить `Hello, world!`</span>
 
-Save the file and go back to your terminal window in the *~/projects/hello_world* directory. On Linux or macOS, enter the following commands to compile and run the file:
+Збережіть цей файл і поверніться до вікна терміналу. На Linux або macOs наберіть такі команди, щоб скомпілювати так виконати файл:
 
 ```console
 $ rustc main.rs
@@ -52,7 +52,7 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, enter the command `.\main.exe` instead of `./main`:
+У Windows запустіть `.\main.exe` замість `./main`:
 
 ```powershell
 > rustc main.rs
@@ -60,13 +60,13 @@ On Windows, enter the command `.\main.exe` instead of `./main`:
 Hello, world!
 ```
 
-Regardless of your operating system, the string `Hello, world!` should print to the terminal. If you don’t see this output, refer back to the [“Troubleshooting”][troubleshooting]<!-- ignore --> part of the Installation section for ways to get help.
+Незалежно від вашої операційної системи, у терміналі буде виведено рядок `Hello, world!`. Якщо вона не вивелася, зверністься до підрозділу [“Вирішення проблем”][troubleshooting]<!-- ignore --> розділу Встановлення, щоб дізнатися, як отримати допомогу.
 
-If `Hello, world!` did print, congratulations! You’ve officially written a Rust program. That makes you a Rust programmer—welcome!
+Якщо ви побачили `Hello, world!` - вітаємо! Ви щойно написали програму на Rust і офіційно стали програмістом на Rust! Ласкаво просимо до спільноти!
 
-### Anatomy of a Rust Program
+### Анатомія програми Rust
 
-Let’s review this “Hello, world!” program in detail. Here’s the first piece of the puzzle:
+Тепер давайте детально пройдемося по тому, що щойно сталося у вашій програмі "Hello, world!". Ось перший шматок пазла:
 
 ```rust
 fn main() {
@@ -74,68 +74,66 @@ fn main() {
 }
 ```
 
-These lines define a function named `main`. The `main` function is special: it is always the first code that runs in every executable Rust program. Here, the first line declares a function named `main` that has no parameters and returns nothing. If there were parameters, they would go inside the parentheses `()`.
+Ці рядки на Rust визначають функцію. Функція `main` особлива: це перше, що запускається у кожній виконанній програмі на Rust. Перший рядок проголошує функцію з назовою `main` без параметрів і яка нічого не повертає. Якби були параметри, їхні імена треба було розмістити між дужками `()`.
 
-The function body is wrapped in `{}`. Rust requires curly brackets around all function bodies. It’s good style to place the opening curly bracket on the same line as the function declaration, adding one space in between.
+Також зверніть увагу, що тіло функції взято у фігурні дужки `{}`. Rust вимагає таких дужок навколо тіл усіх функцій. Вважається хорошим стилем розміщувати відкриваючу дужку на тому ж рядку, що й проголошення функції, з відступом в один пробіл.
 
-> Note: If you want to stick to a standard style across Rust projects, you can use an automatic formatter tool called `rustfmt` to format your code in a particular style (more on `rustfmt` in [Appendix D][devtools]<!-- ignore -->). The Rust team has included this tool with the standard Rust distribution, like `rustc`, so it should already be installed on your computer!
+Якщо ви бажаєте використовувати стандартний стиль у проєктах на Rust, можете скористатися інстумент для автоматичного форматування, що зветься `rustfmt`, для форматування коду в цьому стилі. Команда Rust додала цей інструмент до стандартного набору програм Rust, на кшталт `rustc`, тобто він уже має бути встановленим на вашому комп'ютері! Зверніться до документації на офіційному сайті, щоб дізнатися більше.
 
-The body of the `main` function holds the following code:
+Всередині функції `main` знаходиться такий код:
 
 ```rust
     println!("Hello, world!");
 ```
 
-This line does all the work in this little program: it prints text to the screen. There are four important details to notice here.
+Цей рядок виконує всю роботу в цій маленькій програмі: виводить текст на екран. Тут треба зазначити чотири важливі деталі.
 
-First, Rust style is to indent with four spaces, not a tab.
+По-перше, у Rust прийнято робити відступи в чотири пробіли, а не табуляцію.
 
-Second, `println!` calls a Rust macro. If it had called a function instead, it would be entered as `println` (without the `!`). We’ll discuss Rust macros in more detail in Chapter 19. For now, you just need to know that using a `!` means that you’re calling a macro instead of a normal function, and that macros don’t always follow the same rules as functions.
+По-друге, `println!` - це виклик макросу. Якби ми викликали функцію, то це виглядало б як `println` (без `!`). Макроси в Rust детальніше обговорюються в Розділі 19, а поки що достатньо знати, що коли ви бачите `!`, це означає, що викликається макрос, а не звичайна функція.
 
-Third, you see the `"Hello, world!"` string. We pass this string as an argument to `println!`, and the string is printed to the screen.
+По-третє, ви бачите стрічку "Hello, world!". Ми передаємо цю стрічку аргументом до `println!`, який виводить стрічку на екран.
 
-Fourth, we end the line with a semicolon (`;`), which indicates that this expression is over and the next one is ready to begin. Most lines of Rust code end with a semicolon.
+По-четверте, рядок завершується крапкою із комою (`;`). Це означає, що цей вираз завершено, і можна починати наступний. Більшість рядків в коді на Rust завершується крапкою із комою.
 
-### Compiling and Running Are Separate Steps
+### Компіляція і запуск - окремі кроки
 
-You’ve just run a newly created program, so let’s examine each step in the process.
+Ви щойно запустили новостворену програму. Дослідимо кожен крок у цьому процесі.
 
-Before running a Rust program, you must compile it using the Rust compiler by entering the `rustc` command and passing it the name of your source file, like this:
+Перед запуском програми Rust необхідно її скомпілювати за допомогою компілятора Rust, набравши команду rustc і передавши їй ім'я сирцевого файлу, отак:
 
 ```console
 $ rustc main.rs
 ```
 
-If you have a C or C++ background, you’ll notice that this is similar to `gcc` or `clang`. After compiling successfully, Rust outputs a binary executable.
+Якщо ви маєте досвід роботи з C чи C++, ви можете помітити, що це схоже на `gcc` чи `clang`. Після вдалої компіляції Rust створює двійковий виконанний файл.
 
-On Linux, macOS, and PowerShell on Windows, you can see the executable by entering the `ls` command in your shell. On Linux and macOS, you’ll see two files. With PowerShell on Windows, you’ll see the same three files that you would see using CMD.
+На Linux, macOs чи PowerShell на Windows, можна побачити цей файл, ввівши команду `ls` у командній оболонці. На Linux і macOs ви побачите два файли. У PowerShell на Windows, ви побачите ті ж три файли, що й за допомогою CMD.
 
-```console
+```text
 $ ls
 main  main.rs
 ```
 
-With CMD on Windows, you would enter the following:
+У CMD на Windows ви побачите таке:
 
 ```cmd
-> dir /B %= the /B option says to only show the file names =%
+> dir r /B %= опція /B означає показиувати лише імена файлів =%
 main.exe
 main.pdb
 main.rs
 ```
 
-This shows the source code file with the *.rs* extension, the executable file (*main.exe* on Windows, but *main* on all other platforms), and, when using Windows, a file containing debugging information with the *.pdb* extension. From here, you run the *main* or *main.exe* file, like this:
+Ми бачимо сирцевий файл з розширенням *.rs*, виконанний файл (*main.exe* на Windows, *main* в інших системах) і, на Windows, файл із інформацією для зневадження з розширенням *.pdb*. Тепер можна запустити *main* чи *main.exe*, ось так:
 
 ```console
-$ ./main # or .\main.exe on Windows
+$ ./main  # чи .\main.exe у Windows
 ```
 
-If your *main.rs* is your “Hello, world!” program, this line prints `Hello,
-world!` to your terminal.
+Якщо *main.rs* - це ваша програма "Hello, world!", вона виведе повідомлення `Hello, world!` у вашому терміналі.
 
-If you’re more familiar with a dynamic language, such as Ruby, Python, or JavaScript, you might not be used to compiling and running a program as separate steps. Rust is an *ahead-of-time compiled* language, meaning you can compile a program and give the executable to someone else, and they can run it even without having Rust installed. If you give someone a *.rb*, *.py*, or *.js* file, they need to have a Ruby, Python, or JavaScript implementation installed (respectively). But in those languages, you only need one command to compile and run your program. Everything is a trade-off in language design.
+Якщо ви переходите з інтерпретованої мови на кшталт Ruby, Python чи JavaScript, вам може бути незвичним, що компіляція і виконання програми - окремі кроки. Rust є *завчасно компільованою* мовою, тобто ви можете скомпілювати програму, передати її комусь іншому, і він зможе запустити її навіть якщо у нього не встановлено Rust. Якщо ви передаєте комусь файл *.rb*, *.py* чи *.js*, йому, натомість, буде потрібна встановлена реалізація мови Ruby, Python чи Javascript відповідно, але вам потрібна тільки одна команда щоб скомпілювати та запустити вашу програму. Всі переваги мови програмування мають свою ціну.
 
-Just compiling with `rustc` is fine for simple programs, but as your project grows, you’ll want to manage all the options and make it easy to share your code. Next, we’ll introduce you to the Cargo tool, which will help you write real-world Rust programs.
+Проста компіляція за допомогою `rustc` годиться для простеньких програм, але зі зростанням вашого проєкту, вам захочеться мати можливість керувати всіма параметрами і легко ділитися кодом. Наступний крок - інструмент, що зветься Cargo, який допоможе вам писати програми на Rust для реального світу.
 
 [troubleshooting]: ch01-01-installation.html#troubleshooting
-[devtools]: appendix-04-useful-development-tools.md
