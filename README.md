@@ -1,6 +1,5 @@
-[![Crowdin](https://badges.crowdin.net/rustukrainian/localized.svg)](https://crowdin.com/project/rustukrainian)
 
-# Мова програмування Rust
+# Мова програмування Rust [![Crowdin](https://badges.crowdin.net/rustukrainian/localized.svg)](https://crowdin.com/project/rustukrainian)
 
 Оригінал цієї книжки розміщений на [rust-lang.github.io/book/][html].
 Цей переклад поки що знаходиться в початковому стані, ласкаво прошу всіх 
