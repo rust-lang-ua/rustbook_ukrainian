@@ -180,26 +180,6 @@ From here, you run the *main* or *main.exe* file, like this:
 $ ./main # or .\main.exe on Windows
 ```
 
-<<<<<<< Updated upstream
-Якщо *main.rs* - це ваша програма "Hello, world!", вона виведе повідомлення 
-`Hello, world!` у вашому терміналі.
-
-Якщо ви переходите з інтерпретованої мови на кшталт Ruby, Python чи JavaScript,
-вам може бути незвичним, що компіляція і виконання програми - окремі кроки. 
-Rust є *завчасно компільованою* мовою, тобто ви можете скомпілювати програму, 
-передати її комусь іншому, і він зможе запустити її навіть якщо у нього не 
-встановлено Rust. Якщо ви передаєте комусь файл *.rb*, *.py* чи *.js*, йому,
-натомість, буде потрібна встановлена реалізація мови Ruby, Python чи Javascript
-відповідно, але вам потрібна тільки одна команда щоб скомпілювати та запустити 
-вашу програму. Всі переваги мови програмування мають свою ціну.
-
-Проста компіляція за допомогою `rustc` годиться для простеньких програм, але зі
-зростанням вашого проєкту, вам захочеться мати можливість керувати всіма 
-параметрами і легко ділитися кодом. Наступний крок - інструмент, що зветься 
-Cargo, який допоможе вам писати програми на Rust для реального світу.
-
-[troubleshooting]: ch01-01-installation.html#troubleshooting
-=======
 If your *main.rs* is your “Hello, world!” program, this line prints `Hello,
 world!` to your terminal.
 
@@ -219,4 +199,3 @@ real-world Rust programs.
 
 [troubleshooting]: ch01-01-installation.html#troubleshooting
 [devtools]: appendix-04-useful-development-tools.md
->>>>>>> Stashed changes
