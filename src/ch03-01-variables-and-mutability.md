@@ -1,191 +1,192 @@
-## Змінні і сталість
+## Variables and Mutability
 
-Як вже згадувалося у Розділі 2, усталено змінні є *сталими* (*immutable*). Це 
-- один з численних штурханців, якими Rust заохочує вас писати код, що 
-користується перевагами у безпеці та швидкості, які надає Rust. Тим не менш, 
-ви все ж маєте можливість зробити змінні несталими. Дослідимо, як і чому Rust 
-заохочує вас надавати перевагу сталості, та чому ви можете захотіти 
-відмовитися від цього.
+As mentioned in the [“Storing Values with
+Variables”][storing-values-with-variables]<!-- ignore --> section, by default
+variables are immutable. This is one of many nudges Rust gives you to write
+your code in a way that takes advantage of the safety and easy concurrency that
+Rust offers. However, you still have the option to make your variables mutable.
+Let’s explore how and why Rust encourages you to favor immutability and why
+sometimes you might want to opt out.
 
-Якщо змінна є сталою, це означає, що відколи значення стає прив'язаним до 
-імені, ви не можете змінити це значення. Для прикладу згенеруємо новий проект 
-з назвою *variables* у вашій теці *projects* за допомгою `cargo new variables`.
+When a variable is immutable, once a value is bound to a name, you can’t change
+that value. To illustrate this, let’s generate a new project called *variables*
+in your *projects* directory by using `cargo new variables`.
 
-Потім, у новоствореній теці *variables*, відкрийте *src/main.rs* і замініть 
-його код таким:
+Then, in your new *variables* directory, open *src/main.rs* and replace its
+code with the following code. This code won’t compile just yet, we’ll first
+examine the immutability error.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
-Збережіть і запустіть програму за допомогою `cargo run`. Ви дістанете 
-повідомлення про помилку, як показано тут:
+Save and run the program using `cargo run`. You should receive an error
+message, as shown in this output:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/output.txt}}
 ```
 
-Цей приклад показує, як компілятор допомагає вам знаходити помилки у 
-програмах. Хоча повідомлення компілятора про помилки й можуть бути неприємними,
-вони лише означають, що ваша програма ще не робить те, що ви хотіли, у 
-безпечний спосіб; вони *не* означають, що ви поганий програміст! Досвідчені 
-растацеанці також отримують повідомлення про помилки від компілятора.
+This example shows how the compiler helps you find errors in your programs.
+Compiler errors can be frustrating, but really they only mean your program
+isn’t safely doing what you want it to do yet; they do *not* mean that you’re
+not a good programmer! Experienced Rustaceans still get compiler errors.
 
-Повідомлення вказує, що причиною помилки є те, що ми "не можемо присвоювати 
-двічі сталій змінній `x`" (`cannot assign twice to immutable variable x`), бо 
-ви намагалися присвоїти нове значення сталій змінній `x`.
+The error message indicates that the cause of the error is that you `` cannot
+assign twice to immutable variable `x` ``, because you tried to assign a second
+value to the immutable `x` variable.
 
-Важливо, що ми отримали помилку часу компіляції, коли намагалися змінити 
-значення, яке раніше визначили як стале, тому що ця ситуація може призвести до
-вад у програмі. Якщо одна частина нашого коду працює з припущенням, що значення
-не буде змінене, а інша частина нашого коду змінює це значення, можливо, що 
-перша частина коду буде робити не те, для чого вона була зроблена. Цю причину 
-вад важко відслідкувати після виявлення, особливо коли другий фрагмент коду 
-змінює значення лише *час від часу*.
+It’s important that we get compile-time errors when we attempt to change a
+value that’s designated as immutable because this very situation can lead to
+bugs. If one part of our code operates on the assumption that a value will
+never change and another part of our code changes that value, it’s possible
+that the first part of the code won’t do what it was designed to do. The cause
+of this kind of bug can be difficult to track down after the fact, especially
+when the second piece of code changes the value only *sometimes*. The Rust
+compiler guarantees that when you state a value won’t change, it really won’t
+change, so you don’t have to keep track of it yourself. Your code is thus
+easier to reason through.
 
-У Rust компілятор гарантує, що, якщо ми заявили, що змінна лишиться сталою, 
-вона і дійсно не зміниться. Це означає, що коли ви читаєте і пишете код, вам 
-не треба відстежувати, як і де значення може змінитися. Ваш код стає легше 
-зрозуміти.
+But mutability can be very useful, and can make code more convenient to write. 
+Although variables are immutable by default, you can make them mutable by adding 
+`mut` in front of the variable name as you did in Chapter 2. Adding `mut` also
+conveys intent to future readers of the code by indicating that other parts of
+the code will be changing this variable’s value.
 
-Але несталість може бути дуже корисною. Змінні є сталими тільки усталено; ми 
-можемо зробити їх несталими, додавши `mut` перед ім'ям змінної. На додачу до
-дозволу змінювати це значення, це попереджає майбутніх читачим коду про ваші 
-наміри, вказуючи, що інші частини коду будуть змінювати значення цієї змінної.
-
-Наприклад, змінимо *src/main.rs* на такий код:
+For example, let’s change *src/main.rs* to the following:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/src/main.rs}}
 ```
-```
 
-Запустивши програму ми отримаємо:
+When we run the program now, we get this:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/output.txt}}
 ```
 
-Застосувавши `mut`, ми дозволили змінити значення, прив'язане до `x`, з `5` на
-`6`. У деяких випадках вам захочеться робити змінні несталими, бо так зручніше
-писати код, ніж у реалізації з виключно сталими змінними.
+We’re allowed to change the value bound to `x` from `5` to `6` when `mut`
+is used. Ultimately, deciding whether to use mutability or not is up to you and
+depends on what you think is clearest in that particular situation.
 
-Варто розглядати й інші аспекти, крім запобігання вадам. Наприклад, якщо ви
-використовуєте великі структури даних, змінювати екземпляр на місці може бути 
-швидше, ніж копіювати і повертати наново виділений екземпляр. Для менших
-структур даних може бути зручнішим розмірковувати про код, написаний у більш 
-функціональному стилі, з постійним створенням нових екземплярів, тому може бути
-варто знизити продуктивність заради збільшення ясності.
+### Constants
 
-### Відмінності між змінними та константами
+Like immutable variables, *constants* are values that are bound to a name and
+are not allowed to change, but there are a few differences between constants
+and variables.
 
-Неможливість змінити значення змінної може нагадати вам про іншу концепцію 
-программування, що є в більшості мов: *константи*. Константи - це так само 
-значення, прив'язані до імені, які не можна змінювати, але є кілька 
-відмінностей між константами і змінними. 
+First, you aren’t allowed to use `mut` with constants. Constants aren’t just
+immutable by default—they’re always immutable. You declare constants using the
+`const` keyword instead of the `let` keyword, and the type of the value *must*
+be annotated. We’re about to cover types and type annotations in the next
+section, [“Data Types,”][data-types]<!-- ignore --> so don’t worry about the
+details right now. Just know that you must always annotate the type.
 
-По-перше, використання `mut` з константами неможливе: константи не тільки 
-усталено сталі, вони завжди сталі. 
+Constants can be declared in any scope, including the global scope, which makes
+them useful for values that many parts of code need to know about.
 
-Константи проголошуються ключовим словом `const` замість `let`, і тип значення 
-*має* явно позначатися. Ми розкажемо про типи і позначки типів у наступному 
-розділі, ["Типи даних"][data-types]<!-- ignore-->, тому не хвилюйтеся зараз 
-про деталі. Просто пам'ятайте, що тип констант треба зазначати завжди.
+The last difference is that constants may be set only to a constant expression,
+not the result of a value that could only be computed at runtime.
 
-Константи можуть проголошуватися у будь-якій області видимості, у тому числі 
-глобальній, що робить їх корисними для зберігання значеннь, шо 
-використовуються у багатьох частинах вашого коду.
-
-Остання відмнінність полягає в тому, що константи можуть набувати тільки 
-значення константних виразів, а не результатів виклику функції чи інших 
-значень, які можуть бути обчислені лише під час виконання програми.
-
-Ось приклад проголошення константи, де константа зветься `MAX_POINTS`, а її 
-значення є 100,000. (Угода про назви констант в Rust вимагає використання 
-верхнього регістру із підкресленнями між словами, також підкреслення додаються 
-в числові літерали для кращої читаності):
+Here’s an example of a constant declaration:
 
 ```rust
-const MAX_POINTS: u32 = 100_000;
+const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 ```
 
-Константи діють протягом усього часу життя програми, у тій області видимості, 
-де вони були проголошені. Це робить константи корисними для зберігання значень 
-з предметної області вашого застосунку, про які необхідно знати багатьом 
-частинам програми, наприклад, максимальна кількість балів, яку може отримати 
-гравець чи швидкість світла.
+The constant’s name is `THREE_HOURS_IN_SECONDS` and its value is set to the
+result of multiplying 60 (the number of seconds in a minute) by 60 (the number
+of minutes in an hour) by 3 (the number of hours we want to count in this
+program). Rust’s naming convention for constants is to use all uppercase with
+underscores between words. The compiler is able to evaluate a limited set of
+operations at compile time, which lets us choose to write out this value in a
+way that’s easier to understand and verify, rather than setting this constant
+to the value 10,800. See the [Rust Reference’s section on constant
+evaluation][const-eval] for more information on what operations can be used
+when declaring constants.
 
-Корисно давати назви жорстко заданим значення, що використовуються по всій 
-програмі, позначаючи їх константами, щоб передати сенс цього значення тим, хто
-супроводжуватиме код. Це також корисно тим, що в коді буде тільки одне місце, 
-яке буде необхідно змінити у разі потреби оновити жорстко задане значення.
+Constants are valid for the entire time a program runs, within the scope they
+were declared in. This property makes constants useful for values in your
+application domain that multiple parts of the program might need to know about,
+such as the maximum number of points any player of a game is allowed to earn or
+the speed of light.
 
-### Затінення
+Naming hardcoded values used throughout your program as constants is useful in
+conveying the meaning of that value to future maintainers of the code. It also
+helps to have only one place in your code you would need to change if the
+hardcoded value needed to be updated in the future.
 
-Як ми бачили під час програмування гри - відгадайки в підрозділі [“Порівняння 
-здогадки з таємним числом"][comparing-the-guess-to-the-secret-number]<!-- 
-ignore --> Розділу 2, можна проголошувати нові змінні із таким самим іменем, як 
-і в раніше проголошених змінних, і нова змінна витісняє попередню змінну. 
-Растацеанці кажуть, що перша змінна *затінена* другою, що означає, що 
-при використанні змінної ми отримаємо значення другої змінної. Ми можемо 
-затінити змінну за допомогою ключового слова `let` та імені цієї змінної:
+### Shadowing
 
-<span class="filename">Файл: src/main.rs</span>
+As you saw in the guessing game tutorial in [Chapter
+2][comparing-the-guess-to-the-secret-number]<!-- ignore -->, you can declare a
+new variable with the same name as a previous variable. Rustaceans say that the
+first variable is *shadowed* by the second, which means that the second
+variable is what the compiler will see when you use the name of the variable.
+In effect, the second variable overshadows the first, taking any uses of the
+variable name to itself until either it itself is shadowed or the scope ends.
+We can shadow a variable by using the same variable’s name and repeating the
+use of the `let` keyword as follows:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/src/main.rs}}
 ```
 
-Ця програма спершу прив'язує `x` до значення `5`. Потім затінює `x` повторенням
-`let x =`, взявши початкове значення і додавши до нього `1`, так що значення `x`
-стає `6`. Третя інструкція `let` також затінює `x`, бере попереднє значення і
-множить його на `2`, надаючи `x` остатночного значення `12`. Якщо запустити цю 
-програму, вона виведе:
+This program first binds `x` to a value of `5`. Then it creates a new variable
+`x` by repeating `let x =`, taking the original value and adding `1` so the
+value of `x` is then `6`. Then, within an inner scope created with the curly
+brackets, the third `let` statement also shadows `x` and creates a new
+variable, multiplying the previous value by `2` to give `x` a value of `12`.
+When that scope is over, the inner shadowing ends and `x` returns to being `6`.
+When we run this program, it will output the following:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/output.txt}}
 ```
 
-Це відрізняється від позначення змінної `mut`, адже якщо ми знову не 
-використаємо ключове слово `let`, отримаємо помилку часу компіляції, якщо 
-випадково спробуємо переприсвоїти значення цієї змінної. Ми можемо 
-перетворювати значення, але змінна буде сталою після виконання цих перетворень.
+Shadowing is different from marking a variable as `mut`, because we’ll get a
+compile-time error if we accidentally try to reassign to this variable without
+using the `let` keyword. By using `let`, we can perform a few transformations
+on a value but have the variable be immutable after those transformations have
+been completed.
 
-Інша різниця між `mut` та затіненням полягає в тому, що, оскільки коли ми 
-пишемо знову ключове слово `let`, насправді ми створюємо нову змінну, тож 
-можемо змінити тип значення, але залишити ім'я. Наприклад, хай наша програма 
-просить користувача вказати, скільки пробілів має бути всередині якогось 
-тексту, ввівши символи пробілу, але насправді ми хочемо зберігати це значення 
-як число:
+The other difference between `mut` and shadowing is that because we’re
+effectively creating a new variable when we use the `let` keyword again, we can
+change the type of the value but reuse the same name. For example, say our
+program asks a user to show how many spaces they want between some text by
+inputting space characters, and then we want to store that input as a number:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-04-shadowing-can-change-types/src/main.rs:here}}
 ```
 
-Ця конструкція можлива, бо перша змінна `spaces` має стрічковий тип, а друга
-змінна `spaces`, що є повністю новою змінною, якій трапилося мати таке саме 
-ім'я, має числовий тип. Затінення, таким чином, позбавляє нас необхідності 
-придумувати різні імена, на кшталт `spaces_str` та `spaces_num`; натомість, ми
-можемо заново використати простіше ім'я `spaces`. Але якщо ми спробуємо 
-скористатися `mut`, як показано далі, ми дістанемо помилку часу компіляції:
+The first `spaces` variable is a string type and the second `spaces` variable
+is a number type. Shadowing thus spares us from having to come up with
+different names, such as `spaces_str` and `spaces_num`; instead, we can reuse
+the simpler `spaces` name. However, if we try to use `mut` for this, as shown
+here, we’ll get a compile-time error:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/src/main.rs:here}}
 ```
 
-Помилка каже, що  не можна змінювати тип змінної:
+The error says we’re not allowed to mutate a variable’s type:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
 ```
 
-Тепер, дослідивши, як працюють змінні, погляньмо, які типи данних вони можуть 
-зберігати.
+Now that we’ve explored how variables work, let’s look at more data types they
+can have.
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [data-types]: ch03-02-data-types.html#data-types
+[storing-values-with-variables]: ch02-00-guessing-game-tutorial.html#storing-values-with-variables
+[const-eval]: ../reference/const_eval.html
