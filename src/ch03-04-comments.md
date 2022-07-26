@@ -1,47 +1,42 @@
-## Коментарі
+## Comments
 
-Всі програмісти прагнуть зробити свій код зрозумілішим, та деколи не завадить 
-додаткове пояснення. В таких випадках програмісти лишають в сирцевому коді 
-примітки, що звуться *коментарями*, які ігнорує компілятор, але можуть бути 
-корисними людям, що читатимуть цей код.
+All programmers strive to make their code easy to understand, but sometimes
+extra explanation is warranted. In these cases, programmers leave *comments* in
+their source code that the compiler will ignore but people reading the source
+code may find useful.
 
-Ось простий коментар:
-
-```rust
-// Hello, world.
-```
-
-У Rust коментарі мають починатися з двох знаків дробу і продовжуються до кінця
-рядка. Для коментарів, що займають більше одного рядка, вам доведеться ставити
-`//` у кожному рядку, ось так:
+Here’s a simple comment:
 
 ```rust
-// Тут ми робимо щось складне, досить довге, щоб нам знадобилося кілька рядків
-// коментаря! Отакої! Сподіваюся, цей коментар достатньо детально пояснює, що 
-// тут відбувається.
+// hello, world
 ```
 
-Коментарі також можна розміщувати в кінці рядків, що містять код:
-
-<span class="filename">Файл: src/main.rs</span>
+In Rust, the idiomatic comment style starts a comment with two slashes, and the
+comment continues until the end of the line. For comments that extend beyond a
+single line, you’ll need to include `//` on each line, like this:
 
 ```rust
-fn main() {
-    let lucky_number = 7; // Мені пощастить!
-}
+// So we’re doing something complicated here, long enough that we need
+// multiple lines of comments to do it! Whew! Hopefully, this comment will
+// explain what’s going on.
 ```
 
-Та частіше ви бачитимете їх у форматі, де коментар знаходиться в окремому рядку
-перед кодом, якого він стосується:
+Comments can also be placed at the end of lines containing code:
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    // Мені пощастить!
-    let lucky_number = 7;
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
 ```
 
-У Rust також є інший тип коментарів, документаційні коментарі, мова про які 
-піде в Розділі 14.
+But you’ll more often see them used in this format, with the comment on a
+separate line above the code it’s annotating:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
+```
+
+Rust also has another kind of comment, documentation comments, which we’ll
+discuss in the “Publishing a Crate to Crates.io” section of Chapter 14.
