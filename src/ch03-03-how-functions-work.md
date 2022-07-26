@@ -1,225 +1,167 @@
-## Як працюють функції
+## Functions
 
-Функції використовуються скрізь у коді на Rust. Ви вже бачили одну з 
-найважливіших функцій у мові - функцію `main`, яка є точкою входу багатьох 
-програм. Ви також бачили ключове слово `fn`, яке дозволяє вам оголошувати нові 
-функції.
+Functions are prevalent in Rust code. You’ve already seen one of the most
+important functions in the language: the `main` function, which is the entry
+point of many programs. You’ve also seen the `fn` keyword, which allows you to
+declare new functions.
 
-У мові Rust для назв функцій і змінних прийнято використовувати *зміїний 
-регістр* - тобто всі літери маленькі, а слова відокремлюються підкресленянми.
-Ось приклад програми, що містить визначення функції:
+Rust code uses *snake case* as the conventional style for function and variable
+names, in which all letters are lowercase and underscores separate words.
+Here’s a program that contains an example function definition:
 
-<span class="filename">Файл: src/main.rs</span>
-
-```rust
-fn main() {
-    println!("Привіт, світ!");
-
-    another_function();
-}
-
-fn another_function() {
-    println!("Інша функція.");
-}
-```
-
-Визначення функцій у Rust починаються з `fn` і мають кілька пар дужок після 
-назви функції. Фігурні дужки кажуть компілятору, де починається і закінчується 
-тіло функції.
-
-Ми можемо викликати будь-яку визначену нами функцію, написавши її назву і пару
-дужок. Оскільки `another_function` визначена в програмі, її можна викликати
-зсередини функції `main`. Зверніть увагу, що ми визначили `another_function` 
-у сирцевому коді *після* функції `main`; так само її можна було визначити до
-функції `main`. Для Rust не має значення, де ви визначаєте функції, важливо,
-щоб вони були визначені хоч десь.
-
-Почнемо новий бінарний проект з назвою *functions*, щоб глибше дослідити 
-функції. Помістіть приклад `another_function` до файлу *src/main.rs* і запустіть
-його. Ви побачите таке:
-
-```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-     Running `target/debug/functions`
-Привіт, світ!
-Інша функція.
-```
-
-Рядки виконуються в порядку, в якому вони знаходяться в функції `main`. Спершу
-виводиться повідомлення “Привіт, світ!”, а потім викликається `another_function`
-і виводить своє повідомлення.
-
-### Параметри функції
-
-При визначення функціям можна визначати *параметри* - особливі змінні, що є 
-частиною визначення функції. Коли функція має параметри, ми можемо надати 
-функції конкретні значення для цих параметрів. Формально, конкретні значення 
-звуться *аргументами* або *фактичними параметрами*, а параметри у визначенні
-функції - *формальними параметрами*, але зазвичай слова "параметр" та "аргумент"
-використовуються як для частини визначення функції, так і для конкретних 
-значень, які були передані при виклику функції.
-
-Це переписана версія `another_function` демонструє, як виглядають параметри в 
-Rust:
-
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    another_function(5);
-}
-
-fn another_function(x: i32) {
-    println!("Значення x: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-16-functions/src/main.rs}}
 ```
 
-Запустіть цю програму; ви маєте побачити таке:
+We define a function in Rust by entering `fn` followed by a function name and a
+set of parentheses. The curly brackets tell the compiler where the function
+body begins and ends.
 
-```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-     Running `target/debug/functions`
-Значення x: 5
+We can call any function we’ve defined by entering its name followed by a set
+of parentheses. Because `another_function` is defined in the program, it can be
+called from inside the `main` function. Note that we defined `another_function`
+*after* the `main` function in the source code; we could have defined it before
+as well. Rust doesn’t care where you define your functions, only that they’re
+defined somewhere in a scope that can be seen by the caller.
+
+Let’s start a new binary project named *functions* to explore functions
+further. Place the `another_function` example in *src/main.rs* and run it. You
+should see the following output:
+
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-16-functions/output.txt}}
 ```
 
-Проголошення `another_function` містить один параметр під назвою `x`. Тип `x` 
-визначено як `i32`. Коли в `another_function` передається `5`, макрос `println!`
-виведе `5` на місце фігурних дужок у рядку формату.
+The lines execute in the order in which they appear in the `main` function.
+First, the “Hello, world!” message prints, and then `another_function` is
+called and its message is printed.
 
-У проголошенні функції ви *обов'язково* маєте проголошувати тип кожного 
-параметру. Це свідоме рішення у дизайні мови Rust: вимога позначати тип у 
-визначенні функції означає, що компілятору дуже рідко знадобиться просити вас
-використовувати їх де-інде ще в коді, щоб зрозуміти, який тип вам потрібен.
+### Parameters
 
-Якщо ви хочете, щоб у функції було багато параметрів, відокремлюйте проголошення
-параметрів комами, ось так:
+We can define functions to have *parameters*, which are special variables that
+are part of a function’s signature. When a function has parameters, you can
+provide it with concrete values for those parameters. Technically, the concrete
+values are called *arguments*, but in casual conversation, people tend to use
+the words *parameter* and *argument* interchangeably for either the variables
+in a function’s definition or the concrete values passed in when you call a
+function.
 
-<span class="filename">Файл: src/main.rs</span>
+In this version of `another_function` we add a parameter:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    another_function(5, 6);
-}
-
-fn another_function(x: i32, y: i32) {
-    println!("Значення x: {}", x);
-    println!("Значення y: {}", y);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/src/main.rs}}
 ```
 
-Цей приклад створює функцію з двома параметрами, обидва мають тип `i32`. Функція
-виводить значення обох своїх параметрів. Звісно, параметрам функції зовсім не 
-обов'язково мати один тип - просто так зроблено в цьому прикладі.
+Try running this program; you should get the following output:
 
-Спробуймо запустити цей код. Замініть програму у файлі *src/main.rs* вашого
-проекту *function* кодом вище, і запустіть його командою `cargo run`:
-
-```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-     Running `target/debug/functions`
-Значення x: 5
-Значення y: 6
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/output.txt}}
 ```
 
-Оскільки ми викликали функцію зі значенням `5` для параметру `x` і значенням `6` 
-для `y`, обидві стрічки виведені зі цими значеннями. 
+The declaration of `another_function` has one parameter named `x`. The type of
+`x` is specified as `i32`. When we pass `5` in to `another_function`, the
+`println!` macro puts `5` where the pair of curly brackets containing `x` was
+in the format string.
 
-### Тіла функцій
+In function signatures, you *must* declare the type of each parameter. This is
+a deliberate decision in Rust’s design: requiring type annotations in function
+definitions means the compiler almost never needs you to use them elsewhere in
+the code to figure out what type you mean. The compiler is also able to give
+more helpful error messages if it knows what types the function expects.
 
-Тіла функцій складаються з послідовності інструкцій, яка може закінчуватися 
-виразом. Поки що ми описували тільки функції без виразу наприкінці, але 
-використовували вирази як частини інструкцій. Оскільки Rust є мовою, базованою 
-на виразах, важливо розуміти цю відмінність. Інші мови можуть не мати таких 
-відмінностей, тому давайте розглянемо, що таке інструкції і вирази і як різниця 
-між ними впливає на тіла функцій.
+When defining multiple parameters, separate the parameter declarations with
+commas, like this:
 
-### Інструкції і вирази
-
-Насправді ми вже використовували інструкції і вирази. *Інструкції* (statement) - 
-це команди, що виконують певні дії і не повертають значення. *Вирази* 
-(expression) обчислюються, в результаті даючи певне значення. Розглянемо 
-приклади.
-
-Створення змінної і надання їй значення за допомогою ключового слова `let` - це
-інструкція. У Роздруку 3-3 `let y = 6;` є інструкцією:
-
-<figure>
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let y = 6;
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/src/main.rs}}
 ```
 
-<figcaption>
+This example creates a function named `print_labeled_measurement` with two
+parameters. The first parameter is named `value` and is an `i32`. The second is
+named `unit_label` and is type `char`. The function then prints text containing
+both the `value` and the `unit_label`.
 
-Listing 3-3: Проголошення функції `main`, що містить одну інструкцію.
+Let’s try running this code. Replace the program currently in your *functions*
+project’s *src/main.rs* file with the preceding example and run it using `cargo
+run`:
 
-</figcaption>
-</figure>
-
-Проголошення функцій - також інструкції; весь попередній приклад є однією 
-складною інструкцією. 
-
-Інструкції не повертають значень. Таким чином, не можна присвоїти інструкцію 
-`let` іншій змінній, на кшталт такого:
-
-<span class="filename">Файл: src/main.rs</span>
-
-```rust,ignore
-fn main() {
-    let x = (let y = 6);
-}
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/output.txt}}
 ```
 
-При спробі запустити цю програму, ви отримаєте повідомлення про помилку:
+Because we called the function with `5` as the value for `value` and `'h'` as
+the value for `unit_label`, the program output contains those values.
 
-```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-error: expected expression, found statement (`let`)
- --> src/main.rs:2:14
-  |
-2 |     let x = (let y = 6);
-  |              ^^^
-  |
-  = note: variable declaration using `let` is a statement
-```
+### Statements and Expressions
 
-Інструкція `let y = 6` не повертає значення, тому немає нічого, з чим можна було
-б зв'язати `x`. Це відрізняється від інших мов, таких як C чи Ruby, де 
-присвоєння повертає значення, яке воно присвоїло. В тих мовах можна написати 
-`x = y = 6` і обидві змінні `x` та `y` набудуть значення `6`; у Rust так робити 
-не можна.
+Function bodies are made up of a series of statements optionally ending in an
+expression. So far, the functions we’ve covered haven’t included an ending
+expression, but you have seen an expression as part of a statement. Because
+Rust is an expression-based language, this is an important distinction to
+understand. Other languages don’t have the same distinctions, so let’s look at
+what statements and expressions are and how their differences affect the bodies
+of functions.
 
-Вирази
-Вирази обчислюються у певне значення і складають більшу частину решти коду, який
-ви писатимете на Rust. Розглянемо просту математичну операцію, таку, як `5 + 6`,
-яка є виразом, що обчислюється у значення `11`. Вирази можуть бути частинами
-інструкцій: у Роздруку 3-3 в інструкції `let y = 6;`, `6` - це вираз, що 
-обчислюється у значення `6`. Виразами також є виклик функції чи макросу; блок, 
-що створює нову область видимості, `{}` - це також вираз, наприклад:
+*Statements* are instructions that perform some action and do not return a
+value. *Expressions* evaluate to a resulting value. Let’s look at some examples.
 
-<span class="filename">Файл: src/main.rs</span>
+We’ve actually already used statements and expressions. Creating a variable and
+assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
+`let y = 6;` is a statement.
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 5;
-
-    let y = {
-        let x = 3;
-        x + 1
-    };
-
-    println!("Значення y: {}", y);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-01/src/main.rs}}
 ```
 
-Цей вираз:
+<span class="caption">Listing 3-1: A `main` function declaration containing one statement</span>
+
+Function definitions are also statements; the entire preceding example is a
+statement in itself.
+
+Statements do not return values. Therefore, you can’t assign a `let` statement
+to another variable, as the following code tries to do; you’ll get an error:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/src/main.rs}}
+```
+
+When you run this program, the error you’ll get looks like this:
+
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/output.txt}}
+```
+
+The `let y = 6` statement does not return a value, so there isn’t anything for
+`x` to bind to. This is different from what happens in other languages, such as
+C and Ruby, where the assignment returns the value of the assignment. In those
+languages, you can write `x = y = 6` and have both `x` and `y` have the value
+`6`; that is not the case in Rust.
+
+Expressions evaluate to a value and make up most of the rest of the code that
+you’ll write in Rust. Consider a math operation, such as `5 + 6`, which is an
+expression that evaluates to the value `11`. Expressions can be part of
+statements: in Listing 3-1, the `6` in the statement `let y = 6;` is an
+expression that evaluates to the value `6`. Calling a function is an
+expression. Calling a macro is an expression. A new scope block created with
+curly brackets is an expression, for example:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-20-blocks-are-expressions/src/main.rs}}
+```
+
+This expression:
 
 ```rust,ignore
 {
@@ -228,112 +170,80 @@ fn main() {
 }
 ```
 
-є блоком, який, в цьому випадку, обчислюється у `4`. Це значення прив'язується 
-до `y`, як частина інструкції `let`. Зверніть увагу на рядок без крапки з комою
-наприкінці блоку, на відміну від більшості рядків, які нам поки що траплялися.
-Вирази не мають крапки з комою наприкінці. Якщо ви додасьте крапу з комою в 
-кінець виразу, ви зробите його інструкцією, яка не повертає значення. Пам'ятайте
-це, коли вивчатимете далі значення, які повертають функції та вирази.
+is a block that, in this case, evaluates to `4`. That value gets bound to `y`
+as part of the `let` statement. Note that the `x + 1` line doesn’t have a
+semicolon at the end, unlike most of the lines you’ve seen so far. Expressions
+do not include ending semicolons. If you add a semicolon to the end of an
+expression, you turn it into a statement, and it will then not return a value.
+Keep this in mind as you explore function return values and expressions next.
 
-### Функції і значення, які вони повертають
+### Functions with Return Values
 
-Функції можуть повертать значення в код, який їх викликав. Ці значення не мають
-власних імен, а їхній тип вказується після стрілочки (`->`). У Rust значення, що
-його повертає функція - це те саме, що значення останнього виразу в блоці - тілі
-функції. Ось приклад функції, що повертає значення:
+Functions can return values to the code that calls them. We don’t name return
+values, but we must declare their type after an arrow (`->`). In Rust, the
+return value of the function is synonymous with the value of the final
+expression in the block of the body of a function. You can return early from a
+function by using the `return` keyword and specifying a value, but most
+functions return the last expression implicitly. Here’s an example of a
+function that returns a value:
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn five() -> i32 {
-    5
-}
-
-fn main() {
-    let x = five();
-
-    println!("Значення x: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/src/main.rs}}
 ```
 
-У функції `five` немає викликів інших функцій, макросів чи навіть інструкцій 
-`let` - тільки саме число `5`. Це коректна функція в мові Rust. Зверніть увагу,
-що тут зазначено тип значення, яке функція повертає - `-> i32`. Запустімо цей 
-код; вивід має виглядати так:
+There are no function calls, macros, or even `let` statements in the `five`
+function—just the number `5` by itself. That’s a perfectly valid function in
+Rust. Note that the function’s return type is specified too, as `-> i32`. Try
+running this code; the output should look like this:
 
-```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-     Running `target/debug/functions`
-Значення x: 5
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/output.txt}}
 ```
 
-`5` у `five` є значенням, яке повертає функція, і тому тип, який повертає 
-функція - `i32`. Розглянемо це детальніше. Є два важливі моменти: по-перше, 
-рядок `let x = five();` показує, що ми використовуємо значення, яке повернула
-функція, для ініціалізації змінної. Оскільки функція `five` повертає `5`, цей 
-рядок робить те саме, що й такий:
+The `5` in `five` is the function’s return value, which is why the return type
+is `i32`. Let’s examine this in more detail. There are two important bits:
+first, the line `let x = five();` shows that we’re using the return value of a
+function to initialize a variable. Because the function `five` returns a `5`,
+that line is the same as the following:
 
 ```rust
 let x = 5;
 ```
 
-По-друге, функція `five` не має параматрів і визначає тип значення, яке вона
-повертає, але тіло функції складається лише з `5` без крапи з комою, оскільки
-значення цього виразу ми хочемо повернути. Подивимося інший приклад:
+Second, the `five` function has no parameters and defines the type of the
+return value, but the body of the function is a lonely `5` with no semicolon
+because it’s an expression whose value we want to return.
 
-<span class="filename">Файл: src/main.rs</span>
+Let’s look at another example:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = plus_one(5);
-
-    println!("Значення x: {}", x);
-}
-
-fn plus_one(x: i32) -> i32 {
-    x + 1
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-22-function-parameter-and-return/src/main.rs}}
 ```
 
-Якщо виконати цей код, він виведе `Значення x: 6`. Що ж станеться, якщо ми 
-поставимо крапку з комою в кінець рядка `x + 1`, щоб він став інструкцією, а не
-виразом?
+Running this code will print `The value of x is: 6`. But if we place a
+semicolon at the end of the line containing `x + 1`, changing it from an
+expression to a statement, we’ll get an error.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
-fn main() {
-    let x = plus_one(5);
-
-    println!("Значення x: {}", x);
-}
-
-fn plus_one(x: i32) -> i32 {
-    x + 1;
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/src/main.rs}}
 ```
 
-Виконання цього коду призводить до такої помилки:
+Compiling this code produces an error, as follows:
 
-```text
-error[E0269]: not all control paths return a value
- --> src/main.rs:7:1
-  |
-7 | fn plus_one(x: i32) -> i32 {
-  | ^
-  |
-help: consider removing this semicolon:
- --> src/main.rs:8:10
-  |
-8 |     x + 1;
-  |          ^
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/output.txt}}
 ```
 
-Основне повідомлення про помилку “not all control paths return a value” (“не всі
-шляхи виконання повертають значення”) розкриває основну проблему цього коду.
-Визначення функції `plus_one` каже, що вона має повернути `i32`, але інструкції
-не обчислюються в значення. Таким чином, нічого не повертається, що суперечить
-визначенню функції й призводить до помилки. Далі, Rust повідомляє про можливість
-виправити цю проблему: він радить прибрати крапку з комою, що дійсно виправить
-помилку.
+The main error message, “mismatched types,” reveals the core issue with this
+code. The definition of the function `plus_one` says that it will return an
+`i32`, but statements don’t evaluate to a value, which is expressed by `()`,
+the unit type. Therefore, nothing is returned, which contradicts the function
+definition and results in an error. In this output, Rust provides a message to
+possibly help rectify this issue: it suggests removing the semicolon, which
+would fix the error.
