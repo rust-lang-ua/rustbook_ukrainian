@@ -1,322 +1,255 @@
-## Посилання і позичання
+## References and Borrowing
 
-Проблема з кодом, що використовує кортежі, в кінці попереднього розділу полягає
-в тому, що ми маємо повертати `String` у функцію, що викликає, щоб можна було
-використовувати `String` після виклику `calculate_length`, бо `String` 
-переміщується до `calculate_length`.
+The issue with the tuple code in Listing 4-5 is that we have to return the
+`String` to the calling function so we can still use the `String` after the
+call to `calculate_length`, because the `String` was moved into
+`calculate_length`. Instead, we can provide a reference to the `String` value.
+A *reference* is like a pointer in that it’s an address we can follow to access
+the data stored at that address; that data is owned by some other variable.
+Unlike a pointer, a reference is guaranteed to point to a valid value of a
+particular type for the life of that reference.
 
-Ось як визначити і використати функцію `calculate_length`, що приймає параметром
-*посилання* на об'єкт замість перебирати володіння значенням:
+Here is how you would define and use a `calculate_length` function that
+has a reference to an object as a parameter instead of taking ownership of the
+value:
 
-<span class="filename">Файл: src/main.rs</span>
-
-```rust
-fn main() {
-    let s1 = String::from("hello");
-
-    let len = calculate_length(&s1);
-
-    println!("The length of '{}' is {}.", s1, len);
-}
-
-fn calculate_length(s: &String) -> usize {
-    s.len()
-}
-```
-
-По-перше, зауважте, що весь код із кортежами при визначення змінної та 
-поверненні з функції зник. По-друге, зверніть увагу, що ми передаємо `&s1` у
-`calculate_length`, а у визначенні функції ми приймаємо `&String` замість 
-`String`.
-
-Ці амперсанди (символи &) - це *посилання*, і вони дозволяють нам посилатися на
-певне значення, не перебираючи володіння ним. Рисунок 4-5 показує це.
-
-<img alt="&String s вказує на String s1" src="img/trpl04-05.svg" class="center" />
-
-<span class="caption">Рисунок 4-5: `&String s` вказує на `String s1`</span>
-
-> Примітка: операція, зворотня до помилання, зветься розкриттям посилань, і 
-> виконується оператором розкриття `*`. Ми побачимо деякі застосування цього 
-> оператора в Розділі 8 і обговоримо подробиці розкриття посилань у Розділі 15.
-
-Розглянемо детальніше виклик функції:
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# fn calculate_length(s: &String) -> usize {
-#     s.len()
-# }
-let s1 = String::from("hello");
-
-let len = calculate_length(&s1);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:all}}
 ```
 
-Запис `&s1` створює посилання, що *посилається* на значення `s1`, але не володіє
-ним. Оскільки воно не володіє, значення, на яке воно вказує, не буде знищене, 
-коли посилання вийде з області видимості.
+First, notice that all the tuple code in the variable declaration and the
+function return value is gone. Second, note that we pass `&s1` into
+`calculate_length` and, in its definition, we take `&String` rather than
+`String`. These ampersands represent *references*, and they allow you to refer
+to some value without taking ownership of it. Figure 4-5 depicts this concept.
 
-Так само, сигнатура функції використовує `&`, щоб показати, що тип параметру `s`
-- посилання. Додамо трохи коментарів для пояснення:
+<img alt="&amp;String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
+
+<span class="caption">Figure 4-5: A diagram of `&String s` pointing at `String
+s1`</span>
+
+> Note: The opposite of referencing by using `&` is *dereferencing*, which is
+> accomplished with the dereference operator, `*`. We’ll see some uses of the
+> dereference operator in Chapter 8 and discuss details of dereferencing in
+> Chapter 15.
+
+Let’s take a closer look at the function call here:
 
 ```rust
-fn calculate_length(s: &String) -> usize { // s - це посилання на String
-    s.len()
-} // s виходить з видимості. Але оскільки вона не володіє тим, на що 
-  // посилається, нічого не відбувається.
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:here}}
 ```
 
-Область видимості, де змінна `s` є дійсною, така сама, як і у будь-якого 
-параметра функції, але те, на що вказує посилання, не припиняє свого існування
-при виході з видимості, бо функція ним не володіє. Параметри - посилання замість
-значень означають, що їй не доведеться повертати значення, щоб повернути 
-володіння, бо вона не має володіння.
+The `&s1` syntax lets us create a reference that *refers* to the value of `s1`
+but does not own it. Because it does not own it, the value it points to will
+not be dropped when the reference stops being used.
 
-Використання посилань - параметрів функції зветься *позичанням*. Як і в 
-справжньому життя, якщо особа володіє чимось, ви можете це позичити у неї, а 
-коли річ вам стане не потрібна, треба її віддати.
-
-Що ж станеться, якщо ми спробуємо змінити щось, що ми позичили? Спробуйте 
-запустити код з Роздруку 4-4. Попередження: він не працює!
-
-<span class="filename">Файл: src/main.rs</span>
-
-```rust,ignore
-fn main() {
-    let s = String::from("hello");
-
-    change(&s);
-}
-
-fn change(some_string: &String) {
-    some_string.push_str(", world");
-}
-```
-
-<span class="caption">Роздрук 4-4: спроба змінити позичене значення</span>
-
-Ось помилка:
-
-```text
-error[E0596]: cannot borrow immutable borrowed content `*some_string` as mutable
- --> error.rs:8:5
-  |
-7 | fn change(some_string: &String) {
-  |                        ------- use `&mut String` here to make mutable
-8 |     some_string.push_str(", world");
-  |     ^^^^^^^^^^^ cannot borrow as mutable
-```
-
-Посилання, так само, як і змінні, устано є сталими. Ми не можемо змінити щось, 
-на що ми маємо посилання.
-
-### Несталі посилання
-
-Посилку в коді з Роздруку 4-4 можна виправити маленьким виправленням:
-
-<span class="filename">Файл: src/main.rs</span>
+Likewise, the signature of the function uses `&` to indicate that the type of
+the parameter `s` is a reference. Let’s add some explanatory annotations:
 
 ```rust
-fn main() {
-    let mut s = String::from("hello");
-
-    change(&mut s);
-}
-
-fn change(some_string: &mut String) {
-    some_string.push_str(", world");
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-08-reference-with-annotations/src/main.rs:here}}
 ```
 
-По-перше, треба змінити `s`, щоб він став `mut`. Потім, нам треба створити 
-нестале посилання за допомогою `&mut s` і прийняти це нестале посилання за 
-допомогою `some_string: &mut String`.
+The scope in which the variable `s` is valid is the same as any function
+parameter’s scope, but the value pointed to by the reference is not dropped
+when `s` stops being used because `s` doesn’t have ownership. When functions
+have references as parameters instead of the actual values, we won’t need to
+return the values in order to give back ownership, because we never had
+ownership.
 
-Але несталі посилання мають одне велике обмеження: ви может емати лише одне
-нестале посилання на конкретний фрагмент даних у окремій області видимості. Цей
-код не спрацює:
+We call the action of creating a reference *borrowing*. As in real life, if a
+person owns something, you can borrow it from them. When you’re done, you have
+to give it back. You don’t own it.
 
-<span class="filename">Файл: src/main.rs</span>
+So what happens if we try to modify something we’re borrowing? Try the code in
+Listing 4-6. Spoiler alert: it doesn’t work!
 
-```rust,ignore
-let mut s = String::from("hello");
+<span class="filename">Filename: src/main.rs</span>
 
-let r1 = &mut s;
-let r2 = &mut s;
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-06/src/main.rs}}
 ```
 
-Ось помилка:
+<span class="caption">Listing 4-6: Attempting to modify a borrowed value</span>
 
-```text
-error[E0499]: cannot borrow `s` as mutable more than once at a time
- --> borrow_twice.rs:5:19
-  |
-4 |     let r1 = &mut s;
-  |                   - first mutable borrow occurs here
-5 |     let r2 = &mut s;
-  |                   ^ second mutable borrow occurs here
-6 | }
-  | - first borrow ends here
+Here’s the error:
+
+```console
+{{#include ../listings/ch04-understanding-ownership/listing-04-06/output.txt}}
 ```
 
-Це обмеження дозволяє внесення змін лише під пильним контролем. Це те, із чим
-борються новачки-растаціанці, бо більшість мов дозволяють вам змінювати коли 
-завгодно. Перевага цього обмеження в тому, що Rust запобігає гонитві за даними
-під час компіляції.
+Just as variables are immutable by default, so are references. We’re not
+allowed to modify something we have a reference to.
 
-*Гонитва за даними* подібна до стану гонитви і стається, коли мають місце такі 
-умови:
+### Mutable References
 
-1. Два чи більше вказівників мають доступ до одних даних у один і той самий час.
-1. Щонайменше один зі вказівників використовується для запису даних.
-1. Не застосовується жодних механізмів синхронізації доступу до даних.
+We can fix the code from Listing 4-6 to allow us to modify a borrowed value
+with just a few small tweaks that use, instead, a *mutable reference*:
 
-Гонитва за даними викликає невизначену поведінку та її може бути складно виявити
-та виправити при відстеженні під час виконання; Rust запобігає цій проблеми, бо
-вона не дозволяє навіть скомпілювати код із гонитвою!
-
-Як завжди, ми можемо скористатися фігурними дужками, щоб створити нову область 
-видимості, дозволивши багато несталих посилань, але не *одночасно*:
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-let mut s = String::from("hello");
-
-{
-    let r1 = &mut s;
-
-} // r1 виходить із видимості, так що можна без проблем створювати нові 
-  // посилання.
-
-let r2 = &mut s;
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-09-fixes-listing-04-06/src/main.rs}}
 ```
 
-Схоже правило існує для змішування сталих і несталих посилань. Цей код 
-призводить до помилки:
+First, we change `s` to be `mut`. Then we create a mutable reference with `&mut
+s` where we call the `change` function, and update the function signature to
+accept a mutable reference with `some_string: &mut String`. This makes it very
+clear that the `change` function will mutate the value it borrows.
 
-```rust,ignore
-let mut s = String::from("hello");
+Mutable references have one big restriction: if you have a mutable reference to
+a value, you can have no other references to that value. This code that
+attempts to create two mutable references to `s` will fail:
 
-let r1 = &s; // без проблем
-let r2 = &s; // без проблем
-let r3 = &mut s; // ПРОБЛЕМА
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/src/main.rs:here}}
 ```
 
-Ось помилка:
+Here’s the error:
 
-```text
-error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
-immutable
- --> borrow_thrice.rs:6:19
-  |
-4 |     let r1 = &s; // без проблем
-  |               - immutable borrow occurs here
-5 |     let r2 = &s; // без проблем
-6 |     let r3 = &mut s; // ПРОБЛЕМА
-  |                   ^ mutable borrow occurs here
-7 | }
-  | - immutable borrow ends here
+```console
+{{#include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/output.txt}}
 ```
 
-Отакої! Не виходить *також* мати нестале посилання, коли в нас є стале. 
-Користувачі сталого посилання не очікують, що його значення несподівано 
-зміниться прямо під час використання. Втім, багато сталих посилань допустимі,
-бо жоден з тих, хто прости читає дані, не може вплинути на те, що інші читають
-ці дані.
+This error says that this code is invalid because we cannot borrow `s` as
+mutable more than once at a time. The first mutable borrow is in `r1` and must
+last until it’s used in the `println!`, but between the creation of that
+mutable reference and its usage, we tried to create another mutable reference
+in `r2` that borrows the same data as `r1`.
 
-Хоча ці помилки часами і дратують, пам'ятайте, що це компілятор Rust вказує на
-потенційний баг завчасно (під час компіляції замість часу виконання) і точно
-вказує, де полягає проблема, замість змушувати вас відстежувати, чому іноді ваші
-дані не такі, як ви очікували.
+The restriction preventing multiple mutable references to the same data at the
+same time allows for mutation but in a very controlled fashion. It’s something
+that new Rustaceans struggle with, because most languages let you mutate
+whenever you’d like. The benefit of having this restriction is that Rust can
+prevent data races at compile time. A *data race* is similar to a race
+condition and happens when these three behaviors occur:
 
-### Завислі посилання
+* Two or more pointers access the same data at the same time.
+* At least one of the pointers is being used to write to the data.
+* There’s no mechanism being used to synchronize access to the data.
 
-У мовах із вказівниками легко можна помилково створити *завислий вказівник* -
-вказівник, що посилається на місце в пам'яті, що було виділене комусь іще, 
-звільнивши пам'ять, але залишивши вказівник на цю пам'ять. У Rust, натомість,
-компілятор гарантує, що посилання ніколи не стануть завислими: якщо маємо 
-посилання на певні дані, компілятор пересвідчиться, що дані не вийдуть із 
-області видимості до того, як вийде посилання на ці дані.
+Data races cause undefined behavior and can be difficult to diagnose and fix
+when you’re trying to track them down at runtime; Rust prevents this problem
+by refusing to compile code with data races!
 
-Спробуймо створтти зависле посилання, чому Rust запобігне помилкою компіляції:
+As always, we can use curly brackets to create a new scope, allowing for
+multiple mutable references, just not *simultaneous* ones:
 
-<span class="filename">Файл: src/main.rs</span>
-
-```rust,ignore
-fn main() {
-    let reference_to_nothing = dangle();
-}
-
-fn dangle() -> &String {
-    let s = String::from("hello");
-
-    &s
-}
+```rust
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-11-muts-in-separate-scopes/src/main.rs:here}}
 ```
 
-Ось помилка:
+Rust enforces a similar rule for combining mutable and immutable references.
+This code results in an error:
 
-```text
-error[E0106]: missing lifetime specifier
- --> dangle.rs:5:16
-  |
-5 | fn dangle() -> &String {
-  |                ^ expected lifetime parameter
-  |
-  = help: this function's return type contains a borrowed value, but there is
-  no value for it to be borrowed from
-  = help: consider giving it a 'static lifetime
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/src/main.rs:here}}
 ```
 
-Це повідомлення про помилку посилається на особливість, про яку ми ще не 
-розповідали: *час життя* (*lifetime*). Ми обговоримо часи життя детальніше у
-Розділі 10. Але, якщо опустити частини про час життя, повідомлення містить ключ
-до того, чому цей код містить проблему:
+Here’s the error:
+
+```console
+{{#include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/output.txt}}
+```
+
+Whew! We *also* cannot have a mutable reference while we have an immutable one
+to the same value.
+
+Users of an immutable reference don’t expect the value to suddenly change out
+from under them! However, multiple immutable references are allowed because no
+one who is just reading the data has the ability to affect anyone else’s
+reading of the data.
+
+Note that a reference’s scope starts from where it is introduced and continues
+through the last time that reference is used. For instance, this code will
+compile because the last usage of the immutable references, the `println!`,
+occurs before the mutable reference is introduced:
+
+```rust,edition2021
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
+```
+
+The scopes of the immutable references `r1` and `r2` end after the `println!`
+where they are last used, which is before the mutable reference `r3` is
+created. These scopes don’t overlap, so this code is allowed. The ability of
+the compiler to tell that a reference is no longer being used at a point before
+the end of the scope is called *Non-Lexical Lifetimes* (NLL for short), and you
+can read more about it in [The Edition Guide][nll].
+
+Even though borrowing errors may be frustrating at times, remember that it’s
+the Rust compiler pointing out a potential bug early (at compile time rather
+than at runtime) and showing you exactly where the problem is. Then you don’t
+have to track down why your data isn’t what you thought it was.
+
+### Dangling References
+
+In languages with pointers, it’s easy to erroneously create a *dangling
+pointer*--a pointer that references a location in memory that may have been
+given to someone else--by freeing some memory while preserving a pointer to
+that memory. In Rust, by contrast, the compiler guarantees that references will
+never be dangling references: if you have a reference to some data, the
+compiler will ensure that the data will not go out of scope before the
+reference to the data does.
+
+Let’s try to create a dangling reference to see how Rust prevents them with a
+compile-time error:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/src/main.rs}}
+```
+
+Here’s the error:
+
+```console
+{{#include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/output.txt}}
+```
+
+This error message refers to a feature we haven’t covered yet: lifetimes. We’ll
+discuss lifetimes in detail in Chapter 10. But, if you disregard the parts
+about lifetimes, the message does contain the key to why this code is a problem:
 
 ```text
 this function's return type contains a borrowed value, but there is no value
-for it to be borrowed from.
+for it to be borrowed from
 ```
 
-```text
-тип, що повертає ця функція, містить позичене значення, але немає значення, яке
-воно може позичити.
+Let’s take a closer look at exactly what’s happening at each stage of our
+`dangle` code:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-15-dangling-reference-annotated/src/main.rs:here}}
 ```
 
-Поглянемо ближче, що саме стається на кожному кроці коду `dangle`:
+Because `s` is created inside `dangle`, when the code of `dangle` is finished,
+`s` will be deallocated. But we tried to return a reference to it. That means
+this reference would be pointing to an invalid `String`. That’s no good! Rust
+won’t let us do this.
 
-```rust,ignore
-fn dangle() -> &String { // dangle повертає посилання на String
-
-    let s = String::from("hello"); // s - це новий String
-
-    &s // ми повертаємо посилання на String, s
-} // s виходить із видимості і звільняється. Його пам'ять втрачена. Небезпечно!
-```
-
-Оскільки `s` був створений всередині `dangle`, коли код `dangle` завершується, 
-`s` буде вивільнено. Але ми пробуємо повернути посилання на нього. Це означає,
-що це посилання буде вказувати на некоректний `String`! Так не можна. І Rust 
-цього не допустить.
-
-Рішення тут - повертати `String` безпосередньо:
+The solution here is to return the `String` directly:
 
 ```rust
-fn no_dangle() -> String {
-    let s = String::from("hello");
-
-    s
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-16-no-dangle/src/main.rs:here}}
 ```
 
-Це працює без проблем. Володіння переміщується, і нічого не звільняється.
+This works without any problems. Ownership is moved out, and nothing is
+deallocated.
 
-### Правила посилань
+### The Rules of References
 
-Ще раз повторимо, що ми обговорили про посилання:
+Let’s recap what we’ve discussed about references:
 
-1. У будь-який час можна мати *лише одне*, а не обидва:
-  * Одне нестале посилання.
-  * Будь-яку кількість сталих посилань.
-2. Посилання завжди мають бути коректними.
+* At any given time, you can have *either* one mutable reference *or* any
+  number of immutable references.
+* References must always be valid.
 
-Далі ми поглянемо на інших тип посилань: зрізи.
+Next, we’ll look at a different kind of reference: slices.
 
+[nll]: https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/non-lexical-lifetimes.html
