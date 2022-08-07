@@ -1,118 +1,81 @@
-## Лаконічний контроль виконання конструкцією `if let`
+## Concise Control Flow with `if let`
 
-Запис `if let` дозволяє вам комбінувати `if` та `let` менш багатослівно, щоб
-керувати значеннями, що відповідають одному шаблону, і ігнорувати інші. 
-Розглянемо програму у Роздруку 6-6, що працює зі значенням `Option<u8>`, але 
-хоче виконувтаи код лише у коли значення дорівнює трьом:
-
-```rust
-let some_u8_value = Some(0u8);
-match some_u8_value {
-    Some(3) => println!("три"),
-    _ => (),
-}
-```
-
-<span class="caption">Роздрук 6-6: `match`, що виконує код лише зі значенням 
-`Some(3)`</span>
-
-Ми хочемо зробити щось зі значенням `Some(3)`, але не робити нічого з жодним
-іншим значенням `Some(u8)` чи значенням `None`. Щоб задовільнити вираз `match`,
-нам доводиться додати `_ => ()` після обробки єдиного варіанту, що явно є 
-надлишковим для такої ситуації.
-
-Натомість ми могли б записати це коротше за допомогою `if let`. Наступний код
-робить те саме, що й `match` з Роздруку 6-6:
+The `if let` syntax lets you combine `if` and `let` into a less verbose way to
+handle values that match one pattern while ignoring the rest. Consider the
+program in Listing 6-6 that matches on an `Option<u8>` value in the `config_max`
+variable but only wants to execute code if the value is the `Some` variant.
 
 ```rust
-# let some_u8_value = Some(0u8);
-if let Some(3) = some_u8_value {
-    println!("три");
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-06/src/main.rs:here}}
 ```
 
-`if let` приймає шаблон і вираз, розділені оператором `=`. Він працює так само,
-як і `match`, де вираз надається `match`, а шаблон - це перший рукав.
+<span class="caption">Listing 6-6: A `match` that only cares about executing
+code when the value is `Some`</span>
 
-Використання `if let` означає, що вам треба менше набирати, менше ставити 
-відступів і менше писати зайвого коду. Тим не менш, ви втрачаємо перевірку на 
-вичерпність, до якої зобов'язує `match`. Вибір між `match` та `if let` залежить
-від того, щощо ви робите у конкретній ситуації і чи лаконічність варта втрати
-перевірки на вичерпність.
+If the value is `Some`, we print out the value in the `Some` variant by binding
+the value to the variable `max` in the pattern. We don’t want to do anything
+with the `None` value. To satisfy the `match` expression, we have to add `_ =>
+()` after processing just one variant, which is annoying boilerplate code to
+add.
 
-Іншими словами, ви можете вважати `if let` синтаксичним цукром для `match`, де
-код виконується лише для одного шаблону і ігнорує всі інші варіанти.
-
-У `if let` можна також додати `else`. Блок коду, що іде після else - це той 
-самий блок коду, що був би у випадку `_` у виразу `match`, еквіалентному нашому
-`if let` та `else`. Згадаємо визначення enum-а `Coin` у роздруку 6-4, де 
-варіант `Quarter` також включав значення `UsState`. Якби ми захотіли полічити 
-усі не-чвертаки, що трапляються нам, і в той же час виводити штат чвертаків, ми
-могли б зробити це за допомогою десь такого `match`:
+Instead, we could write this in a shorter way using `if let`. The following
+code behaves the same as the `match` in Listing 6-6:
 
 ```rust
-# #[derive(Debug)]
-# enum UsState {
-#    Alabama,
-#    Alaska,
-# }
-#
-# enum Coin {
-#    Penny,
-#    Nickel,
-#    Dime,
-#    Quarter(UsState),
-# }
-# let coin = Coin::Penny;
-let mut count = 0;
-match coin {
-    Coin::Quarter(state) => println!("Чвертак штату {:?}!", state),
-    _ => count += 1,
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-12-if-let/src/main.rs:here}}
 ```
 
-Або ж ми могли скористатися вираз `if let` та `else` ось таким чином:
+The syntax `if let` takes a pattern and an expression separated by an equal
+sign. It works the same way as a `match`, where the expression is given to the
+`match` and the pattern is its first arm. In this case, the pattern is
+`Some(max)`, and the `max` binds to the value inside the `Some`. We can then
+use `max` in the body of the `if let` block in the same way as we used `max` in
+the corresponding `match` arm. The code in the `if let` block isn’t run if the
+value doesn’t match the pattern.
+
+Using `if let` means less typing, less indentation, and less boilerplate code.
+However, you lose the exhaustive checking that `match` enforces. Choosing
+between `match` and `if let` depends on what you’re doing in your particular
+situation and whether gaining conciseness is an appropriate trade-off for
+losing exhaustive checking.
+
+In other words, you can think of `if let` as syntax sugar for a `match` that
+runs code when the value matches one pattern and then ignores all other values.
+
+We can include an `else` with an `if let`. The block of code that goes with the
+`else` is the same as the block of code that would go with the `_` case in the
+`match` expression that is equivalent to the `if let` and `else`. Recall the
+`Coin` enum definition in Listing 6-4, where the `Quarter` variant also held a
+`UsState` value. If we wanted to count all non-quarter coins we see while also
+announcing the state of the quarters, we could do that with a `match`
+expression like this:
 
 ```rust
-# #[derive(Debug)]
-# enum UsState {
-#    Alabama,
-#    Alaska,
-# }
-#
-# enum Coin {
-#    Penny,
-#    Nickel,
-#    Dime,
-#    Quarter(UsState),
-# }
-# let coin = Coin::Penny;
-let mut count = 0;
-if let Coin::Quarter(state) = coin {
-    println!("Чвертак штату {:?}!", state);
-} else {
-    count += 1;
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-13-count-and-announce-match/src/main.rs:here}}
 ```
 
-Якщо ви маєте ситуацію, де логіка вашої програми надто багатослівна, щоб 
-виражати її за допомогою `match`, пам'ятайте, що `if let` також лежить у вашій
-коробці інструментів Rust.
+Or we could use an `if let` and `else` expression like this:
 
-## Підсумок
+```rust
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-14-count-and-announce-if-let-else/src/main.rs:here}}
+```
 
-Ми щойно розібрали, як використовувати enum-и для створення власних типів, які
-можуть бути одного з множини перелічених значень. Ми показали, як тип 
-`Option<T>` зі стандартної бібліотеки допомагає використовувати систему типів
-для уникання помилок. Коли значення enum-а мають дані всередині, можна 
-скористатися `match` чи `if let` щоб витягти і використати ці значення, залежно
-від того, скільки різних варіантів вам треба обробити.
+If you have a situation in which your program has logic that is too verbose to
+express using a `match`, remember that `if let` is in your Rust toolbox as well.
 
-Ваші програми Rust тепер можуть виражати концепції з проблемної області за 
-допомогою struct-ів та enum-ів. Створення власних типів для використання у 
-вашому API гарантує безпеку типів: компілятор забезпечить, що ваші функції
-отримають лише значення тих типів, на які ці функції очікують.
+## Summary
 
-Для того, щоб створити добре організований API для ваших користувачів, що є
-очевидним у використанні і надає користувачам лише те, що їм потрібно, 
-звернімося до модулів Rust.
+We’ve now covered how to use enums to create custom types that can be one of a
+set of enumerated values. We’ve shown how the standard library’s `Option<T>`
+type helps you use the type system to prevent errors. When enum values have
+data inside them, you can use `match` or `if let` to extract and use those
+values, depending on how many cases you need to handle.
+
+Your Rust programs can now express concepts in your domain using structs and
+enums. Creating custom types to use in your API ensures type safety: the
+compiler will make certain your functions get only values of the type each
+function expects.
+
+In order to provide a well-organized API to your users that is straightforward
+to use and only exposes exactly what your users will need, let’s now turn to
+Rust’s modules.

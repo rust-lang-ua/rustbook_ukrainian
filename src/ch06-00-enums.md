@@ -1,13 +1,11 @@
-# Enum-и і порівняння зі зразком
+# Enums and Pattern Matching
 
-У цьому розділі ми розглянемо *переліки*, також відомі, як *enum*-и. Enum-и 
-дозволяють вам визначити тим, перелічивши всі його можливі значення. Спершу ми 
-визначимо і використаємо enum, щоб показати, як він кодує значення разом із 
-даними. Далі, ми дослідимо особливо корисний enum, що зветься `Option`, який
-виражає, що значення може бути чимось або нічим. Потім ми подивимося на те, як
-порівняння зі зразком у виразі `match` полегшує виконання різних кодів для 
-різних значень enum-а. Нарешті, ми розкриємо, як конструкція `if let` зручно і
-лаконічно дозволяє вам використовувати enum-и  у вашому коді.
-
-Enum-и присутні у багатьох мовах, але їхні можливості сильно залежать від мови.
-Enum-и Rust найбільш схожі на *алгебраїчні типи даних* у функціональних мовах на кшталт F#, OCaml і Haskell.
+In this chapter we’ll look at *enumerations*, also referred to as *enums*.
+Enums allow you to define a type by enumerating its possible *variants*. First,
+we’ll define and use an enum to show how an enum can encode meaning along with
+data. Next, we’ll explore a particularly useful enum, called `Option`, which
+expresses that a value can be either something or nothing. Then we’ll look at
+how pattern matching in the `match` expression makes it easy to run different
+code for different values of an enum. Finally, we’ll cover how the `if let`
+construct is another convenient and concise idiom available to handle enums in
+your code.
