@@ -1,116 +1,136 @@
-## crwdns5360:0crwdne5360:0
+## crwdns55012:0crwdne55012:0
 
-crwdns5362:0crwdne5362:0 crwdns5364:0crwdne5364:0 crwdns5366:0crwdne5366:0 crwdns5368:0crwdne5368:0
+crwdns55014:0crwdne55014:0<!--
+ignore --> crwdns55016:0crwdne55016:0 crwdns55018:0crwdne55018:0 crwdns55020:0crwdne55020:0 crwdns55022:0crwdne55022:0
 
-crwdns5370:0crwdne5370:0 crwdns5372:0crwdne5372:0 crwdns5374:0crwdne5374:0 crwdns5376:0crwdne5376:0
+crwdns55024:0crwdne55024:0 crwdns55026:0crwdne55026:0 crwdns55028:0crwdne55028:0 crwdns55030:0crwdne55030:0
 
 ```rust
-crwdns5378:0crwdne5378:0
+crwdns55032:0crwdne55032:0
 ```
 
-<span class="caption">crwdns5380:0crwdne5380:0</span>
+<span class="caption">crwdns55034:0crwdne55034:0</span>
 
-crwdns5382:0crwdne5382:0 crwdns5384:0crwdne5384:0 crwdns5386:0crwdne5386:0 crwdns5388:0crwdne5388:0 crwdns5390:0crwdne5390:0
-
-```rust
-crwdns5392:0crwdne5392:0
-```
-
-<span class="caption">crwdns5394:0crwdne5394:0</span>
-
-crwdns5396:0crwdne5396:0 crwdns5398:0crwdne5398:0 crwdns5400:0crwdne5400:0 crwdns5402:0crwdne5402:0
+crwdns55036:0crwdne55036:0 crwdns55038:0crwdne55038:0 crwdns55040:0crwdne55040:0 crwdns55042:0crwdne55042:0 crwdns55044:0crwdne55044:0
 
 ```rust
-crwdns5404:0crwdne5404:0
+crwdns55046:0crwdne55046:0
 ```
 
 
-<span class="caption">crwdns5406:0crwdne5406:0</span>
+<span class="caption">crwdns55048:0crwdne55048:0</span>
 
-crwdns5408:0crwdne5408:0 crwdns5410:0crwdne5410:0
-
-crwdns5412:0crwdne5412:0 crwdns5414:0crwdne5414:0
+crwdns55050:0crwdne55050:0 crwdns55052:0crwdne55052:0 crwdns55054:0crwdne55054:0 crwdns55056:0crwdne55056:0
 
 ```rust
-crwdns5416:0crwdne5416:0
+crwdns55058:0crwdne55058:0
 ```
 
 
-<span class="caption">crwdns5418:0crwdne5418:0</span>
+<span class="caption">crwdns55060:0crwdne55060:0</span>
 
-crwdns5420:0crwdne5420:0 crwdns5422:0crwdne5422:0 crwdns5424:0crwdne5424:0
+crwdns55062:0crwdne55062:0 crwdns55064:0crwdne55064:0
 
-### crwdns5426:0crwdne5426:0
-### crwdns5428:0crwdne5428:0
-
-crwdns5430:0crwdne5430:0
+crwdns55066:0crwdne55066:0 crwdns55068:0crwdne55068:0
 
 ```rust
-crwdns5432:0crwdne5432:0
+crwdns55070:0crwdne55070:0
 ```
 
 
-<span class="caption">crwdns5434:0crwdne5434:0</span>
+<span class="caption">crwdns55072:0crwdne55072:0</span>
 
-crwdns5436:0crwdne5436:0 crwdns5438:0crwdne5438:0 crwdns5440:0crwdne5440:0
+crwdns55074:0crwdne55074:0 crwdns55076:0crwdne55076:0 crwdns55078:0crwdne55078:0
 
-### crwdns5442:0crwdne5442:0
-### crwdns5444:0crwdne5444:0
+<a id="using-the-field-init-shorthand-when-variables-and-fields-have-the-same-name"></a>
 
-crwdns5446:0crwdne5446:0 crwdns5448:0crwdne5448:0
+### crwdns55080:0crwdne55080:0
 
-crwdns5450:0crwdne5450:0 crwdns5452:0crwdne5452:0
+crwdns55082:0crwdne55082:0
 
 ```rust
-crwdns5454:0crwdne5454:0
+crwdns55084:0crwdne55084:0
 ```
 
 
-<span class="caption">crwdns5456:0crwdne5456:0</span>
+<span class="caption">crwdns55086:0crwdne55086:0</span>
 
-crwdns5458:0crwdne5458:0 crwdns5460:0crwdne5460:0
+crwdns55088:0crwdne55088:0 crwdns55090:0crwdne55090:0 crwdns55092:0crwdne55092:0
+
+### crwdns55094:0crwdne55094:0
+
+crwdns55096:0crwdne55096:0 crwdns55098:0crwdne55098:0
+
+crwdns55100:0crwdne55100:0 crwdns55102:0crwdne55102:0
 
 ```rust
-crwdns5462:0crwdne5462:0
+crwdns55104:0crwdne55104:0
 ```
 
 
-<span class="caption">crwdns5464:0crwdne5464:0</span>
+<span class="caption">crwdns55106:0crwdne55106:0</span>
 
-crwdns5466:0crwdne5466:0
-
-### crwdns5468:0crwdne5468:0
-
-crwdns5470:0crwdne5470:0 crwdns5472:0crwdne5472:0 crwdns5474:0crwdne5474:0
-
-crwdns5476:0crwdne5476:0 crwdns5478:0crwdne5478:0
+crwdns55108:0crwdne55108:0 crwdns55110:0crwdne55110:0
 
 ```rust
-crwdns5480:0crwdne5480:0
+crwdns55112:0crwdne55112:0
 ```
 
-crwdns5482:0crwdne5482:0 crwdns5484:0crwdne5484:0 crwdns5486:0crwdne5486:0 crwdns5488:0crwdne5488:0
 
-### crwdns5490:0crwdne5490:0
+<span class="caption">crwdns55114:0crwdne55114:0</span>
 
-crwdns5492:0crwdne5492:0 crwdns5494:0crwdne5494:0 crwdns5496:0crwdne5496:0 crwdns5498:0crwdne5498:0
+crwdns55116:0crwdne55116:0 crwdns55118:0crwdne55118:0
 
-> ### crwdns5500:0crwdne5500:0
+crwdns55120:0crwdne55120:0<!-- ignore --> crwdns55122:0crwdne55122:0 crwdns55124:0crwdne55124:0 crwdns55126:0crwdne55126:0 crwdns55128:0crwdne55128:0<!-- ignore --> crwdns55130:0crwdne55130:0
+
+### crwdns55132:0crwdne55132:0
+
+crwdns55134:0crwdne55134:0 crwdns55136:0crwdne55136:0 crwdns55138:0crwdne55138:0
+
+crwdns55140:0crwdne55140:0 crwdns55142:0crwdne55142:0
+
+```rust
+crwdns55144:0crwdne55144:0
+```
+
+crwdns55146:0crwdne55146:0 crwdns55148:0crwdne55148:0 crwdns55150:0crwdne55150:0 crwdns55152:0crwdne55152:0
+
+### crwdns55154:0crwdne55154:0
+
+crwdns55156:0crwdne55156:0 crwdns55158:0crwdne55158:0<!-- ignore --> crwdns55160:0crwdne55160:0 crwdns55162:0crwdne55162:0 crwdns55164:0crwdne55164:0 crwdns55166:0crwdne55166:0
+
+```rust
+crwdns55168:0crwdne55168:0
+```
+
+crwdns55170:0crwdne55170:0 crwdns55172:0crwdne55172:0 crwdns55174:0crwdne55174:0 crwdns55176:0crwdne55176:0 crwdns55178:0crwdne55178:0 crwdns55180:0crwdne55180:0
+
+> ### crwdns55182:0crwdne55182:0
 > 
-> crwdns5502:0crwdne5502:0 crwdns5504:0crwdne5504:0
+> crwdns55184:0crwdne55184:0 crwdns55186:0crwdne55186:0
 > 
-> crwdns5506:0crwdne5506:0 crwdns5508:0crwdne5508:0 crwdns5510:0crwdne5510:0
+> crwdns55188:0crwdne55188:0 crwdns55190:0crwdne55190:0 crwdns55192:0crwdne55192:0
 > 
-> <span class="filename">crwdns5512:0crwdne5512:0</span>
+> <span class="filename">crwdns55194:0crwdne55194:0</span>
 > 
-> ```rust,ignore
-> crwdns5514:0crwdne5514:0
+> <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
+> 
+> ```rust,ignore,does_not_compile
+> crwdns55196:0crwdne55196:0
 > ```
 > 
-> crwdns5516:0crwdne5516:0
+> crwdns55198:0crwdne55198:0
 > 
-> ```text
-> crwdns5518:0[E0106]crwdnd5518:0[E0106]crwdne5518:0
+> ```console
+> crwdns55200:0[E0106]crwdnd55200:0[E0106]crwdne55200:0
+> crwdns55202:0crwdne55202:0
 > ```
 > 
-> crwdns5520:0crwdne5520:0
+> crwdns55204:0crwdne55204:0
+
+<!-- manual-regeneration
+for the error above
+after running update-rustc.sh:
+pbcopy < listings/ch05-using-structs-to-structure-related-data/no-listing-02-reference-in-struct/output.txt
+paste above
+add `> ` before every line -->
