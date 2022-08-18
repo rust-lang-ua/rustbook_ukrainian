@@ -1,46 +1,45 @@
-# Проєкт з введенням/виведенням: створення програми командного рядка
+# An I/O Project: Building a Command Line Program
 
-Цей розділ підсумовує багато навичок, які ви отримали досі, та досліджує ще 
-декілька можливостей стандартної бібліотеки. Ми розробимо інструмент командного
-рядка, що взаємодіятиме введенням/виведенням до файлів і командного рядка, щоб
-потренуватися з уже вивченими концепціями Rust.
+This chapter is a recap of the many skills you’ve learned so far and an
+exploration of a few more standard library features. We’ll build a command line
+tool that interacts with file and command line input/output to practice some of
+the Rust concepts you now have under your belt.
 
-Швидкість, безпека, єдиний бінарник як результат компіляції та підтримка 
-багатоплатформенності роблять Rust ідеальною мовою для створення інструментів 
-командного рядка, отже, для нашого проєкту ми створимо власну версію класичного 
-інструменту для пошуку через командний рядок `grep` (**g**lobally search a 
-**r**egular **e**xpression and **p**rint, глобальний пошук регулярного виразу і 
-друк). У найпростішому випадку `grep` шукає потрібний рядок у потрібному файлі.
-Для цього `grep` приймає параметрами шлях до файлу і стрічку, а далі читає файл,
-знаходить рядки що містять параметр-стрічку і друкує ці рядки.
+Rust’s speed, safety, single binary output, and cross-platform support make it
+an ideal language for creating command line tools, so for our project, we’ll
+make our own version of the classic command line search tool `grep`
+(**g**lobally search a **r**egular **e**xpression and **p**rint). In the
+simplest use case, `grep` searches a specified file for a specified string. To
+do so, `grep` takes as its arguments a file path and a string. Then it reads
+the file, finds lines in that file that contain the string argument, and prints
+those lines.
 
-Дорогою ми покажемо як залучити до нашого інструмента командного рядка поширені
-функції термінала, які використовуються в багатьох інших інструментах 
-командного рядка. Ми прочитаємо значення змінної середовища, щоб дозволити 
-користувачеві сконфігурувати поведінку нашого інструменту. Також ми надрукуємо
-повідомлення про помилки до стандартного потоку виведення помилок (`stderr`), а
-замість стандартного потоку виведення (`stdout`), щоб, скажімо, користувач міг
-перенаправити вдалий результат до файлу і все ж побачив повідомлення про помилки
-на екрані.
+Along the way, we’ll show how to make our command line tool use the terminal
+features that many other command line tools use. We’ll read the value of an
+environment variable to allow the user to configure the behavior of our tool.
+We’ll also print error messages to the standard error console stream (`stderr`)
+instead of standard output (`stdout`), so, for example, the user can redirect
+successful output to a file while still seeing error messages onscreen.
 
-Один з членів спільноти Rust, Andrew Gallant, вже створив повнофункціональну, 
-дуже швидку версію `grep`, що зветься `ripgrep`. Наша версія, як порівняти, буде
-доволі простою, але цей розділ дасть вам певні початкові знання, що знадобляться
-для розуміння реальних проєктів як-от `ripgrep`.
+One Rust community member, Andrew Gallant, has already created a fully
+featured, very fast version of `grep`, called `ripgrep`. By comparison, our
+version will be fairly simple, but this chapter will give you some of the
+background knowledge you need to understand a real-world project such as
+`ripgrep`.
 
-Наш проєкт `grep` об'єднає низку концепцій, що ви вже вивчили:
+Our `grep` project will combine a number of concepts you’ve learned so far:
 
-* Організація коду (застосування того, що ви вже вивчили про модулі у 
-[Розділі 7][ch7]<!-- ignore -->)
-* Використання векторів та стрічок (колекцій, [Розділ 8][ch8]<!-- ignore -->))
-* Обробка помилок ([Розділ 9][ch9]<!-- ignore -->)
-* Використання трейтів і часів життя, де це потрібно ([Розділ 10][ch10]<!-- 
-ignore -->)
-* Написання тестів ([Розділ 11][ch11]<!-- ignore -->)
+* Organizing code (using what you learned about modules in [Chapter 7][ch7]<!--
+  ignore -->)
+* Using vectors and strings (collections, [Chapter 8][ch8]<!-- ignore -->)
+* Handling errors ([Chapter 9][ch9]<!-- ignore -->)
+* Using traits and lifetimes where appropriate ([Chapter 10][ch10]<!-- ignore
+  -->)
+* Writing tests ([Chapter 11][ch11]<!-- ignore -->)
 
-Ми також коротко представимо замикання, ітератори і трейтові об'єкти, про які 
-детальніше йтиметься в розділах [13][ch13]<!-- ignore --> і [17][ch17]<!-- 
-ignore -->
+We’ll also briefly introduce closures, iterators, and trait objects, which
+Chapters [13][ch13]<!-- ignore --> and [17][ch17]<!-- ignore --> will cover in
+detail.
 
 [ch7]: ch07-00-managing-growing-projects-with-packages-crates-and-modules.html
 [ch8]: ch08-00-common-collections.html
