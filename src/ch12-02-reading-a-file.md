@@ -1,22 +1,23 @@
-## Читання файлу
+## Reading a File
 
-Тепер додамо функціональність для читання файлу, заданого параметром 
-`file_path`. Для початку нам знадобиться файл для тестування, і ми скористаємося
-фалом із невеликим текстом у кілька рядків із повторенням слів. Роздрук 12-3 
-містить вірш Емілі Дікінсон, що добре підійде для цього. Створіть файл 
-*poem.txt* у кореневому рівні вашого проєкту, і введіть вірш "Я ніхто! А ти 
-хто?"
+Now we’ll add functionality to read the file specified in the `file_path`
+argument. First, we need a sample file to test it with: we’ll use a file with a
+small amount of text over multiple lines with some repeated words. Listing 12-3
+has an Emily Dickinson poem that will work well! Create a file called
+*poem.txt* at the root level of your project, and enter the poem “I’m Nobody!
+Who are you?”
 
-<span class="filename">Файл: poem.txt</span>
+<span class="filename">Filename: poem.txt</span>
 
 ```text
 {{#include ../listings/ch12-an-io-project/listing-12-03/poem.txt}}
 ```
 
-<span class="caption">Роздрук 12-3: Вірш Емілі Дікінсон вдало підходить для тестування</span>
+<span class="caption">Listing 12-3: A poem by Emily Dickinson makes a good test
+case</span>
 
-Підготувавши текст, відредагуйте *src/main.rs* і додайте код для читання файлу,
-як вказано у Роздруку 12-4.
+With the text in place, edit *src/main.rs* and add code to read the file, as
+shown in Listing 12-4.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -24,29 +25,33 @@
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/src/main.rs:here}}
 ```
 
-<span class="caption">Роздрук 12-4: Читання вмісту файлу,  вказаного другим параметром</span>
+<span class="caption">Listing 12-4: Reading the contents of the file specified
+by the second argument</span>
 
-Спершу, ми вводимо в область видимості відповідну частину стандартної бібліотеки
-за допомогою інструкції `use`: для обробки файлів потрібен `std::fs`.
+First, we bring in a relevant part of the standard library with a `use`
+statement: we need `std::fs` to handle files.
 
-У `main` нова інструкція `fs::read_to_string` бере `file_path`, відкриває цей
-файл і повертає `std::io::Result<String>` з його вмістом.
+In `main`, the new statement `fs::read_to_string` takes the `file_path`, opens
+that file, and returns a `std::io::Result<String>` of the file’s contents.
 
-По тому знову додаємо тимчасову інструкцію `println!`, що видрукує значення
-`contents` після читання файлу, щоб ми змогли перевірити, як програма працює.
+After that, we again add a temporary `println!` statement that prints the value
+of `contents` after the file is read, so we can check that the program is
+working so far.
 
-Запустімо цей код з будь-якою стрічкою першим параметром командного рядка (бо 
-ми ще не додали частину для пошуку) і *poem.txt* другим параметром:
+Let’s run this code with any string as the first command line argument (because
+we haven’t implemented the searching part yet) and the *poem.txt* file as the
+second argument:
 
 ```console
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/output.txt}}
 ```
 
-Чудово! Код прочитав і надрукував вміст файлу. Але код має кілька недоліків. 
-Наразі функція `main` відповідає за багато різних речей. В цілому, функції
-стають зрозумілішими і їх легше підтримувати, якщо кожна функція відповідає за
-лише одну ідею. Інша проблема полягає в тому, що ми не обробляємо помилки так
-добре, як могли б. Програма все ще невелика, тому ці недоліки не становлять 
-великої проблеми, але зі зростанням програми стане важчим їх акуратно виправити.
-Є гарна порада - починати рефакторити код на ранній стадії розробки програми, бо
-значно легше рефакторити невеликі фрагменти коду.  Цим ми й займемося.
+Great! The code read and then printed the contents of the file. But the code
+has a few flaws. At the moment, the `main` function has multiple
+responsibilities: generally, functions are clearer and easier to maintain if
+each function is responsible for only one idea. The other problem is that we’re
+not handling errors as well as we could. The program is still small, so these
+flaws aren’t a big problem, but as the program grows, it will be harder to fix
+them cleanly. It’s good practice to begin refactoring early on when developing
+a program, because it’s much easier to refactor smaller amounts of code. We’ll
+do that next.
