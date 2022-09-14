@@ -1,24 +1,24 @@
-## crwdns69266:0crwdne69266:0
+## crwdns35298:0crwdne35298:0
 
-crwdns69268:0crwdne69268:0 crwdns69270:0crwdne69270:0 crwdns69272:0crwdne69272:0
+crwdns35300:0crwdne35300:0 crwdns35302:0crwdne35302:0 crwdns35304:0crwdne35304:0
 
-### crwdns69274:0crwdne69274:0
+### crwdns35306:0crwdne35306:0
 
-crwdns69276:0crwdne69276:0 crwdns69278:0crwdne69278:0 crwdns69280:0crwdne69280:0 crwdns69282:0crwdne69282:0 crwdns69284:0crwdne69284:0 crwdns69286:0crwdne69286:0 crwdns69288:0crwdne69288:0 crwdns69290:0crwdne69290:0
+crwdns35308:0crwdne35308:0 crwdns35310:0crwdne35310:0 crwdns35312:0crwdne35312:0 crwdns35314:0crwdne35314:0 crwdns35316:0crwdne35316:0 crwdns35318:0crwdne35318:0 crwdns35320:0crwdne35320:0 crwdns35322:0crwdne35322:0
 
 ```console
-crwdns69292:0crwdne69292:0
+crwdns35324:0crwdne35324:0
 ```
 
-crwdns69294:0crwdne69294:0 crwdns69296:0[package]crwdne69296:0 crwdns69298:0[workspace]crwdne69298:0
+crwdns35326:0crwdne35326:0 crwdns35330:0[package]crwdne35330:0 crwdns35332:0[workspace]crwdne35332:0
 
-<span class="filename">crwdns69300:0crwdne69300:0</span>
+<span class="filename">crwdns35338:0crwdne35338:0</span>
 
 ```toml
-crwdns69302:0crwdne69302:0
+crwdns35340:0crwdne35340:0
 ```
 
-crwdns69304:0crwdne69304:0
+crwdns35348:0crwdne35348:0
 
 
 <!-- manual-regeneration
@@ -29,28 +29,28 @@ copy output below
 -->
 
 ```console
-crwdns69306:0crwdne69306:0
+crwdns35350:0crwdne35350:0
 ```
 
-crwdns69308:0crwdne69308:0 crwdns69310:0crwdne69310:0
+crwdns35354:0crwdne35354:0 crwdns35356:0crwdne35356:0
 
 ```text
-crwdns69312:0crwdne69312:0
+crwdns35358:0crwdne35358:0
 ```
 
-crwdns69314:0crwdne69314:0 crwdns69316:0crwdne69316:0 crwdns69318:0crwdne69318:0 crwdns69320:0crwdne69320:0 crwdns69322:0crwdne69322:0
+crwdns35364:0crwdne35364:0 crwdns35366:0crwdne35366:0 crwdns35374:0crwdne35374:0 crwdns35376:0crwdne35376:0 crwdns35380:0crwdne35380:0
 
-### crwdns69324:0crwdne69324:0
+### crwdns35384:0crwdne35384:0
 
-crwdns69326:0crwdne69326:0 crwdns69328:0crwdne69328:0
+crwdns35386:0crwdne35386:0 crwdns35388:0crwdne35388:0
 
-<span class="filename">crwdns69330:0crwdne69330:0</span>
+<span class="filename">crwdns35390:0crwdne35390:0</span>
 
 ```toml
-crwdns69332:0crwdne69332:0
+crwdns35392:0crwdne35392:0
 ```
 
-crwdns69334:0crwdne69334:0
+crwdns35394:0crwdne35394:0
 
 
 <!-- manual-regeneration
@@ -61,45 +61,45 @@ copy output below
 -->
 
 ```console
-crwdns69336:0crwdne69336:0
+crwdns35396:0crwdne35396:0
 ```
 
-crwdns69338:0crwdne69338:0
+crwdns35400:0crwdne35400:0
 
 ```text
-crwdns69340:0crwdne69340:0
+crwdns35406:0crwdne35406:0
 ```
 
-crwdns69342:0crwdne69342:0
+crwdns35412:0crwdne35412:0
 
-<span class="filename">crwdns69344:0crwdne69344:0</span>
+<span class="filename">crwdns35416:0crwdne35416:0</span>
 
 ```rust,noplayground
-crwdns69346:0crwdne69346:0
+crwdns35426:0crwdne35426:0
 ```
 
-crwdns69348:0crwdne69348:0 crwdns69350:0crwdne69350:0
+crwdns35430:0crwdne35430:0 crwdns35434:0crwdne35434:0
 
-<span class="filename">crwdns69352:0crwdne69352:0</span>
+<span class="filename">crwdns35438:0crwdne35438:0</span>
 
 ```toml
-crwdns69354:0crwdne69354:0
+crwdns35440:0crwdne35440:0
 ```
 
-crwdns69356:0crwdne69356:0
+crwdns35444:0crwdne35444:0
 
-crwdns69358:0crwdne69358:0 crwdns69360:0crwdne69360:0 crwdns69362:0crwdne69362:0
+crwdns35448:0crwdne35448:0 crwdns35452:0crwdne35452:0 crwdns35454:0crwdne35454:0
 
-<span class="filename">crwdns69364:0crwdne69364:0</span>
+<span class="filename">crwdns35460:0crwdne35460:0</span>
 
 ```rust,ignore
-crwdns69366:0crwdne69366:0
+crwdns35462:0crwdne35462:0
 ```
 
 
-<span class="caption">crwdns69368:0crwdne69368:0</span>
+<span class="caption">crwdns35464:0crwdne35464:0</span>
 
-crwdns69370:0crwdne69370:0
+crwdns35466:0crwdne35466:0
 
 
 <!-- manual-regeneration
@@ -109,10 +109,10 @@ copy output below; the output updating script doesn't handle subdirectories in p
 -->
 
 ```console
-crwdns69372:0crwdne69372:0
+crwdns35468:0crwdne35468:0
 ```
 
-crwdns69374:0crwdne69374:0
+crwdns35474:0crwdne35474:0
 
 
 <!-- manual-regeneration
@@ -122,14 +122,14 @@ copy output below; the output updating script doesn't handle subdirectories in p
 -->
 
 ```console
-crwdns69376:0crwdne69376:0 crwdns69378:0crwdne69378:0
+crwdns35476:0crwdne35476:0 crwdns35480:0crwdne35480:0
 ```
 
-crwdns69380:0crwdne69380:0
+crwdns35482:0crwdne35482:0
 
-#### crwdns69382:0crwdne69382:0
+#### crwdns35486:0crwdne35486:0
 
-crwdns69384:0crwdne69384:0 crwdns69386:0crwdne69386:0 crwdns69388:0crwdne69388:0 crwdns69390:0crwdne69390:0 crwdns69392:0[dependencies]crwdne69392:0
+crwdns35490:0crwdne35490:0 crwdns35502:0crwdne35502:0 crwdns35506:0crwdne35506:0 crwdns35512:0crwdne35512:0 crwdns35516:0[dependencies]crwdne35516:0
 
 
 <!-- When updating the version of `rand` used, also update the version of
@@ -138,13 +138,13 @@ crwdns69384:0crwdne69384:0 crwdns69386:0crwdne69386:0 crwdns69388:0crwdne69388:0
 * ch07-04-bringing-paths-into-scope-with-the-use-keyword.md
 -->
 
-<span class="filename">crwdns69394:0crwdne69394:0</span>
+<span class="filename">crwdns35518:0crwdne35518:0</span>
 
 ```toml
-crwdns69396:0crwdne69396:0
+crwdns35522:0crwdne35522:0
 ```
 
-crwdns69398:0crwdne69398:0 crwdns69400:0crwdne69400:0
+crwdns35528:0crwdne35528:0 crwdns35530:0crwdne35530:0
 
 
 <!-- manual-regeneration
@@ -154,10 +154,10 @@ copy output below; the output updating script doesn't handle subdirectories in p
 -->
 
 ```console
-crwdns69402:0crwdne69402:0
+crwdns35536:0crwdne35536:0
 ```
 
-crwdns69404:0crwdne69404:0 crwdns69406:0crwdne69406:0 crwdns69408:0crwdne69408:0
+crwdns35540:0crwdne35540:0 crwdns35548:0crwdne35548:0 crwdns35550:0crwdne35550:0
 
 
 <!-- manual-regeneration
@@ -167,22 +167,22 @@ copy output below; the output updating script doesn't handle subdirectories in p
 -->
 
 ```console
-crwdns69410:0[E0432]crwdne69410:0
+crwdns35552:0[E0432]crwdne35552:0
 ```
 
-crwdns69412:0crwdne69412:0 crwdns69414:0crwdne69414:0 crwdns69416:0crwdne69416:0
+crwdns35556:0crwdne35556:0 crwdns35558:0crwdne35558:0 crwdns35562:0crwdne35562:0
 
-#### crwdns69418:0crwdne69418:0
+#### crwdns35564:0crwdne35564:0
 
-crwdns69420:0crwdne69420:0
+crwdns35568:0crwdne35568:0
 
-<span class="filename">crwdns69422:0crwdne69422:0</span>
+<span class="filename">crwdns35574:0crwdne35574:0</span>
 
 ```rust,noplayground
-crwdns69424:0crwdne69424:0
+crwdns35582:0crwdne35582:0
 ```
 
-crwdns69426:0crwdne69426:0 crwdns69428:0crwdne69428:0
+crwdns35588:0crwdne35588:0 crwdns35590:0crwdne35590:0
 
 
 <!-- manual-regeneration
@@ -193,12 +193,12 @@ paths properly
 -->
 
 ```console
-crwdns69430:0crwdne69430:0
+crwdns35596:0crwdne35596:0
 ```
 
-crwdns69432:0crwdne69432:0 crwdns69434:0crwdne69434:0
+crwdns35598:0crwdne35598:0 crwdns35602:0crwdne35602:0
 
-crwdns69436:0crwdne69436:0
+crwdns35608:0crwdne35608:0
 
 
 <!-- manual-regeneration
@@ -208,13 +208,13 @@ copy output below; the output updating script doesn't handle subdirectories in p
 -->
 
 ```console
-crwdns69438:0crwdne69438:0
+crwdns35612:0crwdne35612:0
 ```
 
-crwdns69440:0crwdne69440:0
+crwdns35614:0crwdne35614:0
 
-crwdns69442:0crwdne69442:0 crwdns69444:0crwdne69444:0
+crwdns35618:0crwdne35618:0 crwdns35622:0crwdne35622:0
 
-crwdns69446:0crwdne69446:0
+crwdns35626:0crwdne35626:0
 
-crwdns69448:0crwdne69448:0 crwdns69450:0crwdne69450:0
+crwdns35630:0crwdne35630:0 crwdns35634:0crwdne35634:0
