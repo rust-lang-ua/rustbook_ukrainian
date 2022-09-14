@@ -175,7 +175,7 @@ The right way to suppress the warning is to actually write error handling, but i
 
 ### Printing Values with `println!` Placeholders
 
-Aside from the closing curly bracket, there’s only one more line to discuss in the code so far:
+Rust warns that you haven’t used the `Result` value returned from `read_line`, indicating that the program hasn’t handled a possible error.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
@@ -272,7 +272,7 @@ $ cargo build
 
 <span class="caption">Listing 2-2: The output from running `cargo build` after adding the rand crate as a dependency</span>
 
-You may see different version numbers (but they will all be compatible with the code, thanks to SemVer!), different lines (depending on the operating system), and the lines may be in a different order.
+Now, without changing any of the code, let’s build the project, as shown in Listing 2-2.
 
 When we include an external dependency, Cargo fetches the latest versions of everything that dependency needs from the *registry*, which is a copy of data from [Crates.io][cratesio]. Crates.io is where people in the Rust ecosystem post their open source Rust projects for others to use.
 
