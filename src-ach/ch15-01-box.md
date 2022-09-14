@@ -99,7 +99,7 @@ crwdns90438:0crwdne90438:0 crwdns90440:0crwdne90440:0 crwdns90442:0crwdne90442:0
 
 crwdns90444:0crwdne90444:0 crwdns90446:0crwdne90446:0 crwdns90448:0crwdne90448:0 crwdns90450:0crwdne90450:0 crwdns90452:0crwdne90452:0
 
-<img alt="crwdns90454:0crwdne90454:0" src="crwdns90456:0crwdne90456:0" class="center" style="width: 50%;" />
+<img alt="crwdns90454:0crwdne90454:0" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
 
 <span class="caption">crwdns90458:0crwdne90458:0</span>
 
@@ -132,7 +132,7 @@ crwdns90480:0crwdne90480:0
 
 crwdns90484:0crwdne90484:0 crwdns90486:0crwdne90486:0 crwdns90488:0crwdne90488:0 crwdns90490:0crwdne90490:0 crwdns90492:0crwdne90492:0
 
-<img alt="crwdns90494:0crwdne90494:0" src="crwdns90496:0crwdne90496:0" class="center" />
+<img alt="crwdns90494:0crwdne90494:0" src="img/trpl15-02.svg" class="center" />
 
 <span class="caption">crwdns90498:0crwdne90498:0</span>
 
