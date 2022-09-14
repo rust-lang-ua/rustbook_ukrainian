@@ -12,7 +12,7 @@ crwdns81488:0crwdne81488:0
 
 crwdns81490:0crwdne81490:0 crwdns81492:0crwdne81492:0 crwdns81494:0crwdne81494:0 crwdns81496:0crwdne81496:0
 
-<img alt="crwdns81498:0crwdne81498:0" src="crwdns81500:0crwdne81500:0" class="center" />
+<img alt="crwdns81498:0crwdne81498:0" src="img/trpl04-05.svg" class="center" />
 
 <span class="caption">crwdns81502:0crwdne81502:0</span>
 
