@@ -1,54 +1,54 @@
-## Appendix A: Keywords
+## Додаток A: ключові слова
 
-The following list contains keywords that are reserved for current or future use by the Rust language. As such, they cannot be used as identifiers (except as raw identifiers as we’ll discuss in the “[Raw Identifiers][raw-identifiers]<!-- ignore -->” section). Identifiers are names of functions, variables, parameters, struct fields, modules, crates, constants, macros, static values, attributes, types, traits, or lifetimes.
+Цей список містить ключові слова, зарезервовані для поточного або майбутнього використання в мові Rust. Відтак, вони не можуть використовуватися як ідентифікатори (крім сирих ідентифікаторів, як обговорюється в розділі "[Сирі ідентифікатори][raw-identifiers]<!-- ignore -->). Ідентифікатори - це імена функцій, змінних, параметрів, полів структур, модулів, крейтів, констант, макросів, статичних значень, атрибутів, типів, трейтів і часів існування.
 
-### Keywords Currently in Use
+### Ключові слова, що використовуються
 
-The following is a list of keywords currently in use, with their functionality described.
+Далі наведено список ключових слів, що використовують зараз, з описом їхнього призначення.
 
-* `as` - perform primitive casting, disambiguate the specific trait containing an item, or rename items in `use` statements
-* `async` -  return a `Future` instead of blocking the current thread
-* `await` - suspend execution until the result of a `Future` is ready
-* `break` - exit a loop immediately
-* `const` - define constant items or constant raw pointers
-* `continue` - continue to the next loop iteration
-* `crate` - in a module path, refers to the crate root
-* `dyn` - dynamic dispatch to a trait object
-* `else` - fallback for `if` and `if let` control flow constructs
-* `enum` - define an enumeration
-* `extern` - link an external function or variable
-* `false` - Boolean false literal
-* `fn` - define a function or the function pointer type
-* `for` - loop over items from an iterator, implement a trait, or specify a higher-ranked lifetime
-* `if` - branch based on the result of a conditional expression
-* `impl` - implement inherent or trait functionality
-* `in` - part of `for` loop syntax
-* `let` - bind a variable
-* `loop` - loop unconditionally
-* `match` - match a value to patterns
-* `mod` - define a module
-* `move` - make a closure take ownership of all its captures
-* `mut` - denote mutability in references, raw pointers, or pattern bindings
-* `pub` - denote public visibility in struct fields, `impl` blocks, or modules
-* `ref` - bind by reference
-* `return` - return from function
-* `Self` - a type alias for the type we are defining or implementing
-* `self` - method subject or current module
-* `static` - global variable or lifetime lasting the entire program execution
-* `struct` - define a structure
-* `super` - parent module of the current module
-* `trait` - define a trait
-* `true` - Boolean true literal
-* `type` - define a type alias or associated type
-* `union` - define a [union][union]<!-- ignore -->; is only a keyword when used in a union declaration
-* `unsafe` - denote unsafe code, functions, traits, or implementations
-* `use` - bring symbols into scope
-* `where` - denote clauses that constrain a type
-* `while` - loop conditionally based on the result of an expression
+* `as` - виконати примітивне перетворення, прибрати неоднозначність трейта, що містить елемент, чи перейменувати елементи інструкції `use`
+* `async` -  повернути `Future` замість блокувати поточний потік
+* `await` - припинити виконання, доки результат `Future` не буде готовим
+* `break` - негайно вийти з циклу
+* `const` - визначити константу чи константний вказівник
+* `continue` - продовжити цикл з наступної ітерації
+* `crate` - у шляху модуля посилається на корінь крейта
+* `dyn` - динамічна диспетчеризація трейтового об'єкта
+* `else` - альтернативний рукав для конструкцій керування `if` та `if let`
+* `enum` - визначення енума
+* `extern` - зв'язати зовнішню функцію або змінну
+* `false` - булевий літерал "хиба"
+* `fn` - визначити функцію чи тип вказівника на функцію
+* `for` - цикл по елементах ітератора, реалізувати трейт, чи зазначити більш значущий час існування
+* `if` - виконати код залежно від умовного виразу
+* `impl` - реалізувати притаманну функціональність чи трейт
+* `in` - частина синтаксису циклу `for`
+* `let` - зв'язати змінну
+* `loop` - безумовний цикл
+* `match` - зіставити значення з шаблонами
+* `mod` - визначити модуль
+* `move` - передати замиканню володіння усіма захопленими значеннями
+* `mut` - позначити мутабельність у посиланнях, вказівниках чи шаблонних зв'язуваннях
+* `pub` - позначити публічну видимість у полях структур, блоках `impl` та модулях
+* `ref` - зв'язати за посиланням
+* `return` - повернення з функції
+* `Self` - псевдонім типу для типу, який ми визначаємо чи реалізуємо
+* `self` - суб'єкт методу чи поточний модуль
+* `static` - глобальна змінна чи час існування, що триває весь час виконання програми
+* `struct` - визначити структуру
+* `super` - батьківський модуль відносно поточного
+* `trait` - визначити трейт
+* `true` - булевий літерал "правда"
+* `type` - визначити псевдонім типу чи асоційований тип
+* `union` - визначити [об'єднання][union]<!-- ignore -->; є ключовим словом виключно при проголошенні об'єднання
+* `unsafe` - позначає небезпечний код, функції, трейти чи реалізації
+* `use` - ввести символи у область видимості
+* `where` - позначає обмеження типу
+* `while` - умовний цикл залежно від значення виразу
 
-### Keywords Reserved for Future Use
+### Ключові слова, зарезервовані для використання в майбутньому
 
-The following keywords do not yet have any functionality but are reserved by Rust for potential future use.
+Наступні ключові слова ще не мають функціональності, та є зарезервованими в Rust для можливого використання у майбутньому.
 
 * `abstract`
 * `become`
@@ -64,13 +64,13 @@ The following keywords do not yet have any functionality but are reserved by Rus
 * `virtual`
 * `yield`
 
-### Raw Identifiers
+### Сирі ідентифікатори
 
-*Raw identifiers* are the syntax that lets you use keywords where they wouldn’t normally be allowed. You use a raw identifier by prefixing a keyword with `r#`.
+*Сирі ідентифікатори* - це синтаксис, що дозволяє використовувати ключові слова там, де зазвичай це заборонено. Для використання сирого ідентифікатора, додайте до ключового слова префікс `r#`.
 
-For example, `match` is a keyword. If you try to compile the following function that uses `match` as its name:
+Наприклад `match` є ключовим словом. Якщо ви спробуєте скомпілювати цю функцію, що використовує `match` як ім'я:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 fn match(needle: &str, haystack: &str) -> bool {
@@ -78,7 +78,7 @@ fn match(needle: &str, haystack: &str) -> bool {
 }
 ```
 
-you’ll get this error:
+то отримаєте таку помилку:
 
 ```text
 error: expected identifier, found keyword `match`
@@ -88,9 +88,9 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-The error shows that you can’t use the keyword `match` as the function identifier. To use `match` as a function name, you need to use the raw identifier syntax, like this:
+Ця помилка показує, що не можна використати ключове слово `match` як ідентифікатор функції. Щоб використати `match` як назву функції, вам доведеться використати синтаксис сирого ідентифікатора, ось так:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn r#match(needle: &str, haystack: &str) -> bool {
@@ -102,9 +102,9 @@ fn main() {
 }
 ```
 
-This code will compile without any errors. Note the `r#` prefix on the function name in its definition as well as where the function is called in `main`.
+Цей код компілюється без помилок. Зверніть увагу, що префікс `r#` в імені функції є як у визначенні, так і там, де ми викликаємо цю функцію в `main`.
 
-Raw identifiers allow you to use any word you choose as an identifier, even if that word happens to be a reserved keyword. This gives us more freedom to choose identifier names, as well as lets us integrate with programs written in a language where these words aren’t keywords. In addition, raw identifiers allow you to use libraries written in a different Rust edition than your crate uses. For example, `try` isn’t a keyword in the 2015 edition but is in the 2018 edition. If you depend on a library that’s written using the 2015 edition and has a `try` function, you’ll need to use the raw identifier syntax, `r#try` in this case, to call that function from your 2018 edition code. See [Appendix E][appendix-e]<!-- ignore --> for more information on editions.
+Сирі ідентифікатори дозволяють вам використовувати будь-яке слово як ідентифікатор, навіть якщо воно зарезервоване як ключове слово. Це надає нам більше свободи для вибору назв ідентифікаторів, а також дозволяє інтегруватися з програмами, написаними мовами, де ці слова не є ключовими. На додачу, сирі ідентифікатори дозволяють вам використовувати бібліотеки, написані в редакціях Rust, що відрізняються від вашого крейта. Наприклад,, `try` не було ключовим словом у редакції 2015, але стало у редакції 2018. Якщо ви залежите від бібліотеки, що написана в редакції 2015 і має функцію `try`, вам знадобиться синтаксис сирого ідентифікатора, в цьому випадку `r#try`, щоб викликати цю функцію з коду в редакції 2018. Див. [Додаток E][appendix-e]<!-- ignore --> щоб отримати більше інформації про редакції.
 
 [raw-identifiers]: #raw-identifiers
 
