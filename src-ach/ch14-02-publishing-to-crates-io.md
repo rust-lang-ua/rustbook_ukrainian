@@ -23,7 +23,7 @@ crwdns89648:0crwdne89648:0 crwdns89650:0crwdne89650:0 crwdns89652:0crwdne89652:0
 
 crwdns89654:0crwdne89654:0 crwdns89656:0crwdne89656:0
 
-<img alt="crwdns89658:0crwdne89658:0" src="crwdns89660:0crwdne89660:0" class="center" />
+<img alt="crwdns89658:0crwdne89658:0" src="img/trpl14-01.png" class="center" />
 
 <span class="caption">crwdns89662:0crwdne89662:0</span>
 
@@ -72,7 +72,7 @@ crwdns89708:0crwdne89708:0 crwdns89710:0crwdne89710:0 crwdns89712:0crwdne89712:0
 
 crwdns89716:0crwdne89716:0
 
-<img alt="crwdns89718:0crwdne89718:0" src="crwdns89720:0crwdne89720:0" class="center" />
+<img alt="crwdns89718:0crwdne89718:0" src="img/trpl14-02.png" class="center" />
 
 <span class="caption">crwdns89722:0crwdne89722:0</span>
 
@@ -99,7 +99,7 @@ crwdns89752:0crwdne89752:0
 
 crwdns89756:0crwdne89756:0
 
-<img alt="crwdns89758:0crwdne89758:0" src="crwdns89760:0crwdne89760:0" class="center" />
+<img alt="crwdns89758:0crwdne89758:0" src="img/trpl14-03.png" class="center" />
 
 <span class="caption">crwdns89762:0crwdne89762:0</span>
 
@@ -131,7 +131,7 @@ crwdns89788:0crwdne89788:0
 
 crwdns89792:0crwdne89792:0
 
-<img alt="crwdns89794:0crwdne89794:0" src="crwdns89796:0crwdne89796:0" class="center" />
+<img alt="crwdns89794:0crwdne89794:0" src="img/trpl14-04.png" class="center" />
 
 <span class="caption">crwdns89798:0crwdne89798:0</span>
 
@@ -159,7 +159,7 @@ crwdns89836:0crwdne89836:0
 ```
 
 crwdns89838:0crwdne89838:0 crwdns89840:0crwdne89840:0 crwdns89842:0crwdne89842:0<!-- ignore
--->crwdns89844:0crwdne89844:0
+-->.
 
 ### crwdns89846:0crwdne89846:0
 
