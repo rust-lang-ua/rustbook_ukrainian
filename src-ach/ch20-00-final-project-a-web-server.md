@@ -4,7 +4,7 @@ crwdns95666:0crwdne95666:0 crwdns95668:0crwdne95668:0
 
 crwdns95670:0crwdne95670:0
 
-![crwdns95674:0crwdne95674:0](crwdns95672:0crwdne95672:0)
+![crwdns95674:0crwdne95674:0](img/trpl20-01.png)
 
 <span class="caption">crwdns95676:0crwdne95676:0</span>
 
