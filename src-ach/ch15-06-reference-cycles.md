@@ -40,7 +40,7 @@ crwdns91396:0crwdne91396:0
 
 crwdns91398:0crwdne91398:0 crwdns91400:0crwdne91400:0 crwdns91402:0crwdne91402:0 crwdns91404:0crwdne91404:0 crwdns91406:0crwdne91406:0 crwdns91408:0crwdne91408:0 crwdns91410:0crwdne91410:0
 
-<img alt="crwdns91412:0crwdne91412:0" src="crwdns91414:0crwdne91414:0" class="center" />
+<img alt="crwdns91412:0crwdne91412:0" src="img/trpl15-04.svg" class="center" />
 
 <span class="caption">crwdns91416:0crwdne91416:0</span>
 
