@@ -33,9 +33,9 @@ crwdns81732:0crwdne81732:0
 crwdns81734:0crwdne81734:0
 ```
 
-crwdns81736:0crwdne81736:0<!-- ignore -->crwdns81738:0crwdne81738:0 crwdns81740:0crwdne81740:0 crwdns81742:0crwdne81742:0 crwdns81744:0crwdne81744:0
+crwdns81736:0crwdne81736:0<!-- ignore -->. crwdns81740:0crwdne81740:0 crwdns81742:0crwdne81742:0 crwdns81744:0crwdne81744:0
 
-crwdns81746:0crwdne81746:0 crwdns81748:0crwdne81748:0<!-- ignore -->crwdns81750:0crwdne81750:0 crwdns81752:0crwdne81752:0 crwdns81754:0crwdne81754:0
+crwdns81746:0crwdne81746:0 crwdns81748:0crwdne81748:0<!-- ignore -->. crwdns81752:0crwdne81752:0 crwdns81754:0crwdne81754:0
 
 crwdns81756:0crwdne81756:0 crwdns81758:0crwdne81758:0 crwdns81760:0crwdne81760:0
 
@@ -78,7 +78,7 @@ crwdns81804:0[0..5]crwdne81804:0 crwdns81806:0[starting_index..ending_index]crwd
 
 crwdns81812:0crwdne81812:0
 
-<img alt="crwdns81814:0crwdne81814:0" src="crwdns81816:0crwdne81816:0" class="center" style="width: 50%;" />
+<img alt="crwdns81814:0crwdne81814:0" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
 <span class="caption">crwdns81818:0crwdne81818:0</span>
 
