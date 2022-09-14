@@ -72,11 +72,11 @@ crwdns78380:0crwdne78380:0 crwdns78382:0crwdne78382:0 crwdns78384:0crwdne78384:0
 
 crwdns78386:0crwdne78386:0 crwdns78388:0crwdne78388:0 crwdns78390:0crwdne78390:0 crwdns78392:0crwdne78392:0 crwdns78394:0crwdne78394:0
 
-| crwdns78396:0crwdne78396:0                                                                                        | crwdns78398:0crwdne78398:0 |
-| ----------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| <img src="crwdns78400:0crwdne78400:0" class="ferris-explain" alt="crwdns78402:0crwdne78402:0" /> | crwdns78404:0crwdne78404:0 |
-| <img src="crwdns78406:0crwdne78406:0" class="ferris-explain" alt="crwdns78408:0crwdne78408:0" /> | crwdns78410:0crwdne78410:0 |
-| <img src="crwdns78412:0crwdne78412:0" class="ferris-explain" alt="crwdns78414:0crwdne78414:0" /> | crwdns78416:0crwdne78416:0 |
+| crwdns78396:0crwdne78396:0                                                                                                 | crwdns78398:0crwdne78398:0 |
+| -------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="crwdns78402:0crwdne78402:0" />     | crwdns78404:0crwdne78404:0 |
+| <img src="img/ferris/panics.svg" class="ferris-explain" alt="crwdns78408:0crwdne78408:0" />               | crwdns78410:0crwdne78410:0 |
+| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="crwdns78414:0crwdne78414:0" /> | crwdns78416:0crwdne78416:0 |
 
 crwdns78418:0crwdne78418:0
 
