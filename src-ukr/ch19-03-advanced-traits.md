@@ -126,7 +126,7 @@ When we call `fly` on an instance of `Human`, the compiler defaults to calling t
 
 <span class="caption">Listing 19-17: Calling `fly` on an instance of `Human`</span>
 
-Running this code will print `*waving arms furiously*`, showing that Rust called the `fly` method implemented on `Human` directly.
+When we call `fly` on an instance of `Human`, the compiler defaults to calling the method that is directly implemented on the type, as shown in Listing 19-17.
 
 To call the `fly` methods from either the `Pilot` trait or the `Wizard` trait, we need to use more explicit syntax to specify which `fly` method we mean. Listing 19-18 demonstrates this syntax.
 
@@ -259,7 +259,7 @@ To fix this, we implement `Display` on `Point` and satisfy the constraint that `
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-03-impl-display-for-point/src/main.rs:here}}
 ```
 
-Then implementing the `OutlinePrint` trait on `Point` will compile successfully, and we can call `outline_print` on a `Point` instance to display it within an outline of asterisks.
+To fix this, we implement `Display` on `Point` and satisfy the constraint that `OutlinePrint` requires, like so:
 
 ### Using the Newtype Pattern to Implement External Traits on External Types
 

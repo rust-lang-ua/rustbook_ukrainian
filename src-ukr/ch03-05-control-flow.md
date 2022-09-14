@@ -260,5 +260,5 @@ You made it! That was a sizable chapter: you learned about variables, scalar and
 * Generate the nth Fibonacci number.
 * Print the lyrics to the Christmas carol “The Twelve Days of Christmas,” taking advantage of the repetition in the song.
 
-When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t* commonly exist in other programming languages: ownership.
+When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t* commonly exist in other programming languages: ownership. ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess

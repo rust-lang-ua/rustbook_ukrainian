@@ -72,7 +72,7 @@ The error references the `Sized` trait again! Rust doesn’t know how much space
 This code will compile just fine. For more about trait objects, refer to the section [“Using Trait Objects That Allow for Values of Different Types”]()<!--
 ignore --> in Chapter 17.
 
-Next, let’s look at macros!
+Next, let’s look at macros! ch19-03-advanced-traits.html#advanced-traits ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 ch19-03-advanced-traits.html#advanced-traits ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 
 [enum-values]: ch06-01-defining-an-enum.html#enum-values
