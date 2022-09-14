@@ -60,7 +60,7 @@ crwdns81126:0crwdne81126:0 crwdns81128:0crwdne81128:0
 
 crwdns81132:0crwdne81132:0<!-- ignore --> crwdns81134:0crwdne81134:0 crwdns81136:0crwdne81136:0 crwdns81138:0crwdne81138:0
 
-crwdns81140:0crwdne81140:0 crwdns81142:0crwdne81142:0 crwdns81144:0crwdne81144:0<!-- ignore -->crwdns81146:0crwdne81146:0
+crwdns81140:0crwdne81140:0 crwdns81142:0crwdne81142:0 crwdns81144:0crwdne81144:0<!-- ignore -->.
 
 crwdns81148:0crwdne81148:0 crwdns81150:0crwdne81150:0 crwdns81152:0crwdne81152:0 crwdns81154:0crwdne81154:0 crwdns81156:0crwdne81156:0 crwdns81158:0crwdne81158:0 crwdns81160:0crwdne81160:0
 
@@ -126,7 +126,7 @@ crwdns81266:0crwdne81266:0 crwdns81268:0crwdne81268:0
 
 crwdns81270:0crwdne81270:0 crwdns81272:0crwdne81272:0 crwdns81274:0crwdne81274:0 crwdns81276:0crwdne81276:0
 
-<img alt="crwdns81278:0crwdne81278:0" src="crwdns81280:0crwdne81280:0" class="center" style="width: 50%;" />
+<img alt="crwdns81278:0crwdne81278:0" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
 <span class="caption">crwdns81282:0crwdne81282:0</span>
 
@@ -134,13 +134,13 @@ crwdns81284:0crwdne81284:0 crwdns81286:0crwdne81286:0 crwdns81288:0crwdne81288:0
 
 crwdns81290:0crwdne81290:0 crwdns81292:0crwdne81292:0 crwdns81294:0crwdne81294:0
 
-<img alt="crwdns81296:0crwdne81296:0" src="crwdns81298:0crwdne81298:0" class="center" style="width: 50%;" />
+<img alt="crwdns81296:0crwdne81296:0" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
 <span class="caption">crwdns81300:0crwdne81300:0</span>
 
 crwdns81302:0crwdne81302:0 crwdns81304:0crwdne81304:0
 
-<img alt="crwdns81306:0crwdne81306:0" src="crwdns81308:0crwdne81308:0" class="center" style="width: 50%;" />
+<img alt="crwdns81306:0crwdne81306:0" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
 <span class="caption">crwdns81310:0crwdne81310:0</span>
 
@@ -160,7 +160,7 @@ crwdns81332:0crwdne81332:0
 
 crwdns81334:0crwdne81334:0 crwdns81336:0crwdne81336:0 crwdns81338:0crwdne81338:0 crwdns81340:0crwdne81340:0
 
-<img alt="crwdns81342:0crwdne81342:0" src="crwdns81344:0crwdne81344:0" class="center" style="width: 50%;" />
+<img alt="crwdns81342:0crwdne81342:0" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
 
 <span class="caption">crwdns81346:0crwdne81346:0</span>
 
@@ -194,7 +194,7 @@ crwdns81380:0crwdne81380:0
 
 crwdns81382:0crwdne81382:0 crwdns81384:0crwdne81384:0 crwdns81386:0crwdne81386:0
 
-crwdns81388:0crwdne81388:0<!-- ignore -->crwdns81390:0crwdne81390:0 crwdns81392:0crwdne81392:0
+crwdns81388:0crwdne81388:0<!-- ignore -->). crwdns81392:0crwdne81392:0
 
 crwdns81394:0crwdne81394:0 crwdns81396:0crwdne81396:0 crwdns81398:0crwdne81398:0<!-- ignore --> crwdns81400:0crwdne81400:0
 
