@@ -1,50 +1,50 @@
-## Встановлення
+## Installation
 
-Наш перший крок - встановити Rust. Ми завантажимо Rust за допомогою `rustup`, інструмента командного рядка для керування виданнями Rust і пов'язаних інструментів. Для завантаження вам знадобиться з'єднання з Інтернетом.
+The first step is to install Rust. We’ll download Rust through `rustup`, a command line tool for managing Rust versions and associated tools. You’ll need an internet connection for the download.
 
 > Note: If you prefer not to use `rustup` for some reason, please see the [Other Rust Installation Methods page][otherinstall] for more options.
 
-Наступні кроки встановлять найостаннішу стабільну версію компілятора Rust. Принципи стабільності Rust гарантують, що всі приклади в цій книжці, які можна скомпілювати, будуть компілюватися в новіших версіях Rust. Повідомлення можуть незначно змінюватися від версії до версії, бо Rust часто покращує повідомлення і попередження про помилки. Іншими словами, будь-яка новіша стабільна версія Rust, яку ви встановите за цією інструкцією, має працювати відповідно до змісту цієї книжки.
+The following steps install the latest stable version of the Rust compiler. Rust’s stability guarantees ensure that all the examples in the book that compile will continue to compile with newer Rust versions. The output might differ slightly between versions, because Rust often improves error messages and warnings. In other words, any newer, stable version of Rust you install using these steps should work as expected with the content of this book.
 
-> ### Запис у командному рядку
+> ### Command Line Notation
 > 
-> У цьому розділі та надалі в книжці ми використовуватимемо команди термінала. Рядки, що треба вводити в термінал, починаються з `$`. Не треба вводити сам  символ `$`; це запрошення командного рядка, що лише позначає початок команди. Рядки, що не починаються з `$` зазвичай показують те, що виводить попередня команда. Приклади, специфічні для PowerShell, будуть починатися на `>` замість `$`.
+> In this chapter and throughout the book, we’ll show some commands used in the terminal. Lines that you should enter in a terminal all start with `$`. You don’t need to type in the `$` character; it’s the command line prompt shown to indicate the start of each command. Lines that don’t start with `$` typically show the output of the previous command. Additionally, PowerShell-specific examples will use `>` rather than `$`.
 
-### Встановлення `rustup` на Linux або macOs
+### Installing `rustup` on Linux or macOS
 
-Якщо ви користувач Linux або macOS, відкрийте термінал і введіть цю команду:
+If you’re using Linux or macOS, open a terminal and enter the following command:
 
 ```console
-$ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+$ curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh
 ```
 
-Ця команда завантажить сценарій і почне встановлення інструменту `rustup`, що встановить останню стабільну версію Rust. Можливо, у вас запитають ваш пароль. Якщо встановлення буде успішним, з'явиться цей рядок:
+The command downloads a script and starts the installation of the `rustup` tool, which installs the latest stable version of Rust. You might be prompted for your password. If the install is successful, the following line will appear:
 
 ```text
 Rust is installed now. Great!
 ```
 
-Крім того, вам знадобиться якийсь *компонувальник (linker)*, тобто програма, яку Rust використовує, щоб об'єднати результати компіляції в один файл. Швидше за все, він уже встановлений. Якщо ви отримаєте повідомлення про помилки компонувальника, вам слід встановити компілятор C, який зазвичай включає компонувальник. Компілятор C також корисний, бо деякі поширені пакунки Rust залежать від коду на C і потребуватимуть компілятора C.
+You will also need a *linker*, which is a program that Rust uses to join its compiled outputs into one file. It is likely you already have one. If you get linker errors, you should install a C compiler, which will typically include a linker. A C compiler is also useful because some common Rust packages depend on C code and will need a C compiler.
 
-На macOS, ви можете отримати C компілятор, виконавши команду:
+On macOS, you can get a C compiler by running:
 
 ```console
 $ xcode-select --install
 ```
 
-Користувачі Linux зазвичай мають встановлювати GCC або Clang, відповідно до документації свого дистрибутиву. Скажімо, якщо ви використовуєте Ubuntu, ви можете встановити пакунок `build-essential`.
+Linux users should generally install GCC or Clang, according to their distribution’s documentation. For example, if you use Ubuntu, you can install the `build-essential` package.
 
-### Встановлення `rustup` на Windows
+### Installing `rustup` on Windows
 
-На Windows, перейдіть до [https://www.rust-lang.org/tools/install][install] і дотримуйтеся вказаних там інструкцій для встановлення Rust. У певний момент встановлення ви отримаєте повідомлення, що вам також знадобляться інструменти збірки MSVC для Visual Studio 2013 чи пізнішої. Щоб отримати інструменти збірки, вам потрібно встановити [Visual Studio 2022][visualstudio]. На питання, які робочі завантаження потрібно встановити, вкажіть:
+On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow the instructions for installing Rust. At some point in the installation, you’ll receive a message explaining that you’ll also need the MSVC build tools for Visual Studio 2013 or later. To acquire the build tools, you’ll need to install [Visual Studio 2022][visualstudio]. When asked which workloads to install, include:
 
 - “Desktop Development with C++”
-- SDK для Windows 10 чи 11
+- The Windows 10 or 11 SDK
 - The English language pack component, along with any other language pack of your choosing
 
-Надалі книжка використовує команди, які працюють як у *cmd.exe*, так і в PowerShell. Якщо будуть відмінності, ми пояснимо, що робити.
+The rest of this book uses commands that work in both *cmd.exe* and PowerShell. If there are specific differences, we’ll explain which to use.
 
-### Вирішення проблем
+### Troubleshooting
 
 To check whether you have Rust installed correctly, open a shell and enter this line:
 
@@ -58,31 +58,31 @@ You should see the version number, commit hash, and commit date for the latest s
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-Якщо ви це бачите, Rust було успішно встановлено! Якщо ви не бачите цю інформацію, перевірте, чи є Rust у системній змінній `%PATH%`.
+If you see this information, you have installed Rust successfully! If you don’t see this information, check that Rust is in your `%PATH%` system variable as follows.
 
-У Windows CMD наберіть:
+In Windows CMD, use:
 
 ```console
 > echo %PATH%
 ```
 
-У PowerShell наберіть:
+In PowerShell, use:
 
 ```console
 > echo $env:Path
 ```
 
-У Linux і macOS наберіть:
+In Linux and macOS, use:
 
 ```console
 echo $PATH
 ```
 
-Якщо все правильно і Rust все ще не працює, можна звернутися по допомогу у кілька місць. Найпростіший - канал #beginners на [офіційному каналі Discord Rust][discord]. Там ви можете спілкуватися з іншими растацеанцями (чудернацьке ім'я, як ми звемо себе), які можуть допомогти вам розібратися. Інші чудові ресурси включають [користувацький форум][users] і [Stack Overflow][stackoverflow].
+If that’s all correct and Rust still isn’t working, there are a number of places you can get help. The easiest is the #beginners channel on [the official Rust Discord][discord]. There, you can chat with other Rustaceans (a silly nickname we call ourselves) who can help you out. Other great resources include [the Users forum][users] and [Stack Overflow][stackoverflow].
 
-### Оновлення та видалення
+### Updating and Uninstalling
 
-Після встановлення Rust за допомогою `rustup`, коли виходить нова версія Rust, оновлення до останньої версії робиться легко. З командної оболонки запустіть такий сценарій оновлення:
+Once Rust is installed via `rustup`, when a new version of Rust is released, updating to the latest version is easy. From your shell, run the following update script:
 
 ```console
 $ rustup update
@@ -94,9 +94,9 @@ To uninstall Rust and `rustup`, run the following uninstall script from your she
 $ rustup self uninstall
 ```
 
-### Локальна документація
+### Local Documentation
 
-Установлений Rust також включає локальну копію документації, тож ви можете читати її в офлайні. Запустіть `rustup doc`, щоб відкрити локальну документацію у веббраузері.
+The installation of Rust also includes a local copy of the documentation, so you can read it offline. Run `rustup doc` to open the local documentation in your browser.
 
 Any time a type or function is provided by the standard library and you’re not sure what it does or how to use it, use the application programming interface (API) documentation to find out!
 

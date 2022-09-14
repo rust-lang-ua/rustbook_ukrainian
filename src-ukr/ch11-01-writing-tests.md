@@ -339,7 +339,7 @@ You can’t use the `#[should_panic]` annotation on tests that use `Result<T,
 E>`. To assert that an operation returns an `Err` variant, *don’t* use the question mark operator on the `Result<T, E>` value. Instead, use `assert!(value.is_err())`.
 
 Now that you know several ways to write tests, let’s look at what is happening when we run our tests and explore the different options we can use with `cargo
-test`. ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro ch11-02-running-tests.html#controlling-how-tests-are-run ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro ch11-02-running-tests.html#controlling-how-tests-are-run
+test`.
 ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro ch11-02-running-tests.html#controlling-how-tests-are-run
 
 [bench]: ../unstable-book/library-features/test.html
