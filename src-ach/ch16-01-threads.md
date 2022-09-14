@@ -1,31 +1,31 @@
-## crwdns70948:0crwdne70948:0
+## crwdns91660:0crwdne91660:0
 
-crwdns70950:0crwdne70950:0 crwdns70952:0crwdne70952:0 crwdns70954:0crwdne70954:0 crwdns70956:0crwdne70956:0
+crwdns91662:0crwdne91662:0 crwdns91664:0crwdne91664:0 crwdns91666:0crwdne91666:0 crwdns91668:0crwdne91668:0
 
-crwdns70958:0crwdne70958:0 crwdns70960:0crwdne70960:0 crwdns70962:0crwdne70962:0
+crwdns91670:0crwdne91670:0 crwdns91672:0crwdne91672:0 crwdns91674:0crwdne91674:0
 
-* crwdns70964:0crwdne70964:0
-* crwdns70966:0crwdne70966:0
-* crwdns70968:0crwdne70968:0
+* crwdns91676:0crwdne91676:0
+* crwdns91678:0crwdne91678:0
+* crwdns91680:0crwdne91680:0
 
-crwdns70970:0crwdne70970:0
+crwdns91682:0crwdne91682:0
 
-crwdns70972:0crwdne70972:0 crwdns70974:0crwdne70974:0 crwdns70976:0crwdne70976:0
+crwdns91684:0crwdne91684:0 crwdns91686:0crwdne91686:0 crwdns91688:0crwdne91688:0
 
-### crwdns70978:0crwdne70978:0
+### crwdns91690:0crwdne91690:0
 
-crwdns70980:0crwdne70980:0 crwdns70982:0crwdne70982:0
+crwdns91692:0crwdne91692:0 crwdns91694:0crwdne91694:0
 
-<span class="filename">crwdns70984:0crwdne70984:0</span>
+<span class="filename">crwdns91696:0crwdne91696:0</span>
 
 ```rust
-crwdns70986:0crwdne70986:0
+crwdns91698:0crwdne91698:0
 ```
 
 
-<span class="caption">crwdns70988:0crwdne70988:0</span>
+<span class="caption">crwdns91700:0crwdne91700:0</span>
 
-crwdns70990:0crwdne70990:0 crwdns70992:0crwdne70992:0
+crwdns91702:0crwdne91702:0 crwdns91704:0crwdne91704:0
 
 
 <!-- Not extracting output because changes to this output aren't significant;
@@ -33,37 +33,37 @@ the changes are likely to be due to the threads running differently rather than
 changes in the compiler -->
 
 ```text
-crwdns70994:0crwdne70994:0
-crwdns70996:0crwdne70996:0
-crwdns70998:0crwdne70998:0
-crwdns71000:0crwdne71000:0
-crwdns71002:0crwdne71002:0
-crwdns71004:0crwdne71004:0
-crwdns71006:0crwdne71006:0
-crwdns71008:0crwdne71008:0
-crwdns71010:0crwdne71010:0
+crwdns91706:0crwdne91706:0
+crwdns91708:0crwdne91708:0
+crwdns91710:0crwdne91710:0
+crwdns91712:0crwdne91712:0
+crwdns91714:0crwdne91714:0
+crwdns91716:0crwdne91716:0
+crwdns91718:0crwdne91718:0
+crwdns91720:0crwdne91720:0
+crwdns91722:0crwdne91722:0
 ```
 
-crwdns71012:0crwdne71012:0 crwdns71014:0crwdne71014:0 crwdns71016:0crwdne71016:0 crwdns71018:0crwdne71018:0
+crwdns91724:0crwdne91724:0 crwdns91726:0crwdne91726:0 crwdns91728:0crwdne91728:0 crwdns91730:0crwdne91730:0
 
-crwdns71020:0crwdne71020:0
+crwdns91732:0crwdne91732:0
 
-### crwdns71022:0crwdne71022:0
+### crwdns91734:0crwdne91734:0
 
-crwdns71024:0crwdne71024:0
+crwdns91736:0crwdne91736:0
 
-crwdns71026:0crwdne71026:0 crwdns71028:0crwdne71028:0 crwdns71030:0crwdne71030:0 crwdns71032:0crwdne71032:0
+crwdns91738:0crwdne91738:0 crwdns91740:0crwdne91740:0 crwdns91742:0crwdne91742:0 crwdns91744:0crwdne91744:0
 
-<span class="filename">crwdns71034:0crwdne71034:0</span>
+<span class="filename">crwdns91746:0crwdne91746:0</span>
 
 ```rust
-crwdns71036:0crwdne71036:0
+crwdns91748:0crwdne91748:0
 ```
 
 
-<span class="caption">crwdns71038:0crwdne71038:0</span>
+<span class="caption">crwdns91750:0crwdne91750:0</span>
 
-crwdns71040:0crwdne71040:0 crwdns71042:0crwdne71042:0 crwdns71044:0crwdne71044:0
+crwdns91752:0crwdne91752:0 crwdns91754:0crwdne91754:0 crwdns91756:0crwdne91756:0
 
 
 <!-- Not extracting output because changes to this output aren't significant;
@@ -71,32 +71,32 @@ the changes are likely to be due to the threads running differently rather than
 changes in the compiler -->
 
 ```text
-crwdns71046:0crwdne71046:0
-crwdns71048:0crwdne71048:0
-crwdns71050:0crwdne71050:0
-crwdns71052:0crwdne71052:0
-crwdns71054:0crwdne71054:0
-crwdns71056:0crwdne71056:0
-crwdns71058:0crwdne71058:0
-crwdns71060:0crwdne71060:0
-crwdns71062:0crwdne71062:0
-crwdns71064:0crwdne71064:0
-crwdns71066:0crwdne71066:0
-crwdns71068:0crwdne71068:0
-crwdns71070:0crwdne71070:0
+crwdns91758:0crwdne91758:0
+crwdns91760:0crwdne91760:0
+crwdns91762:0crwdne91762:0
+crwdns91764:0crwdne91764:0
+crwdns91766:0crwdne91766:0
+crwdns91768:0crwdne91768:0
+crwdns91770:0crwdne91770:0
+crwdns91772:0crwdne91772:0
+crwdns91774:0crwdne91774:0
+crwdns91776:0crwdne91776:0
+crwdns91778:0crwdne91778:0
+crwdns91780:0crwdne91780:0
+crwdns91782:0crwdne91782:0
 ```
 
-crwdns71072:0crwdne71072:0
+crwdns91784:0crwdne91784:0
 
-crwdns71074:0crwdne71074:0
+crwdns91786:0crwdne91786:0
 
-<span class="filename">crwdns71076:0crwdne71076:0</span>
+<span class="filename">crwdns91788:0crwdne91788:0</span>
 
 ```rust
-crwdns71078:0crwdne71078:0
+crwdns91790:0crwdne91790:0
 ```
 
-crwdns71080:0crwdne71080:0
+crwdns91792:0crwdne91792:0
 
 
 <!-- Not extracting output because changes to this output aren't significant;
@@ -104,61 +104,61 @@ the changes are likely to be due to the threads running differently rather than
 changes in the compiler -->
 
 ```text
-crwdns71082:0crwdne71082:0
-crwdns71084:0crwdne71084:0
-crwdns71086:0crwdne71086:0
-crwdns71088:0crwdne71088:0
-crwdns71090:0crwdne71090:0
-crwdns71092:0crwdne71092:0
-crwdns71094:0crwdne71094:0
-crwdns71096:0crwdne71096:0
-crwdns71098:0crwdne71098:0
-crwdns71100:0crwdne71100:0
-crwdns71102:0crwdne71102:0
-crwdns71104:0crwdne71104:0
-crwdns71106:0crwdne71106:0
+crwdns91794:0crwdne91794:0
+crwdns91796:0crwdne91796:0
+crwdns91798:0crwdne91798:0
+crwdns91800:0crwdne91800:0
+crwdns91802:0crwdne91802:0
+crwdns91804:0crwdne91804:0
+crwdns91806:0crwdne91806:0
+crwdns91808:0crwdne91808:0
+crwdns91810:0crwdne91810:0
+crwdns91812:0crwdne91812:0
+crwdns91814:0crwdne91814:0
+crwdns91816:0crwdne91816:0
+crwdns91818:0crwdne91818:0
 ```
 
-crwdns71108:0crwdne71108:0
+crwdns91820:0crwdne91820:0
 
-### crwdns71110:0crwdne71110:0
+### crwdns91822:0crwdne91822:0
 
-crwdns71112:0crwdne71112:0 crwdns71114:0crwdne71114:0<!-- ignore
---> crwdns71116:0crwdne71116:0 crwdns71118:0crwdne71118:0
+crwdns91824:0crwdne91824:0 crwdns91826:0crwdne91826:0<!-- ignore
+--> crwdns91828:0crwdne91828:0 crwdns91830:0crwdne91830:0
 
-crwdns71120:0crwdne71120:0 crwdns71122:0crwdne71122:0 crwdns71124:0crwdne71124:0 crwdns71126:0crwdne71126:0
+crwdns91832:0crwdne91832:0 crwdns91834:0crwdne91834:0 crwdns91836:0crwdne91836:0 crwdns91838:0crwdne91838:0
 
-<span class="filename">crwdns71128:0crwdne71128:0</span>
+<span class="filename">crwdns91840:0crwdne91840:0</span>
 
 ```rust,ignore,does_not_compile
-crwdns71130:0crwdne71130:0
+crwdns91842:0crwdne91842:0
 ```
 
 
-<span class="caption">crwdns71132:0crwdne71132:0</span>
+<span class="caption">crwdns91844:0crwdne91844:0</span>
 
-crwdns71134:0crwdne71134:0 crwdns71136:0crwdne71136:0 crwdns71138:0crwdne71138:0
+crwdns91846:0crwdne91846:0 crwdns91848:0crwdne91848:0 crwdns91850:0crwdne91850:0
 
 ```console
-crwdns71140:0crwdne71140:0
+crwdns91852:0crwdne91852:0
 ```
 
-crwdns71142:0crwdne71142:0 crwdns71144:0crwdne71144:0
+crwdns91854:0crwdne91854:0 crwdns91856:0crwdne91856:0
 
-crwdns71146:0crwdne71146:0
+crwdns91858:0crwdne91858:0
 
-<span class="filename">crwdns71148:0crwdne71148:0</span>
+<span class="filename">crwdns91860:0crwdne91860:0</span>
 
 ```rust,ignore,does_not_compile
-crwdns71150:0crwdne71150:0
+crwdns91862:0crwdne91862:0
 ```
 
 
-<span class="caption">crwdns71152:0crwdne71152:0</span>
+<span class="caption">crwdns91864:0crwdne91864:0</span>
 
-crwdns71154:0crwdne71154:0 crwdns71156:0crwdne71156:0 crwdns71158:0crwdne71158:0 crwdns71160:0crwdne71160:0
+crwdns91866:0crwdne91866:0 crwdns91868:0crwdne91868:0 crwdns91870:0crwdne91870:0 crwdns91872:0crwdne91872:0
 
-crwdns71162:0crwdne71162:0
+crwdns91874:0crwdne91874:0
 
 
 <!-- manual-regeneration
@@ -166,26 +166,26 @@ after automatic regeneration, look at listings/ch16-fearless-concurrency/listing
 -->
 
 ```text
-crwdns71164:0crwdne71164:0
+crwdns91876:0crwdne91876:0
 ```
 
-crwdns71166:0crwdne71166:0 crwdns71168:0crwdne71168:0
+crwdns91878:0crwdne91878:0 crwdns91880:0crwdne91880:0
 
-<span class="filename">crwdns71170:0crwdne71170:0</span>
+<span class="filename">crwdns91882:0crwdne91882:0</span>
 
 ```rust
-crwdns71172:0crwdne71172:0
+crwdns91884:0crwdne91884:0
 ```
 
 
-<span class="caption">crwdns71174:0crwdne71174:0</span>
+<span class="caption">crwdns91886:0crwdne91886:0</span>
 
-crwdns71176:0crwdne71176:0 crwdns71178:0crwdne71178:0 crwdns71180:0crwdne71180:0 crwdns71182:0crwdne71182:0
+crwdns91888:0crwdne91888:0 crwdns91890:0crwdne91890:0 crwdns91892:0crwdne91892:0 crwdns91894:0crwdne91894:0
 
 ```console
-crwdns71184:0crwdne71184:0
+crwdns91896:0crwdne91896:0
 ```
 
-crwdns71186:0crwdne71186:0 crwdns71188:0crwdne71188:0 crwdns71190:0crwdne71190:0 crwdns71192:0crwdne71192:0 crwdns71194:0crwdne71194:0
+crwdns91898:0crwdne91898:0 crwdns91900:0crwdne91900:0 crwdns91902:0crwdne91902:0 crwdns91904:0crwdne91904:0 crwdns91906:0crwdne91906:0
 
-crwdns71196:0crwdne71196:0
+crwdns91908:0crwdne91908:0
