@@ -1,20 +1,20 @@
-# crwdns58648:0crwdne58648:0
+# crwdns78976:0crwdne78976:0
 
-crwdns58650:0crwdne58650:0 crwdns58652:0crwdne58652:0 crwdns58654:0crwdne58654:0 crwdns58656:0crwdne58656:0 crwdns58658:0crwdne58658:0
+crwdns78978:0crwdne78978:0 crwdns78980:0crwdne78980:0 crwdns78982:0crwdne78982:0 crwdns78984:0crwdne78984:0 crwdns78986:0crwdne78986:0
 
-crwdns58660:0crwdne58660:0 crwdns58662:0crwdne58662:0 crwdns58664:0crwdne58664:0 crwdns58666:0crwdne58666:0 crwdns58668:0crwdne58668:0
+crwdns78988:0crwdne78988:0 crwdns78990:0crwdne78990:0 crwdns78992:0crwdne78992:0 crwdns78994:0crwdne78994:0 crwdns78996:0crwdne78996:0
 
-## crwdns58670:0crwdne58670:0
+## crwdns78998:0crwdne78998:0
 
-crwdns58672:0crwdne58672:0
+crwdns79000:0crwdne79000:0
 
 ```console
-crwdns58674:0crwdne58674:0
+crwdns79002:0crwdne79002:0
 ```
 
-crwdns58676:0crwdne58676:0 crwdns58678:0crwdne58678:0
+crwdns79004:0crwdne79004:0 crwdns79006:0crwdne79006:0
 
-crwdns58680:0crwdne58680:0
+crwdns79008:0crwdne79008:0
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial
@@ -24,168 +24,168 @@ cd no-listing-01-cargo-new
 cargo run
 -->
 
-<span class="filename">crwdns58682:0crwdne58682:0</span>
+<span class="filename">crwdns79010:0crwdne79010:0</span>
 
 ```toml
-crwdns58684:0crwdne58684:0
+crwdns79012:0crwdne79012:0
 ```
 
-crwdns58686:0crwdne58686:0 crwdns58688:0crwdne58688:0
+crwdns79014:0crwdne79014:0 crwdns79016:0crwdne79016:0
 
-<span class="filename">crwdns58690:0crwdne58690:0</span>
+<span class="filename">crwdns79018:0crwdne79018:0</span>
 
 ```rust
-crwdns58692:0crwdne58692:0
+crwdns79020:0crwdne79020:0
 ```
 
-crwdns58694:0crwdne58694:0
+crwdns79022:0crwdne79022:0
 
 ```console
-crwdns58696:0crwdne58696:0
+crwdns79024:0crwdne79024:0
 ```
 
-crwdns58698:0crwdne58698:0
+crwdns79026:0crwdne79026:0
 
-crwdns58700:0crwdne58700:0 crwdns58702:0crwdne58702:0
+crwdns79028:0crwdne79028:0 crwdns79030:0crwdne79030:0
 
-## crwdns58704:0crwdne58704:0
+## crwdns79032:0crwdne79032:0
 
-crwdns58706:0crwdne58706:0 crwdns58708:0crwdne58708:0 crwdns58710:0crwdne58710:0
+crwdns79034:0crwdne79034:0 crwdns79036:0crwdne79036:0 crwdns79038:0crwdne79038:0
 
-<span class="filename">crwdns58712:0crwdne58712:0</span>
+<span class="filename">crwdns79040:0crwdne79040:0</span>
 
 ```rust,ignore
-crwdns58714:0crwdne58714:0
+crwdns79042:0crwdne79042:0
 ```
 
 
-<span class="caption">crwdns58716:0crwdne58716:0</span>
+<span class="caption">crwdns79044:0crwdne79044:0</span>
 
-crwdns58718:0crwdne58718:0 crwdns58720:0crwdne58720:0 crwdns58722:0crwdne58722:0
+crwdns79046:0crwdne79046:0 crwdns79048:0crwdne79048:0 crwdns79050:0crwdne79050:0
 
 ```rust,ignore
-crwdns58724:0crwdne58724:0
+crwdns79052:0crwdne79052:0
 ```
 
-crwdns58726:0crwdne58726:0 crwdns58728:0crwdne58728:0
+crwdns79054:0crwdne79054:0 crwdns79056:0crwdne79056:0
 
-crwdns58730:0crwdne58730:0 crwdns58732:0crwdne58732:0
+crwdns79058:0crwdne79058:0 crwdns79060:0crwdne79060:0
 
-crwdns58734:0crwdne58734:0
+crwdns79062:0crwdne79062:0
 
 ```rust,ignore
-crwdns58736:0crwdne58736:0
+crwdns79064:0crwdne79064:0
 ```
 
-crwdns58738:0crwdne58738:0
+crwdns79066:0crwdne79066:0
 
-crwdns58740:0crwdne58740:0
+crwdns79068:0crwdne79068:0
 
 ```rust,ignore
-crwdns58742:0crwdne58742:0
+crwdns79070:0crwdne79070:0
 ```
 
-crwdns58744:0crwdne58744:0
+crwdns79072:0crwdne79072:0
 
-### crwdns58746:0crwdne58746:0
+### crwdns79074:0crwdne79074:0
 
-crwdns58748:0crwdne58748:0
+crwdns79076:0crwdne79076:0
 
 ```rust,ignore
-crwdns58750:0crwdne58750:0
+crwdns79078:0crwdne79078:0
 ```
 
-crwdns58752:0crwdne58752:0 crwdns58754:0crwdne58754:0 crwdns58756:0crwdne58756:0 crwdns58758:0crwdne58758:0
+crwdns79080:0crwdne79080:0 crwdns79082:0crwdne79082:0 crwdns79084:0crwdne79084:0 crwdns79086:0crwdne79086:0
 
 ```rust,ignore
-crwdns58760:0crwdne58760:0
+crwdns79088:0crwdne79088:0
 ```
 
-crwdns58762:0crwdne58762:0 crwdns58764:0crwdne58764:0 crwdns58766:0crwdne58766:0<!-- ignore -->
-crwdns58768:0crwdne58768:0 crwdns58770:0crwdne58770:0
+crwdns79090:0crwdne79090:0 crwdns79092:0crwdne79092:0 crwdns79094:0crwdne79094:0<!-- ignore -->
+crwdns79096:0crwdne79096:0 crwdns79098:0crwdne79098:0
 
 ```rust,ignore
-crwdns58772:0crwdne58772:0
+crwdns79100:0crwdne79100:0
 ```
 
-> crwdns58774:0crwdne58774:0 crwdns58776:0crwdne58776:0 crwdns58778:0crwdne58778:0<!-- ignore -->crwdns58780:0crwdne58780:0
+> crwdns79102:0crwdne79102:0 crwdns79104:0crwdne79104:0 crwdns79106:0crwdne79106:0<!-- ignore -->.
 
-crwdns58782:0crwdne58782:0 crwdns58784:0crwdne58784:0 crwdns58786:0crwdne58786:0 crwdns58788:0crwdne58788:0<!-- ignore --> crwdns58790:0crwdne58790:0
+crwdns79110:0crwdne79110:0 crwdns79112:0crwdne79112:0 crwdns79114:0crwdne79114:0 crwdns79116:0crwdne79116:0<!-- ignore --> crwdns79118:0crwdne79118:0
 
-crwdns58792:0crwdne58792:0 crwdns58794:0crwdne58794:0 crwdns58796:0crwdne58796:0 crwdns58798:0crwdne58798:0
+crwdns79120:0crwdne79120:0 crwdns79122:0crwdne79122:0 crwdns79124:0crwdne79124:0 crwdns79126:0crwdne79126:0
 
-crwdns58800:0crwdne58800:0 crwdns58802:0crwdne58802:0
+crwdns79128:0crwdne79128:0 crwdns79130:0crwdne79130:0
 
-### crwdns58804:0crwdne58804:0
+### crwdns79132:0crwdne79132:0
 
-crwdns58806:0crwdne58806:0 crwdns58808:0crwdne58808:0
+crwdns79134:0crwdne79134:0 crwdns79136:0crwdne79136:0
 
 ```rust,ignore
-crwdns58810:0crwdne58810:0
+crwdns79138:0crwdne79138:0
 ```
 
-crwdns58812:0:io:crwdne58812:0 crwdns58814:0:io:crwdne58814:0<!-- ignore -->crwdns58816:0crwdne58816:0
+crwdns79140:0:io:crwdne79140:0 crwdns79142:0:io:crwdne79142:0<!-- ignore -->crwdns79144:0crwdne79144:0
 
-crwdns58818:0crwdne58818:0<!--
-ignore --> crwdns58820:0crwdne58820:0 crwdns58822:0crwdne58822:0 crwdns58824:0crwdne58824:0 crwdns58826:0crwdne58826:0
+crwdns79146:0crwdne79146:0<!--
+ignore --> crwdns79148:0crwdne79148:0 crwdns79150:0crwdne79150:0 crwdns79152:0crwdne79152:0 crwdns79154:0crwdne79154:0
 
-crwdns58828:0crwdne58828:0 crwdns58830:0crwdne58830:0 crwdns58832:0crwdne58832:0 crwdns58834:0crwdne58834:0 crwdns58836:0crwdne58836:0 crwdns58838:0crwdne58838:0
+crwdns79156:0crwdne79156:0 crwdns79158:0crwdne79158:0 crwdns79160:0crwdne79160:0 crwdns79162:0crwdne79162:0 crwdns79164:0crwdne79164:0 crwdns79166:0crwdne79166:0
 
-### crwdns58840:0crwdne58840:0
+### crwdns79168:0crwdne79168:0
 
-crwdns58842:0crwdne58842:0 crwdns58844:0crwdne58844:0 crwdns58846:0crwdne58846:0
+crwdns79170:0crwdne79170:0 crwdns79172:0crwdne79172:0 crwdns79174:0crwdne79174:0
 
 ```rust,ignore
-crwdns58848:0crwdne58848:0
+crwdns79176:0crwdne79176:0
 ```
 
-crwdns58850:0crwdne58850:0
+crwdns79178:0crwdne79178:0
 
 ```rust,ignore
-crwdns58852:0crwdne58852:0
+crwdns79180:0crwdne79180:0
 ```
 
-crwdns58854:0crwdne58854:0 crwdns58856:0crwdne58856:0 crwdns58858:0crwdne58858:0
+crwdns79182:0crwdne79182:0 crwdns79184:0crwdne79184:0 crwdns79186:0crwdne79186:0
 
-crwdns58860:0crwdne58860:0 crwdns58862:0crwdne58862:0<!--
-ignore --> crwdns58864:0crwdne58864:0<!-- ignore -->crwdns58866:0crwdne58866:0 crwdns58868:0crwdne58868:0
+crwdns79188:0crwdne79188:0 crwdns79190:0crwdne79190:0<!--
+ignore --> crwdns79192:0crwdne79192:0<!-- ignore -->crwdns79194:0crwdne79194:0 crwdns79196:0crwdne79196:0
 
-crwdns58870:0crwdne58870:0 crwdns58872:0crwdne58872:0
+crwdns79198:0crwdne79198:0 crwdns79200:0crwdne79200:0
 
-crwdns58874:0crwdne58874:0 crwdns58876:0crwdne58876:0 crwdns58878:0crwdne58878:0
+crwdns79202:0crwdne79202:0 crwdns79204:0crwdne79204:0 crwdns79206:0crwdne79206:0
 
-crwdns58880:0crwdne58880:0 crwdns58882:0crwdne58882:0<!-- ignore -->
-crwdns58884:0crwdne58884:0 crwdns58886:0crwdne58886:0 crwdns58888:0crwdne58888:0 crwdns58890:0crwdne58890:0 crwdns58892:0crwdne58892:0
+crwdns79208:0crwdne79208:0 crwdns79210:0crwdne79210:0<!-- ignore -->
+crwdns79212:0crwdne79212:0 crwdns79214:0crwdne79214:0 crwdns79216:0crwdne79216:0 crwdns79218:0crwdne79218:0 crwdns79220:0crwdne79220:0
 
-crwdns58894:0crwdne58894:0
+crwdns79222:0crwdne79222:0
 
 ```console
-crwdns58896:0crwdne58896:0
+crwdns79224:0crwdne79224:0
 ```
 
-crwdns58898:0crwdne58898:0
+crwdns79226:0crwdne79226:0
 
-crwdns58900:0crwdne58900:0 crwdns58902:0crwdne58902:0<!-- ignore -->crwdns58904:0crwdne58904:0
+crwdns79228:0crwdne79228:0 crwdns79230:0crwdne79230:0<!-- ignore -->.
 
-### crwdns58906:0crwdne58906:0
+### crwdns79234:0crwdne79234:0
 
-crwdns58908:0crwdne58908:0
+crwdns79236:0crwdne79236:0
 
 ```rust,ignore
-crwdns58910:0crwdne58910:0
+crwdns79238:0crwdne79238:0
 ```
 
-crwdns58912:0crwdne58912:0 crwdns58914:0crwdne58914:0 crwdns58916:0crwdne58916:0 crwdns58918:0crwdne58918:0
+crwdns79240:0crwdne79240:0 crwdns79242:0crwdne79242:0 crwdns79244:0crwdne79244:0 crwdns79246:0crwdne79246:0
 
 ```rust
-crwdns58920:0crwdne58920:0
+crwdns79248:0crwdne79248:0
 ```
 
-crwdns58922:0crwdne58922:0
+crwdns79250:0crwdne79250:0
 
-### crwdns58924:0crwdne58924:0
+### crwdns79252:0crwdne79252:0
 
-crwdns58926:0crwdne58926:0 crwdns58928:0crwdne58928:0
+crwdns79254:0crwdne79254:0 crwdns79256:0crwdne79256:0
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-01/
@@ -194,22 +194,22 @@ cargo run
 input 6 -->
 
 ```console
-crwdns58930:0crwdne58930:0
-crwdns58932:0crwdne58932:0
-crwdns58934:0crwdne58934:0
+crwdns79258:0crwdne79258:0
+crwdns79260:0crwdne79260:0
+crwdns79262:0crwdne79262:0
 ```
 
-crwdns58936:0crwdne58936:0
+crwdns79264:0crwdne79264:0
 
-## crwdns58938:0crwdne58938:0
+## crwdns79266:0crwdne79266:0
 
-crwdns58940:0crwdne58940:0 crwdns58942:0crwdne58942:0 crwdns58944:0crwdne58944:0 crwdns58946:0crwdne58946:0 crwdns58948:0crwdne58948:0
+crwdns79268:0crwdne79268:0 crwdns79270:0crwdne79270:0 crwdns79272:0crwdne79272:0 crwdns79274:0crwdne79274:0 crwdns79276:0crwdne79276:0
 
-### crwdns58950:0crwdne58950:0
+### crwdns79278:0crwdne79278:0
 
-crwdns58952:0crwdne58952:0 crwdns58954:0crwdne58954:0 crwdns58956:0crwdne58956:0
+crwdns79280:0crwdne79280:0 crwdns79282:0crwdne79282:0 crwdns79284:0crwdne79284:0
 
-crwdns58958:0crwdne58958:0 crwdns58960:0crwdne58960:0 crwdns58962:0[dependencies]crwdne58962:0 crwdns58964:0crwdne58964:0
+crwdns79286:0crwdne79286:0 crwdns79288:0crwdne79288:0 crwdns79290:0[dependencies]crwdne79290:0 crwdns79292:0crwdne79292:0
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -217,17 +217,17 @@ crwdns58958:0crwdne58958:0 crwdns58960:0crwdne58960:0 crwdns58962:0[dependencies
 * ch14-03-cargo-workspaces.md
 -->
 
-<span class="filename">crwdns58966:0crwdne58966:0</span>
+<span class="filename">crwdns79294:0crwdne79294:0</span>
 
 ```toml
-crwdns58968:0crwdne58968:0
+crwdns79296:0crwdne79296:0
 ```
 
-crwdns58970:0crwdne58970:0 crwdns58972:0[dependencies]crwdne58972:0 crwdns58974:0crwdne58974:0 crwdns58976:0crwdne58976:0<!-- ignore --> crwdns58978:0crwdne58978:0 crwdns58980:0crwdne58980:0
+crwdns79298:0crwdne79298:0 crwdns79300:0[dependencies]crwdne79300:0 crwdns79302:0crwdne79302:0 crwdns79304:0crwdne79304:0<!-- ignore --> crwdns79306:0crwdne79306:0 crwdns79308:0crwdne79308:0
 
-crwdns58982:0crwdne58982:0 crwdns58984:0crwdne58984:0
+crwdns79310:0crwdne79310:0 crwdns79312:0crwdne79312:0
 
-crwdns58986:0crwdne58986:0
+crwdns79314:0crwdne79314:0
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -235,21 +235,21 @@ cargo clean
 cargo build -->
 
 ```console
-crwdns58988:0crwdne58988:0
+crwdns79316:0crwdne79316:0
 ```
 
 
-<span class="caption">crwdns58990:0crwdne58990:0</span>
+<span class="caption">crwdns79318:0crwdne79318:0</span>
 
-crwdns58992:0crwdne58992:0
+crwdns79320:0crwdne79320:0
 
-crwdns58994:0crwdne58994:0 crwdns58996:0crwdne58996:0
+crwdns79322:0crwdne79322:0 crwdns79324:0crwdne79324:0
 
-crwdns58998:0[dependencies]crwdne58998:0 crwdns59000:0crwdne59000:0 crwdns59002:0crwdne59002:0
+crwdns79326:0[dependencies]crwdne79326:0 crwdns79328:0crwdne79328:0 crwdns79330:0crwdne79330:0
 
-crwdns59004:0crwdne59004:0 crwdns59006:0crwdne59006:0 crwdns59008:0crwdne59008:0 crwdns59010:0crwdne59010:0
+crwdns79332:0crwdne79332:0 crwdns79334:0crwdne79334:0 crwdns79336:0crwdne79336:0 crwdns79338:0crwdne79338:0
 
-crwdns59012:0crwdne59012:0
+crwdns79340:0crwdne79340:0
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -257,20 +257,20 @@ touch src/main.rs
 cargo build -->
 
 ```console
-crwdns59014:0crwdne59014:0
+crwdns79342:0crwdne79342:0
 ```
 
-crwdns59016:0crwdne59016:0 crwdns59018:0crwdne59018:0
+crwdns79344:0crwdne79344:0 crwdns79346:0crwdne79346:0
 
-#### crwdns59020:0crwdne59020:0
+#### crwdns79348:0crwdne79348:0
 
-crwdns59022:0crwdne59022:0 crwdns59024:0crwdne59024:0 crwdns59026:0crwdne59026:0
+crwdns79350:0crwdne79350:0 crwdns79352:0crwdne79352:0 crwdns79354:0crwdne79354:0
 
-crwdns59028:0crwdne59028:0 crwdns59030:0crwdne59030:0 crwdns59032:0crwdne59032:0 crwdns59034:0crwdne59034:0 crwdns59036:0crwdne59036:0
+crwdns79356:0crwdne79356:0 crwdns79358:0crwdne79358:0 crwdns79360:0crwdne79360:0 crwdns79362:0crwdne79362:0 crwdns79364:0crwdne79364:0
 
-#### crwdns59038:0crwdne59038:0
+#### crwdns79366:0crwdne79366:0
 
-crwdns59040:0crwdne59040:0 crwdns59042:0crwdne59042:0 crwdns59044:0crwdne59044:0 crwdns59046:0crwdne59046:0
+crwdns79368:0crwdne79368:0 crwdns79370:0crwdne79370:0 crwdns79372:0crwdne79372:0 crwdns79374:0crwdne79374:0
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -279,41 +279,41 @@ assuming there is a new 0.8.x version of rand; otherwise use another update
 as a guide to creating the hypothetical output shown here -->
 
 ```console
-crwdns59048:0crwdne59048:0
+crwdns79376:0crwdne79376:0
 ```
 
-crwdns59050:0crwdne59050:0 crwdns59052:0crwdne59052:0 crwdns59054:0crwdne59054:0
+crwdns79378:0crwdne79378:0 crwdns79380:0crwdne79380:0 crwdns79382:0crwdne79382:0
 
 ```toml
-crwdns59056:0[dependencies]crwdne59056:0
+crwdns79384:0[dependencies]crwdne79384:0
 ```
 
-crwdns59058:0crwdne59058:0
+crwdns79386:0crwdne79386:0
 
-crwdns59060:0crwdne59060:0<!-- ignore --> crwdns59062:0crwdne59062:0<!-- ignore --> crwdns59064:0crwdne59064:0 crwdns59066:0crwdne59066:0
+crwdns79388:0crwdne79388:0<!-- ignore --> crwdns79390:0crwdne79390:0<!-- ignore --> crwdns79392:0crwdne79392:0 crwdns79394:0crwdne79394:0
 
-### crwdns59068:0crwdne59068:0
+### crwdns79396:0crwdne79396:0
 
-crwdns59070:0crwdne59070:0 crwdns59072:0crwdne59072:0
+crwdns79398:0crwdne79398:0 crwdns79400:0crwdne79400:0
 
-<span class="filename">crwdns59074:0crwdne59074:0</span>
+<span class="filename">crwdns79402:0crwdne79402:0</span>
 
 ```rust,ignore
-crwdns59076:0crwdne59076:0
+crwdns79404:0crwdne79404:0
 ```
 
 
-<span class="caption">crwdns59078:0crwdne59078:0</span>
+<span class="caption">crwdns79406:0crwdne79406:0</span>
 
-crwdns59080:0crwdne59080:0 crwdns59082:0crwdne59082:0 crwdns59084:0crwdne59084:0
+crwdns79408:0crwdne79408:0 crwdns79410:0crwdne79410:0 crwdns79412:0crwdne79412:0
 
-crwdns59086:0crwdne59086:0 crwdns59088:0crwdne59088:0 crwdns59090:0crwdne59090:0 crwdns59092:0crwdne59092:0 crwdns59094:0crwdne59094:0 crwdns59096:0crwdne59096:0
+crwdns79414:0crwdne79414:0 crwdns79416:0crwdne79416:0 crwdns79418:0crwdne79418:0 crwdns79420:0crwdne79420:0 crwdns79422:0crwdne79422:0 crwdns79424:0crwdne79424:0
 
-> crwdns59098:0crwdne59098:0 crwdns59100:0crwdne59100:0 crwdns59102:0crwdne59102:0
+> crwdns79426:0crwdne79426:0 crwdns79428:0crwdne79428:0 crwdns79430:0crwdne79430:0
 
-crwdns59104:0crwdne59104:0 crwdns59106:0crwdne59106:0 crwdns59108:0crwdne59108:0
+crwdns79432:0crwdne79432:0 crwdns79434:0crwdne79434:0 crwdns79436:0crwdne79436:0
 
-crwdns59110:0crwdne59110:0
+crwdns79438:0crwdne79438:0
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-03/
@@ -324,69 +324,69 @@ cargo run
 -->
 
 ```console
-crwdns59112:0crwdne59112:0
-crwdns59114:0crwdne59114:0
-crwdns59116:0crwdne59116:0
-crwdns59118:0crwdne59118:0
-crwdns59120:0crwdne59120:0
+crwdns79440:0crwdne79440:0
+crwdns79442:0crwdne79442:0
+crwdns79444:0crwdne79444:0
+crwdns79446:0crwdne79446:0
+crwdns79448:0crwdne79448:0
 ```
 
-crwdns59122:0crwdne59122:0 crwdns59124:0crwdne59124:0
+crwdns79450:0crwdne79450:0 crwdns79452:0crwdne79452:0
 
-## crwdns59126:0crwdne59126:0
+## crwdns79454:0crwdne79454:0
 
-crwdns59128:0crwdne59128:0 crwdns59130:0crwdne59130:0 crwdns59132:0crwdne59132:0
+crwdns79456:0crwdne79456:0 crwdns79458:0crwdne79458:0 crwdns79460:0crwdne79460:0
 
-<span class="filename">crwdns59134:0crwdne59134:0</span>
+<span class="filename">crwdns79462:0crwdne79462:0</span>
 
 ```rust,ignore,does_not_compile
-crwdns59136:0crwdne59136:0
+crwdns79464:0crwdne79464:0
 ```
 
 
-<span class="caption">crwdns59138:0crwdne59138:0</span>
+<span class="caption">crwdns79466:0crwdne79466:0</span>
 
-crwdns59140:0:cmp:crwdne59140:0 crwdns59142:0crwdne59142:0 crwdns59144:0crwdne59144:0
+crwdns79468:0:cmp:crwdne79468:0 crwdns79470:0crwdne79470:0 crwdns79472:0crwdne79472:0
 
-crwdns59146:0crwdne59146:0 crwdns59148:0crwdne59148:0 crwdns59150:0crwdne59150:0 crwdns59152:0crwdne59152:0 crwdns59154:0crwdne59154:0<!-- ignore --> crwdns59156:0crwdne59156:0
+crwdns79474:0crwdne79474:0 crwdns79476:0crwdne79476:0 crwdns79478:0crwdne79478:0 crwdns79480:0crwdne79480:0 crwdns79482:0crwdne79482:0<!-- ignore --> crwdns79484:0crwdne79484:0
 
-crwdns59158:0crwdne59158:0 crwdns59160:0crwdne59160:0 crwdns59162:0crwdne59162:0 crwdns59164:0crwdne59164:0 crwdns59166:0crwdne59166:0
+crwdns79486:0crwdne79486:0 crwdns79488:0crwdne79488:0 crwdns79490:0crwdne79490:0 crwdns79492:0crwdne79492:0 crwdns79494:0crwdne79494:0
 
-crwdns59168:0crwdne59168:0 crwdns59170:0crwdne59170:0
-38. crwdns59172:0crwdne59172:0 crwdns59174:0crwdne59174:0 crwdns59176:0crwdne59176:0 crwdns59178:0crwdne59178:0 crwdns59180:0crwdne59180:0 crwdns59182:0crwdne59182:0
+crwdns79496:0crwdne79496:0 crwdns79498:0crwdne79498:0
+38. crwdns79500:0crwdne79500:0 crwdns79502:0crwdne79502:0 crwdns79504:0crwdne79504:0 crwdns79506:0crwdne79506:0 crwdns79508:0crwdne79508:0 crwdns79510:0crwdne79510:0
 
-crwdns59184:0crwdne59184:0 crwdns59186:0crwdne59186:0
+crwdns79512:0crwdne79512:0 crwdns79514:0crwdne79514:0
 
 ```console
-crwdns59188:0crwdne59188:0
+crwdns79516:0crwdne79516:0
 ```
 
-crwdns59190:0crwdne59190:0 crwdns59192:0crwdne59192:0 crwdns59194:0crwdne59194:0 crwdns59196:0crwdne59196:0 crwdns59198:0crwdne59198:0 crwdns59200:0crwdne59200:0 crwdns59202:0crwdne59202:0 crwdns59204:0crwdne59204:0
+crwdns79518:0crwdne79518:0 crwdns79520:0crwdne79520:0 crwdns79522:0crwdne79522:0 crwdns79524:0crwdne79524:0 crwdns79526:0crwdne79526:0 crwdns79528:0crwdne79528:0 crwdns79530:0crwdne79530:0 crwdns79532:0crwdne79532:0
 
-crwdns59206:0crwdne59206:0 crwdns59208:0crwdne59208:0
+crwdns79534:0crwdne79534:0 crwdns79536:0crwdne79536:0
 
-<span class="filename">crwdns59210:0crwdne59210:0</span>
+<span class="filename">crwdns79538:0crwdne79538:0</span>
 
 ```rust,ignore
-crwdns59212:0crwdne59212:0
+crwdns79540:0crwdne79540:0
 ```
 
-crwdns59214:0crwdne59214:0
+crwdns79542:0crwdne79542:0
 
 ```rust,ignore
-crwdns59216:0crwdne59216:0
+crwdns79544:0crwdne79544:0
 ```
 
-crwdns59218:0crwdne59218:0 crwdns59220:0crwdne59220:0 crwdns59222:0crwdne59222:0 crwdns59224:0crwdne59224:0 crwdns59226:0crwdne59226:0
+crwdns79546:0crwdne79546:0 crwdns79548:0crwdne79548:0 crwdns79550:0crwdne79550:0 crwdns79552:0crwdne79552:0 crwdns79554:0crwdne79554:0
 
-crwdns59228:0crwdne59228:0 crwdns59230:0crwdne59230:0 crwdns59232:0crwdne59232:0 crwdns59234:0crwdne59234:0 crwdns59236:0crwdne59236:0 crwdns59238:0crwdne59238:0 crwdns59240:0crwdne59240:0 crwdns59242:0crwdne59242:0
+crwdns79556:0crwdne79556:0 crwdns79558:0crwdne79558:0 crwdns79560:0crwdne79560:0 crwdns79562:0crwdne79562:0 crwdns79564:0crwdne79564:0 crwdns79566:0crwdne79566:0 crwdns79568:0crwdne79568:0 crwdns79570:0crwdne79570:0
 
-crwdns59244:0crwdne59244:0<!-- ignore --> crwdns59246:0crwdne59246:0 crwdns59248:0crwdne59248:0 crwdns59250:0crwdne59250:0 crwdns59252:0crwdne59252:0 crwdns59254:0crwdne59254:0 crwdns59256:0crwdne59256:0 crwdns59258:0crwdne59258:0 crwdns59260:0crwdne59260:0 crwdns59262:0crwdne59262:0
+crwdns79572:0crwdne79572:0<!-- ignore --> crwdns79574:0crwdne79574:0 crwdns79576:0crwdne79576:0 crwdns79578:0crwdne79578:0 crwdns79580:0crwdne79580:0 crwdns79582:0crwdne79582:0 crwdns79584:0crwdne79584:0 crwdns79586:0crwdne79586:0 crwdns79588:0crwdne79588:0 crwdns79590:0crwdne79590:0
 
-crwdns59264:0crwdne59264:0 crwdns59266:0crwdne59266:0 crwdns59268:0crwdne59268:0<!-- ignore
--->crwdns59270:0crwdne59270:0 crwdns59272:0crwdne59272:0 crwdns59274:0crwdne59274:0 crwdns59276:0crwdne59276:0
+crwdns79592:0crwdne79592:0 crwdns79594:0crwdne79594:0 crwdns79596:0crwdne79596:0<!-- ignore
+-->). crwdns79600:0crwdne79600:0 crwdns79602:0crwdne79602:0 crwdns79604:0crwdne79604:0
 
-crwdns59278:0crwdne59278:0
+crwdns79606:0crwdne79606:0
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/
@@ -395,29 +395,29 @@ cargo run
 -->
 
 ```console
-crwdns59280:0crwdne59280:0
-crwdns59282:0crwdne59282:0
-  crwdns59284:0crwdne59284:0
+crwdns79608:0crwdne79608:0
+crwdns79610:0crwdne79610:0
+  crwdns79612:0crwdne79612:0
 ```
 
-crwdns59286:0crwdne59286:0 crwdns59288:0crwdne59288:0 crwdns59290:0crwdne59290:0
+crwdns79614:0crwdne79614:0 crwdns79616:0crwdne79616:0 crwdns79618:0crwdne79618:0
 
-crwdns59292:0crwdne59292:0 crwdns59294:0crwdne59294:0
+crwdns79620:0crwdne79620:0 crwdns79622:0crwdne79622:0
 
-## crwdns59296:0crwdne59296:0
+## crwdns79624:0crwdne79624:0
 
-crwdns59298:0crwdne59298:0 crwdns59300:0crwdne59300:0
+crwdns79626:0crwdne79626:0 crwdns79628:0crwdne79628:0
 
-<span class="filename">crwdns59302:0crwdne59302:0</span>
+<span class="filename">crwdns79630:0crwdne79630:0</span>
 
 ```rust,ignore
-crwdns59304:0crwdne59304:0
+crwdns79632:0crwdne79632:0
 ```
 
-crwdns59306:0crwdne59306:0 crwdns59308:0crwdne59308:0 crwdns59310:0crwdne59310:0 crwdns59312:0crwdne59312:0
+crwdns79634:0crwdne79634:0 crwdns79636:0crwdne79636:0 crwdns79638:0crwdne79638:0 crwdns79640:0crwdne79640:0
 
-crwdns59314:0crwdne59314:0 crwdns59316:0crwdne59316:0<!--
-ignore -->crwdns59318:0crwdne59318:0 crwdns59320:0crwdne59320:0
+crwdns79642:0crwdne79642:0 crwdns79644:0crwdne79644:0<!--
+ignore -->crwdns79646:0crwdne79646:0 crwdns79648:0crwdne79648:0
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-04-looping/
@@ -429,51 +429,51 @@ quit
 -->
 
 ```console
-crwdns59322:0crwdne59322:0
-crwdns59324:0crwdne59324:0
-crwdns59326:0crwdne59326:0
-crwdns59328:0crwdne59328:0
-crwdns59330:0crwdne59330:0
-crwdns59332:0crwdne59332:0
-crwdns59334:0crwdne59334:0
-crwdns59336:0crwdne59336:0
-crwdns59338:0{ kind: InvalidDigit }crwdne59338:0
+crwdns79650:0crwdne79650:0
+crwdns79652:0crwdne79652:0
+crwdns79654:0crwdne79654:0
+crwdns79656:0crwdne79656:0
+crwdns79658:0crwdne79658:0
+crwdns79660:0crwdne79660:0
+crwdns79662:0crwdne79662:0
+crwdns79664:0crwdne79664:0
+crwdns79666:0{ kind: InvalidDigit }crwdne79666:0
 ```
 
-crwdns59340:0crwdne59340:0 crwdns59342:0crwdne59342:0
+crwdns79668:0crwdne79668:0 crwdns79670:0crwdne79670:0
 
-### crwdns59344:0crwdne59344:0
+### crwdns79672:0crwdne79672:0
 
-crwdns59346:0crwdne59346:0
+crwdns79674:0crwdne79674:0
 
-<span class="filename">crwdns59348:0crwdne59348:0</span>
+<span class="filename">crwdns79676:0crwdne79676:0</span>
 
 ```rust,ignore
-crwdns59350:0crwdne59350:0
+crwdns79678:0crwdne79678:0
 ```
 
-crwdns59352:0crwdne59352:0 crwdns59354:0crwdne59354:0
+crwdns79680:0crwdne79680:0 crwdns79682:0crwdne79682:0
 
-### crwdns59356:0crwdne59356:0
+### crwdns79684:0crwdne79684:0
 
-crwdns59358:0crwdne59358:0 crwdns59360:0crwdne59360:0
+crwdns79686:0crwdne79686:0 crwdns79688:0crwdne79688:0
 
-<span class="filename">crwdns59362:0crwdne59362:0</span>
+<span class="filename">crwdns79690:0crwdne79690:0</span>
 
 ```rust,ignore
-crwdns59364:0crwdne59364:0
+crwdns79692:0crwdne79692:0
 ```
 
 
-<span class="caption">crwdns59366:0crwdne59366:0</span>
+<span class="caption">crwdns79694:0crwdne79694:0</span>
 
-crwdns59368:0crwdne59368:0 crwdns59370:0crwdne59370:0 crwdns59372:0crwdne59372:0
+crwdns79696:0crwdne79696:0 crwdns79698:0crwdne79698:0 crwdns79700:0crwdne79700:0
 
-crwdns59374:0crwdne59374:0 crwdns59376:0crwdne59376:0 crwdns59378:0crwdne59378:0
+crwdns79702:0crwdne79702:0 crwdns79704:0crwdne79704:0 crwdns79706:0crwdne79706:0
 
-crwdns59380:0crwdne59380:0 crwdns59382:0crwdne59382:0 crwdns59384:0crwdne59384:0 crwdns59386:0crwdne59386:0 crwdns59388:0crwdne59388:0
+crwdns79708:0crwdne79708:0 crwdns79710:0crwdne79710:0 crwdns79712:0crwdne79712:0 crwdns79714:0crwdne79714:0 crwdns79716:0crwdne79716:0
 
-crwdns59390:0crwdne59390:0 crwdns59392:0crwdne59392:0
+crwdns79718:0crwdne79718:0 crwdns79720:0crwdne79720:0
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-05/
@@ -485,28 +485,28 @@ foo
 -->
 
 ```console
-crwdns59394:0crwdne59394:0
-crwdns59396:0crwdne59396:0
-crwdns59398:0crwdne59398:0
-crwdns59400:0crwdne59400:0
-crwdns59402:0crwdne59402:0
-crwdns59404:0crwdne59404:0
-crwdns59406:0crwdne59406:0
-crwdns59408:0crwdne59408:0
+crwdns79722:0crwdne79722:0
+crwdns79724:0crwdne79724:0
+crwdns79726:0crwdne79726:0
+crwdns79728:0crwdne79728:0
+crwdns79730:0crwdne79730:0
+crwdns79732:0crwdne79732:0
+crwdns79734:0crwdne79734:0
+crwdns79736:0crwdne79736:0
 ```
 
-crwdns59410:0crwdne59410:0 crwdns59412:0crwdne59412:0 crwdns59414:0crwdne59414:0 crwdns59416:0crwdne59416:0 crwdns59418:0crwdne59418:0 crwdns59420:0crwdne59420:0
+crwdns79738:0crwdne79738:0 crwdns79740:0crwdne79740:0 crwdns79742:0crwdne79742:0 crwdns79744:0crwdne79744:0 crwdns79746:0crwdne79746:0 crwdns79748:0crwdne79748:0
 
-<span class="filename">crwdns59422:0crwdne59422:0</span>
+<span class="filename">crwdns79750:0crwdne79750:0</span>
 
 ```rust,ignore
-crwdns59424:0crwdne59424:0
+crwdns79752:0crwdne79752:0
 ```
 
-<span class="caption">crwdns59426:0crwdne59426:0</span>
+<span class="caption">crwdns79754:0crwdne79754:0</span>
 
-## crwdns59428:0crwdne59428:0
+## crwdns79756:0crwdne79756:0
 
-crwdns59430:0crwdne59430:0 crwdns59432:0crwdne59432:0
+crwdns79758:0crwdne79758:0 crwdns79760:0crwdne79760:0
 
-crwdns59434:0crwdne59434:0 crwdns59436:0crwdne59436:0 crwdns59438:0crwdne59438:0 crwdns59440:0crwdne59440:0 crwdns59442:0crwdne59442:0
+crwdns79762:0crwdne79762:0 crwdns79764:0crwdne79764:0 crwdns79766:0crwdne79766:0 crwdns79768:0crwdne79768:0 crwdns79770:0crwdne79770:0

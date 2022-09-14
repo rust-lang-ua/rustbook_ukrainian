@@ -42,7 +42,7 @@ Different from references and smart pointers, raw pointers:
 
 By opting out of having Rust enforce these guarantees, you can give up guaranteed safety in exchange for greater performance or the ability to interface with another language or hardware where Rust’s guarantees don’t apply.
 
-By opting out of having Rust enforce these guarantees, you can give up guaranteed safety in exchange for greater performance or the ability to interface with another language or hardware where Rust’s guarantees don’t apply.
+Listing 19-1 shows how to create an immutable and a mutable raw pointer from references.
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-01/src/main.rs:here}}
@@ -96,7 +96,7 @@ We must call the `dangerous` function within a separate `unsafe` block. If we tr
 
 With the `unsafe` block, we’re asserting to Rust that we’ve read the function’s documentation, we understand how to use it properly, and we’ve verified that we’re fulfilling the contract of the function.
 
-With the `unsafe` block, we’re asserting to Rust that we’ve read the function’s documentation, we understand how to use it properly, and we’ve verified that we’re fulfilling the contract of the function.
+Bodies of unsafe functions are effectively `unsafe` blocks, so to perform other unsafe operations within an unsafe function, we don’t need to add another `unsafe` block.
 
 #### Creating a Safe Abstraction over Unsafe Code
 

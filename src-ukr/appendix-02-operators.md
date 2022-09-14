@@ -1,194 +1,194 @@
-## Appendix B: Operators and Symbols
+## Додаток B: оператори та символи
 
-This appendix contains a glossary of Rust’s syntax, including operators and other symbols that appear by themselves or in the context of paths, generics, trait bounds, macros, attributes, comments, tuples, and brackets.
+Цей додаток містить словник синтаксису Rust, включно з операторами та іншими символами, що вживаються самостійно або в контексті шляхів, узагальнених типів, обмежень трейтів, макросів, атрибутів, коментарів, кортежів і дужок.
 
-### Operators
+### Оператори
 
-Table B-1 contains the operators in Rust, an example of how the operator would appear in context, a short explanation, and whether that operator is overloadable. If an operator is overloadable, the relevant trait to use to overload that operator is listed.
+Таблиця B-1 містить оператори Rust, приклади, як ці оператори вживаються, коротке пояснення, і чи можна перевантажити оператор. Якщо оператор можна перевантажити, то вказаний трейт, який треба використати для перевантаження.
 
-<span class="caption">Table B-1: Operators</span>
+<span class="caption">Таблиця B-1: оператори</span>
 
-| Operator                  | Example                                                          | Explanation                                                           | Overloadable?  |
-| ------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------- | -------------- |
-| `!`                       | `ident!(...)`, `ident!{...}`, `ident![...]`                      | Macro expansion                                                       |                |
-| `!`                       | `!expr`                                                          | Bitwise or logical complement                                         | `Not`          |
-| `!=`                      | `expr != expr`                                                   | Nonequality comparison                                                | `PartialEq`    |
-| `%`                       | `expr % expr`                                                    | Arithmetic remainder                                                  | `Rem`          |
-| `%=`                      | `var %= expr`                                                    | Arithmetic remainder and assignment                                   | `RemAssign`    |
-| `&`                   | `&expr`, `&mut expr`                                     | Borrow                                                                |                |
-| `&`                   | `&type`, `&mut type`, `&'a type`, `&'a mut type` | Borrowed pointer type                                                 |                |
-| `&`                   | `expr & expr`                                                | Bitwise AND                                                           | `BitAnd`       |
-| `&=`                  | `var &= expr`                                                | Bitwise AND and assignment                                            | `BitAndAssign` |
-| `&&`              | `expr && expr`                                           | Short-circuiting logical AND                                          |                |
-| `*`                       | `expr * expr`                                                    | Arithmetic multiplication                                             | `Mul`          |
-| `*=`                      | `var *= expr`                                                    | Arithmetic multiplication and assignment                              | `MulAssign`    |
-| `*`                       | `*expr`                                                          | Dereference                                                           | `Deref`        |
-| `*`                       | `*const type`, `*mut type`                                       | Raw pointer                                                           |                |
-| `+`                       | `trait + trait`, `'a + trait`                                    | Compound type constraint                                              |                |
-| `+`                       | `expr + expr`                                                    | Arithmetic addition                                                   | `Add`          |
-| `+=`                      | `var += expr`                                                    | Arithmetic addition and assignment                                    | `AddAssign`    |
-| `,`                       | `expr, expr`                                                     | Argument and element separator                                        |                |
-| `-`                       | `- expr`                                                         | Arithmetic negation                                                   | `Neg`          |
-| `-`                       | `expr - expr`                                                    | Arithmetic subtraction                                                | `Sub`          |
-| `-=`                      | `var -= expr`                                                    | Arithmetic subtraction and assignment                                 | `SubAssign`    |
-| `->`                   | `fn(...) -> type`, <code>&vert;...&vert; -> type</code>                   | Function and closure return type                                      |                |
-| `.`                       | `expr.ident`                                                     | Member access                                                         |                |
-| `..`                      | `..`, `expr..`, `..expr`, `expr..expr`                           | Right-exclusive range literal                                         | `PartialOrd`   |
-| `..=`                     | `..=expr`, `expr..=expr`                                         | Right-inclusive range literal                                         | `PartialOrd`   |
-| `..`                      | `..expr`                                                         | Struct literal update syntax                                          |                |
-| `..`                      | `variant(x, ..)`, `struct_type { x, .. }`                        | “And the rest” pattern binding                                        |                |
-| `...`                     | `expr...expr`                                                    | (Deprecated, use `..=` instead) In a pattern: inclusive range pattern |                |
-| `/`                       | `expr / expr`                                                    | Arithmetic division                                                   | `Div`          |
-| `/=`                      | `var /= expr`                                                    | Arithmetic division and assignment                                    | `DivAssign`    |
-| `:`                       | `pat: type`, `ident: type`                                       | Constraints                                                           |                |
-| `:`                       | `ident: expr`                                                    | Struct field initializer                                              |                |
-| `:`                       | `'a: loop {...}`                                                 | Loop label                                                            |                |
-| `;`                       | `expr;`                                                          | Statement and item terminator                                         |                |
-| `;`                       | `[...; len]`                                                     | Part of fixed-size array syntax                                       |                |
-| `<<`                | `expr << expr`                                             | Left-shift                                                            | `Shl`          |
-| `<<=`               | `var <<= expr`                                             | Left-shift and assignment                                             | `ShlAssign`    |
-| `<`                    | `expr < expr`                                                 | Less than comparison                                                  | `PartialOrd`   |
-| `<=`                   | `expr <= expr`                                                | Less than or equal to comparison                                      | `PartialOrd`   |
-| `=`                       | `var = expr`, `ident = type`                                     | Assignment/equivalence                                                |                |
-| `==`                      | `expr == expr`                                                   | Equality comparison                                                   | `PartialEq`    |
-| `=>`                   | `pat => expr`                                                 | Part of match arm syntax                                              |                |
-| `>`                    | `expr > expr`                                                 | Greater than comparison                                               | `PartialOrd`   |
-| `>=`                   | `expr >= expr`                                                | Greater than or equal to comparison                                   | `PartialOrd`   |
-| `>>`                | `expr >> expr`                                             | Right-shift                                                           | `Shr`          |
-| `>>=`               | `var >>= expr`                                             | Right-shift and assignment                                            | `ShrAssign`    |
-| `@`                       | `ident @ pat`                                                    | Pattern binding                                                       |                |
-| `^`                       | `expr ^ expr`                                                    | Bitwise exclusive OR                                                  | `BitXor`       |
-| `^=`                      | `var ^= expr`                                                    | Bitwise exclusive OR and assignment                                   | `BitXorAssign` |
-| <code>&vert;</code> | <code>pat &vert; pat</code>                                        | Pattern alternatives                                                  |                |
-| <code>&vert;</code> | <code>expr &vert; expr</code>                                        | Bitwise OR                                                            | `BitOr`        |
-| <code>&vert;=</code> | <code>var &vert;= expr</code>                                        | Bitwise OR and assignment                                             | `BitOrAssign`  |
-| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code>                                        | Short-circuiting logical OR                                           |                |
-| `?`                       | `expr?`                                                          | Error propagation                                                     |                |
+| Оператор                  | Приклад                                                          | Пояснення                                                                                | Перевантаження? |
+| ------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------- |
+| `!`                       | `ident!(...)`, `ident!{...}`, `ident![...]`                      | Макрос                                                                                   |                 |
+| `!`                       | `!expr`                                                          | Побітове чи логічне доповнення                                                           | `Not`           |
+| `!=`                      | `expr != expr`                                                   | Порівняння на нерівність                                                                 | `PartialEq`     |
+| `%`                       | `expr % expr`                                                    | Арифметична остача                                                                       | `Rem`           |
+| `%=`                      | `var %= expr`                                                    | Арифметична остача з присвоєнням                                                         | `RemAssign`     |
+| `&`                   | `&expr`, `&mut expr`                                     | Позичання                                                                                |                 |
+| `&`                   | `&type`, `&mut type`, `&'a type`, `&'a mut type` | Тип позиченого вказівника                                                                |                 |
+| `&`                   | `expr & expr`                                                | Побітове І                                                                               | `BitAnd`        |
+| `&=`                  | `var &= expr`                                                | Побітове І з присвоєнням                                                                 | `BitAndAssign`  |
+| `&&`              | `expr && expr`                                           | Логічне І зі скороченим обчисленням                                                      |                 |
+| `*`                       | `expr * expr`                                                    | Арифметичне множення                                                                     | `Mul`           |
+| `*=`                      | `var *= expr`                                                    | Арифметичне множення з присвоєнням                                                       | `MulAssign`     |
+| `*`                       | `*expr`                                                          | Розіменування                                                                            | `Deref`         |
+| `*`                       | `*const type`, `*mut type`                                       | Сирий вказівник                                                                          |                 |
+| `+`                       | `trait + trait`, `'a + trait`                                    | Комбіноване обмеження типу                                                               |                 |
+| `+`                       | `expr + expr`                                                    | Арифметичне додавання                                                                    | `Add`           |
+| `+=`                      | `var += expr`                                                    | Арифметичне додавання з присвоєння                                                       | `AddAssign`     |
+| `,`                       | `expr, expr`                                                     | Роздільник аргументів чи елементів                                                       |                 |
+| `-`                       | `- expr`                                                         | Обчислення арифметичного протилежного                                                    | `Neg`           |
+| `-`                       | `expr - expr`                                                    | Арифметичне віднімання                                                                   | `Sub`           |
+| `-=`                      | `var -= expr`                                                    | Арифметичне віднімання з присвоєнням                                                     | `SubAssign`     |
+| `->`                   | `fn(...) -> тип`, <code>&vert;...&vert; -> тип</code>                    | Тип, що повертає функція чи замикання                                                    |                 |
+| `.`                       | `expr.ident`                                                     | Доступ до члена                                                                          |                 |
+| `..`                      | `..`, `expr..`, `..expr`, `expr..expr`                           | Діапазонний літерал, не включає праву межу                                               | `PartialOrd`    |
+| `..=`                     | `..=expr`, `expr..=expr`                                         | Діапазонний літерал, включає праву межу                                                  | `PartialOrd`    |
+| `..`                      | `..expr`                                                         | Оновлення структурного літералу                                                          |                 |
+| `..`                      | `variant(x, ..)`, `struct_type { x, .. }`                        | Шаблон зв'язування "і решта"                                                             |                 |
+| `...`                     | `expr...expr`                                                    | (Застарілий, використовуйте натомість `..=`) У шаблоні: діапазонний шаблон, включає межу |                 |
+| `/`                       | `expr / expr`                                                    | Арифметичне ділення                                                                      | `Div`           |
+| `/=`                      | `var /= expr`                                                    | Арифметичне ділення з присвоєнням                                                        | `DivAssign`     |
+| `:`                       | `pat: type`, `ident: type`                                       | Обмеження                                                                                |                 |
+| `:`                       | `ident: expr`                                                    | Ініціалізатор поля структури                                                             |                 |
+| `:`                       | `'a: loop {...}`                                                 | Мітка циклу                                                                              |                 |
+| `;`                       | `expr;`                                                          | Завершення структури чи елементу                                                         |                 |
+| `;`                       | `[...; len]`                                                     | Частина синтаксису масиву фіксованого розміру                                            |                 |
+| `<<`                | `expr << expr`                                             | Зсув ліворуч                                                                             | `Shl`           |
+| `<<=`               | `var <<= expr`                                             | Зсув ліворуч із присвоєнням                                                              | `ShlAssign`     |
+| `<`                    | `expr < expr`                                                 | Порівняння менше                                                                         | `PartialOrd`    |
+| `<=`                   | `expr <= expr`                                                | Порівняння менше або дорівнює                                                            | `PartialOrd`    |
+| `=`                       | `var = expr`, `ident = type`                                     | Присвоєення/еквівалентність                                                              |                 |
+| `==`                      | `expr == expr`                                                   | Порівняння рівність                                                                      | `PartialEq`     |
+| `=>`                   | `pat => expr`                                                 | Частина синтаксису рукава match                                                          |                 |
+| `>`                    | `expr > expr`                                                 | Порівняння більше                                                                        | `PartialOrd`    |
+| `>=`                   | `expr >= expr`                                                | Порівняння більше або дорівнює                                                           | `PartialOrd`    |
+| `>>`                | `expr >> expr`                                             | Зсув праворуч                                                                            | `Shr`           |
+| `>>=`               | `var >>= expr`                                             | Зсув праворуч із присвоєнням                                                             | `ShrAssign`     |
+| `@`                       | `ident @ pat`                                                    | Зв'язування шаблона                                                                      |                 |
+| `^`                       | `expr ^ expr`                                                    | Побітове виключне АБО                                                                    | `BitXor`        |
+| `^=`                      | `var ^= expr`                                                    | Побітове виключне АБО з присвоєнням                                                      | `BitXorAssign`  |
+| <code>&vert;</code> | <code>pat &vert; pat</code>                                        | Альтернативні шаблони                                                                    |                 |
+| <code>&vert;</code> | <code>expr &vert; expr</code>                                        | Побітове АБО                                                                             | `BitOr`         |
+| <code>&vert;=</code> | <code>var &vert;= expr</code>                                        | Побітове АБО з присвоєнням                                                               | `BitOrAssign`   |
+| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code>                                        | Логічне АБО зі скороченим обчисленням                                                    |                 |
+| `?`                       | `expr?`                                                          | Передавання помилки                                                                      |                 |
 
-### Non-operator Symbols
+### Неоператорні символи
 
-The following list contains all symbols that don’t function as operators; that is, they don’t behave like a function or method call.
+Наступний список містить усі символи, що не працюють як оператори; тобто, вони не поводяться як виклик функції чи методу.
 
-Table B-2 shows symbols that appear on their own and are valid in a variety of locations.
+Таблиця B-2 показує символи, що вживаються самостійно і є коректними у різних місцях.
 
-<span class="caption">Table B-2: Stand-Alone Syntax</span>
+<span class="caption">Таблиця B-2: окремий синтаксис</span>
 
-| Symbol                                        | Explanation                                                            |
-| --------------------------------------------- | ---------------------------------------------------------------------- |
-| `'ident`                                      | Named lifetime or loop label                                           |
-| `...u8`, `...i32`, `...f64`, `...usize`, etc. | Numeric literal of specific type                                       |
-| `"..."`                                       | String literal                                                         |
-| `r"..."`, `r#"..."#`, `r##"..."##`, etc.      | Raw string literal, escape characters not processed                    |
-| `b"..."`                                      | Byte string literal; constructs an array of bytes instead of a string  |
-| `br"..."`, `br#"..."#`, `br##"..."##`, etc.   | Raw byte string literal, combination of raw and byte string literal    |
-| `'...'`                                       | Character literal                                                      |
-| `b'...'`                                      | ASCII byte literal                                                     |
-| <code>&vert;...&vert; expr</code>                     | Closure                                                                |
-| `!`                                           | Always empty bottom type for diverging functions                       |
-| `_`                                           | “Ignored” pattern binding; also used to make integer literals readable |
+| Символ                                         | Пояснення                                                                               |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `'ident`                                       | Іменований час існування чи мітка циклу                                                 |
+| `...u8`, `...i32`, `...f64`, `...usize` і т.д. | Числовий літерал певного типу                                                           |
+| `"..."`                                        | Стрічковий літерал                                                                      |
+| `r"..."`, `r#"..."#`, `r##"..."##` і т.д.      | Сирий стрічковий літерал, символи екранування не обробляються                           |
+| `b"..."`                                       | Байтовий стрічковий літерал; створює масив байтів замість стрічки                       |
+| `br"..."`, `br#"..."#`, `br##"..."##` і т.д.   | Сирий байтовий стрічковий літерал, комбінація сирого і байтового стрічкових літералів   |
+| `'...'`                                        | Символьний літерал                                                                      |
+| `b'...'`                                       | Байтовий літерал ASCII                                                                  |
+| <code>&vert;...&vert; expr</code>                      | Замикання                                                                               |
+| `!`                                            | Завжди порожній нижній тип для функцій, що не завершуються                              |
+| `_`                                            | Ігнороване зв'язування в шаблонах; також використовується для читаності цілих літералів |
 
-Table B-3 shows symbols that appear in the context of a path through the module hierarchy to an item.
+Таблиця B-3 показує символи, що зустрічаються в контексті шляхів до елементу в ієрархії модулів.
 
-<span class="caption">Table B-3: Path-Related Syntax</span>
+<span class="caption">Таблиця B-3: синтаксис, що стосується шляхів</span>
 
-| Symbol                                        | Explanation                                                                                                      |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `ident::ident`                                | Namespace path                                                                                                   |
-| `::path`                                      | Path relative to the crate root (i.e., an explicitly absolute path)                                              |
-| `self::path`                                  | Path relative to the current module (i.e., an explicitly relative path).                                         |
-| `super::path`                                 | Path relative to the parent of the current module                                                                |
-| `type::ident`, `<type as trait>::ident` | Associated constants, functions, and types                                                                       |
-| `<type>::...`                           | Associated item for a type that cannot be directly named (e.g., `<&T>::...`, `<[T]>::...`, etc.) |
-| `trait::method(...)`                          | Disambiguating a method call by naming the trait that defines it                                                 |
-| `type::method(...)`                           | Disambiguating a method call by naming the type for which it’s defined                                           |
-| `<type as trait>::method(...)`          | Disambiguating a method call by naming the trait and type                                                        |
+| Символ                                        | Пояснення                                                                                                              |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `ident::ident`                                | Шлях до простору імен                                                                                                  |
+| `::path`                                      | Шлях відносно кореня крейта (тобто явно заданий абсолютний шлях)                                                       |
+| `self::path`                                  | Шлях відносно поточного модуля (тобто явно заданий відносний шлях).                                                    |
+| `super::path`                                 | Шлях відносно батьківського для поточного модуля                                                                       |
+| `type::ident`, `<type as trait>::ident` | Асоційовані константи, функції та типи                                                                                 |
+| `<type>::...`                           | Асоційований елемент для типу, що не можна прямо назвати (наприклад `<&T>::...`, `<[T]>::...` і т.д..) |
+| `trait::method(...)`                          | Уточнення неоднозначного виклику методу називанням трейту, що визначає його                                            |
+| `type::method(...)`                           | Уточнення неоднозначного виклику методу називанням типу, для якого він визначений                                      |
+| `<type as trait>::method(...)`          | Уточнення неоднозначного виклику методу називанням трейту і типу                                                       |
 
-Table B-4 shows symbols that appear in the context of using generic type parameters.
+Таблиця B-4 показує символи, що зустрічаються в контексті параметрів узагальнених типів.
 
-<span class="caption">Table B-4: Generics</span>
+<span class="caption">Таблиця B-4: узагальнення</span>
 
-| Symbol                                     | Explanation                                                                                                                                    |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `path<...>`                          | Specifies parameters to generic type in a type (e.g., `Vec<u8>`)                                                                         |
-| `path::<...>`, `method::<...>` | Specifies parameters to generic type, function, or method in an expression; often referred to as turbofish (e.g., `"42".parse::<i32>()`) |
-| `fn ident<...> ...`                  | Define generic function                                                                                                                        |
-| `struct ident<...> ...`              | Define generic structure                                                                                                                       |
-| `enum ident<...> ...`                | Define generic enumeration                                                                                                                     |
-| `impl<...> ...`                      | Define generic implementation                                                                                                                  |
-| `for<...> type`                      | Higher-ranked lifetime bounds                                                                                                                  |
-| `type<ident=type>`                   | A generic type where one or more associated types have specific assignments (e.g., `Iterator<Item=T>`)                                   |
+| Символ                                     | Пояснення                                                                                                                               |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `path<...>`                          | Вказує параметри до узагальненого типу в типі (наприклад `Vec<u8>`)                                                               |
+| `path::<...>`, `method::<...>` | Вказує параметри до узагальненого типу, функції чи методу у виразі; часто зветься "турборибою" (наприклад, `"42".parse::<i32>()`) |
+| `fn ident<...> ...`                  | Визначення узагальненої функції                                                                                                         |
+| `struct ident<...> ...`              | Визначення узагальненої структури                                                                                                       |
+| `enum ident<...> ...`                | Визначення узагальненого енуму                                                                                                          |
+| `impl<...> ...`                      | Визначення узагальненої реалізації                                                                                                      |
+| `for<...> type`                      | Обмеження часу існування вищого рівня                                                                                                   |
+| `type<ident=type>`                   | Узагальнений тип, де один чи більше асоційованих типів мають конкретні значення (наприклад, `Iterator<Item=T>`)                   |
 
-Table B-5 shows symbols that appear in the context of constraining generic type parameters with trait bounds.
+Таблиця B-5 показує символи, що зустрічаються в контексті обмеження параметрів узагальненого типу обмеженнями трейта.
 
-<span class="caption">Table B-5: Trait Bound Constraints</span>
+<span class="caption">Таблиця B-5: Обмеження трейтів</span>
 
-| Symbol                        | Explanation                                                                                                                                |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `T: U`                        | Generic parameter `T` constrained to types that implement `U`                                                                              |
-| `T: 'a`                       | Generic type `T` must outlive lifetime `'a` (meaning the type cannot transitively contain any references with lifetimes shorter than `'a`) |
-| `T: 'static`                  | Generic type `T` contains no borrowed references other than `'static` ones                                                                 |
-| `'b: 'a`                      | Generic lifetime `'b` must outlive lifetime `'a`                                                                                           |
-| `T: ?Sized`                   | Allow generic type parameter to be a dynamically sized type                                                                                |
-| `'a + trait`, `trait + trait` | Compound type constraint                                                                                                                   |
+| Символ                        | Пояснення                                                                                                                                    |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `T: U`                        | Узагальнений параметр `T` обмежений типами, що реалізують `U`                                                                                |
+| `Т: 'a`                       | Узагальнений тип `T` має існувати не коротше за час існування `'a` (тобто тип не може містити посилання з часом існування, коротшим за `'a`) |
+| `T: 'static`                  | Узагальнений тип `T` не містить позичених посилань, окрім `'static`                                                                          |
+| `'b: 'a`                      | Узагальнений час існування `'b` має існувати не коротше за час існування `'a`                                                                |
+| `T: ?Sized`                   | Дозволити параметру узагальненого типу бути типом з динамічним розміром                                                                      |
+| `'a + trait`, `trait + trait` | Комбіноване обмеження типу                                                                                                                   |
 
-Table B-6 shows symbols that appear in the context of calling or defining macros and specifying attributes on an item.
+Таблиця B-6 показує символи, що зустрічаються в контексті виклику чи визначення макросів і зазначення атрибутів елементу.
 
-<span class="caption">Table B-6: Macros and Attributes</span>
+<span class="caption">Таблиця B-6: макроси та атрибути</span>
 
-| Symbol                                      | Explanation        |
-| ------------------------------------------- | ------------------ |
-| `#[meta]`                                   | Outer attribute    |
-| `#![meta]`                                  | Inner attribute    |
-| `$ident`                                    | Macro substitution |
-| `$ident:kind`                               | Macro capture      |
-| `$(…)…`                                     | Macro repetition   |
-| `ident!(...)`, `ident!{...}`, `ident![...]` | Macro invocation   |
+| Символ                                      | Пояснення              |
+| ------------------------------------------- | ---------------------- |
+| `#[meta]`                                   | Зовнішній атрибут      |
+| `#![meta]`                                  | Внутрішній атрибут     |
+| `$ident`                                    | Підставлення в макросі |
+| `$ident:kind`                               | Захоплення в макросі   |
+| `$(…)…`                                     | Повторення в макросі   |
+| `ident!(...)`, `ident!{...}`, `ident![...]` | Виклик макросу         |
 
-Table B-7 shows symbols that create comments.
+Таблиця B-7 показує символи для створення коментарів.
 
-<span class="caption">Table B-7: Comments</span>
+<span class="caption">Таблиця B-7: Коментарі</span>
 
-| Symbol     | Explanation             |
-| ---------- | ----------------------- |
-| `//`       | Line comment            |
-| `//!`      | Inner line doc comment  |
-| `///`      | Outer line doc comment  |
-| `/*...*/`  | Block comment           |
-| `/*!...*/` | Inner block doc comment |
-| `/**...*/` | Outer block doc comment |
+| Символ     | Пояснення                                 |
+| ---------- | ----------------------------------------- |
+| `//`       | Рядок-коментар                            |
+| `//!`      | Внутрішній документаційний коментар-рядок |
+| `///`      | Зовнішній документаційний коментар-рядок  |
+| `/*...*/`  | Коментар-блок                             |
+| `/*!...*/` | Внутрішній документаційний коментар-блок  |
+| `/**...*/` | Зовнішній документаційний коментар-блок   |
 
-Table B-8 shows symbols that appear in the context of using tuples.
+Таблиця B-8 показує символи, що зустрічаються в контексті використання кортежів.
 
-<span class="caption">Table B-8: Tuples</span>
+<span class="caption">Таблиця B-8: кортежі</span>
 
-| Symbol                   | Explanation                                                                                 |
-| ------------------------ | ------------------------------------------------------------------------------------------- |
-| `()`                     | Empty tuple (aka unit), both literal and type                                               |
-| `(expr)`                 | Parenthesized expression                                                                    |
-| `(expr,)`                | Single-element tuple expression                                                             |
-| `(type,)`                | Single-element tuple type                                                                   |
-| `(expr, ...)`            | Tuple expression                                                                            |
-| `(type, ...)`            | Tuple type                                                                                  |
-| `expr(expr, ...)`        | Function call expression; also used to initialize tuple `struct`s and tuple `enum` variants |
-| `expr.0`, `expr.1`, etc. | Tuple indexing                                                                              |
+| Символ                     | Пояснення                                                                                              |
+| -------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `()`                       | Порожній кортеж (також відомий як одиничний тип), і літерал, і тип                                     |
+| `(expr)`                   | Вираз у дужках                                                                                         |
+| `(expr,)`                  | Вираз - кортеж з одного елементу                                                                       |
+| `(type,)`                  | Тип - кортеж з одного елементу                                                                         |
+| `(expr, ...)`              | Вираз - кортеж                                                                                         |
+| `(type, ...)`              | Тип - кортеж                                                                                           |
+| `expr(expr, ...)`          | Виклик функції; також використовується для ініціалізації кортежів-структур і кортежів-варіантів енумів |
+| `expr.0`, `expr.1`, і т.д. | Індексація кортежа                                                                                     |
 
-Table B-9 shows the contexts in which curly braces are used.
+Таблиця B-9 показує контексти, в яких застосовуються фігурні дужки.
 
-<span class="caption">Table B-9: Curly Brackets</span>
+<span class="caption">Таблиця B-9: Фігурні дужки</span>
 
-| Context      | Explanation      |
-| ------------ | ---------------- |
-| `{...}`      | Block expression |
-| `Type {...}` | `struct` literal |
+| Контекст     | Пояснення         |
+| ------------ | ----------------- |
+| `{...}`      | Вираз-блок        |
+| `Type {...}` | Літерал структури |
 
-Table B-10 shows the contexts in which square brackets are used.
+Таблиця B-10 показує контексти, в яких застосовуються квадратні дужки.
 
-<span class="caption">Table B-10: Square Brackets</span>
+<span class="caption">Таблиця B-10: квадратні дужки</span>
 
-| Context                                            | Explanation                                                                                                                   |
-| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `[...]`                                            | Array literal                                                                                                                 |
-| `[expr; len]`                                      | Array literal containing `len` copies of `expr`                                                                               |
-| `[type; len]`                                      | Array type containing `len` instances of `type`                                                                               |
-| `expr[expr]`                                       | Collection indexing. Overloadable (`Index`, `IndexMut`)                                                                       |
-| `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | Collection indexing pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, or `RangeFull` as the “index” |
+| Контекст                                           | Пояснення                                                                                                           |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `[...]`                                            | Літерал масиву                                                                                                      |
+| `[expr; len]`                                      | Літерал масиву, що містить `len` копій `expr`                                                                       |
+| `[type; len]`                                      | Тип масиву, що містить `len` екземплярів типу `type`                                                                |
+| `expr[expr]`                                       | Індексація колекції. Може бути перевантаженою (`Index`, `IndexMut`)                                                 |
+| `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | Індексація колекції, що має виробляти слайс за допомогою `Range`, `RangeFrom`, `RangeTo`, or `RangeFull` як індексу |

@@ -159,7 +159,7 @@ And finally, let’s make sure that we don’t get any lines when we search for 
 
 Excellent! We’ve built our own mini version of a classic tool and learned a lot about how to structure applications. We’ve also learned a bit about file input and output, lifetimes, testing, and command line parsing.
 
-To round out this project, we’ll briefly demonstrate how to work with environment variables and how to print to standard error, both of which are useful when you’re writing command line programs. ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
+To round out this project, we’ll briefly demonstrate how to work with environment variables and how to print to standard error, both of which are useful when you’re writing command line programs. ch10-03-lifetime-syntax.html#validating-references-with-lifetimes ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 
 [ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function

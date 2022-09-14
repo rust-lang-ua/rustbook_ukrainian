@@ -1,97 +1,97 @@
-## crwdns64982:0crwdne64982:0
+## crwdns85018:0crwdne85018:0
 
-crwdns64984:0crwdne64984:0 crwdns64986:0crwdne64986:0 crwdns64988:0crwdne64988:0
+crwdns85020:0crwdne85020:0 crwdns85022:0crwdne85022:0 crwdns85024:0crwdne85024:0
 
-crwdns64990:0crwdne64990:0<!-- ignore --> crwdns64992:0crwdne64992:0
-
-```rust
-crwdns64994:0crwdne64994:0
-```
-
-crwdns64996:0crwdne64996:0 crwdns64998:0crwdne64998:0 crwdns65000:0crwdne65000:0
-
-crwdns65002:0crwdne65002:0 crwdns65004:0crwdne65004:0
-
-<span class="filename">crwdns65006:0crwdne65006:0</span>
+crwdns85026:0crwdne85026:0<!-- ignore --> crwdns85028:0crwdne85028:0
 
 ```rust
-crwdns65008:0crwdne65008:0
+crwdns85030:0crwdne85030:0
 ```
 
-<span class="caption">crwdns65010:0crwdne65010:0</span>
+crwdns85032:0crwdne85032:0 crwdns85034:0crwdne85034:0 crwdns85036:0crwdne85036:0
 
-crwdns65012:0crwdne65012:0 crwdns65014:0:fs:crwdne65014:0 crwdns65016:0:io:crwdne65016:0 crwdns65018:0crwdne65018:0 crwdns65020:0crwdne65020:0 crwdns65022:0crwdne65022:0 crwdns65024:0crwdne65024:0
+crwdns85038:0crwdne85038:0 crwdns85040:0crwdne85040:0
 
-crwdns65026:0crwdne65026:0 crwdns65028:0crwdne65028:0
+<span class="filename">crwdns85042:0crwdne85042:0</span>
 
-crwdns65030:0crwdne65030:0 crwdns65032:0crwdne65032:0
+```rust
+crwdns85044:0crwdne85044:0
+```
 
-<span class="filename">crwdns65034:0crwdne65034:0</span>
+<span class="caption">crwdns85046:0crwdne85046:0</span>
+
+crwdns85048:0crwdne85048:0 crwdns85050:0:fs:crwdne85050:0 crwdns85052:0:io:crwdne85052:0 crwdns85054:0crwdne85054:0 crwdns85056:0crwdne85056:0 crwdns85058:0crwdne85058:0 crwdns85060:0crwdne85060:0
+
+crwdns85062:0crwdne85062:0 crwdns85064:0crwdne85064:0
+
+crwdns85066:0crwdne85066:0 crwdns85068:0crwdne85068:0
+
+<span class="filename">crwdns85070:0crwdne85070:0</span>
 
 ```rust,should_panic
-crwdns65036:0crwdne65036:0
+crwdns85072:0crwdne85072:0
 ```
 
 
-<span class="caption">crwdns65038:0crwdne65038:0</span>
+<span class="caption">crwdns85074:0crwdne85074:0</span>
 
-crwdns65040:0crwdne65040:0
+crwdns85076:0crwdne85076:0
 
-crwdns65042:0crwdne65042:0 crwdns65044:0crwdne65044:0
+crwdns85078:0crwdne85078:0 crwdns85080:0crwdne85080:0
 
-crwdns65046:0crwdne65046:0 crwdns65048:0crwdne65048:0 crwdns65050:0crwdne65050:0
+crwdns85082:0crwdne85082:0 crwdns85084:0crwdne85084:0 crwdns85086:0crwdne85086:0
 
 ```console
-crwdns65052:0crwdne65052:0
+crwdns85088:0crwdne85088:0
 ```
 
-crwdns65054:0crwdne65054:0
+crwdns85090:0crwdne85090:0
 
-### crwdns65056:0crwdne65056:0
+### crwdns85092:0crwdne85092:0
 
-crwdns65058:0crwdne65058:0 crwdns65060:0crwdne65060:0 crwdns65062:0crwdne65062:0 crwdns65064:0crwdne65064:0
+crwdns85094:0crwdne85094:0 crwdns85096:0crwdne85096:0 crwdns85098:0crwdne85098:0 crwdns85100:0crwdne85100:0
 
-<span class="filename">crwdns65066:0crwdne65066:0</span>
+<span class="filename">crwdns85102:0crwdne85102:0</span>
 
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
 
 ```rust,ignore
-crwdns65068:0crwdne65068:0
+crwdns85104:0crwdne85104:0
 ```
 
 
-<span class="caption">crwdns65070:0crwdne65070:0</span>
+<span class="caption">crwdns85106:0crwdne85106:0</span>
 
-crwdns65072:0crwdne65072:0 crwdns65074:0crwdne65074:0 crwdns65076:0crwdne65076:0 crwdns65078:0crwdne65078:0 crwdns65080:0crwdne65080:0
+crwdns85108:0crwdne85108:0 crwdns85110:0crwdne85110:0 crwdns85112:0crwdne85112:0 crwdns85114:0crwdne85114:0 crwdns85116:0crwdne85116:0
 
-crwdns65082:0crwdne65082:0 crwdns65084:0crwdne65084:0 crwdns65086:0crwdne65086:0 crwdns65088:0crwdne65088:0 crwdns65090:0crwdne65090:0
+crwdns85118:0crwdne85118:0 crwdns85120:0crwdne85120:0 crwdns85122:0crwdne85122:0 crwdns85124:0crwdne85124:0 crwdns85126:0crwdne85126:0
 
-> ### crwdns65092:0crwdne65092:0
+> ### crwdns85128:0crwdne85128:0
 > 
-> crwdns65094:0crwdne65094:0 crwdns65096:0crwdne65096:0 crwdns65098:0crwdne65098:0 crwdns65100:0crwdne65100:0
+> crwdns85130:0crwdne85130:0 crwdns85132:0crwdne85132:0 crwdns85134:0crwdne85134:0 crwdns85136:0crwdne85136:0
 > 
-> crwdns65102:0crwdne65102:0
+> crwdns85138:0crwdne85138:0
 > 
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
 > 
 > ```rust,ignore
-> crwdns65104:0:fs:crwdnd65104:0:io:crwdne65104:0
+> crwdns85140:0:fs:crwdnd85140:0:io:crwdne85140:0
 > ```
 > 
-> crwdns65106:0crwdne65106:0 crwdns65108:0crwdne65108:0 crwdns65110:0crwdne65110:0
+> crwdns85142:0crwdne85142:0 crwdns85144:0crwdne85144:0 crwdns85146:0crwdne85146:0
 
-### crwdns65112:0crwdne65112:0
+### crwdns85148:0crwdne85148:0
 
-crwdns65114:0crwdne65114:0 crwdns65116:0crwdne65116:0 crwdns65118:0crwdne65118:0 crwdns65120:0crwdne65120:0 crwdns65122:0crwdne65122:0 crwdns65124:0crwdne65124:0
+crwdns85150:0crwdne85150:0 crwdns85152:0crwdne85152:0 crwdns85154:0crwdne85154:0 crwdns85156:0crwdne85156:0 crwdns85158:0crwdne85158:0 crwdns85160:0crwdne85160:0
 
-<span class="filename">crwdns65126:0crwdne65126:0</span>
+<span class="filename">crwdns85162:0crwdne85162:0</span>
 
 ```rust,should_panic
-crwdns65128:0crwdne65128:0
+crwdns85164:0crwdne85164:0
 ```
 
-crwdns65130:0crwdne65130:0
+crwdns85166:0crwdne85166:0
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/no-listing-04-unwrap
@@ -100,18 +100,18 @@ copy and paste relevant text
 -->
 
 ```text
-crwdns65132:0crwdne65132:0
+crwdns85168:0crwdne85168:0
 ```
 
-crwdns65134:0crwdne65134:0 crwdns65136:0crwdne65136:0 crwdns65138:0crwdne65138:0
+crwdns85170:0crwdne85170:0 crwdns85172:0crwdne85172:0 crwdns85174:0crwdne85174:0
 
-<span class="filename">crwdns65140:0crwdne65140:0</span>
+<span class="filename">crwdns85176:0crwdne85176:0</span>
 
 ```rust,should_panic
-crwdns65142:0crwdne65142:0
+crwdns85178:0crwdne85178:0
 ```
 
-crwdns65144:0crwdne65144:0 crwdns65146:0crwdne65146:0 crwdns65148:0crwdne65148:0
+crwdns85180:0crwdne85180:0 crwdns85182:0crwdne85182:0 crwdns85184:0crwdne85184:0
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/no-listing-05-expect
@@ -120,156 +120,156 @@ copy and paste relevant text
 -->
 
 ```text
-crwdns65150:0crwdne65150:0
+crwdns85186:0crwdne85186:0
 ```
 
-crwdns65152:0crwdne65152:0 crwdns65154:0crwdne65154:0
+crwdns85188:0crwdne85188:0 crwdns85190:0crwdne85190:0
 
-### crwdns65156:0crwdne65156:0
+### crwdns85192:0crwdne85192:0
 
-crwdns65158:0crwdne65158:0 crwdns65160:0crwdne65160:0
+crwdns85194:0crwdne85194:0 crwdns85196:0crwdne85196:0
 
-crwdns65162:0crwdne65162:0 crwdns65164:0crwdne65164:0
+crwdns85198:0crwdne85198:0 crwdns85200:0crwdne85200:0
 
-<span class="filename">crwdns65166:0crwdne65166:0</span>
+<span class="filename">crwdns85202:0crwdne85202:0</span>
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
 
 ```rust
-crwdns65168:0crwdne65168:0
+crwdns85204:0crwdne85204:0
 ```
 
 
-<span class="caption">crwdns65170:0crwdne65170:0</span>
+<span class="caption">crwdns85206:0crwdne85206:0</span>
 
-crwdns65172:0crwdne65172:0 crwdns65174:0crwdne65174:0 crwdns65176:0crwdne65176:0
+crwdns85208:0crwdne85208:0 crwdns85210:0crwdne85210:0 crwdns85212:0crwdne85212:0
 
-crwdns65178:0crwdne65178:0 crwdns65180:0crwdne65180:0 crwdns65182:0crwdne65182:0
+crwdns85214:0crwdne85214:0 crwdns85216:0crwdne85216:0 crwdns85218:0crwdne85218:0
 
-crwdns65184:0crwdne65184:0 crwdns65186:0crwdne65186:0 crwdns65188:0crwdne65188:0 crwdns65190:0crwdne65190:0
+crwdns85220:0crwdne85220:0 crwdns85222:0crwdne85222:0 crwdns85224:0crwdne85224:0 crwdns85226:0crwdne85226:0
 
-crwdns65192:0crwdne65192:0 crwdns65194:0crwdne65194:0 crwdns65196:0crwdne65196:0 crwdns65198:0crwdne65198:0 crwdns65200:0crwdne65200:0
+crwdns85228:0crwdne85228:0 crwdns85230:0crwdne85230:0 crwdns85232:0crwdne85232:0 crwdns85234:0crwdne85234:0 crwdns85236:0crwdne85236:0
 
-crwdns65202:0crwdne65202:0 crwdns65204:0crwdne65204:0 crwdns65206:0crwdne65206:0 crwdns65208:0crwdne65208:0
+crwdns85238:0crwdne85238:0 crwdns85240:0crwdne85240:0 crwdns85242:0crwdne85242:0 crwdns85244:0crwdne85244:0
 
-crwdns65210:0crwdne65210:0
+crwdns85246:0crwdne85246:0
 
-#### crwdns65212:0crwdne65212:0
+#### crwdns85248:0crwdne85248:0
 
-crwdns65214:0crwdne65214:0
+crwdns85250:0crwdne85250:0
 
-<span class="filename">crwdns65216:0crwdne65216:0</span>
+<span class="filename">crwdns85252:0crwdne85252:0</span>
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
 
 ```rust
-crwdns65218:0crwdne65218:0
+crwdns85254:0crwdne85254:0
 ```
 
 
-<span class="caption">crwdns65220:0crwdne65220:0</span>
+<span class="caption">crwdns85256:0crwdne85256:0</span>
 
-crwdns65222:0crwdne65222:0 crwdns65224:0crwdne65224:0 crwdns65226:0crwdne65226:0
+crwdns85258:0crwdne85258:0 crwdns85260:0crwdne85260:0 crwdns85262:0crwdne85262:0
 
-crwdns65228:0crwdne65228:0 crwdns65230:0crwdne65230:0 crwdns65232:0crwdne65232:0
+crwdns85264:0crwdne85264:0 crwdns85266:0crwdne85266:0 crwdns85268:0crwdne85268:0
 
-crwdns65234:0crwdne65234:0 crwdns65236:0crwdne65236:0
+crwdns85270:0crwdne85270:0 crwdns85272:0crwdne85272:0
 
-crwdns65238:0crwdne65238:0 crwdns65240:0crwdne65240:0 crwdns65242:0crwdne65242:0
+crwdns85274:0crwdne85274:0 crwdns85276:0crwdne85276:0 crwdns85278:0crwdne85278:0
 
-crwdns65244:0crwdne65244:0 crwdns65246:0crwdne65246:0
+crwdns85280:0crwdne85280:0 crwdns85282:0crwdne85282:0
 
-<span class="filename">crwdns65248:0crwdne65248:0</span>
+<span class="filename">crwdns85284:0crwdne85284:0</span>
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
 
 ```rust
-crwdns65250:0crwdne65250:0
+crwdns85286:0crwdne85286:0
 ```
 
 
-<span class="caption">crwdns65252:0crwdne65252:0</span>
+<span class="caption">crwdns85288:0crwdne85288:0</span>
 
-crwdns65254:0crwdne65254:0 crwdns65256:0crwdne65256:0 crwdns65258:0crwdne65258:0 crwdns65260:0crwdne65260:0
+crwdns85290:0crwdne85290:0 crwdns85292:0crwdne85292:0 crwdns85294:0crwdne85294:0 crwdns85296:0crwdne85296:0
 
-crwdns65262:0crwdne65262:0
+crwdns85298:0crwdne85298:0
 
-<span class="filename">crwdns65264:0crwdne65264:0</span>
+<span class="filename">crwdns85300:0crwdne85300:0</span>
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
 
 ```rust
-crwdns65266:0crwdne65266:0
+crwdns85302:0crwdne85302:0
 ```
 
 
-<span class="caption">crwdns65268:0crwdne65268:0</span>
+<span class="caption">crwdns85304:0crwdne85304:0</span>
 
-crwdns65270:0crwdne65270:0 crwdns65272:0crwdne65272:0
+crwdns85306:0crwdne85306:0 crwdns85308:0crwdne85308:0
 
-#### crwdns65274:0crwdne65274:0
+#### crwdns85310:0crwdne85310:0
 
-crwdns65276:0crwdne65276:0 crwdns65278:0crwdne65278:0 crwdns65280:0crwdne65280:0 crwdns65282:0crwdne65282:0
+crwdns85312:0crwdne85312:0 crwdns85314:0crwdne85314:0 crwdns85316:0crwdne85316:0 crwdns85318:0crwdne85318:0
 
-crwdns65284:0crwdne65284:0
+crwdns85320:0crwdne85320:0
 
-<span class="filename">crwdns65286:0crwdne65286:0</span>
+<span class="filename">crwdns85322:0crwdne85322:0</span>
 
 ```rust,ignore,does_not_compile
-crwdns65288:0crwdne65288:0
+crwdns85324:0crwdne85324:0
 ```
 
 
-<span class="caption">crwdns65290:0crwdne65290:0</span>
+<span class="caption">crwdns85326:0crwdne85326:0</span>
 
-crwdns65292:0crwdne65292:0 crwdns65294:0crwdne65294:0 crwdns65296:0crwdne65296:0
+crwdns85328:0crwdne85328:0 crwdns85330:0crwdne85330:0 crwdns85332:0crwdne85332:0
 
 ```console
-crwdns65298:0crwdne65298:0
+crwdns85334:0crwdne85334:0
 ```
 
-crwdns65300:0crwdne65300:0
+crwdns85336:0crwdne85336:0
 
-crwdns65302:0crwdne65302:0 crwdns65304:0crwdne65304:0 crwdns65306:0crwdne65306:0
+crwdns85338:0crwdne85338:0 crwdns85340:0crwdne85340:0 crwdns85342:0crwdne85342:0
 
-crwdns65308:0crwdne65308:0 crwdns65310:0crwdne65310:0 crwdns65312:0crwdne65312:0 crwdns65314:0crwdne65314:0 crwdns65316:0crwdne65316:0
+crwdns85344:0crwdne85344:0 crwdns85346:0crwdne85346:0 crwdns85348:0crwdne85348:0 crwdns85350:0crwdne85350:0 crwdns85352:0crwdne85352:0
 
 ```rust
-crwdns65318:0crwdne65318:0
+crwdns85354:0crwdne85354:0
 ```
 
 
-<span class="caption">crwdns65320:0crwdne65320:0</span>
+<span class="caption">crwdns85356:0crwdne85356:0</span>
 
-crwdns65322:0crwdne65322:0 crwdns65324:0crwdne65324:0 crwdns65326:0crwdne65326:0 crwdns65328:0crwdne65328:0 crwdns65330:0crwdne65330:0
+crwdns85358:0crwdne85358:0 crwdns85360:0crwdne85360:0 crwdns85362:0crwdne85362:0 crwdns85364:0crwdne85364:0 crwdns85366:0crwdne85366:0
 
-crwdns65332:0crwdne65332:0 crwdns65334:0crwdne65334:0 crwdns65336:0crwdne65336:0 crwdns65338:0crwdne65338:0 crwdns65340:0crwdne65340:0 crwdns65342:0crwdne65342:0
+crwdns85368:0crwdne85368:0 crwdns85370:0crwdne85370:0 crwdns85372:0crwdne85372:0 crwdns85374:0crwdne85374:0 crwdns85376:0crwdne85376:0 crwdns85378:0crwdne85378:0
 
-crwdns65344:0crwdne65344:0 crwdns65346:0crwdne65346:0
+crwdns85380:0crwdne85380:0 crwdns85382:0crwdne85382:0
 
-crwdns65348:0crwdne65348:0 crwdns65350:0crwdne65350:0
+crwdns85384:0crwdne85384:0 crwdns85386:0crwdne85386:0
 
-crwdns65352:0crwdne65352:0 crwdns65354:0crwdne65354:0 crwdns65356:0crwdne65356:0
+crwdns85388:0crwdne85388:0 crwdns85390:0crwdne85390:0 crwdns85392:0crwdne85392:0
 
 ```rust,ignore
-crwdns65358:0crwdne65358:0
+crwdns85394:0crwdne85394:0
 ```
 
 
-<span class="caption">crwdns65360:0crwdne65360:0</span>
+<span class="caption">crwdns85396:0crwdne85396:0</span>
 
-crwdns65362:0crwdne65362:0<!-- ignore --> crwdns65364:0crwdne65364:0 crwdns65366:0crwdne65366:0 crwdns65368:0crwdne65368:0 crwdns65370:0:io:crwdne65370:0
+crwdns85398:0crwdne85398:0<!-- ignore --> crwdns85400:0crwdne85400:0 crwdns85402:0crwdne85402:0 crwdns85404:0crwdne85404:0 crwdns85406:0:io:crwdne85406:0
 
-crwdns65372:0crwdne65372:0 crwdns65374:0crwdne65374:0 crwdns65376:0crwdne65376:0
+crwdns85408:0crwdne85408:0 crwdns85410:0crwdne85410:0 crwdns85412:0crwdne85412:0
 
-crwdns65378:0:process:crwdne65378:0<!-- ignore -->crwdns65380:0crwdne65380:0
+crwdns85414:0:process:crwdne85414:0<!-- ignore -->crwdns85416:0crwdne85416:0
 
-crwdns65382:0crwdne65382:0
+crwdns85418:0crwdne85418:0
