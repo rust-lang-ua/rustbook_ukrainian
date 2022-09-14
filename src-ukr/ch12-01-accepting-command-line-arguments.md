@@ -23,7 +23,7 @@ To enable `minigrep` to read the values of command line arguments we pass to it,
 
 `collect` method on an iterator to turn it into a collection, such as a vector, that contains all the elements the iterator produces.
 
-`collect` method on an iterator to turn it into a collection, such as a vector, that contains all the elements the iterator produces.
+The code in Listing 12-1 allows your `minigrep` program to read any command line arguments passed to it and then collect the values into a vector.
 
 <span class="filename">Filename: src/main.rs</span>
 
