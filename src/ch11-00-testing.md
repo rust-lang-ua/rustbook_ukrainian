@@ -1,31 +1,32 @@
-# Написання автоматизованих тестів
+# Writing Automated Tests
 
-У 1972 році у своєму есе "Скромний програміст" Едсгер Дейкстра сказав
-“Тестування програми може бути дуже ефективним способом показати наявність помилок, але
-його зовсім недостатньо, щоб показати їх відсутність.” Це не означає, що ми
-не повинні тестувати стільки, скільки ми можемо!
+In his 1972 essay “The Humble Programmer,” Edsger W. Dijkstra said that
+“Program testing can be a very effective way to show the presence of bugs, but
+it is hopelessly inadequate for showing their absence.” That doesn’t mean we
+shouldn’t try to test as much as we can!
 
-Коректність наших програм полягає у ступені відповідності того, що вони роблять тому, що ми мали на увазі, 
-коли їх розробляли. Rust розроблений з високим ступенем турботи 
-про коректність програм, але коректність є складною та її не легко довести. Система типів Rust
-несе величезну частину цього тягаря, але вона не здатна впоратися 
-з усім. Таким чином, Rust включає підтримку написання автоматизованих тестів програмного забезпечення.
+Correctness in our programs is the extent to which our code does what we intend
+it to do. Rust is designed with a high degree of concern about the correctness
+of programs, but correctness is complex and not easy to prove. Rust’s type
+system shoulders a huge part of this burden, but the type system cannot catch
+everything. As such, Rust includes support for writing automated software tests.
 
-Нехай ми пишемо функцію `add_two` яка додає 2 до будь-якого числа,
-що передано в неї. В сигнатурі цієї функції ми вказуємо ціле число як вхідний параметр,
-та ціле число, як результат, що повертається. Коли ми реалізуємо та компілюємо цю функцію, Rust робить усі
-перевірки типів та запозичень, щоб гарантувати,
-що ми не передаємо рядок або недійсне посилання 
-до цієї функції. Але Rust *не може* перевірити, що ця функція робить безпосередньо
-те, що ми задумали, що повертає параметр плюс 2, а не , скажимо, параметр плюс 10 або параметр мінус 50! Ось тут і з'являються тести.
+Say we write a function `add_two` that adds 2 to whatever number is passed to
+it. This function’s signature accepts an integer as a parameter and returns an
+integer as a result. When we implement and compile that function, Rust does all
+the type checking and borrow checking that you’ve learned so far to ensure
+that, for instance, we aren’t passing a `String` value or an invalid reference
+to this function. But Rust *can’t* check that this function will do precisely
+what we intend, which is return the parameter plus 2 rather than, say, the
+parameter plus 10 or the parameter minus 50! That’s where tests come in.
 
-Ми можемо написати тести, які  підтверджують, що, наприклад, коли ми передаємо '3'
-до функції `add_two`, то вона повертає значення `5`. Ми можемо запускати ці тести кожного разу,
-коли вносимо зміни до нашого коду, щоб бути впевненими в тому,
-що коректна поведінка програми при цьому не змінилася.
+We can write tests that assert, for example, that when we pass `3` to the
+`add_two` function, the returned value is `5`. We can run these tests whenever
+we make changes to our code to make sure any existing correct behavior has not
+changed.
 
-Тестування - це складна навичка: хоча ми не можемо в одному розділі охопити усі нюанси того,
-як створювати гарні тести, ми оглянемо засоби тестування у Rust. 
-Ми поговоримо про  анотації та макроси, доступні вам для
-написання тестів, про поведінку за замовчуванням та параметри для запуску ваших 
-тестів, а також як організувати тестування за допомогою unit- та інтеграційних тестів.
+Testing is a complex skill: although we can’t cover every detail about how to
+write good tests in one chapter, we’ll discuss the mechanics of Rust’s testing
+facilities. We’ll talk about the annotations and macros available to you when
+writing your tests, the default behavior and options provided for running your
+tests, and how to organize tests into unit tests and integration tests.
