@@ -101,7 +101,7 @@ The error says we’re not allowed to mutate a variable’s type:
 {{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
 ```
 
-Now that we’ve explored how variables work, let’s look at more data types they can have. ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+Now that we’ve explored how variables work, let’s look at more data types they can have.
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 
 [data-types]: ch03-02-data-types.html#data-types
