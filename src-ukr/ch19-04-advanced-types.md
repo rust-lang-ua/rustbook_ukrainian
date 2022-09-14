@@ -165,7 +165,7 @@ A trait bound on `?Sized` means “`T` may or may not be `Sized`” and this not
 Also note that we switched the type of the `t` parameter from `T` to `&T`. Because the type might not be `Sized`, we need to use it behind some kind of pointer. In this case, we’ve chosen a reference.
 
 Next, we’ll talk about functions and closures!
-ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details ch06-02-match.html#the-match-control-flow-operator ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+Next, we’ll talk about functions and closures! ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details ch06-02-match.html#the-match-control-flow-operator ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 
-[string-slices]: ch04-03-slices.html#string-slices
 [using-the-newtype-pattern]: ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
+[string-slices]: ch04-03-slices.html#string-slices
