@@ -164,7 +164,7 @@ When the `Deref` trait is defined for the types involved, Rust will analyze the 
 
 Similar to how you use the `Deref` trait to override the `*` operator on immutable references, you can use the `DerefMut` trait to override the `*` operator on mutable references.
 
-Rust does deref coercion when it finds types and trait implementations in three cases:
+Similar to how you use the `Deref` trait to override the `*` operator on immutable references, you can use the `DerefMut` trait to override the `*` operator on mutable references.
 
 * From `&T` to `&U` when `T: Deref<Target=U>`
 * From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
