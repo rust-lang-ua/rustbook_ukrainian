@@ -1,13 +1,13 @@
-## Appendix F: Translations of the Book
+## Додаток F: Переклади Книги
 
-For resources in languages other than English. Most are still in progress; see [the Translations label][label] to help or let us know about a new translation!
+Ресурси іншими мовами. Більшість з них не завершена; прогляньте [позначки стану перекладу][label], щоб долучитися чи дати нам знати про новий переклад!
 
 - [Português](https://github.com/rust-br/rust-book-pt-br) (BR)
 - [Português](https://github.com/nunojesus/rust-book-pt-pt) (PT)
 - [简体中文](https://github.com/KaiserY/trpl-zh-cn)
 - [正體中文](https://github.com/rust-tw/book-tw)
 - [Українська](https://github.com/pavloslav/rust-book-uk-ua)
-- [Español](https://github.com/thecodix/book), [alternate](https://github.com/ManRR/rust-book-es)
+- [Español](https://github.com/thecodix/book), [альтернативна](https://github.com/ManRR/rust-book-es)
 - [Italiano](https://github.com/Ciro-Fusco/book_it)
 - [Русский](https://github.com/rust-lang-ru/book)
 - [한국어](https://github.com/rinthel/rust-lang-book-ko)
