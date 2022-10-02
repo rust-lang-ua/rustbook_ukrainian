@@ -1,39 +1,38 @@
-## Як писати тести
+## How to Write Tests
 
-Тести - це Rust функції, які перевіряють, чи тестований код працює
-очікуваним способом. Тіла тестових функцій зазвичай виконують
-наступні три дії:
+Tests are Rust functions that verify that the non-test code is functioning in
+the expected manner. The bodies of test functions typically perform these three
+actions:
 
-1. Встановити будь-яке потрібне значення або стан.
-2. Запустити на виконання код, який ви хочете протестувати.
-3. Переконатися, що отримані результати відповідають вашим очікуванням.
+1. Set up any needed data or state.
+2. Run the code you want to test.
+3. Assert the results are what you expect.
 
-Давайте розглянемо функції, які надає Rust спеціально для написання тестів та
-виконання вище зазначених дій, що включають  `test` атрибут, декілька макросів, а також атрибут
- `should_panic`.
+Let’s look at the features Rust provides specifically for writing tests that
+take these actions, which include the `test` attribute, a few macros, and the
+`should_panic` attribute.
 
-### Структура тестуючої функції
+### The Anatomy of a Test Function
 
-У найпростішому випадку, тест у Rust - це функція що анотована за допомогою атрибута 
-`test`. Атрибути - це метадані фрагментів Rust-коду; наприклад 
- атрибут `derive`, який ми використовували зі структурами у розділі 5. Для перетворення звичайної функції
-на функцію-тест, додайте `#[test]` на рядку перед `fn`. Коли ви запускаєте ваші 
-тести за допомогою команди `cargo test`, Rust будує бінарний файл, який запускає 
-анотовані функції та звітує
-чи виконалися тестові функції успішно або трапився збій.
+At its simplest, a test in Rust is a function that’s annotated with the `test`
+attribute. Attributes are metadata about pieces of Rust code; one example is
+the `derive` attribute we used with structs in Chapter 5. To change a function
+into a test function, add `#[test]` on the line before `fn`. When you run your
+tests with the `cargo test` command, Rust builds a test runner binary that runs
+the annotated functions and reports on whether each
+test function passes or fails.
 
-Кожного разу, коли ми створюємо новий проєкт за допомогою Cargo, він автоматично генерує для нас тестовий модуль 
-з тестовими функціями. Цей модуль надає вам шаблон
-для написання тестів, а отже вам непотрібно кожного разу при створенні нового проекту
-уточнювати їх структуру та синтаксис. Ви можете додати стільки тестових модулів
-та тестових функцій, скільки забажаєте!
+Whenever we make a new library project with Cargo, a test module with a test
+function in it is automatically generated for us. This module gives you a
+template for writing your tests so you don’t have to look up the exact
+structure and syntax every time you start a new project. You can add as many
+additional test functions and as many test modules as you want!
 
-Перш ніж фактично протестувати будь-який код,
-ми розглянемо деякі аспекти роботи тестів,
- експериментуючи з шаблоном тесту. Потім ми напишемо декілька реальних тестів,
- що запускають наш код та підтверджують, що його поведінка є правильною.
+We’ll explore some aspects of how tests work by experimenting with the template
+test before we actually test any code. Then we’ll write some real-world tests
+that call some code that we’ve written and assert that its behavior is correct.
 
-Давайте створимо новий проєкт бібліотеки під назвою `adder`, в якому додаються два числа:
+Let’s create a new library project called `adder` that will add two numbers:
 
 ```console
 $ cargo new adder --lib
@@ -41,15 +40,15 @@ $ cargo new adder --lib
 $ cd adder
 ```
 
-Вміст файлу  *src/lib.rs* у вашій бібліотеці ` adder` має виглядати так
-Лістінг 11-1.
+The contents of the *src/lib.rs* file in your `adder` library should look like
+Listing 11-1.
 
 <span class="filename">Filename: src/lib.rs</span>
 
 <!-- manual-regeneration
 cd listings/ch11-writing-automated-tests
 rm -rf listing-11-01
-cargo new --lib listing-11-01 --name adder
+cargo new listing-11-01 --lib --name adder
 cd listing-11-01
 cargo test
 git co output.txt
@@ -63,18 +62,18 @@ cd ../../..
 <span class="caption">Listing 11-1: The test module and function generated
 automatically by `cargo new`</span>
 
-Наразі давайте проігноруємо два верхні рядки та зосередимося на функції. Зверніть увагу на
-анотацію `#[test]`: Цей атрибут вказує на те, що функція є тестуючою,
-та функціонал для запуску тестів ставитиметься до неї, як до теста. Ми також можемо мати нетестуючі функції
-в модулі `tests`  щоб допомогти налаштувати типові сценарії або виконати загальні операції, 
- тому ми завжди повинні помічати за допомогою анотації які саме функції є тестуючими..
+For now, let’s ignore the top two lines and focus on the function. Note the
+`#[test]` annotation: this attribute indicates this is a test function, so the
+test runner knows to treat this function as a test. We might also have non-test
+functions in the `tests` module to help set up common scenarios or perform
+common operations, so we always need to indicate which functions are tests.
 
-Тіло функції зі зразка використовує макрос `assert_eq!`  для ствердження того, що `result`,
-який містить результат операції  додавання 2 та 2, дорівнює 4. Це ствердження служить 
-типовим зразком формату для тесту. Давайте запустимо його 
-та впевнимось, що тест проходить коректно.
+The example function body uses the `assert_eq!` macro to assert that `result`,
+which contains the result of adding 2 and 2, equals 4. This assertion serves as
+an example of the format for a typical test. Let’s run it to see that this test
+passes.
 
-Команда  `cargo test` запускає усі тести з нашого  проєкту, як показано у лістінгу
+The `cargo test` command runs all tests in our project, as shown in Listing
 11-2.
 
 ```console
@@ -84,32 +83,35 @@ automatically by `cargo new`</span>
 <span class="caption">Listing 11-2: The output from running the automatically
 generated test</span>
 
-Cargo скомпілював та запустив тест. Ми бачимо рядок `running 1 test`. наступний рядок 
-показує ім'я згенерованої тестуючої функції `it_works`, а також що 
-результат запуску тесту є `ok`. Загальний результат `test result: ok.`
-означає, що усі тести пройшли успішно, а частина `1 passed; 0
-failed` показує загальну кількість тестів що були пройдені успішно або завершилися зі збоєм.
+Cargo compiled and ran the test. We see the line `running 1 test`. The next
+line shows the name of the generated test function, called `it_works`, and that
+the result of running that test is `ok`. The overall summary `test result: ok.`
+means that all the tests passed, and the portion that reads `1 passed; 0
+failed` totals the number of tests that passed or failed.
 
-Можна помітити деякі тести як ігноровані, тоді вони не будуть запускатися; ми розглянемо це далі у цьому розділі у [“Ignoring Some Tests Unless Specifically
-Requested”][ignoring]<!-- ignore --> . Оскільки ми
-не помічали жодного тесту для ігнорування, ми отрримуємо на виході `0 ignored`. Ми також можемо
-додати до команди `cargo test` аргумент, щоб запускалися лише ті тести, що відповідають певному рядку; Це нназивається  *фільтрацією* та  ми поговоримо про це у  [“Running a
-Subset of Tests by Name”][subset]<!-- ignore -->. Ми також не маємо
-відфільтрованих тестів, тому вивід показує `0 filtered out`.
+It’s possible to mark a test as ignored so it doesn’t run in a particular
+instance; we’ll cover that in the [“Ignoring Some Tests Unless Specifically
+Requested”][ignoring]<!-- ignore --> section later in this chapter. Because we
+haven’t done that here, the summary shows `0 ignored`. We can also pass an
+argument to the `cargo test` command to run only tests whose name matches a
+string; this is called *filtering* and we’ll cover that in the [“Running a
+Subset of Tests by Name”][subset]<!-- ignore --> section. We also haven’t
+filtered the tests being run, so the end of the summary shows `0 filtered out`.
 
-`0 measured` показує статистику тестів швидкодії.
-Тести швидкодії на момент написання цієї статті доступні лише у нічних збірках Rust. Дивись 
-[the documentation about benchmark tests][bench] для більш детальної інформації.
+The `0 measured` statistic is for benchmark tests that measure performance.
+Benchmark tests are, as of this writing, only available in nightly Rust. See
+[the documentation about benchmark tests][bench] to learn more.
 
-Наступна частина виводу  `Doc-tests adder` призначена для 
- відображення тестів документації. У нас поки що немає тестів документації,
-але Rust може скомпілювати будь-які приклади коду з документації по нашому api.
-Ця функція допомагає синхронізувати вашу документацію та код! Ми розглянемо 
-як писати тести документації в  [“Documentation Comments as
-Tests”][doc-comments]<!-- ignore --> у розділі 14. Зараз ми проігноруємо частину виводу, присвячену  
-`Doc-tests`.
+The next part of the test output starting at `Doc-tests adder` is for the
+results of any documentation tests. We don’t have any documentation tests yet,
+but Rust can compile any code examples that appear in our API documentation.
+This feature helps keep your docs and your code in sync! We’ll discuss how to
+write documentation tests in the [“Documentation Comments as
+Tests”][doc-comments]<!-- ignore --> section of Chapter 14. For now, we’ll
+ignore the `Doc-tests` output.
 
-Давайте налаштуємо тест для відповідності нашим потребам. Спочатку змінимо ім'я тестової функції`it_works`  на інше, наприклад таке як  `exploration`:
+Let’s start to customize the test to our own needs. First change the name of
+the `it_works` function to a different name, such as `exploration`, like so:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -117,17 +119,19 @@ Tests”][doc-comments]<!-- ignore --> у розділі 14. Зараз ми п�
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/src/lib.rs}}
 ```
 
-Далі знову запустимо  `cargo test`. Вивід тепер покаже  `exploration` замість `it_works`:
+Then run `cargo test` again. The output now shows `exploration` instead of
+`it_works`:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/output.txt}}
 ```
 
-Тепер ми додамо інший тест, але цього разу він завершиться зі збоєм! Тести
-завершуються зі збоєм коли щось у тестуючій функції викликає паніку. Кожний тест запускається в окремому
-потоці, та коли головний потік бачить, що тестовий потік упав, то тест помічається як такий, що завершився аварійно. У розділі 9 ми розглядали найпростіший спосіб викликати паніку
-за допомогою виклику макросу `panic!`. Створіть новий тест та назвіть тестуючу функцію
-`another`, ваш файл  *src/lib.rs* буде виглядати як у лістінгу 11-3.
+Now we’ll add another test, but this time we’ll make a test that fails! Tests
+fail when something in the test function panics. Each test is run in a new
+thread, and when the main thread sees that a test thread has died, the test is
+marked as failed. In Chapter 9, we talked about how the simplest way to panic
+is to call the `panic!` macro. Enter the new test as a function named
+`another`, so your *src/lib.rs* file looks like Listing 11-3.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -138,8 +142,8 @@ Tests”][doc-comments]<!-- ignore --> у розділі 14. Зараз ми п�
 <span class="caption">Listing 11-3: Adding a second test that will fail because
 we call the `panic!` macro</span>
 
-Запустіть тест знову, використовуючи `cargo test`. Вивід виглядатиме схоже на лістінг
-11-4, який показує, що тест  `exploration` пройшов успішно, а `another` завершився зі збоєм.
+Run the tests again using `cargo test`. The output should look like Listing
+11-4, which shows that our `exploration` test passed and `another` failed.
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-03/output.txt}}
@@ -148,32 +152,35 @@ we call the `panic!` macro</span>
 <span class="caption">Listing 11-4: Test results when one test passes and one
 test fails</span>
 
-Замість `ok`, рядок `test tests::another` відображає `FAILED`. Дві нові
-секції з'явилися між результатами окремих тестів та загальними результатами: перша 
-показує детальну причину того, що тест завершився аварійно. У цьому випадку ми отрирмали
-те, що тест  `another` завершився зі збоєм тому, що  `panicked at 'Make this test fail'` у рядку  10 у  файлі *src/lib.rs*.
-У наступній секції наведені назви тестів, що не пройшли, і це зручно коли у нас багато таких тестів та багато деталей про аварійне завершення.
- Ми можемо використати ім'я тесту для його подальшого відлагодження; ми поговоримо більше про запуск тестів у розділі
- [“Controlling How Tests Are Run”][controlling-how-tests-are-run]<!-- ignore--> .
+Instead of `ok`, the line `test tests::another` shows `FAILED`. Two new
+sections appear between the individual results and the summary: the first
+displays the detailed reason for each test failure. In this case, we get the
+details that `another` failed because it `panicked at 'Make this test fail'` on
+line 10 in the *src/lib.rs* file. The next section lists just the names of all
+the failing tests, which is useful when there are lots of tests and lots of
+detailed failing test output. We can use the name of a failing test to run just
+that test to more easily debug it; we’ll talk more about ways to run tests in
+the [“Controlling How Tests Are Run”][controlling-how-tests-are-run]<!-- ignore
+--> section.
 
-У кінці відображається ітоговий результат тестування: в цілому результат нашого тесту `FAILED`. У нас
-один тест пройшов, та один завершився зі збоєм.
+The summary line displays at the end: overall, our test result is `FAILED`. We
+had one test pass and one test fail.
 
-Тепер, коли ви побачили, як виглядають результати тесту в різних сценаріях,
-давайте розглянемо деякі макроси, крім `panic!`, які корисні в тестах.
+Now that you’ve seen what the test results look like in different scenarios,
+let’s look at some macros other than `panic!` that are useful in tests.
 
-### Перевірка результатів за допомогою макроса `assert!`
+### Checking Results with the `assert!` Macro
 
-Макрос `assert!` , що надається стандартною бібліотекою, широко використовується 
-для того, щоб впевнитися, що деяка умова  у тесті приймає значення `true`. Ми даємо 
-макросу `assert!` аргумент, який обчислюється як вираз логічного типу. Якщо значення обчислюється як
-`true`, нічого поганого не трапляється та тест вважається успішно пройденим. Якщо ж значення буде 'false'
-макрос `assert!` викликає паніку `panic!`, що спричиняє аварійне завершення тесту. Використання макросу `assert!`
-допомагає нам перевірити, чи працює наш код очікуваним способом.
+The `assert!` macro, provided by the standard library, is useful when you want
+to ensure that some condition in a test evaluates to `true`. We give the
+`assert!` macro an argument that evaluates to a Boolean. If the value is
+`true`, nothing happens and the test passes. If the value is `false`, the
+`assert!` macro calls `panic!` to cause the test to fail. Using the `assert!`
+macro helps us check that our code is functioning in the way we intend.
 
-У розділі 5, Лістінг 5-15, ми використовували структуру a `Rectangle`  та метод `can_hold`,
-які повторюються у  лістінгу 11-5. Давайте розмістимо цей код у
-файлі *src/lib.rs*, а далі напишемо декілька тестів, використовуючи  макрос  `assert!`.
+In Chapter 5, Listing 5-15, we used a `Rectangle` struct and a `can_hold`
+method, which are repeated here in Listing 11-5. Let’s put this code in the
+*src/lib.rs* file, then write some tests for it using the `assert!` macro.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -184,8 +191,8 @@ test fails</span>
 <span class="caption">Listing 11-5: Using the `Rectangle` struct and its
 `can_hold` method from Chapter 5</span>
 
- Метод `can_hold` повертає логічне значення, що означає, що це ідеальний варіант використання
-для  макросу `assert!`. В лістінгу 11-6, ми пишемо тест, який перевіряє
+The `can_hold` method returns a Boolean, which means it’s a perfect use case
+for the `assert!` macro. In Listing 11-6, we write a test that exercises the
 `can_hold` method by creating a `Rectangle` instance that has a width of 8 and
 a height of 7 and asserting that it can hold another `Rectangle` instance that
 has a width of 5 and a height of 1.
