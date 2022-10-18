@@ -1,27 +1,57 @@
-## Визначення модулів для контролю області видимості та приватності
+## Defining Modules to Control Scope and Privacy
 
-В цьому розділі ми поговоримо про модулі та інші частини модульної системи, а саме: про *шляхи*, що дозволяють іменувати елементи; про ключове слово `use`, яке додає шлях в область видимості; та про ключове слово `pub`, що робить елементи публічними. Ми також розглянемо ключове слово `as`, зовнішні пакети та оператор glob.
+In this section, we’ll talk about modules and other parts of the module system,
+namely *paths* that allow you to name items; the `use` keyword that brings a
+path into scope; and the `pub` keyword to make items public. We’ll also discuss
+the `as` keyword, external packages, and the glob operator.
 
-Ми почнемо з переліку правил, до яких вам було б зручно повертатися в якості довідки в майбутньому при організації коду. Потім ми детально пояснимо кожне з правил.
+First, we’re going to start with a list of rules for easy reference when you’re
+organizing your code in the future. Then we’ll explain each of the rules in
+detail.
 
-### Шпаргалка по модулям
+### Modules Cheat Sheet
 
-В цьому місці ми дамо короткий огляд того, як модулі, шляхи, ключові слова `use` та `pub` працюють в компіляторі, та як більшість розробників організовують свій код. В цьому розділі ми також розберемо приклади кожного з цих правил. Цей розділ буде прекрасним місцем, куди варто звертатися для нагадування про те, як працюють модулі.
+Here we provide a quick reference on how modules, paths, the `use` keyword, and
+the `pub` keyword work in the compiler, and how most developers organize their
+code. We’ll be going through examples of each of these rules throughout this
+chapter, but this is a great place to refer to as a reminder of how modules
+work.
 
-- **Починайте з кореня крейту**: Компілюючи крейт, компілятор спочатку дивиться в кореневий файл крейту в пошуках коду для компіляції. Зазвичай це *src/lib.rs* для бібліотечного крейту або *src/main.rs* для бінарного.
-- **Оголошення модулів**: Ви можете оголошувати нові модулі в кореневому файлі крейту. Скажімо, ви хочете оголосити модуль "garden" як `mod garden;`. Компілятор шукатиме код даного модуля в наступних місцях:
-- Локально в цьому файлі всередині фігурних дужок, які заміняють крапку з комою після `mod garden`
-- У файлі *src/garden.rs*
-- У файлі *src/garden/mod.rs*
-- **Оголошення підмодулів**: Ви можете оголошувати підмодулі в будь якому файлі, не лише в корені крейту. Наприклад, ви можете оголосити `mod vegetables;` в *src/garden.rs*. Компілятор шукатиме код підмодуля в теці з іменем батьківського модуля в наступних місцях:
-- Локально в цьому файлі, одразу після `mod vegetables`, всередині фігурних дужок замість крапки з комою
-- У файлі *src/garden/vegetables.rs*
-- У файлі *src/garden/vegetables/mod.rs*
-- **Шляхи до коду в модулях**: Після того як модуль став частиною вашого крейту, ви можете звертатися до його коду з будь-якого місця даного крейту за допомогою шляху до коду, якщо дозволяють правила приватності. Наприклад, тип `Asparagus` в модулі garden vegetables буде знайдений за шляхом `crate::garden::vegetables::Asparagus`.
-- **Приватність або публічність**: Код всередині модуля є приватним від його батьківських модулів за замовчуванням. Аби зробити модуль публічним, оголосіть його за допомогою `pub mod` замість `mod`. Аби зробити елементи всередині публічного модуля публічними також, використовуйте `pub` перед їх оголошенням.
-- **Ключове слово `use`**: Всередині області видимості ключове слово `use` створює псевдоніми для елементів аби прибрати необхідність повторювати довгі шляхи. В будь якій області видимості, де необхідно звертатися до `crate::garden::vegetables::Asparagus` ви можете створити псевдонім `use crate::garden::vegetables::Asparagus;` і після цього просто писати `Asparagus` для використання цього типу в даній області видимості.
+- **Start from the crate root**: When compiling a crate, the compiler first
+  looks in the crate root file (usually *src/lib.rs* for a library crate or
+  *src/main.rs* for a binary crate) for code to compile.
+- **Declaring modules**: In the crate root file, you can declare new modules;
+say, you declare a “garden” module with `mod garden;`. The compiler will look
+for the module’s code in these places:
+  - Inline, within curly brackets that replace the semicolon following `mod
+    garden`
+  - In the file *src/garden.rs*
+  - In the file *src/garden/mod.rs*
+- **Declaring submodules**: In any file other than the crate root, you can
+  declare submodules. For example, you might declare `mod vegetables;` in
+  *src/garden.rs*. The compiler will look for the submodule’s code within the
+  directory named for the parent module in these places:
+  - Inline, directly following `mod vegetables`, within curly brackets instead
+    of the semicolon
+  - In the file *src/garden/vegetables.rs*
+  - In the file *src/garden/vegetables/mod.rs*
+- **Paths to code in modules**: Once a module is part of your crate, you can
+  refer to code in that module from anywhere else in that same crate, as long
+  as the privacy rules allow, using the path to the code. For example, an
+  `Asparagus` type in the garden vegetables module would be found at
+  `crate::garden::vegetables::Asparagus`.
+- **Private vs public**: Code within a module is private from its parent
+  modules by default. To make a module public, declare it with `pub mod`
+  instead of `mod`. To make items within a public module public as well, use
+  `pub` before their declarations.
+- **The `use` keyword**: Within a scope, the `use` keyword creates shortcuts to
+  items to reduce repetition of long paths. In any scope that can refer to
+  `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use
+  crate::garden::vegetables::Asparagus;` and from then on you only need to
+  write `Asparagus` to make use of that type in the scope.
 
-Аби продемонструвати ці правила, створимо бінарний крейт `backyard`. Тека крейту, яка також називається `backyard`, містить такі файли та теки:
+Here we create a binary crate named `backyard` that illustrates these rules. The
+crate’s directory, also named `backyard`, contains these files and directories:
 
 ```text
 backyard
@@ -34,15 +64,16 @@ backyard
     └── main.rs
 ```
 
-Кореневий файл крейту в цьому випадку це *src/main.rs*. Його вміст:
+The crate root file in this case is *src/main.rs*, and it contains:
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/main.rs}}
 ```
 
-Рядок `pub mod garden;` каже компілятору підключити код, який знайдений в *src/garden.rs*:
+The `pub mod garden;` line tells the compiler to include the code it finds in
+*src/garden.rs*, which is:
 
 <span class="filename">Filename: src/garden.rs</span>
 
@@ -50,39 +81,69 @@ backyard
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden.rs}}
 ```
 
-Тут `pub mod vegetables;` означає, що код в *src/garden/vegetables.rs* також буде підключений. Цей код:
+Here, `pub mod vegetables;` means the code in *src/garden/vegetables.rs* is
+included too. That code is:
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden/vegetables.rs}}
 ```
 
-Тепер давайте розглянемо ці правила детальніше і продемонструємо їх в роботі!
+Now let’s get into the details of these rules and demonstrate them in action!
 
-### Групування повʼязаного коду в модулі
+### Grouping Related Code in Modules
 
-*Модулі* дозволяють організувати код в крейті для читабельності та простоти повторного використання. Модулі також дозволяють контролювати *приватність* елементів, оскільки код всередині модуля є приватним за замовчуванням. Приватні елементи являють собою внутрішні деталі реалізації, недоступні для використання ззовні. Ми можемо зробити модулі і елементи всередині них публічними, що дозволить сторонньому коду використовувати їх і залежати від них.
+*Modules* let us organize code within a crate for readability and easy reuse.
+Modules also allow us to control the *privacy* of items, because code within a
+module is private by default. Private items are internal implementation details
+not available for outside use. We can choose to make modules and the items
+within them public, which exposes them to allow external code to use and depend
+on them.
 
-В якості прикладу давайте напишемо бібліотечний крейт, що реалізує функціонал ресторану. Ми визначимо сигнатури функцій, проте залишимо їх вміст пустим для того, щоб сконцентруватися на організації коду, а не на деталях імплементації ресторану.
+As an example, let’s write a library crate that provides the functionality of a
+restaurant. We’ll define the signatures of functions but leave their bodies
+empty to concentrate on the organization of the code, rather than the
+implementation of a restaurant.
 
-В ресторанній справі вирізняють такі частини ресторану як *внутрішня кухня (back of house)* та *зал (front of house)*. Зал це те, де сидять відвідувачі. Тут знаходяться місця для клієнтів, офіціанти приймають замовлення і оплату, а бармени роблять напої. Внутрішня кухня - це те, де шеф-кухарі і повари працюють на кухні, посудомийники миють посуд, а менеджери виконують адміністративну роботу.
+In the restaurant industry, some parts of a restaurant are referred to as
+*front of house* and others as *back of house*. Front of house is where
+customers are; this encompasses where the hosts seat customers, servers take
+orders and payment, and bartenders make drinks. Back of house is where the
+chefs and cooks work in the kitchen, dishwashers clean up, and managers do
+administrative work.
 
-Для того аби структурувати наш крейт правильним чином, можемо організувати його функції у вкладених модулях. Створіть нову бібліотеку з іменем `restaurant`, виконавши `cargo new --lib restaurant`; тоді наберіть код з Лістинга 7-1 в *src/lib.rs* аби визначити деякі модулі та сигнатури функцій. Далі йде секція для зали:
+To structure our crate in this way, we can organize its functions into nested
+modules. Create a new library named `restaurant` by running `cargo new
+restaurant --lib`; then enter the code in Listing 7-1 into *src/lib.rs* to
+define some modules and function signatures. Here’s the front of house section:
 
-<span class="filename">Файл: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-1: Модуль `front_of_house`, що містить інші модулі, які в свою чергу містять функції</span>
+<span class="caption">Listing 7-1: A `front_of_house` module containing other
+modules that then contain functions</span>
 
-Ми визначаємо модуль за допомогою ключового слова `mod`, після якого йде назва модуля (в даному випадку `front_of_house`). Тіло модуля розміщається всередині фігурних дужок. Модулі можуть містити інші модулі, як в нашому випадку це зроблено з модулями `hosting` та `serving`. Також в модулях можуть знаходитися визначення інших елементів, таких як структури, переліки, константи, трейти, і - як у Лістингу 7-1 - функції.
+We define a module with the `mod` keyword followed by the name of the module
+(in this case, `front_of_house`). The body of the module then goes inside curly
+brackets. Inside modules, we can place other modules, as in this case with the
+modules `hosting` and `serving`. Modules can also hold definitions for other
+items, such as structs, enums, constants, traits, and—as in Listing
+7-1—functions.
 
-Використовуючи модулі, ми можемо групувати повʼязані визначення між собою і показувати, чому саме вони повʼязані. Програмісти, що використовують цей код, можуть орієнтуватись в коді на рівні функцій замість того, аби бути змушеними читати всі визначення в коді. Це робить задачу пошуку необхідних елементів набагато простішою. Додаючи новий функціонал до коду, програмісти знають де розмістити певний код аби підтримувати порядок і організацію в програмі.
+By using modules, we can group related definitions together and name why
+they’re related. Programmers using this code can navigate the code based on the
+groups rather than having to read through all the definitions, making it easier
+to find the definitions relevant to them. Programmers adding new functionality
+to this code would know where to place the code to keep the program organized.
 
-Раніше ми згадували, що *src/main.rs* та *src/lib.rs* називаються коренями крейту. Причина такого іменування в тому, що вміст будь-якого з цих двох файлів утворює модуль з іменем `crate` в корені структури модуля крейту, яка також відома як *дерево модулів*.
+Earlier, we mentioned that *src/main.rs* and *src/lib.rs* are called crate
+roots. The reason for their name is that the contents of either of these two
+files form a module named `crate` at the root of the crate’s module structure,
+known as the *module tree*.
 
-Лістинг 7-2 демонструє дерево модулів для структури в Лістингу 7-1.
+Listing 7-2 shows the module tree for the structure in Listing 7-1.
 
 ```text
 crate
@@ -96,8 +157,18 @@ crate
          └── take_payment
 ```
 
-<span class="caption">Лістинг 7-2: Дерево модулів для коду в Лістингу 7-1</span>
+<span class="caption">Listing 7-2: The module tree for the code in Listing
+7-1</span>
 
-Це дерево показує, як одні модулі вкладені в інші. Наприклад, `hosting` вкладений в `front_of_house`. Дерево також показує, що деякі модулі є *братами (siblings)* один для одного, що означає, що вони визначені в одному модулі. `hosting` та `serving` є братами, визначеними всередині `front_of_house`. Якщо модуль A міститься всередині модуля B, ми кажемо, що модуль A є *нащадком (child)* модуля B і що модуль B є *батьком (parent)* модуля A. Зверніть увагу, що батьком усього дерева модулів є неявний модуль з назвою `crate`.
+This tree shows how some of the modules nest inside one another; for example,
+`hosting` nests inside `front_of_house`. The tree also shows that some modules
+are *siblings* to each other, meaning they’re defined in the same module;
+`hosting` and `serving` are siblings defined within `front_of_house`. If module
+A is contained inside module B, we say that module A is the *child* of module B
+and that module B is the *parent* of module A. Notice that the entire module
+tree is rooted under the implicit module named `crate`.
 
-Дерево модулів може нагадувати вам дерево тек і файлів файлової системи на вашому компʼютері. Це дуже влучне порівняння! Ви можете використовувати модулі для організації коду точно так само, як ви використовуєте теки у файловій системі. І так само, як у випадку з файлами в теці, нам потрібен спосіб пошуку необхідних модулів.
+The module tree might remind you of the filesystem’s directory tree on your
+computer; this is a very apt comparison! Just like directories in a filesystem,
+you use modules to organize your code. And just like files in a directory, we
+need a way to find our modules.
