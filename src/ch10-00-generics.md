@@ -1,120 +1,118 @@
-# Узагальнені типи, трейти та лайфтайми
+# Generic Types, Traits, and Lifetimes
 
-Кожна мова програмування має інструменти, щоб уникати повторення концепцій.
-У мові Rust, одним з таких інструментів є _узагальнені типи_, також відомі як _дженеріки_
-(від англ. _generic_ "загальний, типовий"): абстрактні замінники конкретних типів
-або інших властивостей. Ми можемо описувати поведінку узагальнених типів і їх відношення
-до інших узагальнених типів, не знаючи, який саме тип буде на їх місці під час компіляції
-і виконання коду.
+Every programming language has tools for effectively handling the duplication
+of concepts. In Rust, one such tool is *generics*: abstract stand-ins for
+concrete types or other properties. We can express the behavior of generics or
+how they relate to other generics without knowing what will be in their place
+when compiling and running the code.
 
-Функції можуть приймати параметри певного узагальненого типу замість
-конкретного типу (наприклад, `i32` або `String`), так само як функції
-можуть приймати параметри з невідомими значеннями і виконувати той самий код
-з багатьма конкретними значеннями. Насправді ми вже стикалися з узагальненими
-типами у розділі 6 (`Option<T>`), розділі 8 (`Vec<T>` та `HashMap<K, V>`)
-і розділі 9 (`Result<T, E>`). У цьому розділі ми побачимо, як можна визначати
-ваші власні типи, функції та методи з узагальненими типами!
+Functions can take parameters of some generic type, instead of a concrete type
+like `i32` or `String`, in the same way a function takes parameters with
+unknown values to run the same code on multiple concrete values. In fact, we’ve
+already used generics in Chapter 6 with `Option<T>`, Chapter 8 with `Vec<T>`
+and `HashMap<K, V>`, and Chapter 9 with `Result<T, E>`. In this chapter, you’ll
+explore how to define your own types, functions, and methods with generics!
 
-Спочатку пригадаємо, як виділити код в окрему функції, щоб зменшити дублювання.
-Тоді ми використаємо цю техніку, щоб створити узагальнену функцію з двох функцій,
-які відрізняються лише типами їх параметрів. Також ми пояснимо, як використовувати
-узагальнені типи для визначення структур і енамів.
+First, we’ll review how to extract a function to reduce code duplication. We’ll
+then use the same technique to make a generic function from two functions that
+differ only in the types of their parameters. We’ll also explain how to use
+generic types in struct and enum definitions.
 
-Після цього ви навчитесь використовувати _трейти_ (від англ. _trait_ "властивість, риса"),
-щоб визначати поведінку в узагальнений спосіб. Ви можете поєднувати трейти
-з узагальненими типами, щоб обмежити узагальнений тип так, щоб він працював
-не з будь-якими типами,
-а лише тими, які мають певну поведінку.
+Then you’ll learn how to use *traits* to define behavior in a generic way. You
+can combine traits with generic types to constrain a generic type to accept
+only those types that have a particular behavior, as opposed to just any type.
 
-Нарешті ми поговоримо про _лайфтайми_ (від англ. _lifetime_ "час життя"): підвид узагальнених типів,
-які дають компілятору інформацію про те, як посилання відносяться одне до одного.
-Лайфтайми дозволяють нам давати компілятору достатньо інформації про позичені
-значення, щоб він міг впевнитись, що посилання будуть дійсними в тих ситуаціях,
-де компілятор не знав би цього без наших підказок.
+Finally, we’ll discuss *lifetimes*: a variety of generics that give the
+compiler information about how references relate to each other. Lifetimes allow
+us to give the compiler enough information about borrowed values so that it can
+ensure references will be valid in more situations than it could without our
+help.
 
-## Уникання повторень за допомогою виділення функції
+## Removing Duplication by Extracting a Function
 
-Узагальнені типи дозволяють використати змінну типу, яка замінює
-багато типів, а не конкретний тип, щоб уникнути повторень у коді.
-Перед тим як розглянути синтаксис узагальнених типів, погляньмо на
-уникнення повторень без узагальнених типів, а саме виділення функції,
-яка замінює конкретні значення на змінну, що представляє багато значень.
-Тоді ми застосуємо той самий підхід, щоб виділити узагальнену функцію!
-Поглянувши на те, як помітити продубльований код, який можна винести
-в окрему функцію, ви почнете помічати продубльований код, який може
-використовувати узагальнені типи.
+Generics allow us to replace specific types with a placeholder that represents
+multiple types to remove code duplication. Before diving into generics syntax,
+then, let’s first look at how to remove duplication in a way that doesn’t
+involve generic types by extracting a function that replaces specific values
+with a placeholder that represents multiple values. Then we’ll apply the same
+technique to extract a generic function! By looking at how to recognize
+duplicated code you can extract into a function, you’ll start to recognize
+duplicated code that can use generics.
 
-Почнімо з короткої програми у роздруку 10-1, яка шукає найбільше число у списку.
+We begin with the short program in Listing 10-1 that finds the largest number
+in a list.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-01/src/main.rs:here}}
 ```
 
-<span class="caption">Роздрук 10-1: Пошук найбільшого числа у списку</span>
+<span class="caption">Listing 10-1: Finding the largest number in a list of
+numbers</span>
 
-Ми зберігаємо список цілих чисел у змінній `number_list` і присвоєму змінній
-`largest` посилання на перше число у списку. Тоді ми проходимося по всіх
-числах у списку, і якщо поточне число більше за те, яке зберігається у `largest`,
-то ми замінємо посилання у цій змінній. Проте якщо поточне число менше або рівне
-поки що найбільшому числу, змінна зберігає своє значення і наш код продовжує
-з наступного числа у списку. Після того як ми пройшлися по всіх числах у списку,
-`largest` має тримати значення найбільшого числа. У даному випадку це 100.
+We store a list of integers in the variable `number_list` and place a reference
+to the first number in the list in a variable named `largest`. We then iterate
+through all the numbers in the list, and if the current number is greater than
+the number stored in `largest`, replace the reference in that variable.
+However, if the current number is less than or equal to the largest number seen
+so far, the variable doesn’t change, and the code moves on to the next number
+in the list. After considering all the numbers in the list, `largest` should
+refer to the largest number, which in this case is 100.
 
-Тепер нам дали завдання знайти найбільше число в інших двох списках чисел.
-Для цього ми можемо продублювати код з роздруку 10-1 і використати ту саму логіку
-у двох різних місцях програми, як показано у роздруку 10-2.
+We've now been tasked with finding the largest number in two different lists of
+numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
+the same logic at two different places in the program, as shown in Listing 10-2.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-02/src/main.rs}}
 ```
 
-<span class="caption">Роздрук 10-2: Програма, яка знаходить найбільше
-число у _двох_ списках</span>
+<span class="caption">Listing 10-2: Code to find the largest number in *two*
+lists of numbers</span>
 
-Хоча цей код працює, дублювання коду виснажливе і збільшує ризик помилок. Також
-потрібно памʼятати, що треба оновити код у двох місцях, якщо ми хочемо внести
-будь-які зміни.
+Although this code works, duplicating code is tedious and error prone. We also
+have to remember to update the code in multiple places when we want to change
+it.
 
-Щоб уникнути цього дублювання, ми створимо абстракцію визначивши функцію,
-що працює з будь-яким списком цілих чисел, переданим як параметр. Це рішення
-робить наш код більш зрозумілим і дозволяє нам виразити концепцію пошуку
-найбільшого числа у списку в абстрактний спосіб.
+To eliminate this duplication, we’ll create an abstraction by defining a
+function that operates on any list of integers passed in a parameter. This
+solution makes our code clearer and lets us express the concept of finding the
+largest number in a list abstractly.
 
-У роздруку 10-3 ми виносимо у функцію `largest` код, який знаходить
-найбільше число у списку. Тоді ми можемо викликати цю функцію,
-щоб знайти найбільше число у двох списках з роздруку 10-2. Також ми можемо
-використати цю функцію на будь-якому іншому списку значень типу `i32`,
-який ми отримали б у майбутньому.
+In Listing 10-3, we extract the code that finds the largest number into a
+function named `largest`. Then we call the function to find the largest number
+in the two lists from Listing 10-2. We could also use the function on any other
+list of `i32` values we might have in the future.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-03/src/main.rs:here}}
 ```
 
-<span class="caption">Роздрук 10-3: Абстрагований код для пошуку найбільшого числа у двох списках</span>
+<span class="caption">Listing 10-3: Abstracted code to find the largest number
+in two lists</span>
 
-Функція `largest` має параметр `list`, який представляє будь-який конкретний
-слайс значень `i32`, який ми могли б передати в цю функцію. Як результат,
-коли ми викликаємо функцію, код працює з конкретними значеннями, які ми передаємо.
+The `largest` function has a parameter called `list`, which represents any
+concrete slice of `i32` values we might pass into the function. As a result,
+when we call the function, the code runs on the specific values that we pass
+in.
 
-Підсумовуючи, ось кроки, які ми виконали, щоб з коду в роздруку 10-2 отримати
-код у роздруку 10-3:
+In summary, here are the steps we took to change the code from Listing 10-2 to
+Listing 10-3:
 
-1. Визначити код, що повторюється.
-2. Винести код, що повторюється, у тіло нової функції і вказати вхідні
-   та вихідні данні цього коду у сигнатурі функції.
-3. Замінити продубльований код на виклик функції в обох місцях.
+1. Identify duplicate code.
+2. Extract the duplicate code into the body of the function and specify the
+   inputs and return values of that code in the function signature.
+3. Update the two instances of duplicated code to call the function instead.
 
-Далі ми використаємо ці самі кроки з узагальненими типами, щоб зменшити
-кількість повторень у коді. Так само як функція може працювати з абстрактною
-змінною `list`, а не конкретними значеннями, узагальнені типи дозволяють
-коду працювати з абстрактними типами.
+Next, we’ll use these same steps with generics to reduce code duplication. In
+the same way that the function body can operate on an abstract `list` instead
+of specific values, generics allow code to operate on abstract types.
 
-Наприклад, скажімо, ми маємо дві функції: одна знаходить найбільший елемент
-у слайсі значень `i32`, а інша — у слайсі значень `char`. Як можна уникнути повторень?
-Давайте дізнаємось!
+For example, say we had two functions: one that finds the largest item in a
+slice of `i32` values and one that finds the largest item in a slice of `char`
+values. How would we eliminate that duplication? Let’s find out!
