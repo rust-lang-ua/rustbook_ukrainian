@@ -1,14 +1,14 @@
-## Generic Data Types
+## Узагальнені типи даних
 
-We use generics to create definitions for items like function signatures or structs, which we can then use with many different concrete data types. Let’s first look at how to define functions, structs, enums, and methods using generics. Then we’ll discuss how generics affect code performance.
+Ми використовуємо узагальнені типи для створення таких речей як сигнатури функцій або структури, які потім можна використовувати з багатьма конкретними типами даних. Погляньмо на те, як визначити функції, структури, енуми та методи, що використовують узагальнені типи. Далі ми поговоримо про те, як узагальнені типи впливають на швидкодію коду.
 
-### In Function Definitions
+### У визначеннях функцій
 
-When defining a function that uses generics, we place the generics in the signature of the function where we would usually specify the data types of the parameters and return value. Doing so makes our code more flexible and provides more functionality to callers of our function while preventing code duplication.
+При визначенні функції, що використовує узагальнені типи, ми розмістимо їх в сигнатурі функції, де зазвичай ми вказуємо типи даних параметрів та результату. Це робить наш код більш гнучким і забезпечує більше функціоналу користувачам нашої функції, водночас запобігаючи дублюванню коду.
 
-Continuing with our `largest` function, Listing 10-4 shows two functions that both find the largest value in a slice. We'll then combine these into a single function that uses generics.
+Продовжимо з нашою функцією `largest`. Роздрук 10-4 показує дві функції, які шукають найбільше значення у слайсі. Пізніше ми обʼєднаємо їх в одну функцію, яка використовує узагальнені типи.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-04/src/main.rs:here}}
@@ -17,21 +17,21 @@ Continuing with our `largest` function, Listing 10-4 shows two functions that bo
 
 <span class="caption">Listing 10-4: Two functions that differ only in their names and the types in their signatures</span>
 
-The `largest_i32` function is the one we extracted in Listing 10-3 that finds the largest `i32` in a slice. The `largest_char` function finds the largest `char` in a slice. The function bodies have the same code, so let’s eliminate the duplication by introducing a generic type parameter in a single function.
+Функція `largest_i32` – це та сама, яку ми винесли у роздруку 10-3, яка шукає найбільше значення типу `i32` у слайсі. Функція `largest_char` шукає найбільше значення типу `char` у слайсі. Тіла функції мають той самий код, тому можна усунути дублювання, ввівши узагальнений параметр-тип в обʼєднаній функції.
 
-To parameterize the types in a new single function, we need to name the type parameter, just as we do for the value parameters to a function. You can use any identifier as a type parameter name. But we’ll use `T` because, by convention, parameter names in Rust are short, often just a letter, and Rust’s type-naming convention is CamelCase. Short for “type,” `T` is the default choice of most Rust programmers.
+Щоб параметризувати типи в новій обʼєднаній функції, нам потрібно дати імʼя параметру, так само як ми даємо імʼя параметрам-значенням у функції. Ви можете використовувати будь-який ідентифікатор як імʼя параметра-типу. Але ми використаємо `T`, тому що, за домовленістю, назви параметрів у Rust короткі і часто складаються лише з однієї букви, а імена типів, за домовленістю, слідують "camel case" (окремі слова пишуться без пробілів і з великої букви; наприклад, так: "CamelCase"). Оскільки це скорочення від "тип", `T` – це типовий вибір для програмістів на Rust.
 
-When we use a parameter in the body of the function, we have to declare the parameter name in the signature so the compiler knows what that name means. Similarly, when we use a type parameter name in a function signature, we have to declare the type parameter name before we use it. To define the generic `largest` function, place type name declarations inside angle brackets, `<>`, between the name of the function and the parameter list, like this:
+Коли ми використовуємо параметр у тілі функції, ми маємо оголосити його імʼя у сигнатурі, щоб компілятор знав, що воно означає. Так само, коли ми використовуємо імʼя параметру-типу у сигнатурі функції, ми маємо оголосити цей параметр-тип перед використанням. Щоб оголосити узагальнену функцію `largest`, вставте оголошення імен типів у кутові дужки, `<>`, між імʼям функції та списком параметрів, ось так:
 
 ```rust,ignore
 fn largest<T>(list: &[T]) -> &T {
 ```
 
-We read this definition as: the function `largest` is generic over some type `T`. This function has one parameter named `list`, which is a slice of values of type `T`. The `largest` function will return a reference to a value of the same type `T`.
+Ми читаємо це визначення так: функція `largest` узагальнена відносно певного типу `T`. Ця функція має один параметр з назвою `list`, який є слайсом значень типу `T`. Функція `largest` поверне посилання на значення того самого типу `T`.
 
-Listing 10-5 shows the combined `largest` function definition using the generic data type in its signature. The listing also shows how we can call the function with either a slice of `i32` values or `char` values. Note that this code won’t compile yet, but we’ll fix it later in this chapter.
+Роздрук 10-5 показує визначення обʼєднаної функції `largest` з використанням узагальненого типу в її сигнатурі. Цей приклад також показує, як можна викликати функцію зі слайсом значень `i32` або `char`. Зверніть увагу, що цей код поки не скомпілюється, але ми виправимо це пізніше у цьому розділі.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/src/main.rs}}
@@ -40,19 +40,19 @@ Listing 10-5 shows the combined `largest` function definition using the generic 
 
 <span class="caption">Listing 10-5: The `largest` function using generic type parameters; this doesn’t yet compile</span>
 
-If we compile this code right now, we’ll get this error:
+Якщо ми скомпілюємо цей код зараз, ми отримаємо таку помилку:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
-The help text mentions `std::cmp::PartialOrd`, which is a *trait*, and we’re going to talk about traits in the next section. For now, know that this error states that the body of `largest` won’t work for all possible types that `T` could be. Because we want to compare values of type `T` in the body, we can only use types whose values can be ordered. To enable comparisons, the standard library has the `std::cmp::PartialOrd` trait that you can implement on types (see Appendix C for more on this trait). By following the help text's suggestion, we restrict the types valid for `T` to only those that implement `PartialOrd` and this example will compile, because the standard library implements `PartialOrd` on both `i32` and `char`.
+Текст довідки згадує `std::cmp::PartialOrd`, який є трейтом, але ми будемо обговорювати трейти в наступній секції. На цей час, запамʼятайте, що ця помилка вказує, що тіло `largest` не працюватиме для всіх можливих типів, якими може бути `T`. Оскільки, ми хочемо порівняти значення типу `T` в тілі, ми можемо використовувати лише типи, значення яких можна впорядкувати. Щоб дозволити операції порівняння стандартна бібліотека має трейт `std::cmp::PartialOrd`, який ви можна реалізувати для типів (див. додаток C для деталей щодо цього трейту). Слідуючи підказці, ми обмежуємо припустимі типи `T` до тих, що реалізують `PartialOrd`, і цей приклад компілюється, оскільки стандартна бібліотека реалізує `PartialOrd` для `i32` і `char`.
 
-### In Struct Definitions
+### У визначеннях структур
 
-We can also define structs to use a generic type parameter in one or more fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold `x` and `y` coordinate values of any type.
+Ми також можемо визначити структури з використанням узагальнених параметрів-типів в одному або декількох полях використовуючи синтаксис з `<>`. Роздрук 10-6 визначає структуру `Point<T>`, яка містить координати `x` та `y`, які можуть бути значеннями будь-якого типу.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-06/src/main.rs}}
@@ -61,11 +61,11 @@ We can also define structs to use a generic type parameter in one or more fields
 
 <span class="caption">Listing 10-6: A `Point<T>` struct that holds `x` and `y` values of type `T`</span>
 
-The syntax for using generics in struct definitions is similar to that used in function definitions. First, we declare the name of the type parameter inside angle brackets just after the name of the struct. Then we use the generic type in the struct definition where we would otherwise specify concrete data types.
+Синтаксис для використання узагальнених типів у визначеннях структур схожий на той, що використовується в визначеннях функцій. Спочатку ми оголошуємо ім'я параметру типу всередині кутових дужок одразу після назви структури. Далі ми використовуємо узагальнений тип у визначенні структури де б ми інакше вказували конкретні типи даних.
 
-Note that because we’ve used only one generic type to define `Point<T>`, this definition says that the `Point<T>` struct is generic over some type `T`, and the fields `x` and `y` are *both* that same type, whatever that type may be. If we create an instance of a `Point<T>` that has values of different types, as in Listing 10-7, our code won’t compile.
+Зауважте, що оскільки ми тільки використовуємо один узагальнений тип, щоб визначити `Point<T>`, це визначення означає, що структура `Point<T>` узагальнена відносно певного типу `T`, і поля `x` та `y` *обоє* мають той самий тип, яким би він не був. Якщо ми створимо екземпляр `Point<T>` зі значеннями різних типів, як у роздруку 10-7, наш код не буде компілюватися.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/src/main.rs}}
@@ -74,15 +74,15 @@ Note that because we’ve used only one generic type to define `Point<T>`, this 
 
 <span class="caption">Listing 10-7: The fields `x` and `y` must be the same type because both have the same generic data type `T`.</span>
 
-In this example, when we assign the integer value 5 to `x`, we let the compiler know that the generic type `T` will be an integer for this instance of `Point<T>`. Then when we specify 4.0 for `y`, which we’ve defined to have the same type as `x`, we’ll get a type mismatch error like this:
+У цьому прикладі, коли ми присвоюємо ціле значення 5 до `x`, ми повідомимо компілятору що тип `T` буде цілим числом для даного екземпляру `Point<T>`. Потім ми вкажемо 4,0 для `у`, який ми визначили як такий же тип, що й `x`, і отримаємо невідповідність типів таким чином:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/output.txt}}
 ```
 
-To define a `Point` struct where `x` and `y` are both generics but could have different types, we can use multiple generic type parameters. For example, in Listing 10-8, we change the definition of `Point` to be generic over types `T` and `U` where `x` is of type `T` and `y` is of type `U`.
+Щоб визначити структуру `Point`, де `x` і `y` є обидва узагальненими, але можуть мати значення різних типів, можна використовувати декілька узагальнених параметрів-типів. Наприклад, у роздруку 10-8, ми змінюємо визначення `Point` на узагальнене відносно типів `T` та `U`, де `x` має тип `T`, а `y` має тип `U`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-08/src/main.rs}}
@@ -91,11 +91,11 @@ To define a `Point` struct where `x` and `y` are both generics but could have di
 
 <span class="caption">Listing 10-8: A `Point<T, U>` generic over two types so that `x` and `y` can be values of different types</span>
 
-Now all the instances of `Point` shown are allowed! You can use as many generic type parameters in a definition as you want, but using more than a few makes your code hard to read. If you're finding you need lots of generic types in your code, it could indicate that your code needs restructuring into smaller pieces.
+Тепер всі екземпляри `Point` допускаються! Ви можете використовувати скільки завгодно параметрів-типів у визначенні, але використання декількох робить ваш код складнішим для читання. Якщо ви виявите, що потрібно багато узагальнених типів в коді, то це може означати, що ваш код потребує розбиття на менші частини.
 
-### In Enum Definitions
+### У визначеннях енумів
 
-As we did with structs, we can define enums to hold generic data types in their variants. Let’s take another look at the `Option<T>` enum that the standard library provides, which we used in Chapter 6:
+Так само як зі структурами, ми можемо визначати енуми, які містять узагальнені типи даних у своїх варіантах. Давайте ще раз подивимось на енум `Option<T>`, який надає стандартна бібліотека, яку ми використали в розділі 6:
 
 ```rust
 enum Option<T> {
@@ -104,9 +104,9 @@ enum Option<T> {
 }
 ```
 
-This definition should now make more sense to you. As you can see, the `Option<T>` enum is generic over type `T` and has two variants: `Some`, which holds one value of type `T`, and a `None` variant that doesn’t hold any value. By using the `Option<T>` enum, we can express the abstract concept of an optional value, and because `Option<T>` is generic, we can use this abstraction no matter what the type of the optional value is.
+Тепер таке визначення має бути зрозуміліше. Як ви можете бачити, енум `Option<T>` є узагальненим відносно типу `T` і має два варіанти: `Some`, який містить одне значення типу `T`, і `None`, який не містить жодних значень. Використовуючи `Option<T>`, ми можемо виразити абстрактне поняття необовʼязкового значення, і через те, що `Option<T>` є узагальненим, ми можемо використовувати цю абстракцію, незалежно від типу необов'язкового значення.
 
-Enums can use multiple generic types as well. The definition of the `Result` enum that we used in Chapter 9 is one example:
+Енуми також можуть використовувати декілька узагальнених типів. Визначення енуму `Result`, який ми використовували у розділі 9 є одним з прикладів:
 
 ```rust
 enum Result<T, E> {
@@ -115,15 +115,15 @@ enum Result<T, E> {
 }
 ```
 
-The `Result` enum is generic over two types, `T` and `E`, and has two variants: `Ok`, which holds a value of type `T`, and `Err`, which holds a value of type `E`. This definition makes it convenient to use the `Result` enum anywhere we have an operation that might succeed (return a value of some type `T`) or fail (return an error of some type `E`). In fact, this is what we used to open a file in Listing 9-3, where `T` was filled in with the type `std::fs::File` when the file was opened successfully and `E` was filled in with the type `std::io::Error` when there were problems opening the file.
+Енум `Result` узагальнений відносно двох типів, `T` та `E`, і має два варіанти: `Ok`, який містить значення типу `T`, і `Err`, який містить значення типу `E`. Це визначення робить `Result` зручним для операцій, які можуть мати успішний результат (повернути значення певного типу `T`) або помилку (повернути помилку певного типу `E`). Насправді це те, що ми використовували для відкриття файлу у роздруку 9-3 де `T` був заповнений типом `std::fs::File`, коли файл був успішно відкритий, а `E` був заповнений типом `std::io::Error`, коли виникли проблеми з відкриттям файлу.
 
 When you recognize situations in your code with multiple struct or enum definitions that differ only in the types of the values they hold, you can avoid duplication by using generic types instead.
 
-### In Method Definitions
+### У визначеннях методів
 
-We can implement methods on structs and enums (as we did in Chapter 5) and use generic types in their definitions, too. Listing 10-9 shows the `Point<T>` struct we defined in Listing 10-6 with a method named `x` implemented on it.
+Ми можемо імплементувати методи структур та енамів (як це було у розділі 5), і використовувати у їх визначеннях узагальнені типи. Роздрук 10-9 показує структуру `Point<T>`, яку ми визначили у роздруку 10-6 з імплементованим методом `x`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-09/src/main.rs}}
@@ -134,11 +134,11 @@ We can implement methods on structs and enums (as we did in Chapter 5) and use g
 
 Here, we’ve defined a method named `x` on `Point<T>` that returns a reference to the data in the field `x`.
 
-Note that we have to declare `T` just after `impl` so we can use `T` to specify that we’re implementing methods on the type `Point<T>`. By declaring `T` as a generic type after `impl`, Rust can identify that the type in the angle brackets in `Point` is a generic type rather than a concrete type. We could have chosen a different name for this generic parameter than the generic parameter declared in the struct definition, but using the same name is conventional. Methods written within an `impl` that declares the generic type will be defined on any instance of the type, no matter what concrete type ends up substituting for the generic type.
+Зверніть увагу, що ми повинні оголосити `T` відразу після `impl`, тож ми можемо використовувати `T`, щоб вказати, що ми застосовуємо методи на типі `Point<T>`. Оголосивши `T` як узагальнений тип після `impl`, Rust може визначити, що тип у кутових дужках у `Point` – узагальнений, а не конкретний тип. Ми могли б вибрати іншу назву, ніж назва параметра з визначення структури, для даного узагальненого параметра, але за домовленістю ми використовуємо ту саму назву. Методи, написані в межах `impl`, який оголошує узагальнений тип, буде визначено в будь-якому екземплярі типу, неважливо, який конкретний тип ми отримаємо, коли підставимо конкретний тип на місце параметра.
 
-We can also specify constraints on generic types when defining methods on the type. We could, for example, implement methods only on `Point<f32>` instances rather than on `Point<T>` instances with any generic type. In Listing 10-10 we use the concrete type `f32`, meaning we don’t declare any types after `impl`.
+Ми також можемо вказати обмеження для узагальнених типів при визначенні методів у типі. Наприклад, ми можемо реалізувати методи лише на екземплярах `Point<f32>`, а не екземплярах `Point<T>` з будь-яким узагальненим типом. У роздруку 10-10 ми використовуємо конкретний тип `f32`, тобто ми не оголошуємо жодних типів після `impl`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-10/src/main.rs:here}}
@@ -147,11 +147,11 @@ We can also specify constraints on generic types when defining methods on the ty
 
 <span class="caption">Listing 10-10: An `impl` block that only applies to a struct with a particular concrete type for the generic type parameter `T`</span>
 
-This code means the type `Point<f32>` will have a `distance_from_origin` method; other instances of `Point<T>` where `T` is not of type `f32` will not have this method defined. The method measures how far our point is from the point at coordinates (0.0, 0.0) and uses mathematical operations that are available only for floating point types.
+Цей код означає, що тип `Point<f32>` буде мати метод `distance_from_origin`; інші екземпляри `Point<T>`, у яких `T` не є типом `f32` не будуть мати цього методу. Метод вимірює відстань від нашої точки до координати (0,0; 0,0) і використовує математичні операції, які доступні тільки для чисел з рухомою комою.
 
-Generic type parameters in a struct definition aren’t always the same as those you use in that same struct’s method signatures. Listing 10-11 uses the generic types `X1` and `Y1` for the `Point` struct and `X2` `Y2` for the `mixup` method signature to make the example clearer. The method creates a new `Point` instance with the `x` value from the `self` `Point` (of type `X1`) and the `y` value from the passed-in `Point` (of type `Y2`).
+Типи-параметри у визначеннях структури не завжди такі самі, що й у сигнатурах методів цієї структури. Роздрук 10-11 використовує типи `X1` та `Y1` для структури `Point` і `X2` `Y2` для сигнатури методу `mixup`, щоб краще пояснити цей приклад. Метод створює новий екземпляр `Point` зі значенням `x` з `self` `Point` (з типом `X1`) і значенням `y` з екземпляра `Point`, що передається як параметр (з типом `Y2`).
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-11/src/main.rs}}
@@ -160,15 +160,15 @@ Generic type parameters in a struct definition aren’t always the same as those
 
 <span class="caption">Listing 10-11: A method that uses generic types different from its struct’s definition</span>
 
-In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`) and an `f64` for `y` (with value `10.4`). The `p2` variable is a `Point` struct that has a string slice for `x` (with value `"Hello"`) and a `char` for `y` (with value `c`). Calling `mixup` on `p1` with the argument `p2` gives us `p3`, which will have an `i32` for `x`, because `x` came from `p1`. The `p3` variable will have a `char` for `y`, because `y` came from `p2`. The `println!` macro call will print `p3.x = 5, p3.y = c`.
+У `main`, ми визначили `Point`, що має тип `i32` для `x` (зі значенням `5`) і тип `f64` для `y` (зі значенням `10.4`). Змінна `p2` – це структура `Point`, де `x` є слайсом стрічки (зі значенням `"Hello"`), `y` є `char` (зі значенням `c`). Виклик `mixup` на `p1` з аргументом `p2` дає нам `p3`, у якому `x` буде `i32`, тому що `x` береться з `p1`. Змінна `p3` матиме `y` з типом `char`, тому що `y` береться з `p2`. Виклик макроса `println!` виведе в консоль `p3.x = 5, p3.y = c`.
 
-The purpose of this example is to demonstrate a situation in which some generic parameters are declared with `impl` and some are declared with the method definition. Here, the generic parameters `X1` and `Y1` are declared after `impl` because they go with the struct definition. The generic parameters `X2` and `Y2` are declared after `fn mixup`, because they’re only relevant to the method.
+Мета цього прикладу – продемонструвати ситуацію, у якій деякі параметри-типи визначені в `impl`, а деякі у визначенні метода. Тут параметри-типи `X1` і `Y1` оголошені після `impl`, тому що вони відповідають визначенню структури. Параметри-типи `X2` і `Y2` оголошені після `fn mixup`, тому що вони стосуються виключно метода.
 
-### Performance of Code Using Generics
+### Швидкодія коду з узагальненими типами
 
-You might be wondering whether there is a runtime cost when using generic type parameters. The good news is that using generic types won't make your program run any slower than it would with concrete types.
+Можливо, вам цікаво, чи страждає швидкодія, коли ми використовуємо узагальнені типи. Гарна новина в тому, що використання узагальнених типів не зробить вашу програму повільнішою, ніж якби ви використовували конкретні типи.
 
-Rust accomplishes this by performing monomorphization of the code using generics at compile time. *Monomorphization* is the process of turning generic code into specific code by filling in the concrete types that are used when compiled. In this process, the compiler does the opposite of the steps we used to create the generic function in Listing 10-5: the compiler looks at all the places where generic code is called and generates code for the concrete types the generic code is called with.
+Rust може досягнути цього за допомогою мономорфізації коду, який використовує узагальнені типи, під час компіляції. *Мономорфізація* – це процес перетворення коду з узагальненими типами в код з конкретними, заповнюючи типів-параметрів конкретними типами, під час компіляції. У цьому процесі компілятор робить зворотні кроки, до тих, які ми виконали, створюючи узагальнену функцію у роздруку 10-5; компліятор шукає всі місця, де код з узагальненими типами викликається і генерує код для кожного конкретного типу, з яким він викликається.
 
 Let’s look at how this works by using the standard library’s generic `Option<T>` enum:
 
@@ -177,11 +177,11 @@ let integer = Some(5);
 let float = Some(5.0);
 ```
 
-When Rust compiles this code, it performs monomorphization. During that process, the compiler reads the values that have been used in `Option<T>` instances and identifies two kinds of `Option<T>`: one is `i32` and the other is `f64`. As such, it expands the generic definition of `Option<T>` into two definitions specialized to `i32` and `f64`, thereby replacing the generic definition with the specific ones.
+Коли Rust компілює цей код, він виконує мономорфізацію. Під час цього процесу, компілятор читає значення, які були використані в екземплярах `Option<T>` і визначає два види `Option<T>`: один з `i32`, а інший – з `f64`. Таким чином, він розкладає узагальнене визначення `Option<T>` на два визначення, які використовують `i32` і `f64`, замінюючи узагальнене визначення на визначення з конкретизовані.
 
 The monomorphized version of the code looks similar to the following (the compiler uses different names than what we’re using here for illustration):
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 enum Option_i32 {
@@ -200,4 +200,4 @@ fn main() {
 }
 ```
 
-The generic `Option<T>` is replaced with the specific definitions created by the compiler. Because Rust compiles generic code into code that specifies the type in each instance, we pay no runtime cost for using generics. When the code runs, it performs just as it would if we had duplicated each definition by hand. The process of monomorphization makes Rust’s generics extremely efficient at runtime.
+Узагальнене `Option<T>` замінюється на конкретизовані визначення, створені компілятором. Оскільки Rust компілює код з узагальненими типами в код, який вказує тип в кожному випадку, ми не платимо за використання узагальнених типів під час виконання. Коли код запускається, він виконується так само, як і якби ми продублювали кожне визначення вручну. Процес мономорфізації робить узагальнені типи в Rust надзвичайно ефективними під час виконання коду.
