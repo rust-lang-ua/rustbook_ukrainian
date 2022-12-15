@@ -1,21 +1,21 @@
-## Packages and Crates
+## Пакунки та Крейти
 
-The first parts of the module system we’ll cover are packages and crates.
+Першою частиною модульної системи, яку ми охопимо, будуть пакунки та крейти.
 
-A *crate* is the smallest amount of code that the Rust compiler considers at a time. Even if you run `rustc` rather than `cargo` and pass a single source code file (as we did all the way back in the “Writing and Running a Rust Program” section of Chapter 1), the compiler considers that file to be a crate. Crates can contain modules, and the modules may be defined in other files that get compiled with the crate, as we’ll see in the coming sections.
+*Крейт* це найменша кількість коду, яку Rust компілятор розглядає за один раз. Навіть, якщо ви запускаєте `rustc`, а не `cargo` і передаєте єдиний файл з вихідним кодом (як ми це робили у секції "Написання і запуск програми на Rust" Розділу 1), компілятор розглядає цей файл як крейт. Крейти можуть містити модулі, і модулі можуть бути визначені в інших файлах, які компілюються з крейтом, як ми побачимо у наступних секціях.
 
-A crate can come in one of two forms: a binary crate or a library crate. *Binary crates* are programs you can compile to an executable that you can run, such as a command-line program or a server. Each must have a function called `main` that defines what happens when the executable runs. All the crates we’ve created so far have been binary crates.
+Крейт може бути представленим у двох формах: двійковий крейт або бібліотечний крейт. *Двійкові крейти* - це програми, які ви можете cкомпілювати у виконувані файли, що можна запустити, такі як, наприклад, програму командного рядка чи сервер. Кожен з них має мати функцію із назвою `main`, яка визначає, що відбувається, коли виконуваний файл запускається. Усі крейти, що ми вже встигли створити, є двійковими.
 
-*Library crates* don’t have a `main` function, and they don’t compile to an executable. Instead, they define functionality intended to be shared with multiple projects. For example, the `rand` crate we used in [Chapter 2][rand]<!-- ignore --> provides functionality that generates random numbers. Most of the time when Rustaceans say “crate”, they mean library crate, and they use “crate” interchangeably with the general programming concept of a “library".
+*Бібліотечні крейти* не мають функції `main` і вони не компілюються у виконуваний файл. Замість цього вони визначають функціонал, призначений для спільного використання у кількох проектах. Наприклад, крейт `rand`, який ми використовували у [Розділі 2][rand],<!-- ignore --> забезпечує функціонал, що генерує рандомні числа. Більшість часу, коли Растаціанці говорять "крейт", вони мають на увазі саме бібліотечний крейт, і вони використовують "крейт" взаємозамінно із загальною концепцією програмування "бібліотека".
 
-The *crate root* is a source file that the Rust compiler starts from and makes up the root module of your crate (we’ll explain modules in depth in the [“Defining Modules to Control Scope and Privacy”][modules]<!-- ignore -->
-section).
+*Кореневий крейт* - це вихідний файл, з якого Rust компілятор розпочинає роботу і створює кореневий модуль вашого крейта (про модулі ми розкажемо детальніше у секції [“Визначення модулів для контролю області видимості та приватності”][modules]<!-- ignore -->
+).
 
-A *package* is a bundle of one or more crates that provides a set of functionality. A package contains a *Cargo.toml* file that describes how to build those crates. Cargo is actually a package that contains the binary crate for the command-line tool you’ve been using to build your code. The Cargo package also contains a library crate that the binary crate depends on. Other projects can depend on the Cargo library crate to use the same logic the Cargo command-line tool uses.
+*Пакунки* - це набір одного або більше крейтів, які забезпечують набір функціоналів. Пакунок містить файл *Cargo.toml*,який описує, як зібрати ці крейти. Cargo - це, по суті, пакунок, який містить двійковий крейт для інструменту командного рядка, який ви використали для збірки вашого коду. Пакунок Cargo також містить бібліотечний крейт, від якого залежить двійковий крейт. Інші проєкти також можуть залежати від бібліотечного крейту Cargo, щоб використовувати таку ж саму логіку, яку використовують Cargo інструменти командного рядка.
 
-A package can contain as many binary crates as you like, but at most only one library crate. A package must contain at least one crate, whether that’s a library or binary crate.
+Пакунок може містити стільки двійкових крейтів, скільки ви захочете, проте у більшості випадків тільки один бібліотечний. Пакунок повинен містити принаймні один крейт, буде це бібліотечний чи двійковий, різниці немає.
 
-Let’s walk through what happens when we create a package. First, we enter the command `cargo new`:
+Давайте роглянемо, що відбувається, коли ми створюємо пакунок. Спочатку, ми вводимо команду `cargo new`:
 
 ```console
 $ cargo new my-project
@@ -27,9 +27,9 @@ $ ls my-project/src
 main.rs
 ```
 
-After we run `cargo new`, we use `ls` to see what Cargo creates. In the project directory, there’s a *Cargo.toml* file, giving us a package. There’s also a *src* directory that contains *main.rs*. Open *Cargo.toml* in your text editor, and note there’s no mention of *src/main.rs*. Cargo follows a convention that *src/main.rs* is the crate root of a binary crate with the same name as the package. Likewise, Cargo knows that if the package directory contains *src/lib.rs*, the package contains a library crate with the same name as the package, and *src/lib.rs* is its crate root. Cargo passes the crate root files to `rustc` to build the library or binary.
+Після того, як ми запустили `cargo new`, ми використовуємо `ls` для того, щоб побачити, що Cargo створює. У каталозі проєкту знаходиться файл *Cargo.toml*, який дає нам проєкт. Також, є ще каталог *src*, який містить *main.rs*. Відкрийте *Cargo.toml*у вашому текустовому редакторі і побачите, що нема жодної згадки про *src/main.rs*. Cargo наслідує умову, що *src/main.rs* є кореневим крейтом двійкового крейту із тою ж самою назвою як і пакунок. Окрім цього, Cargo знає, що якщо каталог пакунків містить *src/lib.rs*, пакунок містить бібліотечний крейт із тою ж назвою, що й пакунок, і *src/lib.rs* є його кореневим крейтом. Cargo передає файли кореневих крейтів у `rustc` для збірки бібліотечного або двійкового.
 
-Here, we have a package that only contains *src/main.rs*, meaning it only contains a binary crate named `my-project`. If a package contains *src/main.rs* and *src/lib.rs*, it has two crates: a binary and a library, both with the same name as the package. A package can have multiple binary crates by placing files in the *src/bin* directory: each file will be a separate binary crate.
+Отже, ми маємо пакунок, який містить лише *src/main.rs*, означаючи, що тут міститься тільки двійковий крейт з назвою `my-project`. Якщо пакунок містить *src/main.rs* і *src/lib.rs*, він має два крейти: двійковий і бібліотечний, обидва із такою ж назвою як і у пакунка. Пакунок може мати декілька двійкових крейтів, розміщуючи файли у каталозі *src/bin*: кожен файл буде окремим двійковим крейтом.
 
 [modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html
 [rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number
