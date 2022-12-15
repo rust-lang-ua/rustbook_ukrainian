@@ -1,15 +1,15 @@
-# Patterns and Matching
+# Шаблони та Зіставлення Шаблонів
 
-*Patterns* are a special syntax in Rust for matching against the structure of types, both complex and simple. Using patterns in conjunction with `match` expressions and other constructs gives you more control over a program’s control flow. A pattern consists of some combination of the following:
+*Шаблони* це спеціальний синтаксис в Rust для порівняння з певною структурою типів, складною чи простою. Використання шаблонів у поєднанні з виразами `match` та іншими конструкціями дає нам більше контролю над нашою програмою. Шаблон складається з певної комбінації наступного:
 
-* Literals
-* Destructured arrays, enums, structs, or tuples
-* Variables
-* Wildcards
-* Placeholders
+* Літералів
+* Деструктуризованих масивів, енумів, структур або кортежів
+* Змінних
+* Символів узагальнення
+* Заповнювачів
 
-Some example patterns include `x`, `(a, 3)`, and `Some(Color::Red)`. In the contexts in which patterns are valid, these components describe the shape of data. Our program then matches values against the patterns to determine whether it has the correct shape of data to continue running a particular piece of code.
+`x`, `(a, 3)`, та `Some(Color::Red)` це декілька прикладів шаблонів. У контекстах, у яких шаблони дійсні, ці компоненти описують форму даних. Наші програми потім зіставляють значення з шаблонами для визначення коректності форми даних та продовження виконання коду.
 
-To use a pattern, we compare it to some value. If the pattern matches the value, we use the value parts in our code. Recall the `match` expressions in Chapter 6 that used patterns, such as the coin-sorting machine example. If the value fits the shape of the pattern, we can use the named pieces. If it doesn’t, the code associated with the pattern won’t run.
+Щоб використати шаблон, ми порівнюємо його з якимось значенням. Ми використовуємо частини значення в нашому коді, якщо значенню зіставляється зі шаблоном. Згадайте вирази `match` в Розділі 6, такі як coin-sorting machine example(скопіювати переклад з шостого розділу), які використовували шаблони. Якщо значення підходить формі шаблону, то ми можемо найменувати та використати певні частини цього значення. Якщо не підходить, то пов'язаний з шаблоном код не виконається.
 
-This chapter is a reference on all things related to patterns. We’ll cover the valid places to use patterns, the difference between refutable and irrefutable patterns, and the different kinds of pattern syntax that you might see. By the end of the chapter, you’ll know how to use patterns to express many concepts in a clear way.
+Цей розділ є довідником для всього пов'язаного з шаблонами. Ми розглянемо місця де можна використовувати шаблони, різницю між спростовними і неспростовними шаблонами та різновиди синтаксису шаблонів, які ви можете побачити. Наприкінці цього розділу ви будете знати як використовувати шаблони для вираження багатьох концептів чітким способом.
