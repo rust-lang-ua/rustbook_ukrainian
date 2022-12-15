@@ -1,13 +1,13 @@
-# Advanced Features
+# Просунутий функціонал
 
-By now, you’ve learned the most commonly used parts of the Rust programming language. Before we do one more project in Chapter 20, we’ll look at a few aspects of the language you might run into every once in a while, but may not use every day. You can use this chapter as a reference for when you encounter any unknowns. The features covered here are useful in very specific situations. Although you might not reach for them often, we want to make sure you have a grasp of all the features Rust has to offer.
+Наразі, ви вже вивчили найуживаніші частини мови програмування Rust. Перш ніж ми реалізуємо ще один проект у Розділі 20, ми розглянемо кілька аспектів мови, з якими ви будете стикатися час від часу, але не використовуватимете їх на постійній основі. Ви можете використовувати цей розділ як довідник, коли ви зіткнетеся з чимось невідомим. Описаний тут функціонал корисний в дуже специфічних ситуаціях. Хоча ви, ймовірно, не будете користуватися ним часто, ми хочемо переконатися, що ви добре розумієте всі можливості, які пропонує Rust.
 
-In this chapter, we’ll cover:
+В цьому розділі, ми розглянемо:
 
-* Unsafe Rust: how to opt out of some of Rust’s guarantees and take responsibility for manually upholding those guarantees
-* Advanced traits: associated types, default type parameters, fully qualified syntax, supertraits, and the newtype pattern in relation to traits
-* Advanced types: more about the newtype pattern, type aliases, the never type, and dynamically sized types
-* Advanced functions and closures: function pointers and returning closures
-* Macros: ways to define code that defines more code at compile time
+* Unsafe Rust: як відмовитися від деяких гарантій Rust і взяти на себе відповідальність за дотримання цих гарантій
+* Просунуті трейти: асоційовані типи (associated types), параметри типу за замовчуванням, повністю кваліфікований синтаксис, шаблон нового типу (newtype) відносно трейтів
+* Просунуті типи: більше про шаблон нового типу (newtype), псевдонім типу, тип "never", а також типи із динамічним розміром
+* Просунуті функції та замикання: вказівники на функції та повертаючі замикання
+* Макроси: способи визначати код, що визначає інший код в час компіляції (compile time)
 
-It’s a panoply of Rust features with something for everyone! Let’s dive in!
+Це набір функціоналу Rust, де кожен знайде щось для себе! Давайте починати!
