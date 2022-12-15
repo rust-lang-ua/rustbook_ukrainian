@@ -1,10 +1,10 @@
-## All the Places Patterns Can Be Used
+## Усі Місця Можливого Використання Шаблонів
 
-Patterns pop up in a number of places in Rust, and you’ve been using them a lot without realizing it! This section discusses all the places where patterns are valid.
+Шаблони з’являються в багатьох місцях в Rust, і ви ними багато користуєтеся навіть не підозрюючи про це! В цьому розділі ми розглянемо всі місця, де допускаються шаблони.
 
-### `match` Arms
+### Рукави виразу `match`
 
-As discussed in Chapter 6, we use patterns in the arms of `match` expressions. Formally, `match` expressions are defined as the keyword `match`, a value to match on, and one or more match arms that consist of a pattern and an expression to run if the value matches that arm’s pattern, like this:
+Як обговорювалося в Розділі 6, ми використовуємо шаблони в рукавах виразів `match`. Формально, вирази `match` визначені як ключове слово `match`, значення яке буде зіставлятися та один або більше рукавів зіставлення, що складаються з шаблону та виразу для виконання, якщо значення зіставляється зі шаблоном рукава, як тут:
 
 ```text
 match VALUE {
@@ -25,21 +25,20 @@ match x {
 
 The patterns in this `match` expression are the `None` and `Some(i)` on the left of each arrow.
 
-One requirement for `match` expressions is that they need to be *exhaustive* in the sense that all possibilities for the value in the `match` expression must be accounted for. One way to ensure you’ve covered every possibility is to have a catchall pattern for the last arm: for example, a variable name matching any value can never fail and thus covers every remaining case.
+Одна з вимог виразів `match` це необхідність бути *вичерпним* у сенсі, що всі можливі значення виразу `match` повинні бути враховані. Один зі способів переконатися, що ви охопили всі можливі варіанти, - це мати загальний шаблон для останнього рукава: наприклад, назва змінної, що збігається з будь-яким значенням, не може не спрацювати і, таким чином, охоплює всі варіанти, що залишилися.
 
-The particular pattern `_` will match anything, but it never binds to a variable, so it’s often used in the last match arm. The `_` pattern can be useful when you want to ignore any value not specified, for example. We’ll cover the `_` pattern in more detail in the [“Ignoring Values in a Pattern”]()<!-- ignore --> section later in this chapter.
+Зокрема, шаблон `_` буде відповідати будь-чому, але він ніколи не зв'язується зі змінною, тому його часто використовують в останньому рукаві виразу match. Шаблон `_` може бути корисним, наприклад, коли потрібно ігнорувати будь-яке не вказане значення. Ми розглянемо шаблон `_` більш детально в секції ["Ігнорування Значень в Шаблоні"]()<!-- ignore --> пізніше в цьому розділі.
 
-### Conditional `if let` Expressions
+### Умовні Вирази `if let`
 
-In Chapter 6 we discussed how to use `if let` expressions mainly as a shorter way to write the equivalent of a `match` that only matches one case. Optionally, `if let` can have a corresponding `else` containing code to run if the pattern in the `if let` doesn’t match.
+В Розділі 6 ми обговорювали використання виразів `if let` в основному як рівнозначний та коротший спосіб написання `match`, який лише зіставляється в одному випадку. При необхідності, `if let` може мати відповідний `else`, що містить код для виконання на випадок невідповідності шаблону в `if let`.
 
-Listing 18-1 shows that it’s also possible to mix and match `if let`, `else
-if`, and `else if let` expressions. Doing so gives us more flexibility than a `match` expression in which we can express only one value to compare with the patterns. Also, Rust doesn't require that the conditions in a series of `if
-let`, `else if`, `else if let` arms relate to each other.
+В Блоці Коду 18-1 показано, що також можливо поєднувати вирази `if let`, `else
+if`, та `else if let`. Це надає нам більшу гнучкість, ніж вираз `match`, в якому ми можемо представити тільки одне значення для порівняння з шаблонами. Також Rust не вимагає, щоб умови в послідовності `if let`, `else if`, `else if let` стосувалися одна одної.
 
-The code in Listing 18-1 determines what color to make your background based on a series of checks for several conditions. For this example, we’ve created variables with hardcoded values that a real program might receive from user input.
+Код у Блоці Коду 18-1 визначає, яким кольором зробити ваш фон, виходячи з низки перевірок за кількома умовами. Для цього прикладу ми створили змінні з жорстко заданими значеннями, які справжня програма може отримати з вхідних даних користувача.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-01/src/main.rs}}
@@ -48,18 +47,17 @@ The code in Listing 18-1 determines what color to make your background based on 
 
 <span class="caption">Listing 18-1: Mixing `if let`, `else if`, `else if let`, and `else`</span>
 
-If the user specifies a favorite color, that color is used as the background. If no favorite color is specified and today is Tuesday, the background color is green. Otherwise, if the user specifies their age as a string and we can parse it as a number successfully, the color is either purple or orange depending on the value of the number. If none of these conditions apply, the background color is blue.
+Якщо користувач вказує улюблений колір, цей колір використовується як фоновий. Якщо улюблений колір не вказано і сьогодні Вівторок, то фоновим кольором буде зелений. Інакше, якщо користувач вказує свій вік стрічкою і ми можемо успішно розібрати її як число, то колір буде фіолетовим або помаранчевим в залежності від значення числа. Якщо жодна з цих умов не застосовується, колір фону буде синім.
 
-This conditional structure lets us support complex requirements. With the hardcoded values we have here, this example will print `Using purple as the
-background color`.
+Ця умовна структура дозволяє нам підтримувати складні вимоги. З жорстко заданими значеннями як ми маємо тут, цей приклад виведе в консолі `Використовую фіолетовий колір як колір фону`.
 
-You can see that `if let` can also introduce shadowed variables in the same way that `match` arms can: the line `if let Ok(age) = age` introduces a new shadowed `age` variable that contains the value inside the `Ok` variant. This means we need to place the `if age > 30` condition within that block: we can’t combine these two conditions into `if let Ok(age) = age && age > 30`. The shadowed `age` we want to compare to 30 isn’t valid until the new scope starts with the curly bracket.
+Ви можете побачити, що `if let` також може впроваджувати затінені змінні аналогічним чином що і рукави `match`: рядок `if let Ok(age) = age` запроваджує нову затінену змінну `age`, яка містить значення всередині `Ok`. Це означає, що нам потрібно помістити умову `if age > 30` в цей блок: ми не можемо об'єднати ці дві умови в `if let Ok(age) = age && age > 30`. Значення затіненої змінної `age`, яку ми хочемо порівняти з 30, не дійсне до тих пір, поки не почнеться новий діапазон з фігурної дужки.
 
-The downside of using `if let` expressions is that the compiler doesn’t check for exhaustiveness, whereas with `match` expressions it does. If we omitted the last `else` block and therefore missed handling some cases, the compiler would not alert us to the possible logic bug.
+Недоліком використання виразів `if let` є те, що компілятор не перевіряє вичерпність, тоді як при використанні виразів `match` він це робить. Якби ми пропустили останній блок `else` і, відповідно, пропустили обробку деяких випадків, компілятор не попередив би нас про можливу логічну помилку.
 
-### `while let` Conditional Loops
+### Умовні Цикли `while let`
 
-Similar in construction to `if let`, the `while let` conditional loop allows a `while` loop to run for as long as a pattern continues to match. In Listing 18-2 we code a `while let` loop that uses a vector as a stack and prints the values in the vector in the opposite order in which they were pushed.
+Подібно до конструкції `if let`, умовний цикл `while let` дозволяє циклу `while` працювати допоки шаблон продовжує збігатися. У Блоці Коду наведено код циклу `while let`, який використовує вектор як стек і виводить в консолі значення вектора у зворотному порядку, в якому вони були додані.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-02/src/main.rs:here}}
@@ -68,11 +66,11 @@ Similar in construction to `if let`, the `while let` conditional loop allows a `
 
 <span class="caption">Listing 18-2: Using a `while let` loop to print values for as long as `stack.pop()` returns `Some`</span>
 
-This example prints 3, 2, and then 1. The `pop` method takes the last element out of the vector and returns `Some(value)`. If the vector is empty, `pop` returns `None`. The `while` loop continues running the code in its block as long as `pop` returns `Some`. When `pop` returns `None`, the loop stops. We can use `while let` to pop every element off our stack.
+Цей приклад виводить в консолі 3, 2, і потім 1. Метод `pop` бере останній елемент з вектора і повертає `Some(значення)`. Якщо вектор порожній, `pop` поверне `None`. Цикл `while` продовжує виконання коду в своєму блоці допоки `pop` повертає `Some`. Коли `pop` поверне `None`, цикл зупиниться. Ми можемо використовувати `while let` для вилучення кожного елементу зі стека.
 
-### `for` Loops
+### Цикли `for`
 
-In a `for` loop, the value that directly follows the keyword `for` is a pattern. For example, in `for x in y` the `x` is the pattern. Listing 18-3 demonstrates how to use a pattern in a `for` loop to destructure, or break apart, a tuple as part of the `for` loop.
+В циклі `for`, значення яке безпосередньо слідує за ключовим словом `for` є шаблоном. Наприклад, `x` в `for x in y` є шаблоном. Блок Коду 18-3 демонструє як використовувати шаблон в циклі `for` для деструктуризації або розбирання на частини кортежу, як частини циклу `for`.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-03/src/main.rs:here}}
@@ -81,29 +79,29 @@ In a `for` loop, the value that directly follows the keyword `for` is a pattern.
 
 <span class="caption">Listing 18-3: Using a pattern in a `for` loop to destructure a tuple</span>
 
-The code in Listing 18-3 will print the following:
+Код в Блоці Коду 18-3 виведе в консоль наступне:
 
 ```console
 {{#include ../listings/ch18-patterns-and-matching/listing-18-03/output.txt}}
 ```
 
-We adapt an iterator using the `enumerate` method so it produces a value and the index for that value, placed into a tuple. The first value produced is the tuple `(0, 'a')`. When this value is matched to the pattern `(index, value)`, `index` will be `0` and `value` will be `'a'`, printing the first line of the output.
+Ми адаптуємо ітератор використовуючи метод `enumerate` таким чином, щоб він генерував значення та індекс для цього значення, поміщені в кортеж. Перше згенероване значення - кортеж `(0, 'a')`. При зіставленні цього значення з шаблоном `(index, value)`, `index` буде `0`, а `value` буде `'a'`, виводячи перший рядок виводу в консоль.
 
-### `let` Statements
+### Інструкції `let`
 
-Prior to this chapter, we had only explicitly discussed using patterns with `match` and `if let`, but in fact, we’ve used patterns in other places as well, including in `let` statements. For example, consider this straightforward variable assignment with `let`:
+До цього розділу ми явно обговорювали тільки використання шаблонів з `match` та `if let`, але насправді ми використовували шаблони і в інших місцях, в тому числі і в операторах `let`. Наприклад, розглянемо це просте присвоювання змінної з використанням `let`:
 
 ```rust
 let x = 5;
 ```
 
-Every time you've used a `let` statement like this you've been using patterns, although you might not have realized it! More formally, a `let` statement looks like this:
+Кожного разу, коли ви використовували інструкцію `let`, ви використовували шаблони, хоча, можливо, ви цього навіть не усвідомлювали! Більш формально, оператор `let` виглядає так:
 
 ```text
 let PATTERN = EXPRESSION;
 ```
 
-In statements like `let x = 5;` with a variable name in the `PATTERN` slot, the variable name is just a particularly simple form of a pattern. Rust compares the expression against the pattern and assigns any names it finds. So in the `let x = 5;` example, `x` is a pattern that means “bind what matches here to the variable `x`.” Because the name `x` is the whole pattern, this pattern effectively means “bind everything to the variable `x`, whatever the value is.”
+В інструкціях типу `let x = 5;` з назвою змінної в слоті `PATTERN` назва змінної є лише особливо простою формою шаблону. Rust порівнює вираз із шаблоном і призначає будь-які знайдені імена. Таким чином, у прикладі `let x = 5;` `x` - це шаблон, який означає "прив'язати до змінної `x` все, що зіставляється з цим виразом." Оскільки назва `x` - це весь шаблон, цей шаблон фактично означає "прив'язати все до змінної `x`, незалежно від її значення."
 
 To see the pattern matching aspect of `let` more clearly, consider Listing 18-4, which uses a pattern with `let` to destructure a tuple.
 
@@ -114,9 +112,9 @@ To see the pattern matching aspect of `let` more clearly, consider Listing 18-4,
 
 <span class="caption">Listing 18-4: Using a pattern to destructure a tuple and create three variables at once</span>
 
-Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)` to the pattern `(x, y, z)` and sees that the value matches the pattern, so Rust binds `1` to `x`, `2` to `y`, and `3` to `z`. You can think of this tuple pattern as nesting three individual variable patterns inside it.
+Тут ми зіставляємо кортеж з шаблоном. Rust зіставляє значення `(1, 2, 3)` із шаблоном `(x, y, z)` та бачить, що значення зіставляються, тому Rust пов'язує `1` до `x`, `2` до `y` та `3` до `z`. Ви можете думати про цей шаблон кортежу як про три окремих вкладених шаблонів змінних всередині.
 
-If the number of elements in the pattern doesn’t match the number of elements in the tuple, the overall type won’t match and we’ll get a compiler error. For example, Listing 18-5 shows an attempt to destructure a tuple with three elements into two variables, which won’t work.
+Якщо кількість елементів у шаблоні не відповідає кількості елементів у кортежі, то загальний тип не буде збігатися і ми отримаємо помилку компілятора. Наприклад, у Блоці Коду 18-5 показано спробу деструктуризації кортежу з трьома елементами на дві змінні, що не спрацює.
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-05/src/main.rs:here}}
@@ -125,17 +123,17 @@ If the number of elements in the pattern doesn’t match the number of elements 
 
 <span class="caption">Listing 18-5: Incorrectly constructing a pattern whose variables don’t match the number of elements in the tuple</span>
 
-Attempting to compile this code results in this type error:
+Спроба скомпілювати цей код призведе до помилки цього типу:
 
 ```console
 {{#include ../listings/ch18-patterns-and-matching/listing-18-05/output.txt}}
 ```
 
-To fix the error, we could ignore one or more of the values in the tuple using `_` or `..`, as you’ll see in the [“Ignoring Values in a Pattern”]()<!-- ignore --> section. If the problem is that we have too many variables in the pattern, the solution is to make the types match by removing variables so the number of variables equals the number of elements in the tuple.
+Щоб виправити помилку, ми можемо проігнорувати один або більше значень кортежу, використовуючи `_` або `..`, як ви побачите в секції ["Ігнорування Значень в Шаблоні"]()<!-- ignore --> . Якщо проблема в тому, що в шаблоні занадто багато змінних, то рішення полягає в узгодженні типів шляхом видалення змінних так, щоб кількість змінних дорівнювала кількості елементів в кортежі.
 
-### Function Parameters
+### Параметри Функції
 
-Function parameters can also be patterns. The code in Listing 18-6, which declares a function named `foo` that takes one parameter named `x` of type `i32`, should by now look familiar.
+Параметри функції також можуть бути шаблонами. Код у Блоці Коду 18-6, який оголошує функцію з назвою `foo`, яка отримує один параметр з назвою `x` типу `i32`, вже повинен виглядати знайомим.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-06/src/main.rs:here}}
@@ -144,9 +142,9 @@ Function parameters can also be patterns. The code in Listing 18-6, which declar
 
 <span class="caption">Listing 18-6: A function signature uses patterns in the parameters</span>
 
-The `x` part is a pattern! As we did with `let`, we could match a tuple in a function’s arguments to the pattern. Listing 18-7 splits the values in a tuple as we pass it to a function.
+Частина `x` - це шаблон! Ми можемо зіставляти кортеж в аргументах функції із шаблоном, як ми зробили з `let`. В Блоці Коду 18-7 значення кортежу розділяються, коли ми передаємо їх до функції.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-07/src/main.rs}}
@@ -155,9 +153,9 @@ The `x` part is a pattern! As we did with `let`, we could match a tuple in a fun
 
 <span class="caption">Listing 18-7: A function with parameters that destructure a tuple</span>
 
-This code prints `Current location: (3, 5)`. The values `&(3, 5)` match the pattern `&(x, y)`, so `x` is the value `3` and `y` is the value `5`.
+Цей код виводить в консоль `Current location: (3, 5)`. Значення `&(3, 5)` зіставляються з шаблоном `&(x, y)`, тому `x` має значення `3` та `y`має значення `5`.
 
 We can also use patterns in closure parameter lists in the same way as in function parameter lists, because closures are similar to functions, as discussed in Chapter 13.
 
-At this point, you’ve seen several ways of using patterns, but patterns don’t work the same in every place we can use them. In some places, the patterns must be irrefutable; in other circumstances, they can be refutable. We’ll discuss these two concepts next.
+Наразі ви побачили декілька способів використання шаблонів, але вони не працюють однаково у всіх місцях можливого використання. У деяких місцях шаблони мають бути неспростовні; в інших умовах вони можуть бути спростовними. Ми обговоримо ці дві концепції далі.
 ch18-03-pattern-syntax.html#ignoring-values-in-a-pattern
