@@ -1,121 +1,121 @@
-## Controlling How Tests Are Run
+## Контроль над запуском тестів
 
-Just as `cargo run` compiles your code and then runs the resulting binary, `cargo test` compiles your code in test mode and runs the resulting test binary. The default behavior of the binary produced by `cargo test` is to run all the tests in parallel and capture output generated during test runs, preventing the output from being displayed and making it easier to read the output related to the test results. You can, however, specify command line options to change this default behavior.
+Так само як `cargo run` компілює ваш код і запускає утворений виконуваний файл, `cargo test` компілює ваш код у режимі тестів і запускає утворений тестовий виконуваний файл. За замовчанням виконуваний файл, згенерований `cargo test`, запускає всі тести паралельно і перехоплює вивід, згенерований під час виконання тестів, запобігаючи виведенню на екран і спрощуючи читання виведення, яке стосується результатів тестів. Однак ви можете вказати опції командного рядка, щоб змінити таку поведінку за замовчанням.
 
-Some command line options go to `cargo test`, and some go to the resulting test binary. To separate these two types of arguments, you list the arguments that go to `cargo test` followed by the separator `--` and then the ones that go to the test binary. Running `cargo test --help` displays the options you can use with `cargo test`, and running `cargo test -- --help` displays the options you can use after the separator.
+Деякі опції командного рядка стосуються `cargo test`, а деякі - вихідного тестового виконуваного файла. Щоб розділити ці два типи аргументів, треба вказати аргументи, що стосуються `cargo test`, далі розділювач `--`, а потім ті, що стосуються тестового виконуваного файлу. Запуск `cargo test --help` покаже опції, що можна використовувати з `cargo test`, а запуск `cargo test -- --help` покаже опції, що можна вказувати після розділювача.
 
-### Running Tests in Parallel or Consecutively
+### Запуск тестів паралельно чи послідовно
 
-When you run multiple tests, by default they run in parallel using threads, meaning they finish running faster and you get feedback quicker. Because the tests are running at the same time, you must make sure your tests don’t depend on each other or on any shared state, including a shared environment, such as the current working directory or environment variables.
+Коли ви запускаєте декілька тестів, за замовчуванням вони запускаються паралельно у кількох потоках, тобто вони закінчують роботу швидше і ви скоріше отримуєте зворотний зв'язок. Оскільки тести виконуються одночасно, ви повинні переконатися, що ваші тести не залежать один від одного або від будь-якого спільного стану, включно зі спільним середовищем, наприклад поточною робочою текою чи змінною середовища.
 
-For example, say each of your tests runs some code that creates a file on disk named *test-output.txt* and writes some data to that file. Then each test reads the data in that file and asserts that the file contains a particular value, which is different in each test. Because the tests run at the same time, one test might overwrite the file in the time between another test writing and reading the file. The second test will then fail, not because the code is incorrect but because the tests have interfered with each other while running in parallel. One solution is to make sure each test writes to a different file; another solution is to run the tests one at a time.
+Наприклад, нехай кожен з ваших тестів запускає певний код, що створює файл на диску з назвою *test-output.txt* і записує якісь дані в цей файл. Потім кожен тест зчитує дані з цього файлу та перевіряє, що файл містить певне значення, яке різниться в кожному тесті. Оскільки тести виконуються одночасно, один тест може перезаписати файл у час між тим, коли інший тест пише і читає цей файл. Другий тест тоді провалиться - не тому, що код неправильний, але тому, що тести втручалися в роботу один одного під час паралельної роботи. Одне можливе рішення - переконатися, що кожен тест пише в окремий файл; інше рішення - запускати тести по одному за раз.
 
-If you don’t want to run the tests in parallel or if you want more fine-grained control over the number of threads used, you can send the `--test-threads` flag and the number of threads you want to use to the test binary. Take a look at the following example:
+Якщо ви не хочете запускати тести паралельно, або якщо хочете мати більш докладний контроль над кількістю потоків, ви можете встановити прапорець `--test-threads` і кількість потоків, які Ви хочете використовувати для тестування. Погляньте на наступний приклад:
 
 ```console
 $ cargo test -- --test-threads=1
 ```
 
-We set the number of test threads to `1`, telling the program not to use any parallelism. Running the tests using one thread will take longer than running them in parallel, but the tests won’t interfere with each other if they share state.
+Ми встановили кількість потоків тестів на значення `1`, які повідомляють програмі не використовувати паралелізм. Виконання тестів за допомогою одного потоку займе більше часу, ніж запуск їх паралельно, але тести не будуть втручатися один одного, якщо вони мають спільний стан.
 
-### Showing Function Output
+### Показування виведення функції
 
-By default, if a test passes, Rust’s test library captures anything printed to standard output. For example, if we call `println!` in a test and the test passes, we won’t see the `println!` output in the terminal; we’ll see only the line that indicates the test passed. If a test fails, we’ll see whatever was printed to standard output with the rest of the failure message.
+За замовчуванням, якщо тест проходить вдало, бібліотека тестування Rust перехоплює все, що виводиться у стандартний вихідний потік. Наприклад, якщо ми викличемо `println!` у тесті й тест проходить, ми не побачимо виведення з `println!` терміналі; ми побачимо тільки рядок, який каже, що тест пройдено. Якщо тест провалено, ми побачимо все, що було виведено до стандартного потоку виведення з рештою повідомлення про помилку.
 
-As an example, Listing 11-10 has a silly function that prints the value of its parameter and returns 10, as well as a test that passes and a test that fails.
+Як приклад, Блок коду 11-10 має простеньку функцію, яка друкує значення свого параметра і повертає 10, а також і тест, що проходить і тест, що провалюється.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,panics,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-10/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 11-10: Tests for a function that calls `println!`</span>
+<span class="caption">Блок коду 11-10: Тести для функції, що викликає `println!`</span>
 
-When we run these tests with `cargo test`, we’ll see the following output:
+Коли ми запустимо ці тести за допомогою `cargo test`, то побачимо таке:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-10/output.txt}}
 ```
 
-Note that nowhere in this output do we see `I got the value 4`, which is what is printed when the test that passes runs. That output has been captured. The output from the test that failed, `I got the value 8`, appears in the section of the test summary output, which also shows the cause of the test failure.
+Зверніть увагу, що у виведеному ніде немає `I got the value 4` - того, що виводиться в тесті, що проходить. Це виведення було перехоплено. Виведення з тесту, що провалився, `I got the value 8`, з'являється в розділі підсумків тесту, де також показана і причина провалу тесту.
 
-If we want to see printed values for passing tests as well, we can tell Rust to also show the output of successful tests with `--show-output`.
+Якщо ми хочемо вивести значення і для тестів, що пройшли, ми можемо сказати Rust також показати виведення з успішних тестів за допомогою `--show-output`.
 
 ```console
 $ cargo test -- --show-output
 ```
 
-When we run the tests in Listing 11-10 again with the `--show-output` flag, we see the following output:
+Коли ми запустимо тести з Блоку коду 11-10 знову, вказавши прапорець `--show-output`, то побачимо таке:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/output-only-01-show-output/output.txt}}
 ```
 
-### Running a Subset of Tests by Name
+### Запуск підмножини тестів по імені
 
-Sometimes, running a full test suite can take a long time. If you’re working on code in a particular area, you might want to run only the tests pertaining to that code. You can choose which tests to run by passing `cargo test` the name or names of the test(s) you want to run as an argument.
+Іноді виконання повного набору тестів може тривати довго. Якщо ви працюєте над кодом у певній області, то можете захотіти запускати лише тести, що містять цей код. Ви можете обирати, які тести виконати, передавши `cargo test` ім'я чи імена тесту(ів), які хочете запустити, як аргумент.
 
-To demonstrate how to run a subset of tests, we’ll first create three tests for our `add_two` function, as shown in Listing 11-11, and choose which ones to run.
+Щоб продемонструвати, як запустити частину тестів, ми спершу створимо три тести для нашої функції `add_two`, як показано у Блоці коду 11-11, і оберемо, які з них запустити.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-11/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 11-11: Three tests with three different names</span>
+<span class="caption">Блок коду 11-11: Три тести з різними іменами</span>
 
-If we run the tests without passing any arguments, as we saw earlier, all the tests will run in parallel:
+Якщо ми запустимо тести, не передавши жодних аргументів, то, як ми бачили раніше, всі тести запустяться паралельно:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-11/output.txt}}
 ```
 
-#### Running Single Tests
+#### Запуск одного тесту
 
-We can pass the name of any test function to `cargo test` to run only that test:
+Ми можемо передати назву будь-якої тестової функції `cargo test`, щоб запустити тільки цей тест:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/output-only-02-single-test/output.txt}}
 ```
 
-Only the test with the name `one_hundred` ran; the other two tests didn’t match that name. The test output lets us know we had more tests that didn’t run by displaying `2 filtered out` at the end.
+Лише тест з ім'ям `one_hundred` було виконано; інші два тести мають невідповідні імена. Вивід тесту дає нам знати, що ми мали більше тестів, що не були запущені, показавши наприкінці `2 filtered out`.
 
-We can’t specify the names of multiple tests in this way; only the first value given to `cargo test` will be used. But there is a way to run multiple tests.
+Ми не можемо таким чином вказувати імена кількох тестів; буде використане лише перше значення, передане `cargo test`. Але є спосіб запустити кілька тестів.
 
-#### Filtering to Run Multiple Tests
+#### Фільтрування для запуску кількох тестів
 
-We can specify part of a test name, and any test whose name matches that value will be run. For example, because two of our tests’ names contain `add`, we can run those two by running `cargo test add`:
+Ми можемо вказати частину назви тесту, і всі тести, чиї імена відповідають цьому значенню, будуть запущені. Наприклад, оскільки дві назви наших тестів містять `add`, ми можемо виконати ці два тести, запустивши `cargo test add`:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/output-only-03-multiple-tests/output.txt}}
 ```
 
-This command ran all tests with `add` in the name and filtered out the test named `one_hundred`. Also note that the module in which a test appears becomes part of the test’s name, so we can run all the tests in a module by filtering on the module’s name.
+Ця команда виконала всі тести, що містили `add` у назві й відфільтрувала тест з назвою `one_hundred`. Також зверніть увагу, що модуль, в якому з'являється тест, перетворюється на частину імені тесту, тож ми можемо запустити усі тести в модулі, відфільтрувавши тести за ім’ям модуля.
 
-### Ignoring Some Tests Unless Specifically Requested
+### Ігнорування деяких тестів, якщо не було спеціального запиту
 
-Sometimes a few specific tests can be very time-consuming to execute, so you might want to exclude them during most runs of `cargo test`. Rather than listing as arguments all tests you do want to run, you can instead annotate the time-consuming tests using the `ignore` attribute to exclude them, as shown here:
+Іноді кілька специфічних тестів можуть витрачати дуже багато часу для виконання, так що ви можете захотіти виключити їх під час більшості запусків `cargo test`. Замість того, щоб перелічувати всі тести, які ви хочете запустити, як аргументи, ви можете натомість додати анотацію трудомістких тестів, додавши атрибут `ignore`, щоб виключити їх, як показано тут:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-11-ignore-a-test/src/lib.rs}}
 ```
 
-After `#[test]` we add the `#[ignore]` line to the test we want to exclude. Now when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
+Після `#[test]` ми додаємо рядок `#[ignore]` до тесту, що його ми хочемо виключити. Тепер, коли ми запускаємо наші тести, `it_works` запускається, а `expensive_test` - ні:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-11-ignore-a-test/output.txt}}
 ```
 
-The `expensive_test` function is listed as `ignored`. If we want to run only the ignored tests, we can use `cargo test -- --ignored`:
+Функція `expensive_test` показана як `ignored`. Якби ми захотіли запустити лише ігноровані тести, то могли б запустити `cargo test -- --ignored`:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/output-only-04-running-ignored/output.txt}}
 ```
 
-By controlling which tests run, you can make sure your `cargo test` results will be fast. When you’re at a point where it makes sense to check the results of the `ignored` tests and you have time to wait for the results, you can run `cargo test -- --ignored` instead. If you want to run all tests whether they’re ignored or not, you can run `cargo test -- --include-ignored`.
+Контролюючи, які тести запустити, ви можете забезпечити швидкість результатів `cargo test`. Коли ви дістанетеся до етапу, коли матиме сенс перевірити результати тестів `ignored` і матимете час дочекатися результатів, то зможете натомість запустити `cargo test -- --ignored`. Якщо ви хочете запустити усі тести, ігноровані чи ні, то можете запустити `cargo test -- --include-ignored`.
