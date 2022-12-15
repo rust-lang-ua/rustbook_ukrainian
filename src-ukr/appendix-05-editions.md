@@ -1,25 +1,25 @@
-## Appendix E - Editions
+## Додаток E - видання
 
-In Chapter 1, you saw that `cargo new` adds a bit of metadata to your *Cargo.toml* file about an edition. This appendix talks about what that means!
+У розділі 1 ви бачили, що `cargo new` додає трохи метаданих до файлу *Cargo.toml* стосовно видання (edition). Цей додаток пояснює, що це означає!
 
-The Rust language and compiler have a six-week release cycle, meaning users get a constant stream of new features. Other programming languages release larger changes less often; Rust releases smaller updates more frequently. After a while, all of these tiny changes add up. But from release to release, it can be difficult to look back and say, “Wow, between Rust 1.10 and Rust 1.31, Rust has changed a lot!”
+Мова Rust і компілятор мають шеститижневий цикл випуску, що означає, що користувачі отримують постійний потік нового функціоналу. Інші мови програмування випускають великі зміни і рідше; Rust випускає менші оновлення частіше. За певний час, усі ці маленькі зміни накопичуються. Але від випуску до випуску може бути складно озирнутися і сказати "Ух, між Rust 1.10 та Rust 1.31, Rust так сильно змінився!"
 
-Every two or three years, the Rust team produces a new Rust *edition*. Each edition brings together the features that have landed into a clear package with fully updated documentation and tooling. New editions ship as part of the usual six-week release process.
+Кожні два чи три роки команда Rust випускає нове *видання* Rust. Кожне видання збирає функціонал, що утворює чіткий пакет, з повністю оновленою документацією та інструментарієм. Нові видання постачаються як частина звичайного шеститижневого процесу випусків.
 
-Editions serve different purposes for different people:
+Видання слугують різним цілям для різних людей:
 
-* For active Rust users, a new edition brings together incremental changes into an easy-to-understand package.
-* For non-users, a new edition signals that some major advancements have landed, which might make Rust worth another look.
-* For those developing Rust, a new edition provides a rallying point for the project as a whole.
+* Для активних користувачів Rust нове видання збирає накопичені зміни у легкозрозумілий пакет.
+* Для некористувачів, нове видання подає сигнал, що сталися якісь суттєві досягнення, завдяки чому Rust, можливо, став вартим більшої уваги.
+* Для тих, хто розробляє Rust, нове видання надає точку відліку для процесу в цілому.
 
-At the time of this writing, three Rust editions are available: Rust 2015, Rust 2018, and Rust 2021. This book is written using Rust 2021 edition idioms.
+На час написання цього, доступні три видання Rust: Rust 2015, Rust 2018 і Rust 2021. Ця книжка написана з використанням ідіом видання Rust 2021.
 
-The `edition` key in *Cargo.toml* indicates which edition the compiler should use for your code. If the key doesn’t exist, Rust uses `2015` as the edition value for backward compatibility reasons.
+Ключ `edition` у *Cargo.toml* указує, яке видання компілятор має використати для вашого коду. Якщо ключа немає, Rust використовує `2015` як значення видання з міркувань зворотної сумісності.
 
-Each project can opt in to an edition other than the default 2015 edition. Editions can contain incompatible changes, such as including a new keyword that conflicts with identifiers in code. However, unless you opt in to those changes, your code will continue to compile even as you upgrade the Rust compiler version you use.
+Кожен проєкт може обрати видання, відмінне від видання 2015 за умовчанням. Видання можуть містити несумісні зміни, такі як появу нового ключового слова, що конфілктує із ідентифікаторами в коді. Однак, якщо ви не погодитеся на ці зміни, ваш код буде продовжувати компілюватися, навіть коли ви оновите версію компілятора Rust, яку ви використовуєте.
 
-All Rust compiler versions support any edition that existed prior to that compiler’s release, and they can link crates of any supported editions together. Edition changes only affect the way the compiler initially parses code. Therefore, if you’re using Rust 2015 and one of your dependencies uses Rust 2018, your project will compile and be able to use that dependency. The opposite situation, where your project uses Rust 2018 and a dependency uses Rust 2015, works as well.
+Всі версії компілятора Rust підтримують усі видання, що існували до випуску цього компілятора, і вони можуть зв'язувати крейти усіх підтримуваних видань. Зміни видання лише впливають на те, як компілятор початково розбирає код. Таким чином, якщо ви використовуєте Rust 2015, а одна з ваших залежностей використовує Rust 2018, ваш проєкт скомпілюється і зможе використовувати цю залежність. Зворотна ситуація, де ваш проєкт використовує Rust 2018, а залежність використовує Rust 2015, теж працює.
 
-To be clear: most features will be available on all editions. Developers using any Rust edition will continue to see improvements as new stable releases are made. However, in some cases, mainly when new keywords are added, some new features might only be available in later editions. You will need to switch editions if you want to take advantage of such features.
+Одразу зазначимо: більшість функціонала доступно у всіх виданнях. Розробники, що використовують будь-яку редакцію Rust, продовжать бачити покращення, коли виходитимуть нові стабільні випуски. Однак у певних випадках, переважно коли додаються нові ключові слова, деякий новий функціонал може бути доступним лише в пізніших виданнях. Вам доведеться перемкнути видання, щоб мати повну змогу використовувати такий функціонал.
 
-For more details, the [*Edition Guide*](https://doc.rust-lang.org/stable/edition-guide/) is a complete book about editions that enumerates the differences between editions and explains how to automatically upgrade your code to a new edition via `cargo fix`.
+Для більш докладної інформації, [*Edition Guide*](https://doc.rust-lang.org/stable/edition-guide/) є вичерпною книжкою про видання, де перелічуються відмінності між виданнями та пояснюється, як автоматично оновити код до нової редакції за допомогою `cargo fix`.
