@@ -1,16 +1,16 @@
 ## Обробка послідовностей елементів за допомогою ітераторів
 
-Шаблон ітератора дозволяє вам виконати певну задачу з послідовністю елементів по черзі. An iterator is responsible for the logic of iterating over each item and determining when the sequence has finished. When you use iterators, you don’t have to reimplement that logic yourself.
+Шаблон ітератора дозволяє вам виконати певну задачу з послідовністю елементів по черзі. Ітератор відповідає за логіку ітерації по елементах і визначення, коли послідовність закінчується. Коли ви користуєтесь ітераторами, вам не треба самостійно реалізовувати цю логіку.
 
-In Rust, iterators are *lazy*, meaning they have no effect until you call methods that consume the iterator to use it up. For example, the code in Listing 13-10 creates an iterator over the items in the vector `v1` by calling the `iter` method defined on `Vec<T>`. This code by itself doesn’t do anything useful.
+У Rust ітератори є *лінивими*, тобто вони нічого не роблять до того моменту, коли ви викличете метод, що поглине ітератор і використає його. Наприклад, код у Блоці коду 13-10 створює ітератор по елементах вектора `v1`, викликавши метод `iter`, визначений для `Vec<T>`. Цей код як такий не робить нічого корисного.
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-10: Creating an iterator</span>
+<span class="caption">Блок коду 13-10: створення ітератора</span>
 
-The iterator is stored in the `v1_iter` variable. Once we’ve created an iterator, we can use it in a variety of ways. In Listing 3-5 in Chapter 3, we iterated over an array using a `for` loop to execute some code on each of its items. Under the hood this implicitly created and then consumed an iterator, but we glossed over how exactly that works until now.
+Ітератор зберігається у змінній `v1_iter`. Once we’ve created an iterator, we can use it in a variety of ways. In Listing 3-5 in Chapter 3, we iterated over an array using a `for` loop to execute some code on each of its items. Under the hood this implicitly created and then consumed an iterator, but we glossed over how exactly that works until now.
 
 In the example in Listing 13-11, we separate the creation of the iterator from the use of the iterator in the `for` loop. When the `for` loop is called using the iterator in `v1_iter`, each element in the iterator is used in one iteration of the loop, which prints out each value.
 
