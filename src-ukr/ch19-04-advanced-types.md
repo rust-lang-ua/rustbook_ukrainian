@@ -1,170 +1,170 @@
-## Advanced Types
+## Поглиблено про типи
 
-The Rust type system has some features that we’ve so far mentioned but haven’t yet discussed. We’ll start by discussing newtypes in general as we examine why newtypes are useful as types. Then we’ll move on to type aliases, a feature similar to newtypes but with slightly different semantics. We’ll also discuss the `!` type and dynamically sized types.
+Система типів Rust має певні особливості, про які ми вже згадували, але не обговорювали. Почнемо з обговорення нових типів у цілому, розбираючи, чому нові типи корисні як типи. Тоді ми перейдемо до псевдонімів типів, функціоналу, подібному до нових типів, але з трохи іншою семантикою. Також ми обговоримо тип `!` і типи з динамічним розміром.
 
-### Using the Newtype Pattern for Type Safety and Abstraction
+### Використання паттерну "новий тип" для безпеки і абстракції типів
 
-> Note: This section assumes you’ve read the earlier section [“Using the Newtype Pattern to Implement External Traits on External Types.”][using-the-newtype-pattern]<!-- ignore -->
+> Примітка: цей підрозділ передбачає, що ви вже прочитали попередній підрозділ [“Використання паттерну "новий тип" для реалізації зовнішніх трейтів на зовнішніх типах.”][using-the-newtype-pattern]<!-- ignore -->
 
-The newtype pattern is also useful for tasks beyond those we’ve discussed so far, including statically enforcing that values are never confused and indicating the units of a value. You saw an example of using newtypes to indicate units in Listing 19-15: recall that the `Millimeters` and `Meters` structs wrapped `u32` values in a newtype. If we wrote a function with a parameter of type `Millimeters`, we couldn’t compile a program that accidentally tried to call that function with a value of type `Meters` or a plain `u32`.
+Паттерн "новий тип" також корисний для задач поза тими, які ми досі обговорили, включно зі статичним гарантуванням, що значення не переплутаються, і вказанням одиниць значення. Ви бачили приклад використання нових типів для позначення типів у Блоці коду 19-15: згадайте структури `Millimeters` і `Meters`, що обгортали значення `u32` у новий тип. Якщо ми напишемо функцію з параметром типу `Millimeters`, то не зможемо скомпілювати програму, де випадково спробуємо викликати цю функцію зі значенням типу `Meters` або просто `u32`.
 
-We can also use the newtype pattern to abstract away some implementation details of a type: the new type can expose a public API that is different from the API of the private inner type.
+Ми також можемо використовувати патерн "новий тип", щоб абстрагуватися від деталей реалізації типу: новий тип може надати публічний API, що відрізняється від API приватного внутрішнього типу.
 
-Newtypes can also hide internal implementation. For example, we could provide a `People` type to wrap a `HashMap<i32, String>` that stores a person’s ID associated with their name. Code using `People` would only interact with the public API we provide, such as a method to add a name string to the `People` collection; that code wouldn’t need to know that we assign an `i32` ID to names internally. The newtype pattern is a lightweight way to achieve encapsulation to hide implementation details, which we discussed in the [“Encapsulation that Hides Implementation Details”]()<!-- ignore -->
-section of Chapter 17.
+Нові типи також можуть приховувати внутрішню реалізацію. Наприклад, ми могли б надати тип `People` для того, щоб загорнути `HashMap<i32, String>`, що зберігає ID людини, пов'язаний з її ім'ям. Код, що використовує `People`, взаємодіятиме лише з наданим нами публічним API, таким як метод, щоб додати ім'я - стрічку до колекції `People`; тому коду не треба знати, що внутрішньо ми присвоюємо іменам ID типу `i32`. Паттерн "новий тип" є простим способом досягти інкапсуляції, щоб приховати деталі реалізації, про яку ми говорили у підрозділі [“Інкапсуляція, яка приховує деталі реалізації”]()<!-- ignore -->
+Розділу 17.
 
-### Creating Type Synonyms with Type Aliases
+### Створення синонімів типів за допомогою псевдонімів типів
 
-Rust provides the ability to declare a *type alias* to give an existing type another name. For this we use the `type` keyword. For example, we can create the alias `Kilometers` to `i32` like so:
+Rust надає можливість проголосити *псевдонім типу*, щоб надати типу, що існує, іншу назву. Для цього використовується ключове слово `type`. Наприклад, ми можемо створити псевдонім `Kilometers` для `i32` ось таким чином:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-04-kilometers-alias/src/main.rs:here}}
 ```
 
-Now, the alias `Kilometers` is a *synonym* for `i32`; unlike the `Millimeters` and `Meters` types we created in Listing 19-15, `Kilometers` is not a separate, new type. Values that have the type `Kilometers` will be treated the same as values of type `i32`:
+Тепер псевдонім `Kilometers` є *синонімом* для `i32`; на відміну від типів `Millimeters` і `Meters`, які ми створили в Блоці коду 19-15, `Kilometers` не є окремим новим типом. Значення, що мають тип `Kilometers` будуть оброблятись так само як і значення типу `i32`:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-04-kilometers-alias/src/main.rs:there}}
 ```
 
-Because `Kilometers` and `i32` are the same type, we can add values of both types and we can pass `Kilometers` values to functions that take `i32` parameters. However, using this method, we don’t get the type checking benefits that we get from the newtype pattern discussed earlier. In other words, if we mix up `Kilometers` and `i32` values somewhere, the compiler will not give us an error.
+Оскільки `Kilometers` та `i32` є одним типом, ми можемо додавати значення обох типів, і ми можемо передавати значення `Kilometers` у функції, що приймають параметром `i32`. Однак, за допомогою цього методу ми не отримуємо переваг перевірки типів, які ми отримали від паттерну "новий тип", про який говорили раніше. Іншими словами, якщо ми десь переплутаємо значення `Kilometers` і `i32`, компілятор не повідомить нам про помилку.
 
-The main use case for type synonyms is to reduce repetition. For example, we might have a lengthy type like this:
+Основним випадком використання синонімів типу є зменшення повторень. Наприклад, у нас може бути такий довгий тип:
 
 ```rust,ignore
 Box<dyn Fn() + Send + 'static>
 ```
 
-Writing this lengthy type in function signatures and as type annotations all over the code can be tiresome and error prone. Imagine having a project full of code like that in Listing 19-24.
+Писати цей довгий тип у сигнатурах функцій і анотаціях типів по всьому коду утомлює і призводить до помилок. Уявімо, що в нас є проєкт, повний коду, подібного до Блоку коду 19-24.
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-24/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-24: Using a long type in many places</span>
+<span class="caption">Блок коду 19-25: використання довгого типу в багатьох місцях</span>
 
-A type alias makes this code more manageable by reducing the repetition. In Listing 19-25, we’ve introduced an alias named `Thunk` for the verbose type and can replace all uses of the type with the shorter alias `Thunk`.
+Псевдонім типу робить цей код більш керованим шляхом зменшення повторень. У Блоці коду 19-25 ми ввели псевдонім з назвою `Thunk` для багатослівного типу і можемо замінити всі використання цього типу на коротший псевдонім `Thunk`.
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-25/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 19-25: Introducing a type alias `Thunk` to reduce repetition</span>
+<span class="caption">Блок коду 19-25: введення псевдоніма типу `Thunk` для зменшення повторень</span>
 
-This code is much easier to read and write! Choosing a meaningful name for a type alias can help communicate your intent as well (*thunk* is a word for code to be evaluated at a later time, so it’s an appropriate name for a closure that gets stored).
+Цей код набагато легше читати і писати! Вибір осмисленої назви для псевдоніма типу також може допомогти передати ваш намір (*thunk* означає код для обчислення пізніше, то ж це доречна назва для замикання, що зберігається).
 
-Type aliases are also commonly used with the `Result<T, E>` type for reducing repetition. Consider the `std::io` module in the standard library. I/O operations often return a `Result<T, E>` to handle situations when operations fail to work. This library has a `std::io::Error` struct that represents all possible I/O errors. Many of the functions in `std::io` will be returning `Result<T, E>` where the `E` is `std::io::Error`, such as these functions in the `Write` trait:
+Псевдоніми типів також широко використовуються з типом `Result<T, E>` для зменшення повторень. Подивімося на модуль `std::io` зі стандартної бібліотеки. Операції введення-виведення часто повертають `Result<T, E>`, щоб обробити ситуації, де операції не вдалися. Ця бібліотека має структуру `std::io::Error`, що представляє всі можливі помилки введення-виведення. Багато з функцій з `std::io` повертають `Result<T, E>`, де `E` - це `std::io::Error`, наприклад ці функції у трейті `Write`:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-05-write-trait/src/lib.rs}}
 ```
 
-The `Result<..., Error>` is repeated a lot. As such, `std::io` has this type alias declaration:
+`Result<..., Error>` повторюється багато разів. Тому `std::io` проголошує псевдонім цього типу:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-06-result-alias/src/lib.rs:here}}
 ```
 
-Because this declaration is in the `std::io` module, we can use the fully qualified alias `std::io::Result<T>`; that is, a `Result<T, E>` with the `E` filled in as `std::io::Error`. The `Write` trait function signatures end up looking like this:
+Оскільки це проголошення знаходиться в модулі `std::io`, ми можемо використовувати повний кваліфікований псевдонім `std::io::Result<T>`, тобто `Result<T, E>`, в якому `E` визначено як `std::io::Error`. Сигнатури функцій трейту `Write` в результаті виглядають ось так:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-06-result-alias/src/lib.rs:there}}
 ```
 
-The type alias helps in two ways: it makes code easier to write *and* it gives us a consistent interface across all of `std::io`. Because it’s an alias, it’s just another `Result<T, E>`, which means we can use any methods that work on `Result<T, E>` with it, as well as special syntax like the `?` operator.
+Псевдоніми типів допомагають у два способи: спрощують написання коду *і* надають нам цілісний інтерфейс у всьому `std::io`. Оскільки це псевдонім, це лише звичайний `Result<T, E>`, що означає, що ми можемо використовувати для нього будь-які методи, що працюють з `Result<T, E>`, а також особливий синтаксис на кшталт оператора `?`.
 
-### The Never Type that Never Returns
+### Тип "ніколи", що ніколи не повертається
 
-Rust has a special type named `!` that’s known in type theory lingo as the *empty type* because it has no values. We prefer to call it the *never type* because it stands in the place of the return type when a function will never return. Here is an example:
+Rust має спеціальний тип, що зветься `!`, також відомий у термінології теорії типів як *empty type*, бо він не має значень. Ми радше називаємо його *тип "ніколи"*, бо він стоїть замість типу, що повертається, коли функція ніколи не повертає значення. Ось приклад:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-07-never-type/src/lib.rs:here}}
 ```
 
-This code is read as “the function `bar` returns never.” Functions that return never are called *diverging functions*. We can’t create values of the type `!` so `bar` can never possibly return.
+Цей код читається як "функція `bar` ніколи не повертає." Функції, що ніколи не повертають, звуться *розбіжними функціями*. Ми не можемо створювати значень типу `!`, тож `bar` ніколи не може нічого повернути.
 
-But what use is a type you can never create values for? Recall the code from Listing 2-5, part of the number guessing game; we’ve reproduced a bit of it here in Listing 19-26.
+Але яка користь від типу, для якого неможливо створити значення? Згадайте код з Блоку коду 2-5, частину гри "Відгадай число"; ми відтворимо частину його тут, у Блоці коду 19-26.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:ch19}}
 ```
 
 
-<span class="caption">Listing 19-26: A `match` with an arm that ends in `continue`</span>
+<span class="caption">Блок коду 19-26: `match` з рукавом, що закінчується на `continue`</span>
 
-At the time, we skipped over some details in this code. In Chapter 6 in [“The `match` Control Flow Operator”]()<!-- ignore -->
-section, we discussed that `match` arms must all return the same type. So, for example, the following code doesn’t work:
+Цього разу ми пропустили деякі деталі в цьому коді. У Розділі 6 у підрозділі ["Конструкція управління `match`"]()<!-- ignore -->
+ми говорили, що рукави `match` мають усі повертати один і той самий тип. Тож, наприклад, цей код не працює:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-08-match-arms-different-types/src/main.rs:here}}
 ```
 
-The type of `guess` in this code would have to be an integer *and* a string, and Rust requires that `guess` have only one type. So what does `continue` return? How were we allowed to return a `u32` from one arm and have another arm that ends with `continue` in Listing 19-26?
+Тип `guess` у цьому коді має бути цілим числом *і* стрічкою, а Rust вимагає, щоб `guess` був лише одного типу. То що ж повертає `continue`? Як у нас вийшло повернути `u32` з одного рукава та мати інший рукав, що закінчується на `continue` у Блоці коду 19-26?
 
-As you might have guessed, `continue` has a `!` value. That is, when Rust computes the type of `guess`, it looks at both match arms, the former with a value of `u32` and the latter with a `!` value. Because `!` can never have a value, Rust decides that the type of `guess` is `u32`.
+Як ви вже мабуть здогадалися, `continue` має значення `!`. Тобто, коли Rust обчислює тип `guess`, він перевіряє обидва рукави match, перший зі значенням `u32` і другий зі значенням `!`. Оскільки `!` ніколи не має значення, Rust вирішує, що типом `guess` є `u32`.
 
-The formal way of describing this behavior is that expressions of type `!` can be coerced into any other type. We’re allowed to end this `match` arm with `continue` because `continue` doesn’t return a value; instead, it moves control back to the top of the loop, so in the `Err` case, we never assign a value to `guess`.
+Формальним ця поведінка описується так: вираз типу `!` може бути приведений до будь-якого іншого типу. Ми можемо поставити`continue` в кінці рукава `match`, бо `continue` не повертає значення; натомість, він передає управління назад на початок циклу, тож у випадку `Err` ми ніколи не присвоїмо значення `guess`.
 
-The never type is useful with the `panic!` macro as well. Recall the `unwrap` function that we call on `Option<T>` values to produce a value or panic with this definition:
+Тип "ніколи" також використовується у макросі `panic!`. Згадайте функцію `unwrap`, яку ми викликаємо для значень типу `Option<T>`, щоб отримати значення чи запанікувати; ось її визначення:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-09-unwrap-definition/src/lib.rs:here}}
 ```
 
-In this code, the same thing happens as in the `match` in Listing 19-26: Rust sees that `val` has the type `T` and `panic!` has the type `!`, so the result of the overall `match` expression is `T`. This code works because `panic!` doesn’t produce a value; it ends the program. In the `None` case, we won’t be returning a value from `unwrap`, so this code is valid.
+У цьому коді відбувається те ж саме, що й у `match` з Блоку коду 19-26: Rust бачить, що `val` має тип `T` а `panic!` має тип `!`, отже, результат усього виразу `match` є `T`. Цей код працює, оскільки `panic!` не виробляє значення; він завершує програму. У випадку `None`, ми не повертаємо значення з `unwrap`, тож цей код є коректним.
 
-One final expression that has the type `!` is a `loop`:
+Іще один останній вираз, що має значення `!` - це `loop`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-10-loop-returns-never/src/main.rs:here}}
 ```
 
-Here, the loop never ends, so `!` is the value of the expression. However, this wouldn’t be true if we included a `break`, because the loop would terminate when it got to the `break`.
+Тут цикл ніколи не закінчується, тож значенням виразу є `!`. Однак це не було б так, якби ми додали `break`, оскільки цикл завершиться, коли дістанеться до `break`.
 
-### Dynamically Sized Types and the `Sized` Trait
+### Типи з динамічним розміром і трейт `Sized`
 
-Rust needs to know certain details about its types, such as how much space to allocate for a value of a particular type. This leaves one corner of its type system a little confusing at first: the concept of *dynamically sized types*. Sometimes referred to as *DSTs* or *unsized types*, these types let us write code using values whose size we can know only at runtime.
+Rust має знати деякі деталі про типи, такі, як скільки місця розподілити під значення певного типу. Це лишає один куток системи типів, на перший погляд, незрозумілим: концепцію *типів з динамічним розміром*. Ці типи, які іноді звуться *DST (dymamically sized types)* чи *безрозмірні типи*, дозволяють нам писати код з використанням значень, розмір яких ми можемо дізнатися лише під час виконання.
 
-Let’s dig into the details of a dynamically sized type called `str`, which we’ve been using throughout the book. That’s right, not `&str`, but `str` on its own, is a DST. We can’t know how long the string is until runtime, meaning we can’t create a variable of type `str`, nor can we take an argument of type `str`. Consider the following code, which does not work:
+Копнімо деталі типу з динамічним розміром, що зветься `str`, який ми використовуємо скрізь у книзі. Саме так, не `&str`, а `str` як такий, що є DST. Ми не можемо знати довжину стрічки до часу виконання, що означає, що ми не можемо створити змінну типу `str`, ані прийняти аргумент типу `str`. Розгляньмо такий код, що не працює:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-11-cant-create-str/src/main.rs:here}}
 ```
 
-Rust needs to know how much memory to allocate for any value of a particular type, and all values of a type must use the same amount of memory. If Rust allowed us to write this code, these two `str` values would need to take up the same amount of space. But they have different lengths: `s1` needs 12 bytes of storage and `s2` needs 15. This is why it’s not possible to create a variable holding a dynamically sized type.
+Rust має знати, скільки пам'яті виділяти для будь-якого значення певного типу, і всі значення цього типу мають використовувати однакову кількість пам'яті. Якби Rust дозволив нам написати такий код, ці два значення `str` мали б займати однакову кількість місця в пам'яті. Але вони мають різні довжини: `s1` потребує 12 байтів пам'яті, а `s2` - 15. Ось чому неможливо створити змінну, що міститиме тип з динамічним розміром.
 
-So what do we do? In this case, you already know the answer: we make the types of `s1` and `s2` a `&str` rather than a `str`. Recall from the [“String Slices”][string-slices]<!-- ignore --> section of Chapter 4 that the slice data structure just stores the starting position and the length of the slice. So although a `&T` is a single value that stores the memory address of where the `T` is located, a `&str` is *two* values: the address of the `str` and its length. As such, we can know the size of a `&str` value at compile time: it’s twice the length of a `usize`. That is, we always know the size of a `&str`, no matter how long the string it refers to is. In general, this is the way in which dynamically sized types are used in Rust: they have an extra bit of metadata that stores the size of the dynamic information. The golden rule of dynamically sized types is that we must always put values of dynamically sized types behind a pointer of some kind.
+То що ж нам робити? В цьому випадку ви вже знаєте відповідь: ми робимо типи `s1` і `s2` `&str` замість `str`. Згадайте з підрозділу ["Стрічкові слайси"][string-slices]<!-- ignore --> Розділу 4, що структура даних слайс зберігає лише початкове положення і довжину слайса. Тож хоча  `&T` і є одним значенням, що зберігає адресу в пам'яті, де знаходиться `T`,  `&str` є *двома* значенням: адресою `str` і її довжиною. Таким чином ми можемо знати розмір значення `&str` під час компіляції: два розміри `usize`. Тобто ми завжди знаємо розмір `&str`, не важливо якою довгою буде стрічка, на яку воно посилається. В цілому типи з динамічним розміром у Rust використовуються саме у такий спосіб: вони мають додаткову крихту метаданих, що зберігають розмір динамічної інформації. Золоте правило типів із динамічним розміром є те, що ми завжди маємо ховати значення типів з динамічним розміром за вказівником певного роду.
 
-We can combine `str` with all kinds of pointers: for example, `Box<str>` or `Rc<str>`. In fact, you’ve seen this before but with a different dynamically sized type: traits. Every trait is a dynamically sized type we can refer to by using the name of the trait. In Chapter 17 in the [“Using Trait Objects That Allow for Values of Different Types”]()<!--
-ignore --> section, we mentioned that to use traits as trait objects, we must put them behind a pointer, such as 
+Ми можемо комбінувати `str` з усіма видами вказівників: наприклад, `Box<str>` чи `Rc<str>`. Фактично ви вже бачили це раніше, але з іншими типами з динамічним розміром: трейтами. Будь-який трейт є типом із динамічним розміром, до якого ми можемо звертатися за допомогою назви трейту. У Розділі 17, підрозділі [“Використання трейт-об'єктів, які допускають значення різних типів”]()<!--
+ignore --> , ми згадали, що для використання трейтів як трейтових об'єктів ми маємо сховати їх за вказівником, таким як 
 
-`&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn
-Trait>` would work too).
+`&dyn Trait` чи `Box<dyn Trait>` (`Rc<dyn
+Trait>` теж підійде).
 
-To work with DSTs, Rust provides the `Sized` trait to determine whether or not a type’s size is known at compile time. This trait is automatically implemented for everything whose size is known at compile time. In addition, Rust implicitly adds a bound on `Sized` to every generic function. That is, a generic function definition like this:
+Щоб працювати з DST, Rust надає трейт `Sized` для визначення, чи розмір типу відомий під час компіляції. Цей трейт автоматично реалізується для усього, чий розмір є відомим під час компіляції. Крім того, Rust неявно додає обмеження `Sized` на кожну узагальнену функцію. Тобто визначення ось таке узагальненої функції:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-12-generic-fn-definition/src/lib.rs}}
 ```
 
-is actually treated as though we had written this:
+насправді розглядається, ніби ми написали таке:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-13-generic-implicit-sized-bound/src/lib.rs}}
 ```
 
-By default, generic functions will work only on types that have a known size at compile time. However, you can use the following special syntax to relax this restriction:
+За замовчуванням узагальнені функції працюють лише з типами, чий розмір є відомим під час компіляції. Однак ви можете застосувати наступний спеціальний синтаксис для послаблення цього обмеження:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-14-generic-maybe-sized/src/lib.rs}}
 ```
 
-A trait bound on `?Sized` means “`T` may or may not be `Sized`” and this notation overrides the default that generic types must have a known size at compile time. The `?Trait` syntax with this meaning is only available for `Sized`, not any other traits.
+Трейтове обмеження `?Sized` означає “`T` може бути чи не бути `Sized`” і цей запис знімає обмеження за замовчуванням, що узагальнені типи мусять мати відомий розмір під час компіляції. Синтаксис `?Trait` із цим значенням можна застосовувати лише для `Sized`, але не для решти трейтів.
 
-Also note that we switched the type of the `t` parameter from `T` to `&T`. Because the type might not be `Sized`, we need to use it behind some kind of pointer. In this case, we’ve chosen a reference.
+Також зауважте, що ми змінили тип параметра `t` з `T` на `&T`. Оскільки тип може не бути `Sized`, ми маємо використати його, сховавши за якогось роду вказівником. У цьому випадку ми обрали посилання.
 
-Next, we’ll talk about functions and closures!
+Далі ми поговоримо про функції та замикання!
 ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details ch06-02-match.html#the-match-control-flow-operator ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 
 [string-slices]: ch04-03-slices.html#string-slices
