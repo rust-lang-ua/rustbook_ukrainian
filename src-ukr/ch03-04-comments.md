@@ -1,24 +1,24 @@
-## Comments
+## Коментарі
 
-All programmers strive to make their code easy to understand, but sometimes extra explanation is warranted. In these cases, programmers leave *comments* in their source code that the compiler will ignore but people reading the source code may find useful.
+Всі програмісти прагнуть зробити свій код зрозумілішим, та деколи не завадить додаткове пояснення. В таких випадках програмісти лишають в початковому коді *коментарі*, які ігнорує компілятор, але які можуть бути корисними людям, що читатимуть цей код.
 
-Here’s a simple comment:
+Ось простий коментар:
 
 ```rust
 // hello, world
 ```
 
-In Rust, the idiomatic comment style starts a comment with two slashes, and the comment continues until the end of the line. For comments that extend beyond a single line, you’ll need to include `//` on each line, like this:
+У Rust найтиповіший стиль коментарів починається з двох знаків дробу і продовжується до кінця рядка. Для коментарів, що займають більше одного рядка, вам доведеться ставити `//` у кожному рядку, ось так:
 
 ```rust
-// So we’re doing something complicated here, long enough that we need
-// multiple lines of comments to do it! Whew! Hopefully, this comment will
-// explain what’s going on.
+// Тут ми робимо щось складне, досить довге, щоб нам знадобилося кілька рядків
+// коментаря! Хух! Сподіваюся, цей коментар достатньо детально пояснює, що 
+// тут відбувається.
 ```
 
-Comments can also be placed at the end of lines containing code:
+Коментарі також можна розміщувати в кінці рядків, що містять код:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
@@ -26,7 +26,7 @@ Comments can also be placed at the end of lines containing code:
 
 But you’ll more often see them used in this format, with the comment on a separate line above the code it’s annotating:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
