@@ -1,178 +1,178 @@
-## Treating Smart Pointers Like Regular References with the `Deref` Trait
+## Використання розумних вказівників як звичайних посилань за допомогою трейта `Deref`
 
-Implementing the `Deref` trait allows you to customize the behavior of the *dereference operator* `*` (not to be confused with the multiplication or glob operator). By implementing `Deref` in such a way that a smart pointer can be treated like a regular reference, you can write code that operates on references and use that code with smart pointers too.
+Реалізація трейта `Deref` дозволяє вам налаштувати поведінку *оператора розіменування* `*` (не плутати з оператором множення чи глобальним оператором). Релізувавши `Deref` таким чином, щоб розумний вказівник міг використовуватися як звичайне посилання, ви зможете писати код, що працює з посиланнями і використовувати цей код також із розумними вказівниками.
 
-Let’s first look at how the dereference operator works with regular references. Then we’ll try to define a custom type that behaves like `Box<T>`, and see why the dereference operator doesn’t work like a reference on our newly defined type. We’ll explore how implementing the `Deref` trait makes it possible for smart pointers to work in ways similar to references. Then we’ll look at Rust’s *deref coercion* feature and how it lets us work with either references or smart pointers.
+Спочатку подивімося, як оператор розіменування працює зі звичайними посиланнями. Потім ми спробуємо визначити власний тип, що поводиться як `Box<T>`, і побачимо, чому оператор розіменування не працює, як посилання, для нашого щойно визначеного типу. Ми дослідимо, як реалізація трейта `Deref` дозволяє розумним вказівникам працювати у спосіб, схожий на посилання. Тоді ми розглянемо таку особливість Rust, як *приведення при розіменуванні* і як вона дозволяє нам працювати як із посиланнями, так і з розумними вказівниками.
 
-> Note: there’s one big difference between the `MyBox<T>` type we’re about to build and the real `Box<T>`: our version will not store its data on the heap. We are focusing this example on `Deref`, so where the data is actually stored is less important than the pointer-like behavior.
+> Примітка: існує суттєва різниця між типом `MyBox<T>`, який ми збираємося описати, і справжнім `Box<T>`: наша версія не зберігатиме дані в купі. Ми зосередимося у цьому прикладі на  `Deref`, тож нам не так важливо, де насправді зберігаються дані, ніж поведінка, подібна до вказівника.
 
 <!-- Old link, do not remove -->
 <a id="following-the-pointer-to-the-value-with-the-dereference-operator"></a>
 
-### Following the Pointer to the Value
+### Перехід за вказівником до значення
 
-A regular reference is a type of pointer, and one way to think of a pointer is as an arrow to a value stored somewhere else. In Listing 15-6, we create a reference to an `i32` value and then use the dereference operator to follow the reference to the value:
+Звичайне посилання — це тип вказівника. Вказівник можна уявити як стрілку, що вказує на значення, розміщене деінде. У Блоці коду 15-6 ми створюємо посилання на значення `i32`, а потім використовуємо оператор розіменування, щоб перейти за посиланням до значення:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-06/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 15-6: Using the dereference operator to follow a reference to an `i32` value</span>
+<span class="caption">Блок коду 15-6: використання оператор розіменування, щоб перейти за посиланням до значення `i32`</span>
 
-The variable `x` holds an `i32` value `5`. We set `y` equal to a reference to `x`. We can assert that `x` is equal to `5`. However, if we want to make an assertion about the value in `y`, we have to use `*y` to follow the reference to the value it’s pointing to (hence *dereference*) so the compiler can compare the actual value. Once we dereference `y`, we have access to the integer value `y` is pointing to that we can compare with `5`.
+Змінна `x` має значення `5` типу `i32`. Ми встановили значення `у` рівним посиланню на `x`. Ми можемо стверджувати, що `x` дорівнює `5`. Проте, якщо ми хочемо зробити твердження про значення в `y`, ми повинні виконати `*y`, щоб перейти за посиланням до значення, на яке воно вказує (тобто *розіменувати*), щоб компілятор міг порівняти фактичне значення. Розіменувавши `y`, ми отримуємо доступ до цілого значення, на яку `y` вказує, яке ми можемо порівняти з `5`.
 
-If we tried to write `assert_eq!(5, y);` instead, we would get this compilation error:
+Якби ми спробували написати натомість `assert_eq!(5, y);`, то отримали б помилку компіляції:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/output-only-01-comparing-to-reference/output.txt}}
 ```
 
-Comparing a number and a reference to a number isn’t allowed because they’re different types. We must use the dereference operator to follow the reference to the value it’s pointing to.
+Порівняння числа і посилання на число не дозволене, оскільки це різні типи. Ми маємо використовувати оператор розіменування, щоб перейти за посиланням до значення, на яке воно вказує.
 
-### Using `Box<T>` Like a Reference
+### Використання `Box<T>` як посилання
 
-We can rewrite the code in Listing 15-6 to use a `Box<T>` instead of a reference; the dereference operator used on the `Box<T>` in Listing 15-7 functions in the same way as the dereference operator used on the reference in Listing 15-6:
+Ми можемо переписати код у Блоці коду 15-6, щоб використовувати `Box<T>` замість посилання; оператор розіменування, застосований до `Box<T>` у Блоці коду 15-7 працює так само як і оператор розіменування, застосований до посилання у Блоці коду 15-6:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-07/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 15-7: Using the dereference operator on a `Box<i32>`</span>
+<span class="caption">Блок коду 15-7: використання оператору розіменування на `Box<i32>`</span>
 
-The main difference between Listing 15-7 and Listing 15-6 is that here we set `y` to be an instance of a box pointing to a copied value of `x` rather than a reference pointing to the value of `x`. In the last assertion, we can use the dereference operator to follow the box’s pointer in the same way that we did when `y` was a reference. Next, we’ll explore what is special about `Box<T>` that enables us to use the dereference operator by defining our own box type.
+Основна відмінність між Блоком коду 15-7 і Блоком коду 15-6 полягає в тому, що в першому ми робимо `y` екземпляром Box, що вказує на скопійоване значення `x`, а не посиланням, що вказує на значення `x`. В останньому твердженні ми можемо використати оператор розіменування, щоб перейти за вказівником у Box так само як ми робили, коли `y` був посиланням. Далі ми дослідимо, що ж такого в `Box<T>` дає нам змогу використовувати оператор розіменування, визначивши власний тип MyBox.
 
-### Defining Our Own Smart Pointer
+### Визначення власного розумного вказівника
 
-Let’s build a smart pointer similar to the `Box<T>` type provided by the standard library to experience how smart pointers behave differently from references by default. Then we’ll look at how to add the ability to use the dereference operator.
+Створімо розумний вказівник, схожий на тип `Box<T>`, що надається стандартною бібліотекою, щоб побачити, у чому розумні вказівники поводяться інакше, ніж вказівники за замовчанням. Тоді ми розглянемо, як додати можливість використовувати оператор розіменування.
 
-The `Box<T>` type is ultimately defined as a tuple struct with one element, so Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a `new` function to match the `new` function defined on `Box<T>`.
+Тип `Box<T>` кінець-кінцем визначається як структура-кортеж з одним елементом, тож Блок коду 15-8 визначає тип `MyBox<T>` у той же спосіб. Ми також визначаємо функцію `new`, що відповідає функції `new`, визначеній для `Box<T>`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-8: Defining a `MyBox<T>` type</span>
+<span class="caption">Блок коду 15-8: визначення типу `MyBox<T>`</span>
 
-We define a struct named `MyBox` and declare a generic parameter `T`, because we want our type to hold values of any type. The `MyBox` type is a tuple struct with one element of type `T`. The `MyBox::new` function takes one parameter of type `T` and returns a `MyBox` instance that holds the value passed in.
+Ми визначаємо структуру з назвою `MyBox` і оголошуємо узагальнений параметр `T`, оскільки ми хочемо, щоб наш тип працював зі значеннями будь-якого типу. Тип `MyBox` є структурою-кортежем з одним елементом типу `T`. Функція `MyBox::new` приймає один параметр типу `T` і повертає екземпляр `MyBox`, який містить передане значення.
 
-Let’s try adding the `main` function in Listing 15-7 to Listing 15-8 and changing it to use the `MyBox<T>` type we’ve defined instead of `Box<T>`. The code in Listing 15-9 won’t compile because Rust doesn’t know how to dereference `MyBox`.
+Спробуймо додати функцію `main` з Блока коду 15-7 до Блоку коду 15-8 та змінити її, щоб використовувати визначений нами тип `MyBox<T>` замість `Box<T>`. Код у Блоці коду 15-9 не компілюється, оскільки Rust не знає, як розіменувати `MyBox`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-09/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 15-9: Attempting to use `MyBox<T>` in the same way we used references and `Box<T>`</span>
+<span class="caption">Блок коду 15-9: спроба використовувати `MyBox<T>` тим самим способом, яким ми використовували посилання та `Box<T>`</span>
 
-Here’s the resulting compilation error:
+Виходить ось така помилка компіляції:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-09/output.txt}}
 ```
 
-Our `MyBox<T>` type can’t be dereferenced because we haven’t implemented that ability on our type. To enable dereferencing with the `*` operator, we implement the `Deref` trait.
+Наш тип `MyBox<T>` не можна розіменовувати, оскільки ми не реалізували цю здатність для нашого типу. Щоб дозволити розіменування за допомогою оператора `*`, ми реалізуємо трейт `Deref`.
 
-### Treating a Type Like a Reference by Implementing the `Deref` Trait
+### Реалізація трейту `Deref` для використання типу як посилання
 
-As discussed in the [“Implementing a Trait on a Type”][impl-trait]<!-- ignore
---> section of Chapter 10, to implement a trait, we need to provide implementations for the trait’s required methods. The 
+Як обговорено в підрозділі ["Реалізація трейту для типів"][impl-trait]<!-- ignore
+--> Розділу 10, щоб реалізувати трейт, ми маємо реалізувати методи, необхідні цьому трейту. Трейт 
 
-`Deref` trait, provided by the standard library, requires us to implement one method named `deref` that borrows `self` and returns a reference to the inner data. Listing 15-10 contains an implementation of `Deref` to add to the definition of `MyBox`:
+`Deref`, наданий стандартною бібліотекою, вимагає, щоб ми реалізувати один метод, що зветься `deref`, який позичає `self` і повертає посилання на внутрішні дані. Блок коду 15-10 містить реалізацію `Deref`, яку треба додати до визначення `MyBox`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-10: Implementing `Deref` on `MyBox<T>`</span>
+<span class="caption">Блок коду 15-10: реалізація `Deref` для `MyBox<T>`</span>
 
-The `type Target = T;` syntax defines an associated type for the `Deref` trait to use. Associated types are a slightly different way of declaring a generic parameter, but you don’t need to worry about them for now; we’ll cover them in more detail in Chapter 19.
+Запис `type Target = T;` визначає асоційований тип для використання трейтом `Deref`. Асоційовані типи дещо відрізняються від оголошення узагальненого параметра, але вам поки що не потрібно турбуватися про них; ми розглянемо її детальніше у Розділі 19.
 
-We fill in the body of the `deref` method with `&self.0` so `deref` returns a reference to the value we want to access with the `*` operator; recall from the [“Using Tuple Structs without Named Fields to Create Different Types”][tuple-structs]<!-- ignore --> section of Chapter 5 that `.0` accesses the first value in a tuple struct. The `main` function in Listing 15-9 that calls `*` on the `MyBox<T>` value now compiles, and the assertions pass!
+В тіло методу `deref` ми додаємо `&self.0`, тож `Deref` повертає посилання на значення, до якого ми хочемо отримати доступ за допомогою оператора `*`; згадайте з підрозділу ["Структури-кортежі без іменованих полів для створення нових типів"][tuple-structs]<!-- ignore --> Розділу 5, що `.0` є способом доступу до першого значення у структурі-кортежі. Функція `main` у Блоці коду 15-9, яка викликає `*` для значення `MyBox<T>` тепер компілюється, і твердження виконуються!
 
-Without the `Deref` trait, the compiler can only dereference `&` references. The `deref` method gives the compiler the ability to take a value of any type that implements `Deref` and call the `deref` method to get a `&` reference that it knows how to dereference.
+Без трейту `Deref` компілятор може розіменовувати лише посилання `&`. Метод `deref` надає компілятору можливість взяти значення будь-якого типу, який реалізує `Deref`, і викликати метод `deref`, щоб отримати посилання `&`, яке він вміє розіменовувати.
 
-When we entered `*y` in Listing 15-9, behind the scenes Rust actually ran this code:
+Коли ми ввели `*y` у Блоці коду 15-9, за лаштунками Rust насправді запустився цей код:
 
 ```rust,ignore
 *(y.deref())
 ```
 
-Rust substitutes the `*` operator with a call to the `deref` method and then a plain dereference so we don’t have to think about whether or not we need to call the `deref` method. This Rust feature lets us write code that functions identically whether we have a regular reference or a type that implements `Deref`.
+Rust замінює оператор `*` викликом методу `deref`, а потім звичайне розіменування, тож нам не треба думати, треба чи не треба викликати метод `deref`. Це особливість Rust дозволяє нам писати код, що працює так само, використовуємо ми звичайні посилання чи тип, що реалізує `Deref`.
 
-The reason the `deref` method returns a reference to a value, and that the plain dereference outside the parentheses in `*(y.deref())` is still necessary, is to do with the ownership system. If the `deref` method returned the value directly instead of a reference to the value, the value would be moved out of `self`. We don’t want to take ownership of the inner value inside `MyBox<T>` in this case or in most cases where we use the dereference operator.
+Причина, з якої метод `deref` повертає посилання на значення, і що за дужками `*(y.deref())` все ще потрібне звичайне розіменування, стосується системи володіння. Якби метод `deref` повертав значення безпосередньо замість посилання на значення, значення було б переміщене з `self`. Ми не хочемо у цьому випадку брати володіння внутрішнім значенням у `MyBox<T>`, як і в більшості випадків, де ми використовуємо оператор розіменування.
 
-Note that the `*` operator is replaced with a call to the `deref` method and then a call to the `*` operator just once, each time we use a `*` in our code. Because the substitution of the `*` operator does not recurse infinitely, we end up with data of type `i32`, which matches the `5` in `assert_eq!` in Listing 15-9.
+Зверніть увагу, що оператор `*` замінюється на виклик метод `deref`, а потім виклик оператора `*` лише один раз, щоразу, коли ми використовуємо `*` у нашому коді. Оскільки підставляння оператора `*` не виконується рекурсивно до нескінченості, ми прийдемо до даних типу `i32`, що відповідають `5` у `assert_eq!` у Блоці коду 15-9.
 
-### Implicit Deref Coercions with Functions and Methods
+### Неявне приведення розіменування у функціях та методах
 
-*Deref coercion* converts a reference to a type that implements the `Deref` trait into a reference to another type. For example, deref coercion can convert `&String` to `&str` because `String` implements the `Deref` trait such that it returns `&str`. Deref coercion is a convenience Rust performs on arguments to functions and methods, and works only on types that implement the `Deref` trait. It happens automatically when we pass a reference to a particular type’s value as an argument to a function or method that doesn’t match the parameter type in the function or method definition. A sequence of calls to the `deref` method converts the type we provided into the type the parameter needs.
+*Приведення розіменування* перетворює посилання на тип, що реалізує трейт `Deref`, до посилання на інший тип. Наприклад, приведення розіменування може перетворити `&String` на `&str`, тому що `String` реалізує трейт `Deref`, так, що він повертає `&str`. Приведення розіменування - це покращення для зручності, яке Rust застосовує до аргументів функцій та методів, і працює лише з типами, що реалізують трейт `Deref`. Воно застосовується автоматично, коли ми передаємо посилання на значення певного типу як аргумент функції чи метода, що не відповідає типу параметра у визначенні функції чи метода. Послідовність викликів методу `deref` перетворює тип, наданий нами, на тип, потрібний параметру.
 
-Deref coercion was added to Rust so that programmers writing function and method calls don’t need to add as many explicit references and dereferences with `&` and `*`. The deref coercion feature also lets us write more code that can work for either references or smart pointers.
+Приведення розіменування було додане в Rust, щоб програмістам, що пишуть виклики функцій та методів, не було потрібно додавати стільки явних посилань і розіменувань за допомогою `&` і `*`. Приведення розіменування також дозволяє легше писати код, що працює як з посиланнями, так і з розумними вказівниками.
 
-To see deref coercion in action, let’s use the `MyBox<T>` type we defined in Listing 15-8 as well as the implementation of `Deref` that we added in Listing 15-10. Listing 15-11 shows the definition of a function that has a string slice parameter:
+Щоб побачити, як працює приведення розіменування, застосуймо тип `MyBox<T>`, який ми визначили у Блоці коду 15-8, разом із реалізацією `Deref`, яку ми додали в Блоці коду 15-10. Блок коду 15-11 показує визначення функції, що має параметром стрічковий слайс:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-11/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 15-11: A `hello` function that has the parameter `name` of type `&str`</span>
+<span class="caption">Блок коду 15-11: Функція `hello`, що має параметр `name` типу `&str`</span>
 
-We can call the `hello` function with a string slice as an argument, such as `hello("Rust");` for example. Deref coercion makes it possible to call `hello` with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12:
+Ми можемо викликати функцію `hello` аргументом - стрічковим зрізом, наприклад `hello("Rust");`. Приведення розіменування уможливлює виклик `hello` з посиланням на значення типу `MyBox<String>`, як показано в Блоці коду 15-12:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-12/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 15-12: Calling `hello` with a reference to a `MyBox<String>` value, which works because of deref coercion</span>
+<span class="caption">Блок коду 15-12: Виклик `hello` з посиланням на значення `MyBox<String>`, яке працює завдяки приведенню розіменування</span>
 
-Here we’re calling the `hello` function with the argument `&m`, which is a reference to a `MyBox<String>` value. Because we implemented the `Deref` trait on `MyBox<T>` in Listing 15-10, Rust can turn `&MyBox<String>` into `&String` by calling `deref`. The standard library provides an implementation of `Deref` on `String` that returns a string slice, and this is in the API documentation for `Deref`. Rust calls `deref` again to turn the `&String` into `&str`, which matches the `hello` function’s definition.
+Тут ми викликаємо функцію `hello` з аргументом `&m`, який є посиланням на значення типу `MyBox<String>`. Оскільки ми реалізували трейт `Deref` для `MyBox<T>` у Блоці коду 15-10, Rust може перетворити `&MyBox<String>` на `&String` викликавши `deref`. Стандартна бібліотека надає реалізацію `Deref` для `String`, що повертає стрічковий слайс, і про це сказано в документації API для `Deref`. Rust викликає `deref` знову, щоб перетворити `&String` на `&str`, який відповідає визначенню функції `hello`.
 
-If Rust didn’t implement deref coercion, we would have to write the code in Listing 15-13 instead of the code in Listing 15-12 to call `hello` with a value of type `&MyBox<String>`.
+Якби Rust не мав приведення розіменування, нам довелося б писати код, як у Блоці коду 15-13 замість коду з Блоку коду 15-12, щоб викликати `hello` для значення типу `&MyBox<String>`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-13/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 15-13: The code we would have to write if Rust didn’t have deref coercion</span>
+<span class="caption">Блок коду 15-13: код, який довелося б писати, якби Rust не мав приведення розіменування</span>
 
-The `(*m)` dereferences the `MyBox<String>` into a `String`. Then the `&` and `[..]` take a string slice of the `String` that is equal to the whole string to match the signature of `hello`. This code without deref coercions is harder to read, write, and understand with all of these symbols involved. Deref coercion allows Rust to handle these conversions for us automatically.
+`(*m)` розіменовує `MyBox<String>` у `String`. Потім `&` і `[..]` беруть стрічковий зріз зі `String`, що дорівнює всій стрічці, щоб відповідати сигнатурі `hello`. Цей код без приведення розіменування складніше читати, писати і розуміти з усіма цими символами. Приведення розіменування дозволяє Rust обробляти для нас такі перетворення автоматично.
 
-When the `Deref` trait is defined for the types involved, Rust will analyze the types and use `Deref::deref` as many times as necessary to get a reference to match the parameter’s type. The number of times that `Deref::deref` needs to be inserted is resolved at compile time, so there is no runtime penalty for taking advantage of deref coercion!
+Коли трейт `Deref` визначений для залучених типів, Rust аналізує ці типи і використовує `Deref::deref` стільки разів, скільки треба, щоб отримати посилання, що відповідає типу параметра. Скільки разів треба додати `Deref::deref` визначається під час компіляції, тож немає ніяких втрат часу виконання за переваги приведення розіменування!
 
-### How Deref Coercion Interacts with Mutability
+### Як приведення розіменування взаємодіє з мутабельністю
 
-Similar to how you use the `Deref` trait to override the `*` operator on immutable references, you can use the `DerefMut` trait to override the `*` operator on mutable references.
+Подібно до того, як ви використовуєте трейт `Deref`, щоб перевизначити оператор `*` для іммутабельних посилань, ви можете скористатися трейтом `DerefMut`, щоб перевизначити оператор `*` для мутабельних посилань.
 
-Rust does deref coercion when it finds types and trait implementations in three cases:
+Rust виконує приведення розіменування, коли виявляє типи і реалізації трейтів у трьох випадках:
 
-* From `&T` to `&U` when `T: Deref<Target=U>`
-* From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
-* From `&mut T` to `&U` when `T: Deref<Target=U>`
+* З `&T` в `&U`, якщо `T: Deref<Target=U>`
+* З `&mut T` в `&mut U`, якщо `T: DerefMut<Target=U>`
+* З `&mut T` в `&U`, якщо `T: Deref<Target=U>`
 
-The first two cases are the same as each other except that the second implements mutability. The first case states that if you have a `&T`, and `T` implements `Deref` to some type `U`, you can get a `&U` transparently. The second case states that the same deref coercion happens for mutable references.
+Перші два випадки однакові, окрім того, що другий реалізує мутабельність. Перший випадок застосовується, що якщо є `&T`, і `T` реалізує `Deref` у якийсь тип `U`, то ми можете прозоро отримати `&U`. Другий випадок застосовується що таке саме приведення розіменування виконується для мутабельних посилань.
 
-The third case is trickier: Rust will also coerce a mutable reference to an immutable one. But the reverse is *not* possible: immutable references will never coerce to mutable references. Because of the borrowing rules, if you have a mutable reference, that mutable reference must be the only reference to that data (otherwise, the program wouldn’t compile). Converting one mutable reference to one immutable reference will never break the borrowing rules. Converting an immutable reference to a mutable reference would require that the initial immutable reference is the only immutable reference to that data, but the borrowing rules don’t guarantee that. Therefore, Rust can’t make the assumption that converting an immutable reference to a mutable reference is possible.
+Третій випадок хитріший: Rust також приведе мутабельне посилання до немутабельного. Але зворотне *не*можливе: немутабельні посилання ніколи не приводяться до мутабельних посилань. Через правила позичання, якщо ви маєте мутабельне посилання, це мутабельне посилання має бути єдиним посиланням на ці дані (інакше програма не скомпілюється). Перетворення мутабельного посилання на немутабельне ніколи не порушить правила позичання. Перетворення немутабельного посилання на мутабельне посилання вимагало б, щоб початкове немутабельне посилання було єдиним немутабельним посиланням на ці дані, але правила позичання не гарантують цього. Тому Rust не може зробити припущення про те, чи перетворення немутабельного посилання на мутабельне посилання є можливим.
 
 [impl-trait]: ch10-02-traits.html#implementing-a-trait-on-a-type
 [tuple-structs]: ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types
