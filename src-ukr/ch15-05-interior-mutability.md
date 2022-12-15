@@ -149,7 +149,7 @@ BorrowMutError`. Ось так `RefCell<T>` обробляє порушення 
 <span class="filename">Файл: src/main.rs</span>
 
 ```rust
-{{#include ../listings/ch15-smart-pointers/listing-15-24/main.rs}}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-24/src/main.rs}}
 ```
 
 
