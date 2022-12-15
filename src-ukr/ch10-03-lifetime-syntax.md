@@ -1,12 +1,12 @@
-## Validating References with Lifetimes
+## Перевірка коректності посилань за допомогою часів існування
 
-Lifetimes are another kind of generic that we’ve already been using. Rather than ensuring that a type has the behavior we want, lifetimes ensure that references are valid as long as we need them to be.
+Часи існування (lifetimes) є ще одним узагальненим типом даних, який ми вже використовували. Замість того щоб гарантувати що тип має бажану поведінку, часи існування гарантують що посилання є валідним доти, доки воно може бути нам потрібним.
 
-One detail we didn’t discuss in the [“References and Borrowing”]()<!-- ignore --> section in Chapter 4 is that every reference in Rust has a *lifetime*, which is the scope for which that reference is valid. Most of the time, lifetimes are implicit and inferred, just like most of the time, types are inferred. We only must annotate types when multiple types are possible. In a similar way, we must annotate lifetimes when the lifetimes of references could be related in a few different ways. Rust requires us to annotate the relationships using generic lifetime parameters to ensure the actual references used at runtime will definitely be valid.
+В частині [“Посилання і позичання”]()<!-- ignore --> четвертого розділу ми не згадали про те, що кожне посилання в Rust має свій *час існування*, який обмежує час протягом якого посилання є дійсним. В більшості випадків, часи існування є неявними (implicit) та виведеними (inferred), так само як і типи. Ми зобовʼязані додавати анотації лише у випадках коли можливий більше ніж один тип. Відповідно, ми мусимо додавати анотації до часів існування лише якщо останні можуть бути використані у кілька різних способів. Rust зобовʼязує нас анотувати звʼязки використовуючи узагальнені параметри часу існування, щоб впевнитися що посилання використані протягом часу виконання програми будуть коректними.
 
-Annotating lifetimes is not even a concept most other programming languages have, so this is going to feel unfamiliar. Although we won’t cover lifetimes in their entirety in this chapter, we’ll discuss common ways you might encounter lifetime syntax so you can get comfortable with the concept.
+Додавання анотацій для часів існування не є поширеним в інших мовах програмування, тож може бути здаватися дещо складним для сприйняття. Попри те що в цьому розділі ми не розглядатимемо всі деталі часів існування, ми обговоримо їх найбільш загальні способи використання, щоб в подальшому у вас не виникало проблем зі сприйняттям цієї концепції.
 
-### Preventing Dangling References with Lifetimes
+### Запобігання висячим посиланням з використанням часів існування
 
 The main aim of lifetimes is to prevent *dangling references*, which cause a program to reference data other than the data it’s intended to reference. Consider the program in Listing 10-16, which has an outer scope and an inner scope.
 
