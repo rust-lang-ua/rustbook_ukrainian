@@ -1,16 +1,16 @@
-## Publishing a Crate to Crates.io
+## Публікація Крейта на Crates.io
 
-We’ve used packages from [crates.io](https://crates.io/)<!-- ignore --> as dependencies of our project, but you can also share your code with other people by publishing your own packages. The crate registry at [crates.io](https://crates.io/)<!-- ignore --> distributes the source code of your packages, so it primarily hosts code that is open source.
+Ми використовували пакети з [crates.io](https://crates.io/)<!-- ignore --> як залежності проекту, але ви також можете поділитися своїм кодом з іншими людьми, опублікувавши ваші власні пакети. Реєстр крейтів на [crates.io](https://crates.io/)<!-- ignore --> поширює початковий код ваших пакетів, тому він в першу чергу розміщує open-source код.
 
-Rust and Cargo have features that make your published package easier for people to find and use. We’ll talk about some of these features next and then explain how to publish a package.
+Rust і Cargo мають функціонал, який полегшує пошук та використання вашого опублікованого пакета. Далі ми поговоримо про деякі з цих можливостей і потім пояснимо, як опублікувати пакет.
 
-### Making Useful Documentation Comments
+### Робимо Корисні Коментарі в Документації
 
-Accurately documenting your packages will help other users know how and when to use them, so it’s worth investing the time to write documentation. In Chapter 3, we discussed how to comment Rust code using two slashes, `//`. Rust also has a particular kind of comment for documentation, known conveniently as a *documentation comment*, that will generate HTML documentation. The HTML displays the contents of documentation comments for public API items intended for programmers interested in knowing how to *use* your crate as opposed to how your crate is *implemented*.
+Якісне документування ваших пакетів допоможе іншим користувачам знати, як і коли їх використовувати, тому варто вкладати час на написання документації. У Розділі 3, ми обговорювали як коментарі Rust коду використовують подвійний слеш, `//`. Rust також має особливий вид коментарів для документації, зручно відомий як *документаційні коментарі*, які також будуть створювати HTML документацію. HTML покаже зміст документаційних коментарів для елементів публічного API, розрахованих на програмістів, які зацікавлені в *використанні* вашого крейту на відміну від того, як ваш крейт *імплементовано*.
 
-Documentation comments use three slashes, `///`, instead of two and support Markdown notation for formatting the text. Place documentation comments just before the item they’re documenting. Listing 14-1 shows documentation comments for an `add_one` function in a crate named `my_crate`.
+Документаційні коментарі використовують три слеші, `///`, замість двох та підтримують Markdown для форматування тексту. Розміщуйте документаційні коментарі безпосередньо перед елементом, який вони документують. Блок коду 14-1 показує документаційні коментарі для функції `add_one` крейту з назвою `my_crate`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-01/src/lib.rs}}
@@ -19,28 +19,27 @@ Documentation comments use three slashes, `///`, instead of two and support Mark
 
 <span class="caption">Listing 14-1: A documentation comment for a function</span>
 
-Here, we give a description of what the `add_one` function does, start a section with the heading `Examples`, and then provide code that demonstrates how to use the `add_one` function. We can generate the HTML documentation from this documentation comment by running `cargo doc`. This command runs the `rustdoc` tool distributed with Rust and puts the generated HTML documentation in the *target/doc* directory.
+Тут ми дамо опис того, що робить функція `add_one`, почнемо розділ з заголовком `Приклади`, і надамо код, який продемонструє, як використовувати функцію `add_one`. Ми можемо створити HTML документацію з документаційних коментарів, запустивши `cargo doc`. Ця команда запускає інструмент `rustdoc`, який поширюється з Rust і кладе згенеровану HTML документацію в директорії *target/doc*.
 
-For convenience, running `cargo doc --open` will build the HTML for your current crate’s documentation (as well as the documentation for all of your crate’s dependencies) and open the result in a web browser. Navigate to the `add_one` function and you’ll see how the text in the documentation comments is rendered, as shown in Figure 14-1:
+Для зручності, запуск `cargo doc --open` збере HTML для Вашої поточної документації (а також документації для всіх залежностей вашого крейту) і відкриє результат у браузері. Перейдіть до функції `add_one` та ви побачите, як текст коментарів документації відтворюється, як показано на Малюнку 14-1:
 
 <img alt="Rendered HTML documentation for the `add_one` function of `my_crate`" src="img/trpl14-01.png" class="center" />
 
 <span class="caption">Figure 14-1: HTML documentation for the `add_one` function</span>
 
-#### Commonly Used Sections
+#### Часто Вживані Розділи
 
-We used the `# Examples` Markdown heading in Listing 14-1 to create a section in the HTML with the title “Examples.” Here are some other sections that crate authors commonly use in their documentation:
+Ми використовували Markdown заголовок `# Examples` в Блоці Коду 14-1 для створення секції в HTML з назвою “Examples.” Ось ще кілька секцій, які автори крейтів зазвичай використовують у своїх документаціях:
 
-* **Panics**: The scenarios in which the function being documented could panic. Callers of the function who don’t want their programs to panic should make sure they don’t call the function in these situations.
-* **Errors**: If the function returns a `Result`, describing the kinds of errors that might occur and what conditions might cause those errors to be returned can be helpful to callers so they can write code to handle the different kinds of errors in different ways.
-* **Safety**: If the function is `unsafe` to call (we discuss unsafety in Chapter 19), there should be a section explaining why the function is unsafe and covering the invariants that the function expects callers to uphold.
+* **Паніки**: Сценарії, в яких документована функція може запанікувати. Користувачі, які будуть використовувати ці функції і які не хочуть, щоб їх програма панікувала, повинні бути впевнені, що вони не викликають функції в цих ситуаціях.
+* **Помилки**: Якщо функція повертає `Result`, який описує різновиди можливих помилок та які умови можуть призвести до повернення цих помилок, користувачам функції може бути корисно, щоб вони могли написати код для обробки різних помилок різними способами.
+* **Безпека**: Якщо функція `unsafe` (ми обговоримо небезпечність в Розділі 19), то має бути секція, в якій пояснюється, чому функція небезпечна та її інваріанти, які мають дотримуватися користувачі функції.
 
 Most documentation comments don’t need all of these sections, but this is a good checklist to remind you of the aspects of your code users will be interested in knowing about.
 
-#### Documentation Comments as Tests
+#### Коментарі Документації як Тести
 
-Adding example code blocks in your documentation comments can help demonstrate how to use your library, and doing so has an additional bonus: running `cargo
-test` will run the code examples in your documentation as tests! Nothing is better than documentation with examples. But nothing is worse than examples that don’t work because the code has changed since the documentation was written. If we run `cargo test` with the documentation for the `add_one` function from Listing 14-1, we will see a section in the test results like this:
+Додавання прикладу блоків коду в ваші коментарі документації може допомогти продемонструвати, як ви використовуєте вашу бібліотеку, і в цьому є додатковий бонус: запуск `cargo test` запускатиме приклади коду в вашій документації як тести! Немає нічого приємнішого ніж документація з прикладами. Але немає нічого гіршого ніж приклади, які не працюють, бо код змінився з моменту написання документації. Якщо ми запустимо `cargo test` із документацією для функції `add_one` з Блока Коду 14-1, ми побачимо секцію результатів тестів наступним чином:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-01/
@@ -59,13 +58,13 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 Now if we change either the function or the example so the `assert_eq!` in the example panics and run `cargo test` again, we’ll see that the doc tests catch that the example and the code are out of sync with each other!
 
-#### Commenting Contained Items
+#### Коментування Присутніх Елементів
 
-The style of doc comment `//!` adds documentation to the item that contains the comments rather than to the items following the comments. We typically use these doc comments inside the crate root file (*src/lib.rs* by convention) or inside a module to document the crate or the module as a whole.
+Стиль документаційних коментарів `//!` додає документацію до елемента, який містить коментарі, аніж до елементів, що слідують за коментарями. Як правило, ми використовуємо документаційні коментарі всередині кореневого файлу крейта (*src/lib.rs* за домовленістю) або всередині модуля для документування крейта або модуля в цілому.
 
 For example, to add documentation that describes the purpose of the `my_crate` crate that contains the `add_one` function, we add documentation comments that start with `//!` to the beginning of the *src/lib.rs* file, as shown in Listing 14-2:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-02/src/lib.rs:here}}
@@ -74,7 +73,7 @@ For example, to add documentation that describes the purpose of the `my_crate` c
 
 <span class="caption">Listing 14-2: Documentation for the `my_crate` crate as a whole</span>
 
-Notice there isn’t any code after the last line that begins with `//!`. Because we started the comments with `//!` instead of `///`, we’re documenting the item that contains this comment rather than an item that follows this comment. In this case, that item is the *src/lib.rs* file, which is the crate root. These comments describe the entire crate.
+Зауважте, що тут немає коду після останнього рядку, який починається з `//!`. Оскільки ми почали коментар з `//!` замість `///`, ми документуємо предмет який міститься в коментарі, замість предмета, який слідує за коментарем. У цьому випадку, цей елемент це файл *src/lib.rs*, який містить кореневий каталог. Ці коментарі описують увесь крейт.
 
 When we run `cargo doc --open`, these comments will display on the front page of the documentation for `my_crate` above the list of public items in the crate, as shown in Figure 14-2:
 
@@ -82,19 +81,19 @@ When we run `cargo doc --open`, these comments will display on the front page of
 
 <span class="caption">Figure 14-2: Rendered documentation for `my_crate`, including the comment describing the crate as a whole</span>
 
-Documentation comments within items are useful for describing crates and modules especially. Use them to explain the overall purpose of the container to help your users understand the crate’s organization.
+Документаційні коментарі всередині елементів корисні для опису крейтів і особливо модулів. Використовуйте їх, щоб пояснювати загальну мету контейнера, щоб допомогти вашим користувачам зрозуміти організацію крейту.
 
-### Exporting a Convenient Public API with `pub use`
+### Експорт Зручного Публічного API з `pub use`
 
-The structure of your public API is a major consideration when publishing a crate. People who use your crate are less familiar with the structure than you are and might have difficulty finding the pieces they want to use if your crate has a large module hierarchy.
+Структура вашого публічного API має вирішальне значення, коли ви публікуєте крейт. Користувачі вашого крейту менш знайомі зі структурою ніж ви та можуть мати труднощі у пошуку бажаних частин, якщо у вашому крейті велика ієрархія модулів.
 
-In Chapter 7, we covered how to make items public using the `pub` keyword, and bring items into a scope with the `use` keyword. However, the structure that makes sense to you while you’re developing a crate might not be very convenient for your users. You might want to organize your structs in a hierarchy containing multiple levels, but then people who want to use a type you’ve defined deep in the hierarchy might have trouble finding out that type exists. They might also be annoyed at having to enter `use` `my_crate::some_module::another_module::UsefulType;` rather than `use` `my_crate::UsefulType;`.
+У Розділі 7 ми розглянули, як робити елементи публічними за допомогою ключового слова `pub` та вносити елементи в область видимості з ключовим словом `use`. Однак, структура, яка має сенс під час розробки крейту, може бути не дуже зручна для ваших користувачів. Ви можливо захочете організувати ваші структури в багаторівневій ієрархії, але потім люди які захочуть використати визначений глибоко в ієрархії тип можуть мати проблеми з з'ясуванням, що цей тип існує. Вони також можуть бути роздратованими через необхідність писати `use` `my_crate::some_module::another_module::UsefulType;` замість `use` `my_crate::UsefulType;`.
 
-The good news is that if the structure *isn’t* convenient for others to use from another library, you don’t have to rearrange your internal organization: instead, you can re-export items to make a public structure that’s different from your private structure by using `pub use`. Re-exporting takes a public item in one location and makes it public in another location, as if it were defined in the other location instead.
+Хороші новини полягають в тому, що якщо іншим користувачам *не* зручно використовувати її з іншої бібліотеки, вам не потрібно переробляти вашу внутрішню організацію: натомість, ми можете повторно експортувати елементи, щоб зробити публічну структуру, яка відрізняється від вашої приватної структури використанням `pub use`. Повторне експортування бере публічний елемент з одного місця і робить його публічним в іншому місці, ніби це було визначено в іншій локації.
 
-For example, say we made a library named `art` for modeling artistic concepts. Within this library are two modules: a `kinds` module containing two enums named `PrimaryColor` and `SecondaryColor` and a `utils` module containing a function named `mix`, as shown in Listing 14-3:
+Скажімо, ми зробили бібліотеку з назвою `art` для моделювання художніх концепцій. Всередині цієї бібліотеки є два модулі: модуль `kinds`, який містить два енуми із назвами `PrimaryColor` та `SecondaryColor` і модуль `utils`, який містить функцію `mix`, як показано в Блоці Коду 14-3:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-03/src/lib.rs:here}}
@@ -109,11 +108,11 @@ Figure 14-3 shows what the front page of the documentation for this crate genera
 
 <span class="caption">Figure 14-3: Front page of the documentation for `art` that lists the `kinds` and `utils` modules</span>
 
-Note that the `PrimaryColor` and `SecondaryColor` types aren’t listed on the front page, nor is the `mix` function. We have to click `kinds` and `utils` to see them.
+Зауважте, що типи `PrimaryColor` та `SecondaryColor` не вказані на головній сторінці, так само як і функція `mix`. Нам потрібно натиснути на `kinds` та `utils`, щоб побачити їх.
 
-Another crate that depends on this library would need `use` statements that bring the items from `art` into scope, specifying the module structure that’s currently defined. Listing 14-4 shows an example of a crate that uses the `PrimaryColor` and `mix` items from the `art` crate:
+Іншому залежному від цієї бібліотеки крейту знадобиться інструкція `use`, яка приносить елементи з `art` в область видимості, вказавши визначену зараз структуру модуля. Блок коду 14-4 показує приклад крейта, який використовую елементи `PrimaryColor` та `mix` з крейту `art`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-04/src/main.rs}}
@@ -122,11 +121,11 @@ Another crate that depends on this library would need `use` statements that brin
 
 <span class="caption">Listing 14-4: A crate using the `art` crate’s items with its internal structure exported</span>
 
-The author of the code in Listing 14-4, which uses the `art` crate, had to figure out that `PrimaryColor` is in the `kinds` module and `mix` is in the `utils` module. The module structure of the `art` crate is more relevant to developers working on the `art` crate than to those using it. The internal structure doesn’t contain any useful information for someone trying to understand how to use the `art` crate, but rather causes confusion because developers who use it have to figure out where to look, and must specify the module names in the `use` statements.
+Автор коду в Блоці Коду 14-4, який використовує `art` крейт, має з'ясувати, що `PrimaryColor` в модулі `kinds`, а `mix` в модулі `utils`. Структура модуля `art` крейту є більш актуальною для розробників `art` крейту, ніж для його користувачів. Внутрішня структура не містить жодної корисної інформації для когось, хто намагається зрозуміти, як використовувати `art` крейт, радше викликає плутанину, бо розробники, які використовують цей крейт мають з'ясовувати, куди дивитися та мають вказувати назву модуля в інструкції `use`.
 
 To remove the internal organization from the public API, we can modify the `art` crate code in Listing 14-3 to add `pub use` statements to re-export the items at the top level, as shown in Listing 14-5:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-05/src/lib.rs:here}}
@@ -143,7 +142,7 @@ The API documentation that `cargo doc` generates for this crate will now list an
 
 The `art` crate users can still see and use the internal structure from Listing 14-3 as demonstrated in Listing 14-4, or they can use the more convenient structure in Listing 14-5, as shown in Listing 14-6:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-06/src/main.rs:here}}
@@ -152,29 +151,28 @@ The `art` crate users can still see and use the internal structure from Listing 
 
 <span class="caption">Listing 14-6: A program using the re-exported items from the `art` crate</span>
 
-In cases where there are many nested modules, re-exporting the types at the top level with `pub use` can make a significant difference in the experience of people who use the crate. Another common use of `pub use` is to re-export definitions of a dependency in the current crate to make that crate's definitions part of your crate’s public API.
+У випадках, коли є багато вкладених модулів, повторне експортування типів на вищий рівень із `pub use` може зробити суттєву різницю в досвіді використання цього крейта. Ще одним поширеним використанням `pub use` є повторне експортування визначень залежностей в поточному крейті, щоб зробити визначення цього крейту частиною публічного API.
 
-Creating a useful public API structure is more of an art than a science, and you can iterate to find the API that works best for your users. Choosing `pub
-use` gives you flexibility in how you structure your crate internally and decouples that internal structure from what you present to your users. Look at some of the code of crates you’ve installed to see if their internal structure differs from their public API.
+Створення корисної публічної структури API є скоріше мистецтвом ніж наукою, і ви можете ітерувати, щоб знайти API яке найкраще підходить для ваших користувачів. Вибір `pub use` дає вам гнучкість у тому, як ви внутрішньо структуруєте свій крейт та відділяє внутрішню структуру від того, що ви представляєте своїм користувачам. Подивімося на деякий код з встановлених вами крейтів, щоб побачити, чи їх структура відрізняється від їх публічного API.
 
-### Setting Up a Crates.io Account
+### Налаштування Облікового Запису Crates.io
 
-Before you can publish any crates, you need to create an account on [crates.io](https://crates.io/)<!-- ignore --> and get an API token. To do so, visit the home page at [crates.io](https://crates.io/)<!-- ignore --> and log in via a GitHub account. (The GitHub account is currently a requirement, but the site might support other ways of creating an account in the future.) Once you’re logged in, visit your account settings at [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> and retrieve your API key. Then run the `cargo login` command with your API key, like this:
+Перш ніж ви зможете опублікувати якісь крейти, вам потрібно створити обліковий запис на [crates.io](https://crates.io/)<!-- ignore --> і отримати API токен. Для цього, відвідайте домашню сторінку на [crates.io](https://crates.io/)<!-- ignore --> і увійдіть за допомогою вашого облікового запису Github. (Обліковий запис на GitHub наразі є вимогою, але сайт може підтримувати інші способи створення облікового запису в майбутньому.) Після входу перейдіть до налаштувань облікового запису на [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> і отримайте ваш API ключ. Потім запустить команду `cargo login` із вашим API токеном наступним чином:
 
 ```console
 $ cargo login abcdefghijklmnopqrstuvwxyz012345
 ```
 
-This command will inform Cargo of your API token and store it locally in *~/.cargo/credentials*. Note that this token is a *secret*: do not share it with anyone else. If you do share it with anyone for any reason, you should revoke it and generate a new token on [crates.io](https://crates.io/)<!-- ignore
+Ця команда повідомить Cargo про ваш API токен та збереже його локально в *~/.cargo/credentials*. Зауважте, що токен це *секрет*: не діліться ним з будь-ким іншим. Якщо ви поділитесь ним з будь-ким задля будь-якої причини, ви можете відкликати його та створити новий токен на [crates.io](https://crates.io/)<!-- ignore
 -->.
 
-### Adding Metadata to a New Crate
+### Додавання Метаданих до Нового Крейту
 
-Let’s say you have a crate you want to publish. Before publishing, you’ll need to add some metadata in the `[package]` section of the crate’s *Cargo.toml* file.
+Скажімо ви маєте крейт який ви хочете опублікувати. Перед публікацією, вам буде потрібно додати деякі метадані в секції `[package]` файлу *Cargo.toml* вашого крейту.
 
-Your crate will need a unique name. While you’re working on a crate locally, you can name a crate whatever you’d like. However, crate names on [crates.io](https://crates.io/)<!-- ignore --> are allocated on a first-come, first-served basis. Once a crate name is taken, no one else can publish a crate with that name. Before attempting to publish a crate, search for the name you want to use. If the name has been used, you will need to find another name and edit the `name` field in the *Cargo.toml* file under the `[package]` section to use the new name for publishing, like so:
+Вашому крейту знадобиться унікальне ім'я. Поки ви працюєте над крейтом локально, ви можете називати його як завгодно. Однак, назва крейту на [crates.io](https://crates.io/)<!-- ignore --> виділяється в порядку живої черги(перший прийшов - перший отримав). Як тільки назва крейту обрана, ніхто інший не може опублікувати крейт із цією назвою. Перед спробою опублікувати крейт, пошукайте назву, яку ви бажаєте використовувати. Якщо назва зайнята, вам знадобиться обрати іншу назву та редагувати поле `name` в файлі *Cargo.toml* в секції `[package]`, щоб використати нову назву для публікації наступним чином:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Файл: Cargo.toml</span>
 
 ```toml
 [package]
@@ -193,17 +191,17 @@ copy just the relevant lines below
 $ cargo publish
     Updating crates.io index
 warning: manifest has no description, license, license-file, documentation, homepage or repository.
-See https://doc.rust-lang.org/cargo/reference/manifest.html#package-metadata for more info.
+Перегляньте https://doc.rust-lang.org/cargo/reference/manifest.html#package-metadata для додатковох інформації.
 --snip--
 error: failed to publish to registry at https://crates.io
 
 Caused by:
-  the remote server responded with an error: missing or empty metadata fields: description, license. Please see https://doc.rust-lang.org/cargo/reference/manifest.html for how to upload metadata
+  the remote server responded with an error: missing or empty metadata fields: description, license. Будь ласка перегляньте https://doc.rust-lang.org/cargo/reference/manifest.html щодо того, як завантажити метадані
 ```
 
-This errors because you’re missing some crucial information: a description and license are required so people will know what your crate does and under what terms they can use it. In *Cargo.toml*, add a description that's just a sentence or two, because it will appear with your crate in search results. For the `license` field, you need to give a *license identifier value*. The [Linux Foundation’s Software Package Data Exchange (SPDX)][spdx] lists the identifiers you can use for this value. For example, to specify that you’ve licensed your crate using the MIT License, add the `MIT` identifier:
+Це помилка, оскільки у вас відсутня деяка вирішальна інформація: опис та ліцензія які необхідні для того, щоб люди знали, що ваш крейт робить та на яких умовах вони можуть його використовувати. У *Cargo.toml*, додайте опис розміром з речення або два, оскільки воно з'явиться з вашим крейтом в результаті пошуку. Для поля `license` вам потрібно надати *значення ідентифікатора ліцензії*. [Linux Foundation’s Software Package Data Exchange (SPDX)][spdx] перелічує ідентифікатори які ви можете використати як це значення. Наприклад, щоб вказати, що ваш крейт використовує ліцензію MIT, додайте ідентифікатор `MIT`:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Файл: Cargo.toml</span>
 
 ```toml
 [package]
@@ -213,11 +211,11 @@ license = "MIT"
 
 If you want to use a license that doesn’t appear in the SPDX, you need to place the text of that license in a file, include the file in your project, and then use `license-file` to specify the name of that file instead of using the `license` key.
 
-Guidance on which license is appropriate for your project is beyond the scope of this book. Many people in the Rust community license their projects in the same way as Rust by using a dual license of `MIT OR Apache-2.0`. This practice demonstrates that you can also specify multiple license identifiers separated by `OR` to have multiple licenses for your project.
+Супровід щодо того, яка ліцензія підійде вашому проєкту, поза рамками цієї книги. Багато людей у спільноті Rust ліцензує їх проєкти так само як і Rust, використовуючи подвійну ліцензію `MIT OR Apache-2.0`. Ця практика демонструє, що ви також можете вказати декілька ідентифікаторів ліцензій, які відокремлені `OR`, щоб використовувати декілька ліцензій в вашому проєкті.
 
 With a unique name, the version, your description, and a license added, the *Cargo.toml* file for a project that is ready to publish might look like this:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Файл: Cargo.toml</span>
 
 ```toml
 [package]
@@ -232,13 +230,13 @@ license = "MIT OR Apache-2.0"
 
 [Cargo’s documentation](https://doc.rust-lang.org/cargo/) describes other metadata you can specify to ensure others can discover and use your crate more easily.
 
-### Publishing to Crates.io
+### Публікація на Crates.io
 
-Now that you’ve created an account, saved your API token, chosen a name for your crate, and specified the required metadata, you’re ready to publish! Publishing a crate uploads a specific version to [crates.io](https://crates.io/)<!-- ignore --> for others to use.
+Тепер, коли ви створили обліковий запис, зберегли ваш API токен, обрали назву вашого крейту та вказали необхідні метадані, ви готові до публікації! Публікація крейту завантажує конкретну версію на [crates.io](https://crates.io/)<!-- ignore --> для використовування іншими.
 
-Be careful, because a publish is *permanent*. The version can never be overwritten, and the code cannot be deleted. One major goal of [crates.io](https://crates.io/)<!-- ignore --> is to act as a permanent archive of code so that builds of all projects that depend on crates from [crates.io](https://crates.io/)<!-- ignore --> will continue to work. Allowing version deletions would make fulfilling that goal impossible. However, there is no limit to the number of crate versions you can publish.
+Будьте обережні, оскільки публікація *перманентна*. Версія ніколи не може бути перезаписана, а код ніколи не може бути видалений. Одна з основних цілей [crates.io](https://crates.io/)<!-- ignore --> це діяти як перманентний архів коду, щоб збірка кожного проекту залежного від крейту на [crates.io](https://crates.io/)<!-- ignore --> продовжувала працювати. Дозволяючи видалення версій ми робимо виконання цієї цілі неможливим. Однак, немає обмежень на кількість версій крейтів, які ви можете опублікувати.
 
-Run the `cargo publish` command again. It should succeed now:
+Запустимо знову команду `cargo publish`. Тепер воно має бути вдалим:
 
 <!-- manual-regeneration
 go to some valid crate, publish a new version
@@ -257,22 +255,22 @@ $ cargo publish
    Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
-Congratulations! You’ve now shared your code with the Rust community, and anyone can easily add your crate as a dependency of their project.
+Вітаємо! Ви зараз поділилися вашим кодом із Rust спільнотою та кожен може легко додати ваш крейт як залежність до його проєкту.
 
-### Publishing a New Version of an Existing Crate
+### Публікація Нової Версії Існуючого Крейту
 
-When you’ve made changes to your crate and are ready to release a new version, you change the `version` value specified in your *Cargo.toml* file and republish. Use the [Semantic Versioning rules][semver] to decide what an appropriate next version number is based on the kinds of changes you’ve made. Then run `cargo publish` to upload the new version.
+Коли ви внесли зміни в ваш крейт та готові випустити нову версію ви змінюєте значення `version`, яке вказане в вашому файлі *Cargo.toml* та знову публікуйте. Використовуйте [правила Семантичного Версіонування][semver] для вирішення відповідного наступного номера версії, на основі зроблених вами змін. Потім запускайте `cargo publish` для завантаження нової версії.
 
 <!-- Old link, do not remove -->
 <a id="removing-versions-from-cratesio-with-cargo-yank"></a>
 
-### Deprecating Versions from Crates.io with `cargo yank`
+### Вилучаємо Старі Версії з Crates.io з `cargo yank`
 
-Although you can’t remove previous versions of a crate, you can prevent any future projects from adding them as a new dependency. This is useful when a crate version is broken for one reason or another. In such situations, Cargo supports *yanking* a crate version.
+Хоча ми не можемо видалити попередні версії крейта, ми можемо запобігти будь-яким майбутнім проєктам додавання цих версій як нової залежності. Це корисно, коли версія крейту зламана по тій чи іншій причині. У таких ситуаціях Cargo підтримує *висмикування або yanking* версії крейту.
 
-Yanking a version prevents new projects from depending on that version while allowing all existing projects that depend on it to continue. Essentially, a yank means that all projects with a *Cargo.lock* will not break, and any future *Cargo.lock* files generated will not use the yanked version.
+Висмикування версії перешкоджає залежність від цієї версії новими проєктами, дозволяючи усім чинним проєктам, які залежать від неї, продовжувати її використовувати. По суті, смик означає, що всі проєкти з *Cargo.lock* не зламаються та будь-який наступний створений файл *Cargo.lock* не буде використовувати висмикану версію.
 
-To yank a version of a crate, in the directory of the crate that you’ve previously published, run `cargo yank` and specify which version you want to yank. For example, if we've published a crate named `guessing_game` version 1.0.1 and we want to yank it, in the project directory for `guessing_game` we'd run:
+Щоб висмикнути версію крейту в директорії, яку ви раніше публікували запустіть команду `cargo yank` та зазначте яку версію ви хочете висмикнути. Наприклад, якщо ви опублікуєте крейт з назвою `guessing_game` версії 1.0.1 та захочете висмикнути її, в теці вашого проєкту для `guessing_game` ви б виконали:
 
 ```console
 $ cargo yank --vers 1.0.1
@@ -288,7 +286,7 @@ $ cargo yank --vers 1.0.1 --undo
       Unyank guessing_game_:1.0.1
 ```
 
-A yank *does not* delete any code. It cannot, for example, delete accidentally uploaded secrets. If that happens, you must reset those secrets immediately.
+Висмикування *не* видаляє жодного коду. Воно не може, наприклад, випадково видалити завантажені секрети. Якщо це станеться, вам буде потрібно негайно відновити ці секрети.
 
 [spdx]: http://spdx.org/licenses/
 [semver]: http://semver.org/
