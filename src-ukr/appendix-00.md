@@ -1,3 +1,3 @@
-# Appendix
+# Додатки
 
-The following sections contain reference material you may find useful in your Rust journey.
+Ці додатки містять довідковий матеріал, що стане в пригоді у вашій подорожі мовою Rust.
