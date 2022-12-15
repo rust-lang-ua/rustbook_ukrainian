@@ -9,7 +9,7 @@
 <span class="filename">Файл: src/main.rs</span>
 
 ```rust
-{{#include ../listings/ch15-smart-pointers/listing-15-25/main.rs}}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-25/src/main.rs}}
 ```
 
 
