@@ -1,19 +1,19 @@
-# Final Project: Building a Multithreaded Web Server
+# Останній проєкт: збірка багатопотокового вебсервера
 
-It’s been a long journey, but we’ve reached the end of the book. In this chapter, we’ll build one more project together to demonstrate some of the concepts we covered in the final chapters, as well as recap some earlier lessons.
+Це була довга подорож, та нарешті ми дійшли до кінця книжки. У цьому розділі ми разом зберемо ще один проєкт для демонстрації деяких концепцій, про які йшлося в останніх розділах, а також згадаємо деякі раніші уроки.
 
-For our final project, we’ll make a web server that says “hello” and looks like Figure 20-1 in a web browser.
+Для нашого останнього проєкту ми зробимо вебсервер, що скаже "привіт" і виглядає як Рисунок 20-1 у веббраузері.
 
 ![hello from rust](img/trpl20-01.png)
 
-<span class="caption">Figure 20-1: Our final shared project</span>
+<span class="caption">Рисунок 20-1: Наш останній спільний проєкт</span>
 
-Here is our plan for building the web server:
+Ось наш план збірки вебсервера:
 
-1. Learn a bit about TCP and HTTP.
-2. Listen for TCP connections on a socket.
-3. Parse a small number of HTTP requests.
-4. Create a proper HTTP response.
-5. Improve the throughput of our server with a thread pool.
+1. Дізнатися трохи про TCP та HTTP.
+2. Прослуховувати TCP-підключення на сокеті.
+3. Розібрати невелику кількість HTTP-запитів.
+4. Створити коректну HTTP відповідь.
+5. Поліпшити пропускну здатність нашого сервера за допомогою пула потоків.
 
-Before we get started, we should mention one detail: the method we’ll use won’t be the best way to build a web server with Rust. Community members have published a number of production-ready crates available on [crates.io](https://crates.io/) that provide more complete web server and thread pool implementations than we’ll build. However, our intention in this chapter is to help you learn, not to take the easy route. Because Rust is a systems programming language, we can choose the level of abstraction we want to work with and can go to a lower level than is possible or practical in other languages. We’ll therefore write the basic HTTP server and thread pool manually so you can learn the general ideas and techniques behind the crates you might use in the future.
+Перед тим як розпочати, ми маємо згадати про одну деталь: метод, який ми будемо використовувати, не буде найкращим способом створення вебсервера на Rust. Учасники спільноти опублікували ряд готових для використання у виробництві крейтів, доступних на [crates.io](https://crates.io/), які забезпечують повніші реалізації вебсервера та пула потоків, ніж те, що ми збираємо. Однак, наш намір у цьому розділі допомогти вам вчитися, а не іти легким шляхом. Оскільки Rust є системною мовою програмування, ми можемо вибрати рівень абстракції, з яким ми хочемо працювати й можемо піти на нижчий рівень, ніж це можливо чи практично в інших мовах. Тому ми напишемо базовий HTTP-сервер і пул потоків вручну, щоб ви могли вивчити загальні ідеї та техніки, застосовані в крейтах, які ви можете використати в майбутньому.
