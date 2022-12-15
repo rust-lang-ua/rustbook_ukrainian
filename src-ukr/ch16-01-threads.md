@@ -1,31 +1,31 @@
-## Using Threads to Run Code Simultaneously
+## Використання потоків для одночасного запуску коду
 
-In most current operating systems, an executed program’s code is run in a *process*, and the operating system will manage multiple processes at once. Within a program, you can also have independent parts that run simultaneously. The features that run these independent parts are called *threads*. For example, a web server could have multiple threads so that it could respond to more than one request at the same time.
+В більшості сучасних операційних систем, код виконуємої програми запускається в середині *процесу*, а операційна система керує багатьма процесами одночасно. Всередині програми ви можете мати незалежні частини, які виконуються одночасно. Фунціонал, який виконує такі незалежні частини називають *потоками* або *тредами*. Наприклад, вебсервер може використовувати декілька потоків і таким чином мати змогу обробляти більше одного запиту одночасно.
 
-Splitting the computation in your program into multiple threads to run multiple tasks at the same time can improve performance, but it also adds complexity. Because threads can run simultaneously, there’s no inherent guarantee about the order in which parts of your code on different threads will run. This can lead to problems, such as:
+Розділення обчислень між декількома потоками для одночасного виконання кількох завдань може покращити швидкість виконання програми, але також підвищує складність програми. Оскільки потоки можуть виконуватись одночасно, немає жодної гарантії стосовно порядку виконання частин коду в різних потоках. Це може призвести до наступних проблем:
 
-* Race conditions, where threads are accessing data or resources in an inconsistent order
-* Deadlocks, where two threads are waiting for each other, preventing both threads from continuing
-* Bugs that happen only in certain situations and are hard to reproduce and fix reliably
+* стан гонитви, за якого потоки отримують доступ до даних або ресурсів в довільному порядку
+* дедлоки, коли два потоки чекають один одного, перешкоджаючи продовженню виконанняя обох потоків
+* помилки, що виникають виключно за певних обставин і які важко відворити та надійно виправити
 
-Rust attempts to mitigate the negative effects of using threads, but programming in a multithreaded context still takes careful thought and requires a code structure that is different from that in programs running in a single thread.
+Rust намагається помʼякшити негативні наслідки використання потоків, але програмування в багатопоточному контексті все ще вимагає ретельного обдумування та потребує структуру коду, відмінну від програм, що виконуються в одному потоці.
 
-Programming languages implement threads in a few different ways, and many operating systems provide an API the language can call for creating new threads. The Rust standard library uses a *1:1* model of thread implementation, whereby a program uses one operating system thread per one language thread. There are crates that implement other models of threading that make different tradeoffs to the 1:1 model.
+Мови програмування імплементують потоки декількома різними способами, а багато операційних систем надають API, який мова може використовувати для створення нових потоків. Стандартна бібліотека Rust використовує модель імплементації потоку *1:1*, за якої програма використовує один потік операційної системи на один потік, що використовує мова. Існують крейти, котрі імплементують інші моделі потоків, що йдуть на інші компроміси порівняно з моделью 1:1.
 
-### Creating a New Thread with `spawn`
+### Створення нового потоку за допомогою `spawn`
 
-To create a new thread, we call the `thread::spawn` function and pass it a closure (we talked about closures in Chapter 13) containing the code we want to run in the new thread. The example in Listing 16-1 prints some text from a main thread and other text from a new thread:
+Для того, щоб створити новий потік, ми викликаємо функцію `thread::spawn` і передаємо їй замикання (ми вже говорили про них в Розділі 13), що містить в собі код, який ми хочемо запустити всередині нового потоку. Приклад у Лістінгу 16-1 виводить на екран деякий текст з основного потоку, а також інший текст з нового потоку:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-01/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 16-1: Creating a new thread to print one thing while the main thread prints something else</span>
+<span class="caption">Блок коду 16-1: Створення нового потоку для виводу на екран деяку стрічку, поки основний потік виводить іншу стрічку</span>
 
-Note that when the main thread of a Rust program completes, all spawned threads are shut down, whether or not they have finished running. The output from this program might be a little different every time, but it will look similar to the following:
+Зверніть увагу, що коли основний потік Rust програми завершується, всі створені потоки припиняють існувати, незалежно від того завершили вони своє виконання чи ні. Вивід цієї програми може дещо відрізнятись від запуску до запуску, але виглядатиме приблизно так:
 
 
 <!-- Not extracting output because changes to this output aren't significant;
@@ -37,33 +37,33 @@ hi number 1 from the main thread!
 hi number 1 from the spawned thread!
 hi number 2 from the main thread!
 hi number 2 from the spawned thread!
-hi number 3 from the main thread!
+hi number 3 from the spawned thread!
 hi number 3 from the spawned thread!
 hi number 4 from the main thread!
 hi number 4 from the spawned thread!
 hi number 5 from the spawned thread!
 ```
 
-The calls to `thread::sleep` force a thread to stop its execution for a short duration, allowing a different thread to run. The threads will probably take turns, but that isn’t guaranteed: it depends on how your operating system schedules the threads. In this run, the main thread printed first, even though the print statement from the spawned thread appears first in the code. And even though we told the spawned thread to print until `i` is 9, it only got to 5 before the main thread shut down.
+Виклики `thread::sleep` змушують потік припинити виконання на короткий період часу, дозволяючи виконувати інший потік. Ймовірно, потоки будуть виконуватись по черзі, проте це не гарантовано, а залежить від того, як ваша операційна система планує виконання потоків. Цього разу, основний потік вивів на екран стрічку першим, незважаючи на те, що print statement в новому потоці зʼявляється у коді раніше. Незважаючи на те, що ми запрограмували новостворений потік виводити екран стрічки доти, поки `i` не дорівнюватиме 9, він вивів лише 5 стрічок до завершення основного потоку.
 
-If you run this code and only see output from the main thread, or don’t see any overlap, try increasing the numbers in the ranges to create more opportunities for the operating system to switch between the threads.
+Якщо ви запускаєте цей код і бачите лише вивід з основного потоку або ж не бачите жодного оверлепу, спробуйте збільшити діапазон чисел, щоб створити для операційної системи більше умов для переключання між потоками.
 
-### Waiting for All Threads to Finish Using `join` Handles
+### Очікування закінчення виконання всіх потоків з використанням `join` handles
 
-The code in Listing 16-1 not only stops the spawned thread prematurely most of the time due to the main thread ending, but because there is no guarantee on the order in which threads run, we also can’t guarantee that the spawned thread will get to run at all!
+Код в Блоці коду 16-1 не лише передчасно зупиняє створений потік в більшості випадків через завершення основного потоку, але оскільки гарантії щодо порядку виконання потоків відсутні, ми не можемо гарантувати, що створені потоки взагалі будуть виконуватись!
 
-We can fix the problem of the spawned thread not running or ending prematurely by saving the return value of `thread::spawn` in a variable. The return type of `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned value that, when we call the `join` method on it, will wait for its thread to finish. Listing 16-2 shows how to use the `JoinHandle` of the thread we created in Listing 16-1 and call `join` to make sure the spawned thread finishes before `main` exits:
+Ми можемо вирішити проблему, коли створений потік не виконується або ж передчасно завершує виконання, зберігаючи значення, що повертає `thread::spawn` в змінну. `thread::spawn` повертає значення, що має тип `JoinHandle`. `JoinHandle` - це owned value (значення, яким володіють), котре при виклику на ньому методу `join`, чекатиме завершення виконання потоку. Блок коду 16-2 демонструє як використовувати `JoinHandle` потоку, котрий ми створили в блоці коду 16-1, а також викликати `join` щоб пересвідчитись, що новостворений потік закінчує виконання раніше, ніж `main`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-02/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 16-2: Saving a `JoinHandle` from `thread::spawn` to guarantee the thread is run to completion</span>
+<span class="caption">Блок коду 16-2: Збереження `JoinHandle` з `thread::spawn` щоб гарантувати виконання потоку до завершення</span>
 
-Calling `join` on the handle blocks the thread currently running until the thread represented by the handle terminates. *Blocking* a thread means that thread is prevented from performing work or exiting. Because we’ve put the call to `join` after the main thread’s `for` loop, running Listing 16-2 should produce output similar to this:
+Виклик `join` на обробнику (хендлері) блокує потік, що наразі виконується аж до моменту, коли потік, представлений обробником, не завершиться. *Блокування* потоку означає, що такий потік не може виконуватися або ж завершитись. Оскільки ми помістили виклик `join` після циклу `for` в основному потоці, виконання Блоку коду 16-2 має вивести на екран щось схоже на наступне:
 
 
 <!-- Not extracting output because changes to this output aren't significant;
@@ -86,17 +86,17 @@ hi number 8 from the spawned thread!
 hi number 9 from the spawned thread!
 ```
 
-The two threads continue alternating, but the main thread waits because of the call to `handle.join()` and does not end until the spawned thread is finished.
+Два потоки продовжують виконуватися по черзі, але основний потік чекає через виклик `handle.join()` і не завершується, доки не завершиться створений потік.
 
-But let’s see what happens when we instead move `handle.join()` before the `for` loop in `main`, like this:
+Однак давайте поглянемо, що трапиться, якщо замість цього розмістити `handle.join()` перед циклом `for` всередині `main`, як тут:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/no-listing-01-join-too-early/src/main.rs}}
 ```
 
-The main thread will wait for the spawned thread to finish and then run its `for` loop, so the output won’t be interleaved anymore, as shown here:
+Основний потік чекатиме на завершення виконання створеного треду і лише після цього виконуватиме цикл `for`, тому вивід більше не буде чергуватись, як показано тут:
 
 
 <!-- Not extracting output because changes to this output aren't significant;
@@ -119,48 +119,48 @@ hi number 3 from the main thread!
 hi number 4 from the main thread!
 ```
 
-Small details, such as where `join` is called, can affect whether or not your threads run at the same time.
+Дрібні деталі, такі як-от місце виклику `join`, можуть впливати на те чи будуть ваші потоки виконуватись одночасно.
 
-### Using `move` Closures with Threads
+### Використання `move` замикання із потоками
 
-We'll often use the `move` keyword with closures passed to `thread::spawn` because the closure will then take ownership of the values it uses from the environment, thus transferring ownership of those values from one thread to another. In the [“Capturing the Environment with Closures”][capture]<!-- ignore
---> section of Chapter 13, we discussed 
+Ми будемо часто використовувати ключове слово `move` разом з замиканнями, переданими всередину `thread::spawn`, оскільки замикання тоді почне володіти значеннями, які вона використовує з оточуючого контексту (середовища), таким чином передаючи володіння значеннями з одного потоку в інший. In the [“Capturing the Environment with Closures”][capture]<!-- ignore
+--> секції Розділу 13, ми розглядали 
 
-`move` in the context of closures. Now, we’ll concentrate more on the interaction between `move` and `thread::spawn`.
+`move` в контексті замикань. Зараз же, ми сконцентруємось більше на взаємодії між `move` та `thread::spawn`.
 
-Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no arguments: we’re not using any data from the main thread in the spawned thread’s code. To use data from the main thread in the spawned thread, the spawned thread’s closure must capture the values it needs. Listing 16-3 shows an attempt to create a vector in the main thread and use it in the spawned thread. However, this won’t yet work, as you’ll see in a moment.
+Зверніть увагу, в Блоці коду 16-1 замикання, яке ми передаємо в `thread::spawn` не приймає жодних аргументів: ми не використовуємо жодних даних з основного потоку в коді створеного потоку. Для того, щоб використовувати дані з основного потоку в створеному потоці, замикання створеного потоку має захопити (capture) потрібні значення. Блок коду 16-3 показує спробу створити вектор в основному потоці, а потім використати його в створеному. Однак, це не запрацює одразу, як ви зможете незабаром пересвідчитись.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-03/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 16-3: Attempting to use a vector created by the main thread in another thread</span>
+<span class="caption">Блок коду 16-3: Спроба використати вектор, створений основним потоком, в іншому потоці</span>
 
-The closure uses `v`, so it will capture `v` and make it part of the closure’s environment. Because `thread::spawn` runs this closure in a new thread, we should be able to access `v` inside that new thread. But when we compile this example, we get the following error:
+Замикання використовує `v`, отже, воно захопить `v` і зробить його частиною контексту замикання. Оскільки `thread::spawn` виконує замикання в новому потоці, ми повинні мати доступ до `v` всередині нового потоку. Однак, коли ми скомпілюємо цей приклад, ми отримаємо наступну помилку:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
-Rust *infers* how to capture `v`, and because `println!` only needs a reference to `v`, the closure tries to borrow `v`. However, there’s a problem: Rust can’t tell how long the spawned thread will run, so it doesn’t know if the reference to `v` will always be valid.
+Rust *здогадується* як захопити `v`, і саме тому `println!` потребує тільки посилання на `v`, а замикання намагається запозичити `v`. Однак є проблема: Rust не може здогадатись як довго потік буде виконуватись, отже, Rust не знає чи буде посилання на `v` завжди валідним (valid).
 
-Listing 16-4 provides a scenario that’s more likely to have a reference to `v` that won’t be valid:
+Блок коду 16-4 показує випадок, який, швидше за все, матиме невалідне посилання на `v`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-04/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 16-4: A thread with a closure that attempts to capture a reference to `v` from a main thread that drops `v`</span>
+<span class="caption">Блок коду 16-4: Потік з замиканням, що намагається захопити (capture) посилання на `v` з основного потоку, який видаляє `v`</span>
 
-If Rust allowed us to run this code, there’s a possibility the spawned thread would be immediately put in the background without running at all. The spawned thread has a reference to `v` inside, but the main thread immediately drops `v`, using the `drop` function we discussed in Chapter 15. Then, when the spawned thread starts to execute, `v` is no longer valid, so a reference to it is also invalid. Oh no!
+Якщо Rust дозволить нам виконати цей код, існує ймовірність, що створений потік буде негайно переведений в бекграунд (background) і не буде виконуватись взагалі. Створений потік має посилання на `v` всередині себе, але основний потік негайно викидає (drops) `v`, використовуючи функцію `drop`, котру ми розглядали у Розділі 15. Потім, коли створений потік починає виконуватись, `v` більше невалідний, тому посилання на нього також невалідне. О ні!
 
-To fix the compiler error in Listing 16-3, we can use the error message’s advice:
+Щоб виправити помилку компілятора в блоці коду 16-3, ми можем скористатись порадою, яку надає повідомлення про помилку:
 
 
 <!-- manual-regeneration
@@ -174,25 +174,25 @@ help: to force the closure to take ownership of `v` (and any other referenced va
   |                                ++++
 ```
 
-By adding the `move` keyword before the closure, we force the closure to take ownership of the values it’s using rather than allowing Rust to infer that it should borrow the values. The modification to Listing 16-3 shown in Listing 16-5 will compile and run as we intend:
+Додаючи ключове слово `move` перед замиканням, ми змушуємо замикання взяти володіння над значеннями, котрі воно використовує, не дозволяючи Rust робити припущення стосовно позичання (borrowing) значень. Модифікація до Блоку коду 16-3, показана в Блоці коду 16-5 скомпілюється і виконуватиметься так, як ми задумали:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 16-5: Using the `move` keyword to force a closure to take ownership of the values it uses</span>
+<span class="caption">Блок коду 16-5: Використання ключового слова `move`, щоб примусити замикання взяти володіння над значеннями, які воно використовує</span>
 
-We might be tempted to try the same thing to fix the code in Listing 16-4 where the main thread called `drop` by using a `move` closure. However, this fix will not work because what Listing 16-4 is trying to do is disallowed for a different reason. If we added `move` to the closure, we would move `v` into the closure’s environment, and we could no longer call `drop` on it in the main thread. We would get this compiler error instead:
+В нас може виникнути спокуса спробувати той самий підхід, щоб виправити код у Блоці коду 16-4, де основний потік викликав `drop`, використовуючи замикання з `move`. Однак, це не спрацює, оскільки те, що Блок коду 16-4 намагається зробити, заборонено з іншої причини. Якщо ми додамо `move` до замикання, ми перенемістили `v` в контекст замикання, тому ми більше не можемо викликати `drop` на ньому в основному потоці. Замість цього ми отримаємо помилку компіляції:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
 ```
 
-Rust’s ownership rules have saved us again! We got an error from the code in Listing 16-3 because Rust was being conservative and only borrowing `v` for the thread, which meant the main thread could theoretically invalidate the spawned thread’s reference. By telling Rust to move ownership of `v` to the spawned thread, we’re guaranteeing Rust that the main thread won’t use `v` anymore. If we change Listing 16-4 in the same way, we’re then violating the ownership rules when we try to use `v` in the main thread. The `move` keyword overrides Rust’s conservative default of borrowing; it doesn’t let us violate the ownership rules.
+Правила володіння Rust знову нас врятували! Ми отримали помлку в Блоці коду 16-3, оскільки Rust був консервативним і позичив лише `v` для потоку, а отже, основний потік міг теоретично зробити посилання, що використовувалось у створеному потоці, невалідним. Сказавши Rust передати володіння `v` створеному потоку, ми гарантуємо Rust, що основний потік більше не використовуватиме `v`. Якщо ми змінимо Блок коду 16-4 таким же чином, то ми порушимо правила володіння, коли намагатимемось використати `v` в основному потоці. Ключове слово `move` бере гору над правилами володіння, що Rust використовує за замовчуванням; таким чином не ми не порушуємо правила володіння.
 
-With a basic understanding of threads and the thread API, let’s look at what we can *do* with threads.
+Маючи базове розуміння потоків і API потоків (прикладний програмний інтерфейс потоків), давайте поглянемо що ми можемо *робити* з потоками.
 
 [capture]: ch13-01-closures.html#capturing-the-environment-with-closures
