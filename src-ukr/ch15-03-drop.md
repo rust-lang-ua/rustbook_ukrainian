@@ -1,83 +1,83 @@
-## Running Code on Cleanup with the `Drop` Trait
+## Виконання коду при очищенні за допомогою трейту `Drop`
 
-The second trait important to the smart pointer pattern is `Drop`, which lets you customize what happens when a value is about to go out of scope. You can provide an implementation for the `Drop` trait on any type, and that code can be used to release resources like files or network connections. We’re introducing `Drop` in the context of smart pointers because the functionality of the `Drop` trait is almost always used when implementing a smart pointer. For example, when a `Box<T>` is dropped it will deallocate the space on the heap that the box points to.
+Другий важливий трейт для шаблону розумного вказівника - `Drop`, який дозволяє вам налаштувати, що відбувається, коли значення збирається вийти з області видимості. Ви можете створити реалізацію трейту `Drop` для будь-якого типу, і цей код може використовуватися для звільнення ресурсів на кшталт файлів чи мережевих з'єднань. Ми презентуємо `Drop` у контексті розумних вказівників, оскільки функціональність трейту `Drop` практично завжди використовується при реалізації розумних вказівників. Наприклад, коли `Box<T>` скидається, то звільняє простір у купі, виділений при створенні.
 
-In some languages, for some types, the programmer must call code to free memory or resources every time they finish using an instance those types. Examples include file handles, sockets, or locks. If they forget, the system might become overloaded and crash. In Rust, you can specify that a particular bit of code be run whenever a value goes out of scope, and the compiler will insert this code automatically. As a result, you don’t need to be careful about placing cleanup code everywhere in a program that an instance of a particular type is finished with—you still won’t leak resources!
+У деяких мовах для деяких типів програміст повинен викликати код для звільнення пам'яті або ресурсів кожного разу, коли він завершує використовувати екземпляр такого типу. Прикладами можуть бути файли, сокети чи блокування доступу до даних. Якщо програміст забуде це зробити, система може перенавантажитися і впасти. У Rust ви можете вказати, що спеціальний шматок коду має бути виконано, коли значення виходить з зони видимості, і компілятор додасть цей код автоматично. В результаті вам не треба стежити за ретельним розміщенням коду очищення всюди в програмі для завершення роботи з екземпляром певного типу - і все одно не допустити витоку ресурсів!
 
-You specify the code to run when a value goes out of scope by implementing the `Drop` trait. The `Drop` trait requires you to implement one method named `drop` that takes a mutable reference to `self`. To see when Rust calls `drop`, let’s implement `drop` with `println!` statements for now.
+Ви вказуєте код, що потрібно виконати, коли значення виходить з області видимості, реалізуючи трейт `Drop`. Трейт `Drop` потребує реалізації одного методу, що зветься `drop`, який приймає мутабельне посилання на `self`. Щоб побачити, коли Rust викликає `drop`, тимчасово реалізуймо `drop` з інструкціями `println!`.
 
-Listing 15-14 shows a `CustomSmartPointer` struct whose only custom functionality is that it will print `Dropping CustomSmartPointer!` when the instance goes out of scope, to show when Rust runs the `drop` function.
+Блок коду 15-14 показує структуру `CustomSmartPointer`, чия єдина особлива функціональність полягає в тому, що вона виводить `Dropping CustomSmartPointer!`, коли екземпляр виходить із зони видимості щоб показати, коли Rust запускає функцію `drop`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-14/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 15-14: A `CustomSmartPointer` struct that implements the `Drop` trait where we would put our cleanup code</span>
+<span class="caption">Блок коду 15-14: структура `CustomSmartPointer`, що реалізує трейт `Drop`, в якому ми розміщуємо наш код для очищення</span>
 
-The `Drop` trait is included in the prelude, so we don’t need to bring it into scope. We implement the `Drop` trait on `CustomSmartPointer` and provide an implementation for the `drop` method that calls `println!`. The body of the `drop` function is where you would place any logic that you wanted to run when an instance of your type goes out of scope. We’re printing some text here to demonstrate visually when Rust will call `drop`.
+Трейт `Drop` включено до прелюдії, тож нам не треба вводити її в область видимості. Ми реалізуємо трейт `Drop` для `CustomSmartPointer` і надаємо реалізацію методу `drop`, що викликає `println!`. Саме у тілі функції `drop` треба розмістити логіку, яку ви хочете виконати, коли екземпляр типу виходить з області видимості. Тут ми виводимо деякий текст для наочної демонстрації, коли саме Rust викличе `drop`.
 
-In `main`, we create two instances of `CustomSmartPointer` and then print `CustomSmartPointers created`. At the end of `main`, our instances of `CustomSmartPointer` will go out of scope, and Rust will call the code we put in the `drop` method, printing our final message. Note that we didn’t need to call the `drop` method explicitly.
+У `main` ми створимо два екземпляри `CustomSmartPointer` і виведемо `CustomSmartPointers created`. Наприкінці `main` наші екземпляри `CustomSmartPointer` вийдуть з області видимості, і Rust викличе код, який ми розмістили у методі `drop`, вивівши наше останнє повідомлення. Зверніть увагу що нам не треба явно викликати метод `drop`.
 
-When we run this program, we’ll see the following output:
+Коли ми запустимо цю програму, то побачимо таке:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-14/output.txt}}
 ```
 
-Rust automatically called `drop` for us when our instances went out of scope, calling the code we specified. Variables are dropped in the reverse order of their creation, so `d` was dropped before `c`. This example's purpose is to give you a visual guide to how the `drop` method works; usually you would specify the cleanup code that your type needs to run rather than a print message.
+Rust автоматично викликав для нас `drop`, коли наші екземпляри вийшли з області видимості, виконавши зазначений код. Змінні очищуються у зворотному порядку від створення, тож `d` буде очищено перед `c`. Мета цього прикладу - надати Вам візуальний посібник того, як працює метод `drop`; зазвичай ви вказуєте код для очищення, який треба запустити вашому типу, а не друкуєте повідомлення.
 
-### Dropping a Value Early with `std::mem::drop`
+### Раннє очищення значення за допомогою `std::mem::drop`
 
-Unfortunately, it’s not straightforward to disable the automatic `drop` functionality. Disabling `drop` isn’t usually necessary; the whole point of the `Drop` trait is that it’s taken care of automatically. Occasionally, however, you might want to clean up a value early. One example is when using smart pointers that manage locks: you might want to force the `drop` method that releases the lock so that other code in the same scope can acquire the lock. Rust doesn’t let you call the `Drop` trait’s `drop` method manually; instead you have to call the `std::mem::drop` function provided by the standard library if you want to force a value to be dropped before the end of its scope.
+На жаль, зовсім не очевидно, як вимкнути автоматичну функціональність `drop`. Відключати `drop` зазвичай не потрібно; весь сенс трейту `Drop` полягає в тому, що про нього компілятор дбає автоматично. Однак, іноді ви можете захотіти очистити значення завчасно. Візьмемо такий приклад: розумні вказівники, що керують блокуванням; ви можете захотіти примусово запустити метод `drop`, що відпускає блокування, щоб інший код у цій області видимості міг захопити це блокування. Rust не дозволяє вам викликати метод `drop` трейту `Drop` вручну; натомість ви маєте викликати функцію `std::mem::drop`, надану стандартною бібліотекою, якщо ви хочете примусово очистити значення перед до закінчення її області видимості.
 
-If we try to call the `Drop` trait’s `drop` method manually by modifying the `main` function from Listing 15-14, as shown in Listing 15-15, we’ll get a compiler error:
+Якщо ми спробуємо викликати метод `drop` трейту `Drop` вручну, змінивши функцію `main` з Блоку коду 15-14, як показано у Блоці коду 15-15, то отримаємо помилку компілятора:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-15/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 15-15: Attempting to call the `drop` method from the `Drop` trait manually to clean up early</span>
+<span class="caption">Блок коду 15-15: спроба викликати метод `drop` з риси `Drop` вручну для раннього очищення</span>
 
-When we try to compile this code, we’ll get this error:
+Якщо ми спробуємо скомпілювати цей код, то отримаємо таку помилку:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-15/output.txt}}
 ```
 
-This error message states that we’re not allowed to explicitly call `drop`. The error message uses the term *destructor*, which is the general programming term for a function that cleans up an instance. A *destructor* is analogous to a *constructor*, which creates an instance. The `drop` function in Rust is one particular destructor.
+Ця помилка каже, що ми не можемо явно викликати `drop`. Повідомлення використовує загальнопрограмістський термін *деструктор*, що позначає функцію, яка очищує екземпляр. *Деструктор* є аналогом до *конструктора*, який створює екземпляр. Функція `drop` в Rust - це деструктор.
 
-Rust doesn’t let us call `drop` explicitly because Rust would still automatically call `drop` on the value at the end of `main`. This would cause a *double free* error because Rust would be trying to clean up the same value twice.
+Rust не дозволяє нам викликати `drop` явно, бо Rust все одно автоматично викличе `drop` для цього значення наприкінці `main`. Це спричинить помилку *подвійного звільнення*, бо Rust спробує очистити те саме значення двічі.
 
-We can’t disable the automatic insertion of `drop` when a value goes out of scope, and we can’t call the `drop` method explicitly. So, if we need to force a value to be cleaned up early, we use the `std::mem::drop` function.
+Ми не можемо вимкнути автоматичне додавання `drop` там, де значення виходить за межі області видимості, і ми не можемо викликати метод `drop` явно. Тож якщо нам треба змусити значення очиститися раніше, ми використовуємо функцію `std::mem::drop`.
 
-The `std::mem::drop` function is different from the `drop` method in the `Drop` trait. We call it by passing as an argument the value we want to force drop. The function is in the prelude, so we can modify `main` in Listing 15-15 to call the `drop` function, as shown in Listing 15-16:
+Функція `std::mem::drop` відрізняється від методу `drop` у трейті `Drop`. Ми викликаємо її, передаючи аргументом значення, яке ми хочемо примусово очистити. Ця функція є в прелюдії, таким чином, ми можемо змінити `main` у Блоці коду 15-15, щоб викликати функцію `drop`, як показано в Блоці коду 15-16:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-16/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 15-16: Calling `std::mem::drop` to explicitly drop a value before it goes out of scope</span>
+<span class="caption">Блок коду 15-16: виклик `std::mem::drop`, щоб явно очистити значення до того, як вони вийде з області видимості</span>
 
-Running this code will print the following:
+Виконання цього коду виведе наступне:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-16/output.txt}}
 ```
 
-The text ``Dropping CustomSmartPointer with data `some data`!`` is printed between the `CustomSmartPointer created.` and `CustomSmartPointer dropped
-before the end of main.` text, showing that the `drop` method code is called to drop `c` at that point.
+Текст ``Dropping CustomSmartPointer with data `some data`!`` виводиться між `CustomSmartPointer created.` та `CustomSmartPointer dropped
+before the end of main.`, показуючи, що код методу `drop` був викликаний в цьому місці, щоб очистити `c`.
 
-You can use code specified in a `Drop` trait implementation in many ways to make cleanup convenient and safe: for instance, you could use it to create your own memory allocator! With the `Drop` trait and Rust’s ownership system, you don’t have to remember to clean up because Rust does it automatically.
+Ви можете використати код, вказаний у реалізації трейту `Drop`, у різні способи, щоб зробити очищення зручним і безпечним: зокрема, ви могли б використати його для створення власного розподілювача пам'яті! Завдяки трейту `Drop` і системи володіння Rust, вам не треба пам'ятати про очищення, бо Rust робить це автоматично.
 
-You also don’t have to worry about problems resulting from accidentally cleaning up values still in use: the ownership system that makes sure references are always valid also ensures that `drop` gets called only once when the value is no longer being used.
+Також вам не доведеться турбуватися про проблеми, що можуть виникнути через випадкове очищення значень, які все ще використовуються: система власності, яка гарантує, що посилання завжди дійсні, також гарантує, що метод `drop` буде викликаний лише один раз, коли значення більше не використовуватиметься.
 
-Now that we’ve examined `Box<T>` and some of the characteristics of smart pointers, let’s look at a few other smart pointers defined in the standard library.
+Тепер, коли ми дослідили `Box<T>` і деякі характеристики розумних вказівників, погляньмо на деякі інші розумні вказівники, визначені у стандартній бібліотеці.
