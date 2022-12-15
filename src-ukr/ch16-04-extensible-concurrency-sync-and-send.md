@@ -1,39 +1,38 @@
-## Extensible Concurrency with the `Sync` and `Send` Traits
+## Розширювана конкурентність із трейтами `Sync` і `Send`
 
-Interestingly, the Rust language has *very* few concurrency features. Almost every concurrency feature we’ve talked about so far in this chapter has been part of the standard library, not the language. Your options for handling concurrency are not limited to the language or the standard library; you can write your own concurrency features or use those written by others.
+Цікаво, що мова Rust має *дуже* небагато функціоналу для конкурентності. Майже весь функціонал конкурентності, про який ми будемо говорити в цьому розділі, є частиною стандартної бібліотеки, а не мови. Ваші опції для роботи з конкурентністю не обмежуються мовою чи стандартною бібліотекою; ви можете написати власний функціонал для конкурентності або використовувати ті, що вже були написані іншими.
 
-However, two concurrency concepts are embedded in the language: the `std::marker` traits `Sync` and `Send`.
+Однак, дві концепції конкурентності вбудовані в мову: трейти `Sync` and `Send` із `std::marker`.
 
-### Allowing Transference of Ownership Between Threads with `Send`
+### Дозвіл передавати володіння між потоками за допомогою `Send`
 
-The `Send` marker trait indicates that ownership of values of the type implementing `Send` can be transferred between threads. Almost every Rust type is `Send`, but there are some exceptions, including `Rc<T>`: this cannot be `Send` because if you cloned an `Rc<T>` value and tried to transfer ownership of the clone to another thread, both threads might update the reference count at the same time. For this reason, `Rc<T>` is implemented for use in single-threaded situations where you don’t want to pay the thread-safe performance penalty.
+Маркерний трейт `Send` підказує нам, що володіння значенням типу, який реалізує `Send` можна передавати між потоками. Майже кожен тип в Rust реалізує `Send`, але є деякі винятки, включаючи `Rc<T>`: він не може реалізовувати `Send`, оскільки якщо ви клонували значення `Rc<T>` і спробували передати володіння клоном в інший потік, обидва потоки могли оновити лічильник підрахунку посилань одночасно. З цієї причини `Rc<T>` реалізовано для використання в одному потоці, коли ви не хочете жертвувати ефективністю виконання коду.
 
-Therefore, Rust’s type system and trait bounds ensure that you can never accidentally send an `Rc<T>` value across threads unsafely. When we tried to do this in Listing 16-14, we got the error `the trait Send is not implemented for
-Rc<Mutex<i32>>`. When we switched to `Arc<T>`, which is `Send`, the code compiled.
+Тому, система типів Rust і межі трейтів (trait bounds) гарантують, що ви ніколи не зможете випадково небезпечно надіслати значення `Rc<T>` між потоками. Коли ми спробували зробити це в Блоці коду 16-14, то отримали помилку`the trait Send is not implemented for Rc<Mutex<i32>>`. Коли ми почали використовувати `Arc<T>`, який реалізує `Send`, код скомпілювався.
 
-Any type composed entirely of `Send` types is automatically marked as `Send` as well. Almost all primitive types are `Send`, aside from raw pointers, which we’ll discuss in Chapter 19.
+Будь-який тип, який повністю складається з типів, що реалізують `Send`, також автоматично позначається як `Send`. Майже всі примітивні типи реалізують `Send`, окрім сирих вказівників (raw pointers), які ми обговоримо в Розділі 19.
 
-### Allowing Access from Multiple Threads with `Sync`
+### Дозвіл доступу з кількох потоків за допомогою `Sync`
 
-The `Sync` marker trait indicates that it is safe for the type implementing `Sync` to be referenced from multiple threads. In other words, any type `T` is `Sync` if `&T` (an immutable reference to `T`) is `Send`, meaning the reference can be sent safely to another thread. Similar to `Send`, primitive types are `Sync`, and types composed entirely of types that are `Sync` are also `Sync`.
+Маркерний трейт `Sync` підказує нам, що на тип, котрий реалізує `Sync`, безпечно посилатись із декількох потоків. Іншими словами, будь-який тип `T` реалізує `Sync`, якщо `&T` (імутабельне посилання на `T`) реалізує `Send`, тобто що посилання може бути безпечно передане в інший потік. Подібно до `Send`, примітивні типи реалізують `Sync`, а типи, що складаються з типів, котрі реалізують `Sync` також позначаються як `Sync`.
 
-The smart pointer `Rc<T>` is also not `Sync` for the same reasons that it’s not `Send`. The `RefCell<T>` type (which we talked about in Chapter 15) and the family of related `Cell<T>` types are not `Sync`. The implementation of borrow checking that `RefCell<T>` does at runtime is not thread-safe. The smart pointer `Mutex<T>` is `Sync` and can be used to share access with multiple threads as you saw in the [“Sharing a `Mutex<T>` Between Multiple Threads”]()<!-- ignore --> section.
+Розумний вказівник `Rc<T>` також не реалізує `Sync` з тих самих причин з яких не реалізує `Send`. Тип `RefCell<T>` (про який ми говорили в Розділі 15) і сімейство повʼязаних типів `Cell<T>` також не реалізують `Sync`. Реалізація перевірки запозичень (borrow checking), яку `RefCell<T>` виконує під час виконання програми, не є потокобезпечною. Розумний покажчик `Mutex<T>` реалізує `Sync` і може бути спільно використовуватись декількома потоками, як ви могли побачити в секції "Спільне використання `Mutex<T>` декількома потоками"<!-- ignore --> секції
 
-### Implementing `Send` and `Sync` Manually Is Unsafe
+### Реалізовувати `Send` і `Sync` вручну небезпечно
 
-Because types that are made up of `Send` and `Sync` traits are automatically also `Send` and `Sync`, we don’t have to implement those traits manually. As marker traits, they don’t even have any methods to implement. They’re just useful for enforcing invariants related to concurrency.
+Оскільки типи, які складаються з типів, що реалізують `Send` і `Sync`, автоматично також реалізують `Send` і `Sync`, нам не потрібно реалізовувати ці трейти вручну. Як маркерні трейти, вони навіть не мають жодних методів, які потрібно реалізовувати. Вони просто корисні для забезпечення виконання інваріантів, пов’язаних із конкурентністю.
 
-Manually implementing these traits involves implementing unsafe Rust code. We’ll talk about using unsafe Rust code in Chapter 19; for now, the important information is that building new concurrent types not made up of `Send` and `Sync` parts requires careful thought to uphold the safety guarantees. [“The Rustonomicon”][nomicon] has more information about these guarantees and how to uphold them.
+Ручне реалізація цих трейтів передбачає використання unsafe Rust коду. Ми поговоримо про використання unsafe Rust коду в Розділі 19; наразі ж, важливою інформацією є те, що для створення нових конкурентних типів, які не складаються з `Send` і `Sync`, потрібно ретельно продумати гарантії безпеки. [“The Rustonomicon”][nomicon] містить більше інформації про такі гарантії та способи їх забезбечення.
 
-## Summary
+## Висновки
 
-This isn’t the last you’ll see of concurrency in this book: the project in Chapter 20 will use the concepts in this chapter in a more realistic situation than the smaller examples discussed here.
+Це не останній раз, коли ви читаєте про конкурентність у цій книзі: проєкт у Розділі 20 використовуватиме концепції цього розділу в більш реалістичній ситуації, ніж менші приклади, які тут розглядались.
 
-As mentioned earlier, because very little of how Rust handles concurrency is part of the language, many concurrency solutions are implemented as crates. These evolve more quickly than the standard library, so be sure to search online for the current, state-of-the-art crates to use in multithreaded situations.
+Як вже згадувалося раніше, оскільки лише дуже маленька доля функціоналу для роботи з конкурентністю є частиною мови Rust, багато рішень реалізовано як крейти. Вони розвиваються швидше, ніж стандартна бібліотека, тому обов’язково шукайте в інтернеті поточні, найсучасніші крейти для використання при роботі з конкурентністю.
 
-The Rust standard library provides channels for message passing and smart pointer types, such as `Mutex<T>` and `Arc<T>`, that are safe to use in concurrent contexts. The type system and the borrow checker ensure that the code using these solutions won’t end up with data races or invalid references. Once you get your code to compile, you can rest assured that it will happily run on multiple threads without the kinds of hard-to-track-down bugs common in other languages. Concurrent programming is no longer a concept to be afraid of: go forth and make your programs concurrent, fearlessly!
+Стандартна бібліотека Rust надає канали для обміну повідомленнями і типи розумних вказівників, такі як `Mutex<T>` і `Arc<T>`, які безпечно використовувати в конкурентних контекстах. Система типів і borrow checker гарантують, що код, який використовує ці рішення, не призведе до гонитви даних або недійсних (невалідних) посилань. Як тільки ви змогли досягти того, що ваш код скомпілювався, ви можете бути впевнені, що він успішно працюватиме в декількох потоках без типових для інших мов помилок, котрі важко відстежити. Конкурентне програмування більше не є концепцією, якої варто боятися: безстрашно робіть свої програми конкурентними!
 
-Next, we’ll talk about idiomatic ways to model problems and structure solutions as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idioms relate to those you might be familiar with from object-oriented programming.
+Далі ми поговоримо про ідіоматичні способи моделювання проблем і структурування рішень, по мірі того як ваші Rust програми стають більшими. Крім того, ми обговоримо, як ідіоми Rust пов’язані з ідіомами, що можуть бути вам знайомі з об’єктно-орієнтованого програмування.
 ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
 
 [nomicon]: ../nomicon/index.html
