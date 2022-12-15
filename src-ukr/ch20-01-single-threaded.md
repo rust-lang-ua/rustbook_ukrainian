@@ -1,14 +1,14 @@
-## Building a Single-Threaded Web Server
+## Збірка однопотокового вебсервера
 
-We’ll start by getting a single-threaded web server working. Before we begin, let’s look at a quick overview of the protocols involved in building web servers. The details of these protocols are beyond the scope of this book, but a brief overview will give you the information you need.
+Ми розпочнемо з запуску однопотокового вебсервера. Перш ніж почати, розгляньмо короткий огляд протоколів, залучених до створення вебсерверів. Деталі цих протоколів лежать поза межами цієї книги, але короткий огляд надасть вам потрібну інформацію.
 
-The two main protocols involved in web servers are *Hypertext Transfer Protocol* *(HTTP)* and *Transmission Control Protocol* *(TCP)*. Both protocols are *request-response* protocols, meaning a *client* initiates requests and a *server* listens to the requests and provides a response to the client. The contents of those requests and responses are defined by the protocols.
+Два основні протоколи, залучені у вебсерверах, це *Протокол передачі гіпертексту* *(HTTP)* і *Протокол керування передаванням* *(TCP)*. Обидва протоколи є *протоколами відповіді на запит*, тобто *клієнт* ініціює запити, а *сервер* слухає запити та надає відповідь клієнту. Вміст цих запитів та відповідей визначається протоколами.
 
-TCP is the lower-level protocol that describes the details of how information gets from one server to another but doesn’t specify what that information is. HTTP builds on top of TCP by defining the contents of the requests and responses. It’s technically possible to use HTTP with other protocols, but in the vast majority of cases, HTTP sends its data over TCP. We’ll work with the raw bytes of TCP and HTTP requests and responses.
+TCP - це протокол нижчого рівня, який описує деталі того, як інформація дістається від одного сервера до іншого, але не вказує, що це за інформація. HTTP є надбудовою над TCP і визначає зміст запитів та відповідей. Технічно можливо використовувати HTTP з іншими протоколами, але переважній більшості випадків HTTP відправляє його дані через TCP. Ми працюватимемо з необробленими байтами TCP та запитами і відповідями HTTP.
 
-### Listening to the TCP Connection
+### Прослуховування з'єднання TCP
 
-Our web server needs to listen to a TCP connection, so that’s the first part we’ll work on. The standard library offers a `std::net` module that lets us do this. Let’s make a new project in the usual fashion:
+Наш вебсервер має прослуховувати TCP-з'єднання, тож це буде першою частиною над якою ми працюватимемо. Стандартна бібліотека надає модуль `std::net`, який дозволить нам це зробити. Створімо новий проєкт у звичний спосіб:
 
 ```console
 $ cargo new hello
@@ -16,28 +16,28 @@ $ cargo new hello
 $ cd hello
 ```
 
-Now enter the code in Listing 20-1 in *src/main.rs* to start. This code will listen at the local address `127.0.0.1:7878` for incoming TCP streams. When it gets an incoming stream, it will print `Connection established!`.
+Тепер введіть код з Блока коду 20-1 у *src/main.rs* для початку. Цей код прослуховує локальну адресу `127.0.0.1:7878` на вхідні потоки TCP. Коли він отримує вхідний потік, то виведе `Connection established!`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-01/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 20-1: Listening for incoming streams and printing a message when we receive a stream</span>
+<span class="caption">Блок коду 20-1: прослуховування вхідних потоків і виведення повідомлення, коли прийняли потік</span>
 
-Using `TcpListener`, we can listen for TCP connections at the address `127.0.0.1:7878`. In the address, the section before the colon is an IP address representing your computer (this is the same on every computer and doesn’t represent the authors’ computer specifically), and `7878` is the port. We’ve chosen this port for two reasons: HTTP isn’t normally accepted on this port so our server is unlikely to conflict with any other web server you might have running on your machine, and 7878 is *rust* typed on a telephone.
+За допомогою `TcpListener` ми можемо прослуховувати TCP-з'єднання за адресою `127.0.0.1:7878`. У адресі розділ перед двокрапкою є IP-адресою, що представляє ваш комп'ютер (вона однакова для всіх комп'ютерів і не представляє конкретно комп'ютер автора), а `7878` - порт. Ми обрали цей порт з двох причин: HTTP зазвичай не приймається на цьому порті, тож наш сервер навряд чи конфліктуватиме з іншим вебсервером, що може працювати на вашій машині, і 7878 - це *rust*, набране на кнопках телефона.
 
-The `bind` function in this scenario works like the `new` function in that it will return a new `TcpListener` instance. The function is called `bind` because, in networking, connecting to a port to listen to is known as “binding to a port.”
+Функція `bind` у цьому сценарії працює як функція `new` функція в тому, що повертає новий екземпляр `TcpListener`. Функція називається `bind` тому, що в організації мережі підключення до порту для прослуховування відоме як "прив'язування до порту."
 
-The `bind` function returns a `Result<T, E>`, which indicates that it’s possible for binding to fail. For example, connecting to port 80 requires administrator privileges (nonadministrators can listen only on ports higher than 1023), so if we tried to connect to port 80 without being an administrator, binding wouldn’t work. Binding also wouldn’t work, for example, if we ran two instances of our program and so had two programs listening to the same port. Because we’re writing a basic server just for learning purposes, we won’t worry about handling these kinds of errors; instead, we use `unwrap` to stop the program if errors happen.
+Функція `bind` повертає `Result<T, E>`, що позначає, що зв'язування може бути невдалим. Наприклад, для підключення до порту 80 потрібні права адміністратора (не-адміністратори можуть слухати лише порти вище ніж 1023), так що, якщо ми намагались під'єднатися до порту 80 без прав адміністратора, зв'язування не спрацює. Зв'язування також не спрацює, наприклад, якщо ми запустимо два екземпляри нашої програми і відтак матимемо дві програми, що слухають один порт. Оскільки ми пишемо базовий сервер лише для навчальних цілей, ми не турбуватимемося про обробку таких помилок; натомість, ми використаємо `unwrap`, щоб зупинити програму, якщо виникнуть помилки.
 
-The `incoming` method on `TcpListener` returns an iterator that gives us a sequence of streams (more specifically, streams of type `TcpStream`). A single *stream* represents an open connection between the client and the server. A *connection* is the name for the full request and response process in which a client connects to the server, the server generates a response, and the server closes the connection. As such, we will read from the `TcpStream` to see what the client sent and then write our response to the stream to send data back to the client. Overall, this `for` loop will process each connection in turn and produce a series of streams for us to handle.
+Метод `incoming` для `TcpListener` повертає ітератор, який дає нам послідовність потоків (точніше, потоків типу `TcpStream`). Кожен *stream* представляє відкрите з'єднання між клієнтом і сервером. З'єднання *connection* є назвою для усього процесу запиту та відповіді, в якому клієнт підключається до сервера, сервер генерує відповідь, і сервер же закриває з'єднання. Таким чином ми читатимемо з `TcpStream`, щоб побачити, що надіслав клієнт, а потім писатимемо нашу відповідь до потоку, щоб відправити дані назад до клієнта. Загалом, цей циклу `for` буде обробляти кожне підключення по черзі і створить ряд потоків, які ми оброблятимемо.
 
-For now, our handling of the stream consists of calling `unwrap` to terminate our program if the stream has any errors; if there aren’t any errors, the program prints a message. We’ll add more functionality for the success case in the next listing. The reason we might receive errors from the `incoming` method when a client connects to the server is that we’re not actually iterating over connections. Instead, we’re iterating over *connection attempts*. The connection might not be successful for a number of reasons, many of them operating system specific. For example, many operating systems have a limit to the number of simultaneous open connections they can support; new connection attempts beyond that number will produce an error until some of the open connections are closed.
+Наразі наша обробка потоку складається з виклику `unwrap` для припинення нашої програми, якщо потік має будь-які помилки; якщо помилок немає, програма виводить повідомлення. У наступному блоці коду ми додамо більше функціональності для варіанту вдалого з'єднання. Причина, з якої ми можемо отримувати помилки з методу `incoming`, коли клієнт підключається до сервера це те, що ми насправді ітеруємо не по з'єднаннях. Натомість ми ітеруємо по *спробах з'єднання*. З'єднання може бути невдалим з ряду причин, багато з них специфічні для різних операційних систем. Наприклад, багато операційних систем мають обмеження на кількість одночасних відкритих підключень, які вони можуть підтримувати; нове спроба підключення після цієї кількості призводитиме до помилки, поки якісь з відкритих підключень не закриються.
 
-Let’s try running this code! Invoke `cargo run` in the terminal and then load *127.0.0.1:7878* in a web browser. The browser should show an error message like “Connection reset,” because the server isn’t currently sending back any data. But when you look at your terminal, you should see several messages that were printed when the browser connected to the server!
+Спробуймо запустити цей код! Викличте `cargo run` у терміналі та завантажите *127.0.0.1:7878* у веббраузері. Браузер повинен показати повідомлення про помилку на кшталт "З'єднання скинуто", оскільки сервер поки що не надсилає жодних даних. Але поглянувши в термінал, ви маєте побачити кілька повідомлень, які ми виводимо, коли браузер з'єднується із сервером!
 
 ```text
      Running `target/debug/hello`
@@ -46,37 +46,37 @@ Connection established!
 Connection established!
 ```
 
-Sometimes, you’ll see multiple messages printed for one browser request; the reason might be that the browser is making a request for the page as well as a request for other resources, like the *favicon.ico* icon that appears in the browser tab.
+Іноді ви бачитимете кілька виведених повідомлень на один запит браузера; причина може бути в тому, що браузер запитує сторінку, а також деякі інші ресурси на кшталт піктограми *favicon.ico*, що показується у вкладці браузера.
 
-It could also be that the browser is trying to connect to the server multiple times because the server isn’t responding with any data. When `stream` goes out of scope and is dropped at the end of the loop, the connection is closed as part of the `drop` implementation. Browsers sometimes deal with closed connections by retrying, because the problem might be temporary. The important factor is that we’ve successfully gotten a handle to a TCP connection!
+Також можливо, що браузер намагається з'єднатися із сервером багато разів, бо сервер не надіслав у відповідь жодних даних. Коли `stream` виходить з області видимості й очищується в кінці циклу, з'єднання закривається, бо це є частиною реалізації `drop`. Браузери іноді намагаються повторно з'єднатися із закритими підключеннями, оскільки проблема може бути тимчасовою. Але важливим тут є те, що ми успішно отримали TCP-з'єднання!
 
-Remember to stop the program by pressing <span class="keystroke">ctrl-c</span> when you’re done running a particular version of the code. Then restart the program by invoking the `cargo run` command after you’ve made each set of code changes to make sure you’re running the newest code.
+Не забудьте зупинити програму, натиснувши <span class="keystroke">ctrl-c</span>, коли ви закінчили працювати з певною версією коду. Потім перезапустіть програму, запустивши команду `cargo run` після того, як робите кожен набір змін у коді для того, щоб переконатися, що у вас працює найновіший код.
 
-### Reading the Request
+### Читання запиту
 
-Let’s implement the functionality to read the request from the browser! To separate the concerns of first getting a connection and then taking some action with the connection, we’ll start a new function for processing connections. In this new `handle_connection` function, we’ll read data from the TCP stream and print it so we can see the data being sent from the browser. Change the code to look like Listing 20-2.
+А тепер реалізуймо функціональність для читання запиту з браузера! Для поділу інтересів - спершу встановлення з'єднання, а потім вживання якихось дій зі з'єднанням, ми почнемо нову функцію для обробки з'єднань. У цій новій функції `handle_connection` ми прочитаємо дані з потоку TCP і виведемо їх, щоб ми могли побачити дані. що пересилаються з браузера. Змініть код, щоб він виглядав як у Блоці коду 20-2.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-02/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 20-2: Reading from the `TcpStream` and printing the data</span>
+<span class="caption">Блок коду 20-2: читання з `TcpStream` і виведення даних</span>
 
-We bring `std::io::prelude` and `std::io::BufReader` into scope to get access to traits and types that let us read from and write to the stream. In the `for` loop in the `main` function, instead of printing a message that says we made a connection, we now call the new `handle_connection` function and pass the `stream` to it.
+Ми вносимо `std::io::prelude` і `std::io::BufReader` до області видимості, щоб отримати доступ до трейтів і типів, що дозволяють нам читати і писати до потоку. У циклі `for` у функції `main` замість того, щоб виводити повідомлення про те, що ми встановили з'єднання, тепер ми викликаємо нову функцію `handle_connection` і передаємо їй `stream`.
 
-In the `handle_connection` function, we create a new `BufReader` instance that wraps a mutable reference to the `stream`. `BufReader` adds buffering by managing calls to the `std::io::Read` trait methods for us.
+У функції `handle_connection` ми створюємо новий екземпляр `BufReader`, який огортає мутабельне посилання на `stream`. `BufReader` додає буферизацію, керуючи викликами до трейтових методів `std::io::Read` замість нас.
 
-We create a variable named `http_request` to collect the lines of the request the browser sends to our server. We indicate that we want to collect these lines in a vector by adding the `Vec<_>` type annotation.
+Ми створюємо змінну з назвою `http_request` для збору рядків запиту, що браузер відправляє на наш сервер. Ми позначаємо, що хочемо зібрати ці рядки у вектор, додавши анотацію типу `Vec<_>`.
 
-`BufReader` implements the `std::io::BufRead` trait, which provides the `lines` method. The `lines` method returns an iterator of `Result<String,
-std::io::Error>` by splitting the stream of data whenever it sees a newline byte. To get each `String`, we map and `unwrap` each `Result`. The `Result` might be an error if the data isn’t valid UTF-8 or if there was a problem reading from the stream. Again, a production program should handle these errors more gracefully, but we’re choosing to stop the program in the error case for simplicity.
+`BufReader` реалізує трейт `std::io::BufRead`, що надає метод `lines`. Метод `lines` повертає ітератор `Result<String,
+std::io::Error>`, розділяючи потік даних кожного разу, коли він бачить байт нового рядка. Щоб отримати кожен `String`, ми відображаємо і робимо `unwrap` для кожного `Result`. `Result` може бути помилкою, якщо дані не є коректним UTF-8 або виникли проблеми із читанням з потоку. Знову ж таки, готова програма повинна обробляти ці помилки більш майстерно, але для простоти ми просто зупиняємо програму у випадку помилки.
 
-The browser signals the end of an HTTP request by sending two newline characters in a row, so to get one request from the stream, we take lines until we get a line that is the empty string. Once we’ve collected the lines into the vector, we’re printing them out using pretty debug formatting so we can take a look at the instructions the web browser is sending to our server.
+Браузер сигналізує про кінець запиту на HTTP, надіславши поспіль два символи нового рядка, тож щоб отримати один запит з потоку, ми беремо рядки, доки не отримаємо рядок, що є порожньою стрічкою. Коли ми зберемо рядки у вектор, ми виводимо їх за допомогою гарного форматування для налагодження, щоб ми могли подивитися на інструкції, що веббраузер надсилає на наш сервер.
 
-Let’s try this code! Start the program and make a request in a web browser again. Note that we’ll still get an error page in the browser, but our program’s output in the terminal will now look similar to this:
+Спробуймо цей код! Запустіть програму і знову зробіть запит у веббраузері. Зверніть увагу, що ми все ще бачимо сторінку помилку в браузері, але виведення від нашої програми в термінал виглядатиме тепер схожим на це:
 
 ```console
 $ cargo run
@@ -101,161 +101,161 @@ Request: [
 ]
 ```
 
-Depending on your browser, you might get slightly different output. Now that we’re printing the request data, we can see why we get multiple connections from one browser request by looking at the path after `GET` in the first line of the request. If the repeated connections are all requesting */*, we know the browser is trying to fetch */* repeatedly because it’s not getting a response from our program.
+Залежно від вашого браузера ви можете отримати трохи інше виведення. Тепер, коли ми виводимо дані запиту, ми бачимо, чому ми отримуємо декілька підключень з одного запиту до браузера, дивлячись на шлях за `GET` в першому рядку запиту. Якщо повторні з'єднання всі запитують */*, то ми знатимемо, що браузер повторно намагається отримати */*, бо не отримує відповіді від нашої програми.
 
-Let’s break down this request data to understand what the browser is asking of our program.
+Розберімо дані цього запиту, щоб зрозуміти, що саме браузер запитує в нашої програми.
 
-### A Closer Look at an HTTP Request
+### Ближчий погляд на HTTP-запит
 
-HTTP is a text-based protocol, and a request takes this format:
-
-```text
-Method Request-URI HTTP-Version CRLF
-headers CRLF
-message-body
-```
-
-The first line is the *request line* that holds information about what the client is requesting. The first part of the request line indicates the *method* being used, such as `GET` or `POST`, which describes how the client is making this request. Our client used a `GET` request, which means it is asking for information.
-
-The next part of the request line is */*, which indicates the *Uniform Resource Identifier* *(URI)* the client is requesting: a URI is almost, but not quite, the same as a *Uniform Resource Locator* *(URL)*. The difference between URIs and URLs isn’t important for our purposes in this chapter, but the HTTP spec uses the term URI, so we can just mentally substitute URL for URI here.
-
-The last part is the HTTP version the client uses, and then the request line ends in a *CRLF sequence*. (CRLF stands for *carriage return* and *line feed*, which are terms from the typewriter days!) The CRLF sequence can also be written as `\r\n`, where `\r` is a carriage return and `\n` is a line feed. The CRLF sequence separates the request line from the rest of the request data. Note that when the CRLF is printed, we see a new line start rather than `\r\n`.
-
-Looking at the request line data we received from running our program so far, we see that `GET` is the method, */* is the request URI, and `HTTP/1.1` is the version.
-
-After the request line, the remaining lines starting from `Host:` onward are headers. `GET` requests have no body.
-
-Try making a request from a different browser or asking for a different address, such as *127.0.0.1:7878/test*, to see how the request data changes.
-
-Now that we know what the browser is asking for, let’s send back some data!
-
-### Writing a Response
-
-We’re going to implement sending data in response to a client request. Responses have the following format:
+HTTP - це протокол на основі тексту і запит використовує такий формат:
 
 ```text
-HTTP-Version Status-Code Reason-Phrase CRLF
-headers CRLF
-message-body
+Метод URI-запит HTTP-версія CRLF
+заголовки CRLF
+тіло повідомлення
 ```
 
-The first line is a *status line* that contains the HTTP version used in the response, a numeric status code that summarizes the result of the request, and a reason phrase that provides a text description of the status code. After the CRLF sequence are any headers, another CRLF sequence, and the body of the response.
+Перший рядок це рядок *рядок запиту*, який містить інформацію про те, що саме клієнт запитує. Перша частина рядка запиту позначає на *метод*, наприклад `GET` чи `POST`, який описує як клієнт робить цей запит. Наш клієнт використав запит `GET`, що означає, що він запитує інформацію.
 
-Here is an example response that uses HTTP version 1.1, has a status code of 200, an OK reason phrase, no headers, and no body:
+Наступна частина рядка запиту - це */*, що є *уніфікованим ідентифікатором ресурсу* *(Uniform Resource Identifier, URI)*, який запитує клієнт: URI це майже те, хоча й не зовсім, що й *уніфікований локатор ресурсу* *(Uniform Resource Locator, URL)*. Різниця між URI і URL не є важливою для наших цілей у цьому розділі, але специфікація HTTP використовує термін URI, тому ми тут можемо просто думати про URL замість URI.
+
+Остання частина - це версія HTTP, яку використовує клієнт, а потім рядок запиту закінчується *послідовністю CRLF*. (CRLF означає *повернення каретки* і *зміна рядка*, тобто терміни з часів друкарських машинок!) Послідовність CRLF також записується як `\r\n`, де`\r` - повернення каретки, а `\n` - зміна рядка. Послідовність CRLF відділяє рядок запиту від решти даних запиту. Зверніть увагу, що коли виводиться CRLF, ми бачимо початок нового рядка, а не `\r\n`.
+
+Дивлячись на дані рядка запиту, який ми отримали, запустивши нашу програму, ми бачимо, що `GET` - це метод, */* - URI запиту і `HTTP/1.1` - це версія.
+
+Рядки після рядка запиту, починаючи від `Host:` і далі - це заголовки. Запити `GET` не мають тіла.
+
+Спробуйте запит з іншого браузера або запросіть іншу адресу, наприклад, *127.0.0.1:78/test*, щоб побачити, як змінюються дані запиту.
+
+Тепер, коли ми знаємо, що браузер запитує, спробуймо відправити трохи даних у відповідь!
+
+### Написання відповіді
+
+Ми збираємось реалізувати виправляння даних у відповідь на запит клієнта. Відповіді мають такий формат:
+
+```text
+HTTP-версія статус-код фраза-прояснення CRLF
+заголовки CRLF
+тіло повідомлення
+```
+
+Перший рядок - це *рядок стану*, що містить версію HTTP, використану у відповіді, числовий код стану, що підсумовує результат запиту, і фразу-пояснення з текстовим описом коду статусу. Після послідовності CRLF ідуть заголовками, ще одна послідовність CRLF та тіло відповіді.
+
+Ось приклад відповіді, що використовує HTTP версії 1.1, має код стану 200, фразу-пояснення OK, без заголовків і без тіла:
 
 ```text
 HTTP/1.1 200 OK\r\n\r\n
 ```
 
-The status code 200 is the standard success response. The text is a tiny successful HTTP response. Let’s write this to the stream as our response to a successful request! From the `handle_connection` function, remove the `println!` that was printing the request data and replace it with the code in Listing 20-3.
+Код стану 200 це стандартна відповідь про успіх. Цей текст є крихітною успішною відповіддю HTTP. Запишімо її в потік, як нашу відповідь на успішний запит! З функції `handle_connection` видалімо `println!`, який друкував дані запиту, і замінімо їх кодом з Блоку коду 20-3.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-03/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 20-3: Writing a tiny successful HTTP response to the stream</span>
+<span class="caption">Блок коду 20-3: написанні крихітної успішної відповіді HTTP до потоку</span>
 
-The first new line defines the `response` variable that holds the success message’s data. Then we call `as_bytes` on our `response` to convert the string data to bytes. The `write_all` method on `stream` takes a `&[u8]` and sends those bytes directly down the connection. Because the `write_all` operation could fail, we use `unwrap` on any error result as before. Again, in a real application you would add error handling here.
+Перший новий рядок визначає змінну `response`, яка містить дані повідомлення про успіх. Потім ми викликаємо `as_bytes` для `response`, щоб перетворити стрічку даних на байти. Метод `write_all` для `stream` приймає `&[u8]` і відправляє ці байти безпосередньо у з'єднання. Оскільки операція `write_all` можуть бути невдалою, ми застосовуємо `unwrap` для будь-яких помилок, як і раніше. Знову ж таки в реальній програмі ви маєте додати тут обробку помилок.
 
-With these changes, let’s run our code and make a request. We’re no longer printing any data to the terminal, so we won’t see any output other than the output from Cargo. When you load *127.0.0.1:7878* in a web browser, you should get a blank page instead of an error. You’ve just hand-coded receiving an HTTP request and sending a response!
+Змінивши так код, запустімо його і зробимо запит. Ми більше не виводимо жодних даних до термінала, тому не побачимо нічого крім того, що виведе Cargo. При завантаженні *127.0.0.1:7878* у веббраузері ви маєте отримати порожню сторінку замість помилки. Ви щойно своїми руками закодували отримання запиту HTTP і відправлення відповіді!
 
-### Returning Real HTML
+### Повертаємо справжній HTML
 
-Let’s implement the functionality for returning more than a blank page. Create the new file *hello.html* in the root of your project directory, not in the *src* directory. You can input any HTML you want; Listing 20-4 shows one possibility.
+Реалізуймо функціональність для повернення чогось більшого за порожню сторінку. Створіть новий файл *hello.html* у кореневій теці вашого проєкту, а не в теці *src*. Ви можете ввести будь-який HTML за вашим бажанням; Блок коду 20-4 показує одну з можливостей.
 
-<span class="filename">Filename: hello.html</span>
+<span class="filename">Файл: hello.html</span>
 
 ```html
 {{#include ../listings/ch20-web-server/listing-20-05/hello.html}}
 ```
 
 
-<span class="caption">Listing 20-4: A sample HTML file to return in a response</span>
+<span class="caption">Блок коду 20-4: зразок HTML файлу для повернення у відповідь</span>
 
-This is a minimal HTML5 document with a heading and some text. To return this from the server when a request is received, we’ll modify `handle_connection` as shown in Listing 20-5 to read the HTML file, add it to the response as a body, and send it.
+Це мінімальний документ HTML5 із заголовком та текстом. Щоб сервер повернув це після отримання запиту, ми змінимо функцію `handle_connection`, як показано у Блоці коду 20-5, щоб вона читала HTML файл, додавала його до відповіді як тіло і відправляла його.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-05/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 20-5: Sending the contents of *hello.html* as the body of the response</span>
+<span class="caption">Блок коду 20-5: відправлення вмісту *hello.html* як тіла відповіді</span>
 
-We’ve added `fs` to the `use` statement to bring the standard library’s filesystem module into scope. The code for reading the contents of a file to a string should look familiar; we used it in Chapter 12 when we read the contents of a file for our I/O project in Listing 12-4.
+Ми додали `fs` в інструкцію `use`, щоб ввести в область видимості модуль файлової системи зі стандартної бібліотеки. Код для читання вмісту файлу до стрічки має бути вам знайомим; ми використовували його в Розділі 12, коли читали вміст файлу для нашого проєкту I/O в Блоці коду 12-4.
 
-Next, we use `format!` to add the file’s contents as the body of the success response. To ensure a valid HTTP response, we add the `Content-Length` header which is set to the size of our response body, in this case the size of `hello.html`.
+Далі, ми використовуємо `format!`, щоб додати вміст файлу як тіло успішної відповіді. Для забезпечення коректної HTTP відповіді ми додаємо заголовок `Content-Length`, встановлений у розмір тіла нашої відповіді, у цьому випадку розмір `hello.html`.
 
-Run this code with `cargo run` and load *127.0.0.1:7878* in your browser; you should see your HTML rendered!
+Запустіть цей код за допомогою `cargo run` і завантажте *127.0.0.1:78* у браузері; ви повинні побачити зображеним свій HTML!
 
-Currently, we’re ignoring the request data in `http_request` and just sending back the contents of the HTML file unconditionally. That means if you try requesting *127.0.0.1:7878/something-else* in your browser, you’ll still get back this same HTML response. At the moment, our server is very limited and does not do what most web servers do. We want to customize our responses depending on the request and only send back the HTML file for a well-formed request to */*.
+Наразі ми ігноруємо дані запиту у `http_request` і лише безумовно відправляємо у відповідь вміст HTML файлу. Це означає, що якщо ви спробуєте запитати *127.0.0.1:7878/something-else* у своєму браузері, то все одно отримаєте ту ж саму HTML відповідь. На зараз наш сервер украй обмежений і не робить того, що робить більшість вебсерверів. Ми хочемо налаштувати наші відповіді залежно від запиту і відправляти назад HTML файл лише для правильного сформованого запиту */*.
 
-### Validating the Request and Selectively Responding
+### Перевірка запиту і вибіркова відповідь
 
-Right now, our web server will return the HTML in the file no matter what the client requested. Let’s add functionality to check that the browser is requesting */* before returning the HTML file and return an error if the browser requests anything else. For this we need to modify `handle_connection`, as shown in Listing 20-6. This new code checks the content of the request received against what we know a request for */* looks like and adds `if` and `else` blocks to treat requests differently.
+Зараз наш вебсервер поверне HTML з файлу, незалежно від того, що клієнт запитував. Додамо функціональність для перевірки, чи браузер запитує */*, перед поверненням HTML файлу і повертатимемо помилку, якщо браузер запитав щось інше. Для цього нам потрібно змінити `handle_connection`, як показано у Блоці коду 20-6. Цей новий код порівнює вміст отриманого запиту із тим, як, як ми знаємо, має виглядати запит до */*, і додає блоки `if` та `else`, щоб нарізно обробляти запити.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-06/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 20-6: Handling requests to */* differently from other requests</span>
+<span class="caption">Блок коду 20-6: обробка запитів до */* окремо від інших запитів</span>
 
-We’re only going to be looking at the first line of the HTTP request, so rather than reading the entire request into a vector, we’re calling `next` to get the first item from the iterator. The first `unwrap` takes care of the `Option` and stops the program if the iterator has no items. The second `unwrap` handles the `Result` and has the same effect as the `unwrap` that was in the `map` added in Listing 20-2.
+Ми збираємося проглядати лише перший рядок HTTP запиту, тож замість зчитувати весь запит у вектор, ви викликаємо `next`, щоб отримати перший елемент з ітератора. Перший `unwrap` обробляє `Option` і зупиняє програму, якщо ітератор не має елементів. Другий `unwrap` обробляє `Result` і має такий самий ефект, що й `unwrap`, який був у `map`, доданому в Блоці коду 20-2.
 
-Next, we check the `request_line` to see if it equals the request line of a GET request to the */* path. If it does, the `if` block returns the contents of our HTML file.
+Далі ми перевіряємо, чи `request_line` дорівнює рядку запиту для запиту GET до шляху */*. Якщо це так, блок `if` поверне вміст нашого HTML файлу.
 
-If the `request_line` does *not* equal the GET request to the */* path, it means we’ve received some other request. We’ll add code to the `else` block in a moment to respond to all other requests.
+Якщо `request_line` *не* дорівнює GET запиту до шляху */*, це означає, що ми отримали якийсь інший запит. Ми додамо код блоку `else`, щоб відповісти на всі інші запити, за хвилинку.
 
-Run this code now and request *127.0.0.1:7878*; you should get the HTML in *hello.html*. If you make any other request, such as *127.0.0.1:7878/something-else*, you’ll get a connection error like those you saw when running the code in Listing 20-1 and Listing 20-2.
+Запустіть цей код і запросіть *127.0.0.1:7878*; ви повинні отримати HTML з *hello.html*. Якщо ви зробите будь-який інший запит, наприклад, *127.0.0.1:7878/something-else*, то отримаєте помилку з'єднання, схожу на ті, які ви бачили, коли запускали код з Блоків коду 20-1 і 20-2.
 
-Now let’s add the code in Listing 20-7 to the `else` block to return a response with the status code 404, which signals that the content for the request was not found. We’ll also return some HTML for a page to render in the browser indicating the response to the end user.
+Тепер у Блоці коду 20-7 додамо код до блоку `else`, щоб повернути відповідь з кодом статусу 404, що означає, що запитаний вміст не був знайдений. Також ми повернемо трохи HTML для відображення сторінки в браузері, щоб показати відповідь кінцевому користувачу.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-07/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 20-7: Responding with status code 404 and an error page if anything other than */* was requested</span>
+<span class="caption">Блок коду 20-7: відповідь з кодом стану 404 і сторінкою помилки, якщо було запитано щось відмінне від */*</span>
 
-Here, our response has a status line with status code 404 and the reason phrase `NOT FOUND`. The body of the response will be the HTML in the file *404.html*. You’ll need to create a *404.html* file next to *hello.html* for the error page; again feel free to use any HTML you want or use the example HTML in Listing 20-8.
+Тут наша відповідь має рядок стану з кодом стану 404 і фразу-пояснення `NOT FOUND`. Тіло відповіді буде HTML з файлу *404.html*. Вам треба створити файл *404.html* поруч із *hello.html* для сторінки помилки; знову ж можете використати будь-який HTML, який бажаєте, чи зразок HTML з Блоку коду 20-8.
 
-<span class="filename">Filename: 404.html</span>
+<span class="filename">Файл: 404.html</span>
 
 ```html
 {{#include ../listings/ch20-web-server/listing-20-07/404.html}}
 ```
 
 
-<span class="caption">Listing 20-8: Sample content for the page to send back with any 404 response</span>
+<span class="caption">Блок коду 20-8: зразок вмісту для сторінки, яку відправляють у відповідь із кодом 404</span>
 
-With these changes, run your server again. Requesting *127.0.0.1:7878* should return the contents of *hello.html*, and any other request, like *127.0.0.1:7878/foo*, should return the error HTML from *404.html*.
+Після цих змін запустіть ваш сервер знову. Запит *127.0.0.1:7878* повинен повернути вміст *hello.html*, а будь-який інший запит, наприклад *127.0.0.1:7878/foo*, повинен повернути HTML помилки з *404.html*.
 
-### A Touch of Refactoring
+### Трохи рефакторингу
 
-At the moment the `if` and `else` blocks have a lot of repetition: they’re both reading files and writing the contents of the files to the stream. The only differences are the status line and the filename. Let’s make the code more concise by pulling out those differences into separate `if` and `else` lines that will assign the values of the status line and the filename to variables; we can then use those variables unconditionally in the code to read the file and write the response. Listing 20-9 shows the resulting code after replacing the large `if` and `else` blocks.
+На цей момент блоки `if` та `else` мають багато повторень: обидва читають файли і записують вміст файлів до потоку. Єдиною відмінністю є рядок стану й ім'я файлу. Зробімо код виразнішим, витягши ці відмінності в окремі рядки `if` та `else`, які присвоять значення рядка стану та імені файлу змінним; тоді ми можемо використати ці змінні безумовно в коді, щоб прочитати файл і записати відповідь. Блок коду 20-9 показує отриманий код після заміни великих блоків `if` та `else`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-09/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 20-9: Refactoring the `if` and `else` blocks to contain only the code that differs between the two cases</span>
+<span class="caption">Блок коду 20-9: рефакторизація блоків `if` та `else`, щоб містили лише відмінний у двох випадках код</span>
 
-Now the `if` and `else` blocks only return the appropriate values for the status line and filename in a tuple; we then use destructuring to assign these two values to `status_line` and `filename` using a pattern in the `let` statement, as discussed in Chapter 18.
+Тепер блоки `if` та `else` лише повертають відповідні значення для рядка стану й імені файлу в кортежі; далі ми використовуємо деструктуризацію, щоб присвоїти ці два значення змінним `status_line` і `filename` скориставшись шаблоном в інструкції `let`, як пояснювалося в Розділі 18.
 
-The previously duplicated code is now outside the `if` and `else` blocks and uses the `status_line` and `filename` variables. This makes it easier to see the difference between the two cases, and it means we have only one place to update the code if we want to change how the file reading and response writing work. The behavior of the code in Listing 20-9 will be the same as that in Listing 20-8.
+Цей раніше дубльований код знаходиться поза межами блоків `if` та `else` і використовує змінні `status_line` і `filename`. Це дає змогу легше бачити відмінності між двома випадками, і це означає, що у нас є тільки одне місце, щоб змінити код, якщо ми хочемо змінити, як працює читання файлів чи відправлення відповіді. Поведінка коду у Блоці коду 20-9 буде такою ж, як у Блоці коду 20-8.
 
-Awesome! We now have a simple web server in approximately 40 lines of Rust code that responds to one request with a page of content and responds to all other requests with a 404 response.
+Блискуче! Тепер ми маємо простий вебсервер з приблизно 40 рядків коду на Rust, що відповідає на один запит сторінкою з вмістом і на всі інші запити відповіддю 404.
 
-Currently, our server runs in a single thread, meaning it can only serve one request at a time. Let’s examine how that can be a problem by simulating some slow requests. Then we’ll fix it so our server can handle multiple requests at once.
+Наразі наш сервер працює в одному потоці, тобто він може обслуговувати лише один запит за раз. Дослідимо, чому це може бути проблемою, симулюючи повільні запити. Тоді ми полагодимо цю проблему, щоб наш сервер міг обробляти багато запитів одночасно.
