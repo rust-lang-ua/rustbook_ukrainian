@@ -1,13 +1,13 @@
 <!-- Old link, do not remove -->
 <a id="installing-binaries-from-cratesio-with-cargo-install"></a>
 
-## Installing Binaries with `cargo install`
+## Встановлення Двійкових Файлів з `cargo install`
 
-The `cargo install` command allows you to install and use binary crates locally. This isn’t intended to replace system packages; it’s meant to be a convenient way for Rust developers to install tools that others have shared on [crates.io](https://crates.io/)<!-- ignore -->. Note that you can only install packages that have binary targets. A *binary target* is the runnable program that is created if the crate has a *src/main.rs* file or another file specified as a binary, as opposed to a library target that isn’t runnable on its own but is suitable for including within other programs. Usually, crates have information in the *README* file about whether a crate is a library, has a binary target, or both.
+Команда `cargo install` дозволяє встановлювати і використовувати бінарні крейти локально. Це не має на меті замінити системні пакети; Це має бути зручним способом для Rust розробників встановити інструменти, якими інші поділилися на [crates.io](https://crates.io/)<!-- ignore -->. Зауважте, що ви можете встановлювати лише пакети, які мають цільовий двійковий файл. *Цільовий двійковий файл* це запускаєма програма, яка створюється, якщо крейт має файл *src/main.rs* або інший файл вказаний, як двійковий, на відміну від цільового бібліотечного файлу, який не можна запускати сам по собі, але який є придатним для додавання всередину інших програм. Зазвичай крейти мають інформацію в файлі *README* про те, чи крейт це бібліотека, має двійкову ціль, або й те й інше.
 
-All binaries installed with `cargo install` are stored in the installation root’s *bin* folder. If you installed Rust using *rustup.rs* and don’t have any custom configurations, this directory will be *$HOME/.cargo/bin*. Ensure that directory is in your `$PATH` to be able to run programs you’ve installed with `cargo install`.
+Всі встановлені з `cargo install` двійкові файли зберігаються в теці *bin* кореневого каталогу встановлення. Якщо ви встановили Rust із *rustup.rs* і не маєте жодних користувацьких конфігурацій, то цей каталог буде *$HOME/.cargo/bin*. Переконайтеся, що каталог є в вашому `$PATH`, щоб мати можливість запускати встановленні з `cargo install` програми.
 
-For example, in Chapter 12 we mentioned that there’s a Rust implementation of the `grep` tool called `ripgrep` for searching files. To install `ripgrep`, we can run the following:
+Наприклад, у Розділі 12 ми згадували, що існує Rust імплементація інструменту `grep` під назвою `ripgrep` для пошуку файлів. Щоб встановити `ripgrep`, ми запустимо наступне:
 
 <!-- manual-regeneration
 cargo install something you don't have, copy relevant output below
@@ -26,4 +26,4 @@ $ cargo install ripgrep
    Installed package `ripgrep v11.0.2` (executable `rg`)
 ```
 
-The second-to-last line of the output shows the location and the name of the installed binary, which in the case of `ripgrep` is `rg`. As long as the installation directory is in your `$PATH`, as mentioned previously, you can then run `rg --help` and start using a faster, rustier tool for searching files!
+Передостанній рядок виводу показує розташування і назву встановленого двійкового файлу, який у випадку `ripgrep` має назву `rg`. Допоки у вашому `$PATH` є каталог встановлення, як говорилося раніше, ви зможете запускати `rg --help` та починати використовувати швидший, іржавіший інструмент для пошуку файлів!

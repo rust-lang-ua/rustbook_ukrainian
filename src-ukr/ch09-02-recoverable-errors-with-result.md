@@ -1,8 +1,8 @@
-## Recoverable Errors with `Result`
+## Помилки, що піддаються відновленню за допомогою `Result`
 
-Most errors aren’t serious enough to require the program to stop entirely. Sometimes, when a function fails, it’s for a reason that you can easily interpret and respond to. For example, if you try to open a file and that operation fails because the file doesn’t exist, you might want to create the file instead of terminating the process.
+Більшість помилок не є достатньо серйозними, щоб вимагати повної зупинки виконання програми. Іноді, якщо функція не спрацьовує, то це можна досить просто пояснити й відреагувати певним чином. Наприклад, якщо ви намагаєтесь відкрити файл і ця операція зазнає невдачі, тому що такого файлу немає, то замість завершення процесу ви б захотіли створити такий файл.
 
-Recall from [“Handling Potential Failure with the `Result` Type”][handle_failure]<!-- ignore --> in Chapter 2 that the `Result` enum is defined as having two variants, `Ok` and `Err`, as follows:
+Нагадаємо з підрозділу [Керування потенційною невдачею за допомогою типу `Result`][handle_failure]<!-- ignore --> в розділі 2, що `Result` визначається як енум, що має два можливих значення `Ok` та `Err`, наступним чином:
 
 ```rust
 enum Result<T, E> {
@@ -11,50 +11,50 @@ enum Result<T, E> {
 }
 ```
 
-The `T` and `E` are generic type parameters: we’ll discuss generics in more detail in Chapter 10. What you need to know right now is that `T` represents the type of the value that will be returned in a success case within the `Ok` variant, and `E` represents the type of the error that will be returned in a failure case within the `Err` variant. Because `Result` has these generic type parameters, we can use the `Result` type and the functions defined on it in many different situations where the successful value and error value we want to return may differ.
+The `T` and `E` це параметри, що відносять до узагальнених типів, які ми розглянемо більш детально у розділі 10. Все, що вам необхідно знати на даний момент, що `T` представляє тип значення, яке буде повернуто результатом успішного виконання як вміст варіанту `Ok`, а `E` представляє тип помилки, що буде повернуто як вміст варіанту `Err` у випадку невдачі. Оскільки `Result` містить ці узагальнені типи параметрів, ми можемо використовувати тип `Result` і функції, що визначені для нього у стандартній бібліотеці, для різних випадків, коли значення успішного виконання і значення невдачі, які ми хочемо повернути, можуть відрізнятися.
 
-Let’s call a function that returns a `Result` value because the function could fail. In Listing 9-3 we try to open a file.
+Спробуймо викликати функцію, яка повертає значення типу `Result`, оскільки ця функція може не спрацювати. В блоці коду 9-3 ми спробуємо відкрити файл.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-03/src/main.rs}}
 ```
 
-<span class="caption">Listing 9-3: Opening a file</span>
+<span class="caption">Блок коду 9-3: Відкривання файлу</span>
 
-The return type of `File::open` is a `Result<T, E>`. The generic parameter `T` has been filled in by the implementation of `File::open` with the type of the success value, `std::fs::File`, which is a file handle. The type of `E` used in the error value is `std::io::Error`. This return type means the call to `File::open` might succeed and return a file handle that we can read from or write to. The function call also might fail: for example, the file might not exist, or we might not have permission to access the file. The `File::open` function needs to have a way to tell us whether it succeeded or failed and at the same time give us either the file handle or error information. This information is exactly what the `Result` enum conveys.
+Типом, який повертає `File::open` є `Result<T, E>`. Узагальнений параметр `T` був визначений в реалізації `File::open`, як тип значення при успіху при обробці файлу, а саме `std::fs::File`. Тип `E`, що використовується, як значення помилки, визначений як `std::io::Error`. Цей тип значення, що повертається, означає, що виклик `File::open` може бути успішним і повернути обробник файлу, за допомогою якого ми можемо його зчитувати, або записувати. Також виклик функції може завершитися не успішно, наприклад файлу може ще не існувати, або у нас не буде дозволів на обробку цього файлу. Функція `File::open` має мати можливість сповістити нас, чи виклик був успішним чи ні, і дати нам або обробник файлу, або інформацію про помилку. Ця інформація і є безпосередньо тим, що являє собою енум `Result`.
 
-In the case where `File::open` succeeds, the value in the variable `greeting_file_result` will be an instance of `Ok` that contains a file handle. In the case where it fails, the value in `greeting_file_result` will be an instance of `Err` that contains more information about the kind of error that happened.
+У випадку, коли виклик `File::open` був успішним, значенням змінної `greeting_file_result` буде екземпляр `Ok`, що містить обробник файлу. А у випадку помилки, значенням `greeting_file_result` буде екземпляр `Err`, який містить інформацію про тим помилкової ситуації, що сталася.
 
-We need to add to the code in Listing 9-3 to take different actions depending on the value `File::open` returns. Listing 9-4 shows one way to handle the `Result` using a basic tool, the `match` expression that we discussed in Chapter 6.
+Ми повинні розширити блок коду 9-3, щоб зрозуміти різні підходи в залежності від значення, яке повертає `File::open`. Блок коду 9-4 демонструє один із способів обробки `Result`, використовуючи базові підхід, такий як вираз співставлення зі зразком (`match`), що розглядався у розділі 6.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-04/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 9-4: Using a `match` expression to handle the `Result` variants that might be returned</span>
+<span class="caption">Блок коду 9-4: Використання `match` виразу для обробки варіантів `Result`</span>
 
-Note that, like the `Option` enum, the `Result` enum and its variants have been brought into scope by the prelude, so we don’t need to specify `Result::` before the `Ok` and `Err` variants in the `match` arms.
+Звернуть увагу, що аналогічно до енума `Option`, енум `Result` і його варіанти вже введені в область видимості прелюдії, тому немає необхідності вказувати `Result::` перед варіантами `Ok` і `Err` в рукавах виразу співставлення зі зразком `match`.
 
-When the result is `Ok`, this code will return the inner `file` value out of the `Ok` variant, and we then assign that file handle value to the variable `greeting_file`. After the `match`, we can use the file handle for reading or writing.
+Коли результат буде рівний `Ok`, нам необхідно повернути внутрішнє значення `file` з варіанту `Ok`, таким чином при присвоїмо значення обробника файлу змінній `greeting_file`. Після виразу `match` ми можемо використовувати обробник файлу для запису чи зчитування.
 
-The other arm of the `match` handles the case where we get an `Err` value from `File::open`. In this example, we’ve chosen to call the `panic!` macro. If there’s no file named *hello.txt* in our current directory and we run this code, we’ll see the following output from the `panic!` macro:
+Другий рукав виразу `match` обробляє випадок, коли отримуємо значення `Err` результатом виконання `File::open`. В нашому прикладі ми вирішили викликати макрос `panic!`. Якщо в поточному каталозі немає файлу з іменем *hello.txt* і ми запустимо наш код, то завдяки макрокоманді `panic!` побачимо наступний вивід:
 
 ```console
 {{#include ../listings/ch09-error-handling/listing-09-04/output.txt}}
 ```
 
-As usual, this output tells us exactly what has gone wrong.
+Як завжди, цей вивід розкаже нам, що саме пішло не так.
 
-### Matching on Different Errors
+### Застосування виразу match для різних помилок
 
-The code in Listing 9-4 will `panic!` no matter why `File::open` failed. However, we want to take different actions for different failure reasons: if `File::open` failed because the file doesn’t exist, we want to create the file and return the handle to the new file. If `File::open` failed for any other reason—for example, because we didn’t have permission to open the file—we still want the code to `panic!` in the same way as it did in Listing 9-4. For this we add an inner `match` expression, shown in Listing 9-5.
+Код у блоці 9-4 буде завершиться панікою, незалежно від того, чому виклик `File::open` не спрацював. Однак, ми б хотіли виконати різні дії для різних причин неуспішного виконання: якщо `File::open` не відпрацьовує, оскільки файл не існує, ми б хотіли створити такий файл і повернути обробник для цього нового файлу. Якщо ж `File::open` не спрацював через будь-які інші причини, наприклад, у нас немає дозволів для відкриття файлу, ми б все ж таки хотіли викликати `panic!` таким самим чином, як це було в блоці коду 9-4. Для цього ми додамо вкладений вираз `match`, як показано у блоці коду 9-5.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
@@ -64,17 +64,17 @@ tests to fail lol -->
 ```
 
 
-<span class="caption">Listing 9-5: Handling different kinds of errors in different ways</span>
+<span class="caption">Блок коду 9-5: Обробка різних типів помилок різним способом</span>
 
-The type of the value that `File::open` returns inside the `Err` variant is `io::Error`, which is a struct provided by the standard library. This struct has a method `kind` that we can call to get an `io::ErrorKind` value. The enum `io::ErrorKind` is provided by the standard library and has variants representing the different kinds of errors that might result from an `io` operation. The variant we want to use is `ErrorKind::NotFound`, which indicates the file we’re trying to open doesn’t exist yet. So we match on `greeting_file_result`, but we also have an inner match on `error.kind()`.
+Тип значення, який повертає `File::open` всередині варіантів `Err` є `io::Error`, який в свою чергу є структурою, що поставляється стандартною бібліотекою. Ця структура має метод `kind`, при виклику якого отримаємо `io::ErrorKind` значення. Енум `io::ErrorKind` поставляється у стандартній бібліотеці і має варіанти, які представляють різні типи помилок, що можуть бути результатом операції `io`. Варіант, який ми хочемо використати, це `ErrorKind::NotFound`. Цей варіант сигналізує нам, що файлу, який ми намагаємось відкрити, не існує. Тому ми застосовуємо вираз match у `greeting_file_result`, а також ми маємо вкладений вираз match для `error.kind()`.
 
-The condition we want to check in the inner match is whether the value returned by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is, we try to create the file with `File::create`. However, because `File::create` could also fail, we need a second arm in the inner `match` expression. When the file can’t be created, a different error message is printed. The second arm of the outer `match` stays the same, so the program panics on any error besides the missing file error.
+У внутрішньому виразі match ми хочемо перевірити, чи значення, що повертає метод `error.kind()` є варіантом `NotFound` енума `ErrorKind`. Якщо ж так і є, ми пробуємо створити такий файл за допомогою методу `File::create`. Однак, оскільки метод `File::create` може також завершитися не успішно, нам треба ще один рукав всередині вкладеного виразу `match`. Якщо файл не може бути створено, то виводимо інше повідомлення про помилку. Другий рукав зовнішнього виразу `match` залишається незмінним, тому програма підіймає паніку на будь-які інші помилки за виключенням помилки відсутнього файлу.
 
-> ### Alternatives to Using `match` with `Result<T, E>`
+> ### Альтернативи використанню виразу `match` для значень типу `Result<T, E>`
 > 
-> That’s a lot of `match`! The `match` expression is very useful but also very much a primitive. In Chapter 13, you’ll learn about closures, which are used with many of the methods defined on `Result<T, E>`. These methods can be more concise than using `match` when handling `Result<T, E>` values in your code.
+> Схоже, що у нас забагато `match`! Вираз `match` дуже корисний, проте дуже примітивний. У розділі 13 ми будемо вивчати замикання, які використовуються  у комбінації з багатьма методами, які визначені для типу `Result<T, E>`. Ці методи можуть бути більш виразними за використання виразу `match`, коли працюємо зі значеннями `Result<T, E>` у своєму коді.
 > 
-> For example, here’s another way to write the same logic as shown in Listing 9-5, this time using closures and the `unwrap_or_else` method:
+> Прикладом може бути інший спосіб описати таку ж саму логіку, що показана у блоці коду 9-5, але з використанням замикань і методу `unwrap_or_else`:
 > 
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
 > 
@@ -95,19 +95,19 @@ The condition we want to check in the inner match is whether the value returned 
 > }
 > ```
 > 
-> Although this code has the same behavior as Listing 9-5, it doesn’t contain any `match` expressions and is cleaner to read. Come back to this example after you’ve read Chapter 13, and look up the `unwrap_or_else` method in the standard library documentation. Many more of these methods can clean up huge nested `match` expressions when you’re dealing with errors.
+> Хоча цей код має таку ж поведінку, що і код у блоці 9-5, він не містить жодного  виразу `match` і зрозуміліший для читання. Повертайтесь до цього прикладу після того, як прочитаєте розділ 13 і познайомтесь з методом `unwrap_or_else` у документації до стандартної бібліотеки. Також багато інших методів можуть допомогти справитися з великою кількістю вкладений між собою виразів `match`, при роботі з помилками.
 
-### Shortcuts for Panic on Error: `unwrap` and `expect`
+### Короткі форми для паніки на помилках: `unwrap` і `expect`
 
-Using `match` works well enough, but it can be a bit verbose and doesn’t always communicate intent well. The `Result<T, E>` type has many helper methods defined on it to do various, more specific tasks. The `unwrap` method is a shortcut method implemented just like the `match` expression we wrote in Listing 9-4. If the `Result` value is the `Ok` variant, `unwrap` will return the value inside the `Ok`. If the `Result` is the `Err` variant, `unwrap` will call the `panic!` macro for us. Here is an example of `unwrap` in action:
+Використання виразу `match` працює достатньо добре, але може бути занадто багатослівним і не завжди добре передавати наші наміри. Тип `Result<T, E>` має багато допоміжних методів, які визначені для того, щоб здійснити більш специфічні обробки. Метод `unwrap` є скороченням імплементації виразу `match`, як це було зроблено у блоці коду 9-4. Якщо значення `Result` є варіантом `Ok`, метод `unwrap` поверне значення, як міститься всередині `Ok`. Якщо ж `Result` є варіантом `Err`, то метод `unwrap` викличе макрос `panic!` для нас. Ось приклад методу `unwrap` у дії:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-04-unwrap/src/main.rs}}
 ```
 
-If we run this code without a *hello.txt* file, we’ll see an error message from the `panic!` call that the `unwrap` method makes:
+Якщо ми виконаємо код без існуючого файлу *hello.txt*, ми отримаємо повідомлення про помилку із виклику `panic!`, який здійснить метод `unwrap`:
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/no-listing-04-unwrap
@@ -121,15 +121,15 @@ code: 2, kind: NotFound, message: "No such file or directory" }',
 src/main.rs:4:49
 ```
 
-Similarly, the `expect` method lets us also choose the `panic!` error message. Using `expect` instead of `unwrap` and providing good error messages can convey your intent and make tracking down the source of a panic easier. The syntax of `expect` looks like this:
+Аналогічний метод `expect` дозволяє додатково нам вибрати повідомлення про помилку для макрокоманди `panic!`. Використання методу `expect` замість `unwrap` разом із заданням хороших повідомлень про помилку допоможе краще передати ваші наміри й спростить відстежування причин такої паніки. Синтаксис методу `expect` виглядає наступним чином:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-05-expect/src/main.rs}}
 ```
 
-We use `expect` in the same way as `unwrap`: to return the file handle or call the `panic!` macro. The error message used by `expect` in its call to `panic!` will be the parameter that we pass to `expect`, rather than the default `panic!` message that `unwrap` uses. Here’s what it looks like:
+Ми використовуємо `expect` в такий самий спосіб, як і `unwrap`, щоб повернути обробник файлу або викликати макрос `panic!`. Повідомленням про помилку, що використовує метод `expect` у виклику макросу `panic!`, буде параметром, який ми передаємо у `expect`, замість стандартного повідомлення макросу `panic!`, яку використовує `unwrap`. Ось як це виглядає:
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/no-listing-05-expect
@@ -143,15 +143,15 @@ code: 2, kind: NotFound, message: "No such file or directory" }',
 src/main.rs:5:10
 ```
 
-In production-quality code, most Rustaceans choose `expect` rather than `unwrap` and give more context about why the operation is expected to always succeed. That way, if your assumptions are ever proven wrong, you have more information to use in debugging.
+Частіше програмісти на Rust віддають перевагу у своєму коді методу `expect` аніж `unwrap`, додаючи більше контексту з роз'ясненням, чому дана операція має бути завжди успішною для виконання. Таким чином, навіть якщо ваші припущення були не до кінця точними у такій ситуації, у вас буде більше інформації під час відлагодження.
 
-### Propagating Errors
+### Поширення помилок
 
-When a function’s implementation calls something that might fail, instead of handling the error within the function itself, you can return the error to the calling code so that it can decide what to do. This is known as *propagating* the error and gives more control to the calling code, where there might be more information or logic that dictates how the error should be handled than what you have available in the context of your code.
+Коли ви пишите функцію, імплементація якої може викликати щось, що може не спрацювати, тоді замість обробки помилки всередині функції, ви можете повернути помилку тій частині коду, що її викликала. І тоді вже ця частина коду буде вирішувати, що робити з цією помилкою. Це називається *розповсюдженням* помилки й дає більше контролю викликаючому коду, де, можливо, є більше інформації або логіки, які диктують, як ця помилка має бути оброблено, ніж те що є доступним в контексті вашого коду функції.
 
-For example, Listing 9-6 shows a function that reads a username from a file. If the file doesn’t exist or can’t be read, this function will return those errors to the code that called the function.
+Для прикладу блок коду 9-6 показує функцію, яка зчитає username з файлу. Якщо ж файл не існує або його неможливо прочитати, то цю функція поверне ці помилки в код, який викликає дану функцію.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -162,25 +162,25 @@ don't want to include it for rustdoc testing purposes. -->
 ```
 
 
-<span class="caption">Listing 9-6: A function that returns errors to the calling code using `match`</span>
+<span class="caption">Блок коду 9-6: Функція, яка повертає помилки в код, який її викликає за допомогою виразу `match`</span>
 
-This function can be written in a much shorter way, but we’re going to start by doing a lot of it manually in order to explore error handling; at the end, we’ll show the shorter way. Let’s look at the return type of the function first: `Result<String, io::Error>`. This means the function is returning a value of the type `Result<T, E>` where the generic parameter `T` has been filled in with the concrete type `String`, and the generic type `E` has been filled in with the concrete type `io::Error`.
+Вказану функцію також можливо написати коротшим способом, але ми почнемо з того, що зробимо більшу частину самостійно, для того, щоб познайомитися з обробкою помилок. В кінці ми продемонструємо коротший спосіб. Давайте спочатку розглянемо тип значення, яке повертає функція: `Result<String, io::Error>`. Це означає, що функція повертає значення типу `Result<T, E>`, де узагальнений параметр `T` був підставлений конкретним типом `String`, а узагальнений тип `E` конкретним типом `io::Error`.
 
-If this function succeeds without any problems, the code that calls this function will receive an `Ok` value that holds a `String`—the username that this function read from the file. If this function encounters any problems, the calling code will receive an `Err` value that holds an instance of `io::Error` that contains more information about what the problems were. We chose `io::Error` as the return type of this function because that happens to be the type of the error value returned from both of the operations we’re calling in this function’s body that might fail: the `File::open` function and the `read_to_string` method.
+Якщо виклик функції відпрацює успішно без жодних проблем, то код, який викликає її, отримає значення типу `Ok`, яке містить `String` - тобто username, який був зчитаним функцією з файлу. Якщо ж виконання функції зіткнеться з якимось проблемами, код,який викликав її отримає значення `Err`, яке містить екземпляр `io::Error`, який, в свою чергу, містить більше інформації стосовно характеру проблем. Ми вибрали `io::Error` як тип значення, що повертається з неї, тому що вона є типом помилок обох функцій, що можуть виконатись не успішно, які ми викликаємо в тілі нашої функції: функція `File::open` і `read_to_string`.
 
-The body of the function starts by calling the `File::open` function. Then we handle the `Result` value with a `match` similar to the `match` in Listing 9-4. If `File::open` succeeds, the file handle in the pattern variable `file` becomes the value in the mutable variable `username_file` and the function continues. In the `Err` case, instead of calling `panic!`, we use the `return` keyword to return early out of the function entirely and pass the error value from `File::open`, now in the pattern variable `e`, back to the calling code as this function’s error value.
+Тіло функції починається з виклику методу `File::open`. Далі ми обробляємо значення `Result` за допомогою виразу `match`, схоже до того, що було у блоці коду 9-4. Якщо виклик `File::open` буде успішним, тоді обробник файлу буде міститися у змінній `file` виразу співставлення, який стане значення мутабельної змінної `username_file` і виконання функції буде продовжуватися. А у випадку значення `Err`, замість виклику `panic!`, ми використовуємо ключове слово `return` для передчасного виходу з функції з поверненням значення помилки в місце виклику нашої функції, яку отримаємо з виклику `File::open` як внутрішню змінну зіставлення `e`.
 
-So if we have a file handle in `username_file`, the function then creates a new `String` in variable `username` and calls the `read_to_string` method on the file handle in `username_file` to read the contents of the file into `username`. The `read_to_string` method also returns a `Result` because it might fail, even though `File::open` succeeded. So we need another `match` to handle that `Result`: if `read_to_string` succeeds, then our function has succeeded, and we return the username from the file that’s now in `username` wrapped in an `Ok`. If `read_to_string` fails, we return the error value in the same way that we returned the error value in the `match` that handled the return value of `File::open`. However, we don’t need to explicitly say `return`, because this is the last expression in the function.
+Якщо ми маємо обробник файлу у змінній `username_file`, тоді функція створить нове значення `String` у змінній `username` і викличе метод `read_to_string` на обробнику файлу `username_file`, щоб прочитати контент цього файлу у значення змінної `username`. Метод `read_to_string` також повертає `Result`, оскільки може виконатись не успішно, навіть виконання `File::open` було успішним до цього. Тому нам потрібно ще один вираз `match` для обробки цього `Result`: якщо `read_to_string` був успішним, то і виконання нашої функції теж успішне і повертаємо значення username з файлу, огорнутим у `Ok`. Якщо є `read_to_string` виконалось не успішно, ми просто повертаємо помилку у той самий спосіб, як і у виразі `match`, що обробляв значення виклику `File::open`. Однак нам непотрібно явно використовувати `return`, оскільки це останній вираз нашої функції.
 
-The code that calls this code will then handle getting either an `Ok` value that contains a username or an `Err` value that contains an `io::Error`. It’s up to the calling code to decide what to do with those values. If the calling code gets an `Err` value, it could call `panic!` and crash the program, use a default username, or look up the username from somewhere other than a file, for example. We don’t have enough information on what the calling code is actually trying to do, so we propagate all the success or error information upward for it to handle appropriately.
+Код, який викликає цей має обробити отримані або значення `Ok`, що містить username або значення `Err`, яке містить `io::Error`. Ми не повинні знати, що саме код який викликає буде робити з отриманими значеннями. Якщо він отримає значення `Err`, то може або викликати `panic!` і зупинити виконання програми, або скористатися іменем користувача по замовчуванню, або знайти його де інде. Ми не маємо достатньої інформації стосовно того, що саме код, який викликає буде робити, тому ми поширюємо всю інформацію, як і успішного виконання, так і не успішного вгору, для обробки її належним чином.
 
-This pattern of propagating errors is so common in Rust that Rust provides the question mark operator `?` to make this easier.
+Цей патерн поширення помилок є дуже поширеним в Rust, тому Rust має спеціальний оператор знаку питання `?`, для роботи з цим більш зручний спосіб.
 
-#### A Shortcut for Propagating Errors: the `?` Operator
+#### Коротка форма поширення помилок оператором `?`
 
-Listing 9-7 shows an implementation of `read_username_from_file` that has the same functionality as in Listing 9-6, but this implementation uses the `?` operator.
+Блок коду 9-7 демонстрував імплементацію функції `read_username_from_file`, яка має таку ж функціональність, як і функція в блоці коду 9-6, але дана реалізація використовувала оператор `?`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -191,19 +191,19 @@ don't want to include it for rustdoc testing purposes. -->
 ```
 
 
-<span class="caption">Listing 9-7: A function that returns errors to the calling code using the `?` operator</span>
+<span class="caption">Listing 9-7: Функція, яка повертає помилки коду, який її викликає за допомогою оператора `?`</span>
 
-The `?` placed after a `Result` value is defined to work in almost the same way as the `match` expressions we defined to handle the `Result` values in Listing 9-6. If the value of the `Result` is an `Ok`, the value inside the `Ok` will get returned from this expression, and the program will continue. If the value is an `Err`, the `Err` will be returned from the whole function as if we had used the `return` keyword so the error value gets propagated to the calling code.
+Якщо розмістити оператор `?` після значення `Result`, то він буде працювати таким самим чином, як і вираз `match`, який ми визначали для обробки значення `Result` в блоці коду 9-6. Якщо значення `Result` є `Ok`, то значення, що знаходиться всередині `Ok`, буде повернутим як результат виразу і програма продовжить виконання. Якщо ж значення є `Err`, то в цілому з функції буде повернуто `Err`, так ніби ми використали ключове слово `return` і значення помилки буде передано функції, що викликала даний код.
 
-There is a difference between what the `match` expression from Listing 9-6 does and what the `?` operator does: error values that have the `?` operator called on them go through the `from` function, defined in the `From` trait in the standard library, which is used to convert values from one type into another. When the `?` operator calls the `from` function, the error type received is converted into the error type defined in the return type of the current function. This is useful when a function returns one error type to represent all the ways a function might fail, even if parts might fail for many different reasons.
+Є певна різниця між тим, що виконує вираз `match` з блоку коду 9-6 і тим, що виконує оператор `?`. Значення помилок, при яких викликається оператор `?` проходять через виклик функції `from`, яка визначена на трейті `From` стандартної бібліотеки і використовується для конвертації значень із одного типу в інший. Коли оператор `?` викликає функцію `from`, отриманий тип помилки конвертується в тим помилки, який був визначений типом, що повертається з поточної функції. Це корисно, коли функція повертає один тип помилки, який являє собою всі можливі шляхи, при яких функція може виконатись не успішно, навіть якщо її частини можуть завершуватись не успішно з різних причин.
 
-For example, we could change the `read_username_from_file` function in Listing 9-7 to return a custom error type named `OurError` that we define. If we also define `impl From<io::Error> for OurError` to construct an instance of `OurError` from an `io::Error`, then the `?` operator calls in the body of `read_username_from_file` will call `from` and convert the error types without needing to add any more code to the function.
+Для прикладу, ми б могли змінити функцію `read_username_from_file` в блоці коду 9-7, щоб вона повертала кастомізований тип помилки визначений нами, який б називався `OurError`. Якщо ми також визначимо імплементацію `impl From` для типу `OurError` при створенні екземпляру `OurError` із `io::Error`, тоді виклик оператора `?` в тілі функції `read_username_from_file` викличе метод <0>from</0> і здійснить конвертацію типу помилки без необхідності додавання жодного коду у нашу функцію.
 
-In the context of Listing 9-7, the `?` at the end of the `File::open` call will return the value inside an `Ok` to the variable `username_file`. If an error occurs, the `?` operator will return early out of the whole function and give any `Err` value to the calling code. The same thing applies to the `?` at the end of the `read_to_string` call.
+В контексті блоку коду 9-7, оператор `?` в кінці виклику функції `File::open` поверне значення значення всередині `Ok` у змінну `username_file`. Якщо ж помилка виникне, то оператор `?` припинить виконання функції заздалегідь і поверне якесь значення `Err` коду, який її викликав. Те ж саме буде справедливим для оператора `?` в кінці виклику методу `read_to_string`.
 
-The `?` operator eliminates a lot of boilerplate and makes this function’s implementation simpler. We could even shorten this code further by chaining method calls immediately after the `?`, as shown in Listing 9-8.
+Оператор `?` дозволяє уникнути надлишкового коду у функціях і робить їх імплементацію простішою. Ми можемо навіть ще більше скоротити код, об'єднуючи виклики методів в ланцюжок відразу після оператора `?`, як це показано в блоці коду 9-8.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -214,13 +214,13 @@ don't want to include it for rustdoc testing purposes. -->
 ```
 
 
-<span class="caption">Listing 9-8: Chaining method calls after the `?` operator</span>
+<span class="caption">Блок коду 9-8: Ланцюжок викликів методів після оператора `?`</span>
 
-We’ve moved the creation of the new `String` in `username` to the beginning of the function; that part hasn’t changed. Instead of creating a variable `username_file`, we’ve chained the call to `read_to_string` directly onto the result of `File::open("hello.txt")?`. We still have a `?` at the end of the `read_to_string` call, and we still return an `Ok` value containing `username` when both `File::open` and `read_to_string` succeed rather than returning errors. The functionality is again the same as in Listing 9-6 and Listing 9-7; this is just a different, more ergonomic way to write it.
+Ми перенесли створення нового екземпляру `String` в `username` на початок функції. Замість створення змінної `username_file`, ми приєднали ланцюжком виклик `read_to_string` прямо до результату виклику `File::open("hello.txt")?`. Ми все ще маємо оператор `?` в кінці виклику `read_to_string` і все ще повертаємо значення `Ok`, яке містить `username`, якщо обидва виклики `File::open` і `read_to_string` завершаться успішно, а не повертаємо помилки. Ця функціональність знову ж таки аналогічна тій, що представлена у блоках коду 9-6 і 9-7 з однією тільки відмінністю, що такий шлях більш ергономічний для написання.
 
-Listing 9-9 shows a way to make this even shorter using `fs::read_to_string`.
+Блок коду 9-9 демонструє ще коротший шлях використання `fs::read_to_string`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -231,70 +231,69 @@ don't want to include it for rustdoc testing purposes. -->
 ```
 
 
-<span class="caption">Listing 9-9: Using `fs::read_to_string` instead of opening and then reading the file</span>
+<span class="caption">Listing 9-9: Використання методу `fs::read_to_string` замість того, щоб відкривати файл і потім виконувати його зчитування</span>
 
-Reading a file into a string is a fairly common operation, so the standard library provides the convenient `fs::read_to_string` function that opens the file, creates a new `String`, reads the contents of the file, puts the contents into that `String`, and returns it. Of course, using `fs::read_to_string` doesn’t give us the opportunity to explain all the error handling, so we did it the longer way first.
+Зчитування файлу в стрічку є досить типовою операцією, тому стандартна бібліотека надає зручнішу функцію `fs::read_to_string`, яка відкриває файл, створює новий екземпляр `String`, зчитує вміст фалу, поміщає вміст в створений екземпляр стрічки `String` і повертає його. Звичайно, використання методу `fs::read_to_string` не дає можливості пояснити всі підходи до обробки помилок, тому ми спочатку пішли більш довгим шляхом.
 
-#### Where The `?` Operator Can Be Used
+#### Де можна використовувати оператор `?`
 
-The `?` operator can only be used in functions whose return type is compatible with the value the `?` is used on. This is because the `?` operator is defined to perform an early return of a value out of the function, in the same manner as the `match` expression we defined in Listing 9-6. In Listing 9-6, the `match` was using a `Result` value, and the early return arm returned an `Err(e)` value. The return type of the function has to be a `Result` so that it’s compatible with this `return`.
+Оператор `?` може бути використаним тільки у функціях, які повертають тип, який сумісний зі значення, яке він може обробити. Це тому, що оператор `?` створений для обробки раннього повернення значення з функції в такий самий спосіб, як і вираз `match`, описаний у блоці коду 9-6. Тут вираз `match` використовує значення `Result` і повертає значення `Err(e)` по рукаву раннього виходу. Типом, що повертається з функції має бути тип `Result`, що є сумісним цим `return`.
 
-In Listing 9-10, let’s look at the error we’ll get if we use the `?` operator in a `main` function with a return type incompatible with the type of the value we use `?` on:
+Давайте розглянемо в блоці коду 9-10 помилку, яку отримаємо, якщо використаємо оператор `?` у функції `main`, яка має повертати тип, що не сумісний з типом значення, яке ми використовуємо з оператором `?`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-10/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 9-10: Attempting to use the `?` in the `main` function that returns `()` won’t compile</span>
+<span class="caption">Блок коду 9-10: Спроба використати оператор `?` всередині функції `main`, яка не скомпілюється, оскільки має повертати несумісний тип `()`</span>
 
-This code opens a file, which might fail. The `?` operator follows the `Result` value returned by `File::open`, but this `main` function has the return type of `()`, not `Result`. When we compile this code, we get the following error message:
+Цей код відкриває файл, тому ця операція може виконатись не успішно. Оператор `?` слідує за значенням `Result`, який повертає `File::open`, але функція `main` має повертати тип `()`, а не тип `Result`. Коли ми спробуємо скомпілювати цей код, ми отримаємо наступне повідомлення про помилку компілювання:
 
 ```console
 {{#include ../listings/ch09-error-handling/listing-09-10/output.txt}}
 ```
 
-This error points out that we’re only allowed to use the `?` operator in a function that returns `Result`, `Option`, or another type that implements `FromResidual`.
+Ця помилка компілювання вказує на те, що ми можемо використовувати оператор `?` тільки у функціях, які повертають `Result`, `Option`, або інший тип, який імлементує `FromResidual`.
 
-To fix the error, you have two choices. One choice is to change the return type of your function to be compatible with the value you’re using the `?` operator on as long as you have no restrictions preventing that. The other technique is to use a `match` or one of the `Result<T, E>` methods to handle the `Result<T,
-E>` in whatever way is appropriate.
+Для виправлення цієї помилки ми маємо два шляхи. Перший полягає в тому, щоб змінювати тип значення, яке повертаємо для нашої функції, щоб бути сумісним по типу зі значенням, яке використовуємо з оператором `?` до того моменту, поки немає жодних інших обмежень для цього. Інший полягає в тому, щоб використовувати вираз `match` або один із методів визначених для типу `Result<T, E>`, щоб обробити значення `Result<T,
+E>` більш підходящим способом.
 
-The error message also mentioned that `?` can be used with `Option<T>` values as well. As with using `?` on `Result`, you can only use `?` on `Option` in a function that returns an `Option`. The behavior of the `?` operator when called on an `Option<T>` is similar to its behavior when called on a `Result<T, E>`: if the value is `None`, the `None` will be returned early from the function at that point. If the value is `Some`, the value inside the `Some` is the resulting value of the expression and the function continues. Listing 9-11 has an example of a function that finds the last character of the first line in the given text:
+Помилка компілювання також говорить, що оператор `?` також можна використовувати зі значенням `Option<T>`. Як і з використанням `?` на `Result`, ми можемо використовувати оператор `?` на `Option` у функціях, які повертають `Option`. Поведінка оператора `?`, коли викликаємо його на `Option<T>` є подібною до випадку з `Result<T, E>`: якщо значення `None`, то це значення буде повернуто достроково з функції. Якщо ж значення `Some`, то значення всередині `Some` буде значенням результату виразу і виконання функції буде продовжуватися далі. Блок коду 9-11 є прикладом функції, що знаходить останній символ в отриманому тексті:
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-11/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 9-11: Using the `?` operator on an `Option<T>` value</span>
+<span class="caption">Блок коду 9-11: Використання оператора `?` на значенні `Option<T>`</span>
 
-This function returns `Option<char>` because it’s possible that there is a character there, but it’s also possible that there isn’t. This code takes the `text` string slice argument and calls the `lines` method on it, which returns an iterator over the lines in the string. Because this function wants to examine the first line, it calls `next` on the iterator to get the first value from the iterator. If `text` is the empty string, this call to `next` will return `None`, in which case we use `?` to stop and return `None` from `last_char_of_first_line`. If `text` is not the empty string, `next` will return a `Some` value containing a string slice of the first line in `text`.
+Ця функція повертає `Option<char>`, тому що як є можливість, що символ може бути, так і можливість, що символу не буде. Ця функція приймає як аргумент зріз стрічки `text` і викликає метод `lines` на ньому, який повертає ітератор над рядками у стрічці. Оскільки ця функція має отримати перший рядок, вона викликає метод `next` на ітераторі, щоб отримати перше значення з ітератора. Якщо `text` буде пустою стрічкою, то виклик `next` поверне значення `None`, для цього випадку ми використовуємо оператор `?`, щоб достроково зупинити виконання і повернути `None` з функції `last_char_of_first_line`. Якщо ж `text` не пуста стрічка, виклик `next` поверне значення `Some`, яке буде містити зріз стрічки, як перший рядок у `text`.
 
-The `?` extracts the string slice, and we can call `chars` on that string slice to get an iterator of its characters. We’re interested in the last character in this first line, so we call `last` to return the last item in the iterator. This is an `Option` because it’s possible that the first line is the empty string, for example if `text` starts with a blank line but has characters on other lines, as in `"\nhi"`. However, if there is a last character on the first line, it will be returned in the `Some` variant. The `?` operator in the middle gives us a concise way to express this logic, allowing us to implement the function in one line. If we couldn’t use the `?` operator on `Option`, we’d have to implement this logic using more method calls or a `match` expression.
+Оператор `?` вилучає цей зріз стрічки і ми можемо далі викликати метод `chars` на цьому зрізі, щоб отримати ітератор символів. Ми зацікавлені в останньому символі першої стрічки, тому ми викликаємо метод `last`, для останнього елементу ітератора. Це значення також `Option`, оскільки можливо, що цей перший рядок є пустою стрічкою, наприклад, якщо `text` починається з пустого рядку, але має символи на наступних рядках, як, до прикладу, у `"\nhi"`. Однак, якщо є останній символ у першому рядку, то він повернеться загорнутим у `Some`. Оператор `?` посередині дає нам виразний спосіб описати логіку, змушуючи нас реалізовувати тіло функції в один рядок. Якщо б ми не використовували оператор `?` на `Option`, то довелося би реалізовувати логіку з використанням більшої кількості викликів методів та виразів `match`.
 
-Note that you can use the `?` operator on a `Result` in a function that returns `Result`, and you can use the `?` operator on an `Option` in a function that returns `Option`, but you can’t mix and match. The `?` operator won’t automatically convert a `Result` to an `Option` or vice versa; in those cases, you can use methods like the `ok` method on `Result` or the `ok_or` method on `Option` to do the conversion explicitly.
+Варто зазначити, що ми можемо використовувати оператор `?` на `Result` всередині функцій, які повертають `Result`, а також можемо використовувати на `Option` у функціях, які повертають `Option`, але ми не можемо їх змішувати і порівнювати. Оператор `?` не може автоматично конвертувати `Result` в `Option` або навпаки. В цих випадках слід використовувати методи на зразок `ok` на `Result`, або `ok_or` на `Option`, для здійснення явного конвертування.
 
-So far, all the `main` functions we’ve used return `()`. The `main` function is special because it’s the entry and exit point of executable programs, and there are restrictions on what its return type can be for the programs to behave as expected.
+Поки що всі функції `main`, які ми використовували повертали значення типу `()`. Функція `main` є спеціальною, тому що є вхідною та вихідною точкою для запуску програм і має строгі обмеження до типу значення, яке вона повертає, щоб програма поводила себе так, як очікується.
 
-Luckily, `main` can also return a `Result<(), E>`. Listing 9-12 has the code from Listing 9-10 but we’ve changed the return type of `main` to be `Result<(), Box<dyn Error>>` and added a return value `Ok(())` to the end. This code will now compile:
+На щастя, `main` може також повертати значення типу `Result<(), E>`. Блок 9-12 містить код з блоку 9-10, але тут ми змінили тип значення, яке повертається з `main` на `Result<(), Box<dyn Error>>` і повернули значення `Ok(())` в кінці тіла функції. Цей код буде тепер компілюватися:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-12/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 9-12: Changing `main` to return `Result<(), E>` allows the use of the `?` operator on `Result` values</span>
+<span class="caption">Блок коду 9-12: Зміна функції `main` щоб повертати `Result<(), E>` і мати можливість використання оператора `?` на значеннях `Result`</span>
 
-The `Box<dyn Error>` type is a *trait object*, which we’ll talk about in the [“Using Trait Objects that Allow for Values of Different Types”][trait-objects]<!-- ignore --> section in Chapter 17. For now, you can read `Box<dyn Error>` to mean “any kind of error.” Using `?` on a `Result` value in a `main` function with the error type `Box<dyn Error>` is allowed, because it allows any `Err` value to be returned early. Even though the body of this `main` function will only ever return errors of type `std::io::Error`, by specifying `Box<dyn Error>`, this signature will continue to be correct even if more code that returns other errors is added to the body of `main`.
+Тип `Box<dyn Error>` є *об'єктом типажом*, про який ми будемо говорити у секції [«Використання трейт об'єктів, які допускають значення різних типів»][trait-objects]<!-- ignore --> розділу 17. На тепер ми можемо читати це, як`Box<dyn Error>`, що означає «будь який тип помилок». Використання оператора `?` на значенні `Result` всередині функції `main` з помилкою типу `Box<dyn Error>` є допустимим, оскільки допустимими є будь-які значення `Err` для дострокового повернення. Навіть якщо тіло цієї функції `main` буде повертати помилки типу `std::io::Error`, спеціалізована `Box<dyn Error>` сигнатура буде залишатися коректною, навіть якщо додамо більше коду в тіло функції `main`, який може повертати помилки іншого типу.
 
-When a `main` function returns a `Result<(), E>`, the executable will exit with a value of `0` if `main` returns `Ok(())` and will exit with a nonzero value if `main` returns an `Err` value. Executables written in C return integers when they exit: programs that exit successfully return the integer `0`, and programs that error return some integer other than `0`. Rust also returns integers from executables to be compatible with this convention.
+Коли функція `main` повертає `Result<(), E>`, виконання запиниться зі значенням `0`, якщо `main` поверне `Ok(())` і запиниться з ненульовим значенням, якщо `main` поверне значення `Err`. Виконувані файли, написані на C повертають цілі числа коли завершуються: програми які виконалися успішно повертають ціле число `0`, а програми що виконалися з помилкою повертають цілі числа, відмінні від `0`. Rust також повертає цілі числа з виконуваних файлів, щоб бути сумісним з такою домовленістю.
 
-The `main` function may return any types that implement [the `std::process::Termination` trait][termination]<!-- ignore -->, which contains a function `report` that returns an `ExitCode` Consult the standard library documentation for more information on implementing the `Termination` trait for your own types.
+Функція `main` може повертати довільний тип, який імплементує `std::process::Termination` трейт<!-- ignore -->, що містить метод `report`, який повертає `ExitCode`. Для більшого розуміння імплементації трейту `Termination` на власних типах рекомендуємо ознайомитися з документацією до стандартної бібліотеки.
 
-Now that we’ve discussed the details of calling `panic!` or returning `Result`, let’s return to the topic of how to decide which is appropriate to use in which cases.
+Тепер, коли ми обговорили деталі виклику `panic!` й використанню `Result`, повернімось до теми, яким чином визначати, що з переліченого доцільно використовувати та в яких випадках.
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type
 [trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
-[termination]: ../std/process/trait.Termination.html

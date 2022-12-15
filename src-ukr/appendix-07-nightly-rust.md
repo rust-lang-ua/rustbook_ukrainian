@@ -1,30 +1,30 @@
-## Appendix G - How Rust is Made and “Nightly Rust”
+## Додаток G - як робиться Rust і "щонічний Rust"
 
-This appendix is about how Rust is made and how that affects you as a Rust developer.
+Цей додаток розповідає про те, як робиться Rust і як це впливає на вас як на розробника на Rust.
 
-### Stability Without Stagnation
+### Стабільність без застою
 
-As a language, Rust cares a *lot* about the stability of your code. We want Rust to be a rock-solid foundation you can build on, and if things were constantly changing, that would be impossible. At the same time, if we can’t experiment with new features, we may not find out important flaws until after their release, when we can no longer change things.
+Як мова, Rust *багато* піклується про стабільність вашого коду. Ми хочемо, щоб Rust був якомога надійнішим фундаментом, на якому ви зможете будувати, і якби все постійно змінювалося, це було б неможливо. У той самий час ми, якщо ми не зможемо експериментувати з новим функціоналом, то можемо пропустити важливі недоліки аж до їхнього релізу, коли ми вже не зможемо це змінити.
 
-Our solution to this problem is what we call “stability without stagnation”, and our guiding principle is this: you should never have to fear upgrading to a new version of stable Rust. Each upgrade should be painless, but should also bring you new features, fewer bugs, and faster compile times.
+Наше розв'язання цієї проблеми - це те, що ми звемо "стабільність без застою", і наш керівний принцип такий: ви ніколи не маєте боятися оновлення до нової версії стабільного Rust. Кожне оновлення має бути безболісним, але також має приносити нові можливості, менше помилок і швидший час компіляції.
 
-### Choo, Choo! Release Channels and Riding the Trains
+### Ту-туу! Канали оновлення і залізничний розклад
 
-Rust development operates on a *train schedule*. That is, all development is done on the `master` branch of the Rust repository. Releases follow a software release train model, which has been used by Cisco IOS and other software projects. There are three *release channels* for Rust:
+Розробка Rust відбувається за *залізничним розкладом*. Тобто вся розробка робиться в гілці `master` репозиторію Rust. Релізи слідують залізничній моделі випусків програмного забезпечення (software release train model), яку використовують Cisco IOS та інші проєкти програмного забезпечення. Існують три *канали релізів* Rust:
 
-* Nightly
-* Beta
-* Stable
+* Щонічний (nightly)
+* Бета (beta)
+* Стабільний (stable)
 
-Most Rust developers primarily use the stable channel, but those who want to try out experimental new features may use nightly or beta.
+Більшість розробників Rust в переважно використовують стабільний канал, але ті, хто хоче спробувати експериментальні нові функції, можуть використовувати щонічний або бету.
 
-Here’s an example of how the development and release process works: let’s assume that the Rust team is working on the release of Rust 1.5. That release happened in December of 2015, but it will provide us with realistic version numbers. A new feature is added to Rust: a new commit lands on the `master` branch. Each night, a new nightly version of Rust is produced. Every day is a release day, and these releases are created by our release infrastructure automatically. So as time passes, our releases look like this, once a night:
+Ось приклад того, як працює процес розробки та релізів: припустімо, що команда Rust працює над релізом Rust 1.5. Цей реліз відбувся у грудні 2015 року, але він забезпечить нам реалістичні номери версій. У Rust додається новий функціонал: новий коміт з'являється у гілці `master`. Кожної ночі виробляється нова щонічна версія Rust. Кожен день відбувається реліз, і ці релізи створюються автоматично нашою інфраструктурою релізів. Тож із плином часу наші релізи виглядають ось так, по одному за ніч:
 
 ```text
 nightly: * - - * - - *
 ```
 
-Every six weeks, it’s time to prepare a new release! The `beta` branch of the Rust repository branches off from the `master` branch used by nightly. Now, there are two releases:
+Кожні шість тижнів настає час підготувати новий реліз! Гілка `beta` у репозиторію Rust відгалужується від гілки `master`, що належить щонічній версії. Тепер є два релізи:
 
 ```text
 nightly: * - - * - - *
@@ -32,7 +32,7 @@ nightly: * - - * - - *
 beta:                *
 ```
 
-Most Rust users do not use beta releases actively, but test against beta in their CI system to help Rust discover possible regressions. In the meantime, there’s still a nightly release every night:
+Більшість користувачів Rust не використовують бета-релізи активно, а лише тестують на беті у своїх системах неперервної інтеграції (CI), щоб допомогти Rust знайти можливі регресії. Тим часом нові щонічні релізи з'являються кожної ночі:
 
 ```text
 nightly: * - - * - - * - - * - - *
@@ -40,7 +40,7 @@ nightly: * - - * - - * - - * - - *
 beta:                *
 ```
 
-Let’s say a regression is found. Good thing we had some time to test the beta release before the regression snuck into a stable release! The fix is applied to `master`, so that nightly is fixed, and then the fix is backported to the `beta` branch, and a new release of beta is produced:
+Припустимо, було знайдено регресію. Добре, що ми мали якийсь час для перевірки бета-релізу перед тим, як регресія прокралася до стабільного реліз! Виправлення застосовується до `master`, тож тепер щонічна версія виправлена, а потім виправлення переноситься (backport) у `бета-гілку` і робиться реліз:
 
 ```text
 nightly: * - - * - - * - - * - - * - - *
@@ -48,7 +48,7 @@ nightly: * - - * - - * - - * - - * - - *
 beta:                * - - - - - - - - *
 ```
 
-Six weeks after the first beta was created, it’s time for a stable release! The `stable` branch is produced from the `beta` branch:
+Шість тижнів минуло після створення першої бети, настав час для стабільної версії! `Стабільна` гілка робиться з гілки `beta`:
 
 ```text
 nightly: * - - * - - * - - * - - * - - * - * - *
@@ -58,7 +58,7 @@ beta:                * - - - - - - - - *
 stable:                                *
 ```
 
-Hooray! Rust 1.5 is done! However, we’ve forgotten one thing: because the six weeks have gone by, we also need a new beta of the *next* version of Rust, 1.6. So after `stable` branches off of `beta`, the next version of `beta` branches off of `nightly` again:
+Ура! Rust 1.5 зроблено! Проте ми забули одну річ: оскільки минуло шість тижнів, нам також потрібна нова бета *наступної* версії Rust, 1.6. Тож після того, як `стабільна` версія відгалужується від `бети`, наступна версія `бети` знову відгалужується від `щонічної` версії:
 
 ```text
 nightly: * - - * - - * - - * - - * - - * - * - *
@@ -68,29 +68,29 @@ beta:                * - - - - - - - - *       *
 stable:                                *
 ```
 
-This is called the “train model” because every six weeks, a release “leaves the station”, but still has to take a journey through the beta channel before it arrives as a stable release.
+Це зветься "залізничною моделлю", тому що кожні шість тижнів реліз "залишає станцію", але все ще потрібно здійснити подорож в бета-каналі, перш ніж він прибуде як стабільна версія.
 
-Rust releases every six weeks, like clockwork. If you know the date of one Rust release, you can know the date of the next one: it’s six weeks later. A nice aspect of having releases scheduled every six weeks is that the next train is coming soon. If a feature happens to miss a particular release, there’s no need to worry: another one is happening in a short time! This helps reduce pressure to sneak possibly unpolished features in close to the release deadline.
+Релізи Rust випускаються що шість тижнів, як годинник. Якщо ви знаєте дату одного релізу Rust, то можете дізнатися дату наступного: за шість тижнів. Гарний аспект запланованих що шість тижнів релізів полягає в тому, що наступний потяг прибуде незабаром. Якщо певний функціонал пропускає якийсь певний реліз, немає потреби хвилюватися: інший відбудеться за короткий час! Це допомагає зменшити тиск, що хтось спробує протягти, можливо, недошліфований функціонал близько до строку релізу.
 
-Thanks to this process, you can always check out the next build of Rust and verify for yourself that it’s easy to upgrade to: if a beta release doesn’t work as expected, you can report it to the team and get it fixed before the next stable release happens! Breakage in a beta release is relatively rare, but `rustc` is still a piece of software, and bugs do exist.
+Завдяки цьому процесу, ви завжди можете перевірити наступну збірку Rust і впевнитись, що до неї легко оновитися: якщо бета реліз не працює так, як очікувалося, ви можете повідомити про це команді, і його відремонтують до наступного стабільного релізу! Аварії в бета релізі порівняно рідкісні, але `rustc` є лише програмою, і вади існують.
 
-### Unstable Features
+### Нестабільний функціонал
 
-There’s one more catch with this release model: unstable features. Rust uses a technique called “feature flags” to determine what features are enabled in a given release. If a new feature is under active development, it lands on `master`, and therefore, in nightly, but behind a *feature flag*. If you, as a user, wish to try out the work-in-progress feature, you can, but you must be using a nightly release of Rust and annotate your source code with the appropriate flag to opt in.
+Є ще одна хитрість у цій моделі релізів: нестабільний функціонал. Rust використовує техніку, що зветься "прапорці функціонала", щоб визначити, який функціонал увімкнено в даному релізі. Якщо новий функціонал перебуває в активній розробці, він опиняється в `master`, а, відтак, у щонічних релізах, але поза *прапорцем функціонала*. Якщо ви, як користувач, захочете спробувати функціонал, над яким ведеться робота, то можете це зробити, але ви маєте використовувати нічний реліз Rust і позначити свій вихідний файл відповідним прапорцем, щоб погодитися на цей функціонал.
 
-If you’re using a beta or stable release of Rust, you can’t use any feature flags. This is the key that allows us to get practical use with new features before we declare them stable forever. Those who wish to opt into the bleeding edge can do so, and those who want a rock-solid experience can stick with stable and know that their code won’t break. Stability without stagnation.
+Якщо ви використовуєте бета або стабільний реліз Rust, то не можете використовувати прапорці функціонала. Це ключ, що дозволяє нам отримати практичний досвід нового функціонала до того, як його оголосять стабільним назавжди. Ті, хто бажає бути на передньому краю, можуть підписатися на це, а ті, хто бажає надійного досвіду, може залишитися на стабільному релізі і знати, що їхній код не зламається. Стабільність без застою.
 
-This book only contains information about stable features, as in-progress features are still changing, and surely they’ll be different between when this book was written and when they get enabled in stable builds. You can find documentation for nightly-only features online.
+Ця книга містить інформацію лише про стабільний функціонал, оскільки в процесі функціонал все ще змінюється, і, безумовно, він буде різним у той час, коли була написана ця книжка, і коли він буде включеним до стабільних збірок. Ви можете знайти документацію про функціонал, доступний лише в щонічних релізах, онлайн.
 
-### Rustup and the Role of Rust Nightly
+### Rustup і роль щонічного Rust
 
-Rustup makes it easy to change between different release channels of Rust, on a global or per-project basis. By default, you’ll have stable Rust installed. To install nightly, for example:
+Rustup дозволяє легко перемикатися між різними каналами релізів Rust, глобально чи для окремих проєктів. За замовчуванням буде встановлено стабільний Rust. Для встановлення, наприклад, щонічного, запустіть:
 
 ```console
 $ rustup toolchain install nightly
 ```
 
-You can see all of the *toolchains* (releases of Rust and associated components) you have installed with `rustup` as well. Here’s an example on one of your authors’ Windows computer:
+Ви також можете побачити всі *ланцюжки інструментів* (toolchain, релізи Rust і пов’язаних компонентів), що ви встановили за допомогою `rustup`. Ось приклад на комп'ютері одного з авторів з Windows:
 
 ```powershell
 > rustup toolchain list
@@ -99,21 +99,21 @@ beta-x86_64-pc-windows-msvc
 nightly-x86_64-pc-windows-msvc
 ```
 
-As you can see, the stable toolchain is the default. Most Rust users use stable most of the time. You might want to use stable most of the time, but use nightly on a specific project, because you care about a cutting-edge feature. To do so, you can use `rustup override` in that project’s directory to set the nightly toolchain as the one `rustup` should use when you’re in that directory:
+Як ви можете бачити, стабільний ланцюжок інструментів є замовчуванням. Більшість користувачів Rust використовують переважно стабільний реліз. Ви можете використовувати стабільний реліз більшу частину часу, але використовувати щонічний у конкретному проєкті, якщо вам потрібен функціонал з переднього краю. Для цього, ви можете запустити `rustup override` в теці цього проєкту, щоб встановити щонічний ланцюжок інструментів для використання `rustup`, коли ви в цій теці:
 
 ```console
 $ cd ~/projects/needs-nightly
 $ rustup override set nightly
 ```
 
-Now, every time you call `rustc` or `cargo` inside of *~/projects/needs-nightly*, `rustup` will make sure that you are using nightly Rust, rather than your default of stable Rust. This comes in handy when you have a lot of Rust projects!
+Відтепер кожного разу як ви викликаєте `rustc` чи `cargo` всередині *~/projects/needs-nightly*, `rustup` переконається, що ви використовуєте щонічний Rust, а не стабільний Rust за замовчуванням. Це стає в пригоді, коли ви маєте багато проєктів Rust!
 
-### The RFC Process and Teams
+### Процес і команди RFC
 
-So how do you learn about these new features? Rust’s development model follows a *Request For Comments (RFC) process*. If you’d like an improvement in Rust, you can write up a proposal, called an RFC.
+То як же вам дізнатися про цей новий функціонал? Модель розробки Rust слідує процесу *"прохання прокоментувати (RFC, Request For Comments)*. Якщо ви хочете покращення в Rust, то можете написати пропозицію, що зветься RFC.
 
-Anyone can write RFCs to improve Rust, and the proposals are reviewed and discussed by the Rust team, which is comprised of many topic subteams. There’s a full list of the teams [on Rust’s website](https://www.rust-lang.org/governance), which includes teams for each area of the project: language design, compiler implementation, infrastructure, documentation, and more. The appropriate team reads the proposal and the comments, writes some comments of their own, and eventually, there’s consensus to accept or reject the feature.
+Будь-хто може написати RFC для покращення Rust, і пропозиції розглядаються і обговорюються командою Rust, що складається з багатьох тематичних підкоманд. Повний список команд знаходиться [на вебсайті Rust](https://www.rust-lang.org/governance) і включає команди для кожної області проєкт: дизайн мови, реалізація компілятора, Інфраструктура, документація та інші. Відповідна команда читає пропозицію і коментарі, пише деякі власні коментарі, і врешті-решт виникає консенсус - прийняти або відхилити цей функціонал.
 
-If the feature is accepted, an issue is opened on the Rust repository, and someone can implement it. The person who implements it very well may not be the person who proposed the feature in the first place! When the implementation is ready, it lands on the `master` branch behind a feature gate, as we discussed in the [“Unstable Features”](#unstable-features)<!-- ignore --> section.
+Якщо функціонал буде прийнятий, то в репозиторії Rust відкривається задача, і хтось може їх виконати. Особа, що реалізує функціонал цілком може бути не тою особою, що його взагалі запропонувала! Коли реалізація готова, вона додається в гілку `master` за бар'єром функціонала, про який ми говорили в підрозділі ["Нестабільний функціонал"](#unstable-features)<!-- ignore --> .
 
-After some time, once Rust developers who use nightly releases have been able to try out the new feature, team members will discuss the feature, how it’s worked out on nightly, and decide if it should make it into stable Rust or not. If the decision is to move forward, the feature gate is removed, and the feature is now considered stable! It rides the trains into a new stable release of Rust.
+За деякий час, коли розробники Rust, які використовують щонічні релізи, зможуть спробувати новий функціонал, члени команди обговорять, як функціонал працює на щонічному релізі, і вирішать, чи варто перенести його в стабільний Rust чи ні. Якщо буде ухвалено рішення просуватися, то бар'єр функціонала знімають, і функціонал тепер вважається стабільним! І він їде залізницею у новий стабільний реліз Rust.

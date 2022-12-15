@@ -1,22 +1,22 @@
-## Pattern Syntax
+## Синтаксис Шаблонів
 
 In this section, we gather all the syntax valid in patterns and discuss why and when you might want to use each one.
 
-### Matching Literals
+### Зіставлення з Літералами
 
-As you saw in Chapter 6, you can match patterns against literals directly. The following code gives some examples:
+Як ви бачили у Розділі 6, можна зіставляти шаблони з літералами напряму. Наведемо декілька прикладів в наступному коді:
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-01-literals/src/main.rs:here}}
 ```
 
-This code prints `one` because the value in `x` is 1. This syntax is useful when you want your code to take an action if it gets a particular concrete value.
+Цей код виведе в консолі `one`, оскільки значення в `x` дорівнює 1. Цей синтаксис корисний, коли ви хочете, щоб ваш код виконував дію, якщо він отримує певне значення.
 
-### Matching Named Variables
+### Зіставлення з Найменованими Змінними
 
-Named variables are irrefutable patterns that match any value, and we’ve used them many times in the book. However, there is a complication when you use named variables in `match` expressions. Because `match` starts a new scope, variables declared as part of a pattern inside the `match` expression will shadow those with the same name outside the `match` construct, as is the case with all variables. In Listing 18-11, we declare a variable named `x` with the value `Some(5)` and a variable `y` with the value `10`. We then create a `match` expression on the value `x`. Look at the patterns in the match arms and `println!` at the end, and try to figure out what the code will print before running this code or reading further.
+Іменовані змінні - це незаперечні шаблони, які відповідають будь-якому значенню, і ми багато разів використовували їх у книзі. Однак, існує ускладнення при використанні іменованих змінних у виразах `match`. Оскільки `match` починає нову область видимості, змінні, оголошені як частина шаблону всередині виразу `match`, будуть затінювати змінні з тією ж назвою за межами конструкції `match`, як і у випадку з усіма змінними. У Блоці Коду 18-11 оголошується змінна з назвою `x` зі значенням `Some(5)` та змінна `y` зі значенням `10`. Потім ми створюємо вираз `match` над значенням `x`. Подивіться на шаблони в рукавах match і `println!` наприкінці, і перед тим, як запускати цей код або читати далі, спробуйте з'ясувати, що виведе код в консолі.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-11/src/main.rs:here}}
@@ -25,58 +25,56 @@ Named variables are irrefutable patterns that match any value, and we’ve used 
 
 <span class="caption">Listing 18-11: A `match` expression with an arm that introduces a shadowed variable `y`</span>
 
-Let’s walk through what happens when the `match` expression runs. The pattern in the first match arm doesn’t match the defined value of `x`, so the code continues.
+Розглянемо, що відбувається при виконанні виразу `match`. Шаблон у першому рукаві порівняння не збігається із заданим значенням `x`, тому код продовжується.
 
-The pattern in the second match arm introduces a new variable named `y` that will match any value inside a `Some` value. Because we’re in a new scope inside the `match` expression, this is a new `y` variable, not the `y` we declared at the beginning with the value 10. This new `y` binding will match any value inside a `Some`, which is what we have in `x`. Therefore, this new `y` binds to the inner value of the `Some` in `x`. That value is `5`, so the expression for that arm executes and prints `Matched, y = 5`.
+Шаблон у другому рукаві порівняння вводить нову змінну з назвою `y`, яка буде відповідати будь-якому значенню всередині значення `Some`. Оскільки ми знаходимося в новій області видимості всередині виразу `match`, це нова змінна `y`, а не та `y`, яку ми оголосили на початку зі значенням 10. Ця нова прив'язка `y` буде відповідати будь-якому значенню всередині `Some`, яке ми маємо в `x`. Таким чином, ця нова `y` зв'язується з внутрішнім значенням `Some` в `x`. Це значення `5`, тому вираз для цього рукава виконується і виводить в консолі `Matched, y = 5`.
 
-If `x` had been a `None` value instead of `Some(5)`, the patterns in the first two arms wouldn’t have matched, so the value would have matched to the underscore. We didn’t introduce the `x` variable in the pattern of the underscore arm, so the `x` in the expression is still the outer `x` that hasn’t been shadowed. In this hypothetical case, the `match` would print `Default
-case, x = None`.
+Якби значення `x` було б `None` замість `Some(5)`, шаблони в перших двох рукавах не збіглися б, тому значення збіглося б з підкресленням. Ми не створювали змінну `x` у шаблоні підкреслення, тому `x` у виразі - це все ще зовнішній `x`, який не був затінений. У цьому гіпотетичному випадку `match` виведе в консолі `Default case, x = None`.
 
-When the `match` expression is done, its scope ends, and so does the scope of the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
+Коли вираз `match` виконано, його область видимості закінчується, так само як і область видимості внутрішньої `y`. Останній `println!` виведе в консолі `at the end: x = Some(5), y = 10`.
 
-To create a `match` expression that compares the values of the outer `x` and `y`, rather than introducing a shadowed variable, we would need to use a match guard conditional instead. We’ll talk about match guards later in the [“Extra Conditionals with Match Guards”](#extra-conditionals-with-match-guards)<!--
-ignore --> section.
+Щоб створити вираз `match`, який порівнює значення зовнішніх `x` і `y`, замість того, щоб вводити затінену змінну, нам потрібно буде використовувати умовний запобіжник. Ми поговоримо про запобіжники пізніше в розділі ["Додаткові умови з запобіжниками"](#extra-conditionals-with-match-guards)<!--
+ignore --> .
 
-### Multiple Patterns
+### Декілька Шаблонів
 
-In `match` expressions, you can match multiple patterns using the `|` syntax, which is the pattern *or* operator. For example, in the following code we match the value of `x` against the match arms, the first of which has an *or* option, meaning if the value of `x` matches either of the values in that arm, that arm’s code will run:
+У виразах `match` ви можете зіставляти кілька шаблонів, використовуючи синтаксис `|`, який є оператором шаблону *or*. Наприклад, у наступному коді ми порівнюємо значення `x` з рукавами match, перше з яких має опцію *or*, що означає, що якщо значення `x` збігається з будь-яким зі значень у цьому рукаві, код цього рукава буде виконано:
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-02-multiple-patterns/src/main.rs:here}}
 ```
 
-This code prints `one or two`.
+Цей код виведе в консоль `one or two`.
 
-### Matching Ranges of Values with `..=`
+### Зіставлення Діапазонів Значень з `..=`
 
-The `..=` syntax allows us to match to an inclusive range of values. In the following code, when a pattern matches any of the values within the given range, that arm will execute:
+Синтаксис `..=` дозволяє робити інклюзивне зіставлення, зіставлення з діапазоном включно з останнім його значенням. В наступному коді буде виконана гілка, шаблон якої зіставляється з будь-яким значенням заданого діапазону:
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-03-ranges/src/main.rs:here}}
 ```
 
-If `x` is 1, 2, 3, 4, or 5, the first arm will match. This syntax is more convenient for multiple match values than using the `|` operator to express the same idea; if we were to use `|` we would have to specify `1 | 2 | 3 | 4 | 5`. Specifying a range is much shorter, especially if we want to match, say, any number between 1 and 1,000!
+Якщо `x` дорівнює 1, 2, 3, 4, або 5, то буде обрана перша гілка виразу match. Цей синтаксис більш зручний для зіставлення декількох значень ніж використання оператора `|` для вираження тої самої ідеї; якщо ми використовували б `|`, нам було б потрібно вказати `1 | 2 | 3 | 4 | 5`. Вказання діапазону набагато коротше, особливо якщо ми хочемо зіставляти, скажімо, будь-яке число між 1 та 1,000!
 
 The compiler checks that the range isn’t empty at compile time, and because the only types for which Rust can tell if a range is empty or not are `char` and numeric values, ranges are only allowed with numeric or `char` values.
 
-Here is an example using ranges of `char` values:
+Ось приклад використання діапазонів значень `char`:
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-04-ranges-of-char/src/main.rs:here}}
 ```
 
-Rust can tell that `'c'` is within the first pattern’s range and prints `early
-ASCII letter`.
+Rust може визначити, що `'c'` в першому діапазоні шаблона та виведе в консоль `early ASCII letter`.
 
-### Destructuring to Break Apart Values
+### Деструктуризація для Розбору Значень на Частини
 
-We can also use patterns to destructure structs, enums, and tuples to use different parts of these values. Let’s walk through each value.
+Ми також використовуємо шаблони для деструктуризації структур, енумів та кортежів для використання різних частин їх значень. Розглянемо покроково кожне значення.
 
-#### Destructuring Structs
+#### Деструктуризація Структур
 
 Listing 18-12 shows a `Point` struct with two fields, `x` and `y`, that we can break apart using a pattern with a `let` statement.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-12/src/main.rs}}
@@ -85,9 +83,9 @@ Listing 18-12 shows a `Point` struct with two fields, `x` and `y`, that we can b
 
 <span class="caption">Listing 18-12: Destructuring a struct’s fields into separate variables</span>
 
-This code creates the variables `a` and `b` that match the values of the `x` and `y` fields of the `p` struct. This example shows that the names of the variables in the pattern don’t have to match the field names of the struct. However, it’s common to match the variable names to the field names to make it easier to remember which variables came from which fields. Because of this common usage, and because writing `let Point { x: x, y: y } = p;` contains a lot of duplication, Rust has a shorthand for patterns that match struct fields: you only need to list the name of the struct field, and the variables created from the pattern will have the same names. Listing 18-13 behaves in the same way as the code in Listing 18-12, but the variables created in the `let` pattern are `x` and `y` instead of `a` and `b`.
+В цьому коді створюються змінні `a` та `b`, які відповідають значенням полів `x` та `y` структури `p`. Цей приклад показує, що назви змінних у шаблоні не обов'язково повинні збігатися з назвами полів структури. Однак, зазвичай назви змінних збігаються з назвами полів, щоб полегшити запам'ятовування того, які змінні походять з яких полів. Через таке поширене використання, а також через те, що запис `let Point { x: x, y: y } = p;` містить багато повторень, Rust має скорочення для шаблонів, які відповідають полям struct: вам потрібно лише перерахувати назву поля struct, і змінні, створені на основі шаблону, матимуть ті ж самі назви. Блок Коду 18-13 працює так само як і Блок Коду 18-12, але змінні, що створюються в шаблоні `let`, є `x` і `y` замість `a` і `b`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-13/src/main.rs}}
@@ -96,13 +94,13 @@ This code creates the variables `a` and `b` that match the values of the `x` and
 
 <span class="caption">Listing 18-13: Destructuring struct fields using struct field shorthand</span>
 
-This code creates the variables `x` and `y` that match the `x` and `y` fields of the `p` variable. The outcome is that the variables `x` and `y` contain the values from the `p` struct.
+Цей код створить змінні `x` та `y`, які відповідають полям `x` та`y` змінної `p`. В результаті змінні `x` та `y` містять значення зі структури `p`.
 
-We can also destructure with literal values as part of the struct pattern rather than creating variables for all the fields. Doing so allows us to test some of the fields for particular values while creating variables to destructure the other fields.
+Ми також можемо деструктурувати за допомогою буквених значень як частини шаблону struct замість того, щоб створювати змінні для всіх полів. Це дозволяє нам перевіряти деякі з полів на наявність певних значень, створюючи змінні для деструктуризації інших полів.
 
 In Listing 18-14, we have a `match` expression that separates `Point` values into three cases: points that lie directly on the `x` axis (which is true when `y = 0`), on the `y` axis (`x = 0`), or neither.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-14/src/main.rs:here}}
@@ -111,19 +109,19 @@ In Listing 18-14, we have a `match` expression that separates `Point` values int
 
 <span class="caption">Listing 18-14: Destructuring and matching literal values in one pattern</span>
 
-The first arm will match any point that lies on the `x` axis by specifying that the `y` field matches if its value matches the literal `0`. The pattern still creates an `x` variable that we can use in the code for this arm.
+Перший рукав буде відповідати будь-якій точці, що лежить на осі `x`, вказуючи, що поле `y` збігається, якщо його значення збігається з `0`. Шаблон все ще створює змінну `x`, яку ми можемо використовувати в коді для цього рукава.
 
-Similarly, the second arm matches any point on the `y` axis by specifying that the `x` field matches if its value is `0` and creates a variable `y` for the value of the `y` field. The third arm doesn’t specify any literals, so it matches any other `Point` and creates variables for both the `x` and `y` fields.
+Аналогічно, другий рукав зіставляє будь-яку точку на осі `y`, вказуючи, що поле `x` збігається, якщо його значення дорівнює `0`, і створює змінну `y` для значення поля `y`. Третій рукав не визначає ніяких літералів, тому воно відповідає будь-якій іншій `Point` і створює змінні для полів `x` і `y`.
 
 In this example, the value `p` matches the second arm by virtue of `x` containing a 0, so this code will print `On the y axis at 7`.
 
 Remember that a `match` expression stops checking arms once it has found the first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis and the `y` axis, this code would only print `On the x axis at 0`.
 
-#### Destructuring Enums
+#### Деструктуризація Енумів
 
-We've destructured enums in this book (for example, Listing 6-5 in Chapter 6), but haven’t yet explicitly discussed that the pattern to destructure an enum corresponds to the way the data stored within the enum is defined. As an example, in Listing 18-15 we use the `Message` enum from Listing 6-2 and write a `match` with patterns that will destructure each inner value.
+У цій книзі ми вже деструктурували енуми (наприклад, в Блоці Коду 6-5 Розділу 6), але ми ще окремо не обговорювали, що шаблон деструктурування енума повинен відповідати тому, як визначаються збережені в енумі дані. Як приклад, у Блоці Коду 18-15 ми використовуємо енум `Message` з Блоку Коду 6-2 і пишемо `match` з шаблонами, які деструктуруватимуть кожне внутрішнє значення.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-15/src/main.rs}}
@@ -132,29 +130,29 @@ We've destructured enums in this book (for example, Listing 6-5 in Chapter 6), b
 
 <span class="caption">Listing 18-15: Destructuring enum variants that hold different kinds of values</span>
 
-This code will print `Change the color to red 0, green 160, and blue 255`. Try changing the value of `msg` to see the code from the other arms run.
+Цей код виведе в консолі `Change the color to red 0, green 160, and blue 255`. Спробуйте змінити значення `msg`, щоб побачити виконання коду з інших рукавів.
 
-For enum variants without any data, like `Message::Quit`, we can’t destructure the value any further. We can only match on the literal `Message::Quit` value, and no variables are in that pattern.
+Для варіантів енуму без даних, таких як `Message::Quit`, ми не можемо деструктурувати значення далі. Ми тільки можемо зіставити буквальне значення `Message::Quit`, і жодних змінних у цьому шаблоні немає.
 
-For struct-like enum variants, such as `Message::Move`, we can use a pattern similar to the pattern we specify to match structs. After the variant name, we place curly brackets and then list the fields with variables so we break apart the pieces to use in the code for this arm. Here we use the shorthand form as we did in Listing 18-13.
+Для структуро-подібних варіантів енуму, таких як `Message::Move`, ми можемо використовувати шаблон схожий з тим, що ми вказували для зіставлення структур. Після назви варіанту ми ставимо фігурні дужки, а потім перелічуємо поля зі змінними, щоб розбити все на частини, які будуть використані в коді для цього рукава. Тут ми використовуємо скорочену форму, як ми це робили в Блоці Коду 18-13.
 
-For tuple-like enum variants, like `Message::Write` that holds a tuple with one element and `Message::ChangeColor` that holds a tuple with three elements, the pattern is similar to the pattern we specify to match tuples. The number of variables in the pattern must match the number of elements in the variant we’re matching.
+Шаблони кортежо-подібних варіантів енума, таких як `Message::Write`, що містить кортеж з одним елементом, і `Message::ChangeColor`, що містить кортеж з трьома елементами подібні до шаблону, який ми вказуємо для зіставлення кортежів. Кількість змінних у шаблоні повинна відповідати кількості елементів у варіанті, який ми порівнюємо.
 
-#### Destructuring Nested Structs and Enums
+#### Деструктуризація Вкладених Структур та Енумів
 
-So far, our examples have all been matching structs or enums one level deep, but matching can work on nested items too! For example, we can refactor the code in Listing 18-15 to support RGB and HSV colors in the `ChangeColor` message, as shown in Listing 18-16.
+Дотепер всі наші приклади стосувалися зіставлення структур або енумів глибиною в один рівень, але зіставлення може працювати і на вкладених елементах! Наприклад, ми можемо переробити код у Блоці Коду 18-15 для додавання підтримки RGB та HSV кольорів у повідомленні `ChangeColor`, як показано у Блоці Коду 18-16.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-16/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-16: Matching on nested enums</span>
+<span class="caption">Блок Коду 18-16: Зіставлення з вкладеними енумами</span>
 
-The pattern of the first arm in the `match` expression matches a `Message::ChangeColor` enum variant that contains a `Color::Rgb` variant; then the pattern binds to the three inner `i32` values. The pattern of the second arm also matches a `Message::ChangeColor` enum variant, but the inner enum matches `Color::Hsv` instead. We can specify these complex conditions in one `match` expression, even though two enums are involved.
+Шаблон першого рукава у виразі `match` відповідає варіанту енуму `Message::ChangeColor`, який містить варіант `Color::Rgb`; потім шаблон зв'язується з трьома внутрішніми значеннями `i32`. Шаблон другого рукава також відповідає варіанту енуму `Message::ChangeColor`, але внутрішній енум замість цього збігається з `Color::Hsv`. Ми можемо вказувати такі складні умови в одному виразі `match`, навіть якщо залучені два енуми.
 
-#### Destructuring Structs and Tuples
+#### Деструктуризація Структур та Кортежів
 
-We can mix, match, and nest destructuring patterns in even more complex ways. The following example shows a complicated destructure where we nest structs and tuples inside a tuple and destructure all the primitive values out:
+Ми можемо змішувати, зіставляти та вкладати деструктуризуючі шаблони і складнішими способами. В наступному прикладі показано складна деструктуризація, де ми вкладаємо структури та кортежі в кортеж та деструктуризуємо все примітивні значення:
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-05-destructuring-structs-and-tuples/src/main.rs:here}}
@@ -164,21 +162,21 @@ This code lets us break complex types into their component parts so we can use t
 
 Destructuring with patterns is a convenient way to use pieces of values, such as the value from each field in a struct, separately from each other.
 
-### Ignoring Values in a Pattern
+### Ігнорування Значень Шаблона
 
-You’ve seen that it’s sometimes useful to ignore values in a pattern, such as in the last arm of a `match`, to get a catchall that doesn’t actually do anything but does account for all remaining possible values. There are a few ways to ignore entire values or parts of values in a pattern: using the `_` pattern (which you’ve seen), using the `_` pattern within another pattern, using a name that starts with an underscore, or using `..` to ignore remaining parts of a value. Let’s explore how and why to use each of these patterns.
+You’ve seen that it’s sometimes useful to ignore values in a pattern, such as in the last arm of a `match`, to get a catchall that doesn’t actually do anything but does account for all remaining possible values. There are a few ways to ignore entire values or parts of values in a pattern: using the `_` pattern (which you’ve seen), using the `_` pattern within another pattern, using a name that starts with an underscore, or using `..` to ignore remaining parts of a value. Розглянемо, як і навіщо використовувати кожен з цих шаблонів.
 
-#### Ignoring an Entire Value with `_`
+#### Ігнорування цілого значення з _ `_`
 
-We’ve used the underscore as a wildcard pattern that will match any value but not bind to the value. This is especially useful as the last arm in a `match` expression, but we can also use it in any pattern, including function parameters, as shown in Listing 18-17.
+Ми використали символ підкреслення як шаблон підстановки, який буде відповідати будь-якому значенню, але не прив'язуватиметься до нього. This is especially useful as the last arm in a `match` expression, but we can also use it in any pattern, including function parameters, as shown in Listing 18-17.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-17/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-17: Using `_` in a function signature</span>
+<span class="caption">Блок Коду 18-17: Використання `_` в сигнатурі функції</span>
 
 This code will completely ignore the value `3` passed as the first argument, and will print `This code only uses the y parameter: 4`.
 
@@ -205,7 +203,7 @@ We can also use underscores in multiple places within one pattern to ignore part
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-19/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-19: Ignoring multiple parts of a tuple</span>
+<span class="caption">Блок Коду 18-19: Ігнорування кількох частин кортежу</span>
 
 This code will print `Some numbers: 2, 8, 32`, and the values 4 and 16 will be ignored.
 
@@ -213,7 +211,7 @@ This code will print `Some numbers: 2, 8, 32`, and the values 4 and 16 will be i
 
 If you create a variable but don’t use it anywhere, Rust will usually issue a warning because an unused variable could be a bug. However, sometimes it’s useful to be able to create a variable you won’t use yet, such as when you’re prototyping or just starting a project. In this situation, you can tell Rust not to warn you about the unused variable by starting the name of the variable with an underscore. In Listing 18-20, we create two unused variables, but when we compile this code, we should only get a warning about one of them.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-20/src/main.rs}}
@@ -242,9 +240,9 @@ We’ll receive an error because the `s` value will still be moved into `_s`, wh
 
 <span class="caption">Listing 18-22: Using an underscore does not bind the value</span>
 
-This code works just fine because we never bind `s` to anything; it isn’t moved.
+Цей код працює, оскільки ми ніколи та ні до чого не прив'язували `s`; воно не зміщене.
 
-#### Ignoring Remaining Parts of a Value with `..`
+#### Ігнорування Інших Частин Значення з `..`
 
 With values that have many parts, we can use the `..` syntax to use specific parts and ignore the rest, avoiding the need to list underscores for each ignored value. The `..` pattern ignores any parts of a value that we haven’t explicitly matched in the rest of the pattern. In Listing 18-23, we have a `Point` struct that holds a coordinate in three-dimensional space. In the `match` expression, we want to operate only on the `x` coordinate and ignore the values in the `y` and `z` fields.
 
@@ -259,7 +257,7 @@ We list the `x` value and then just include the `..` pattern. This is quicker th
 
 The syntax `..` will expand to as many values as it needs to be. Listing 18-24 shows how to use `..` with a tuple.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-24/src/main.rs}}
@@ -268,11 +266,11 @@ The syntax `..` will expand to as many values as it needs to be. Listing 18-24 s
 
 <span class="caption">Listing 18-24: Matching only the first and last values in a tuple and ignoring all other values</span>
 
-In this code, the first and last value are matched with `first` and `last`. The `..` will match and ignore everything in the middle.
+In this code, the first and last value are matched with `first` and `last`. `..` буде зіставлятися та ігнорувати зі всім посередині.
 
 However, using `..` must be unambiguous. If it is unclear which values are intended for matching and which should be ignored, Rust will give us an error. Listing 18-25 shows an example of using `..` ambiguously, so it will not compile.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-25/src/main.rs}}
@@ -281,7 +279,7 @@ However, using `..` must be unambiguous. If it is unclear which values are inten
 
 <span class="caption">Listing 18-25: An attempt to use `..` in an ambiguous way</span>
 
-When we compile this example, we get this error:
+Якщо ми скомпілюємо цей приклад, ми отримаємо цю помилку:
 
 ```console
 {{#include ../listings/ch18-patterns-and-matching/listing-18-25/output.txt}}
@@ -289,7 +287,7 @@ When we compile this example, we get this error:
 
 It’s impossible for Rust to determine how many values in the tuple to ignore before matching a value with `second` and then how many further values to ignore thereafter. This code could mean that we want to ignore `2`, bind `second` to `4`, and then ignore `8`, `16`, and `32`; or that we want to ignore `2` and `4`, bind `second` to `8`, and then ignore `16` and `32`; and so forth. The variable name `second` doesn’t mean anything special to Rust, so we get a compiler error because using `..` in two places like this is ambiguous.
 
-### Extra Conditionals with Match Guards
+### Додаткові Умови з Запобіжниками Зіставлення
 
 A *match guard* is an additional `if` condition, specified after the pattern in a `match` arm, that must also match for that arm to be chosen. Match guards are useful for expressing more complex ideas than a pattern alone allows.
 
@@ -299,9 +297,9 @@ The condition can use variables created in the pattern. Listing 18-26 shows a `m
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-26/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-26: Adding a match guard to a pattern</span>
+<span class="caption">Блок Коду 18-26: Додавання запобіжника зіставлення до шаблона</span>
 
-This example will print `The number 4 is even`. When `num` is compared to the pattern in the first arm, it matches, because `Some(4)` matches `Some(x)`. Then the match guard checks whether the remainder of dividing `x` by 2 is equal to 0, and because it is, the first arm is selected.
+Цей приклад виведе в консолі `The number 4 is even`. When `num` is compared to the pattern in the first arm, it matches, because `Some(4)` matches `Some(x)`. Then the match guard checks whether the remainder of dividing `x` by 2 is equal to 0, and because it is, the first arm is selected.
 
 If `num` had been `Some(5)` instead, the match guard in the first arm would have been false because the remainder of 5 divided by 2 is 1, which is not equal to 0. Rust would then go to the second arm, which would match because the second arm doesn’t have a match guard and therefore matches any `Some` variant.
 
@@ -309,7 +307,7 @@ There is no way to express the `if x % 2 == 0` condition within a pattern, so th
 
 In Listing 18-11, we mentioned that we could use match guards to solve our pattern-shadowing problem. Recall that we created a new variable inside the pattern in the `match` expression instead of using the variable outside the `match`. That new variable meant we couldn’t test against the value of the outer variable. Listing 18-27 shows how we can use a match guard to fix this problem.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-27/src/main.rs}}
@@ -318,9 +316,9 @@ In Listing 18-11, we mentioned that we could use match guards to solve our patte
 
 <span class="caption">Listing 18-27: Using a match guard to test for equality with an outer variable</span>
 
-This code will now print `Default case, x = Some(5)`. The pattern in the second match arm doesn’t introduce a new variable `y` that would shadow the outer `y`, meaning we can use the outer `y` in the match guard. Instead of specifying the pattern as `Some(y)`, which would have shadowed the outer `y`, we specify `Some(n)`. This creates a new variable `n` that doesn’t shadow anything because there is no `n` variable outside the `match`.
+Цей код виведе в консолі `Default case, x = Some(5)`. The pattern in the second match arm doesn’t introduce a new variable `y` that would shadow the outer `y`, meaning we can use the outer `y` in the match guard. Instead of specifying the pattern as `Some(y)`, which would have shadowed the outer `y`, we specify `Some(n)`. This creates a new variable `n` that doesn’t shadow anything because there is no `n` variable outside the `match`.
 
-The match guard `if n == y` is not a pattern and therefore doesn’t introduce new variables. This `y` *is* the outer `y` rather than a new shadowed `y`, and we can look for a value that has the same value as the outer `y` by comparing `n` to `y`.
+Запобіжник зіставлення `if n == y` не є шаблоном і тому не вводить нових змінних. This `y` *is* the outer `y` rather than a new shadowed `y`, and we can look for a value that has the same value as the outer `y` by comparing `n` to `y`.
 
 You can also use the *or* operator `|` in a match guard to specify multiple patterns; the match guard condition will apply to all the patterns. Listing 18-28 shows the precedence when combining a pattern that uses `|` with a match guard. The important part of this example is that the `if y` match guard applies to `4`, `5`, *and* `6`, even though it might look like `if y` only applies to `6`.
 
@@ -337,7 +335,7 @@ The match condition states that the arm only matches if the value of `x` is equa
 (4 | 5 | 6) if y => ...
 ```
 
-rather than this:
+замість:
 
 ```text
 4 | 5 | (6 if y) => ...
@@ -356,7 +354,7 @@ The *at* operator `@` lets us create a variable that holds a value at the same t
 
 <span class="caption">Listing 18-29: Using `@` to bind to a value in a pattern while also testing it</span>
 
-This example will print `Found an id in range: 5`. By specifying `id_variable
+Цей приклад виведе в консолі `Found an id in range: 5`. By specifying `id_variable
 @` before the range `3..=7`, we’re capturing whatever value matched the range while also testing that the value matched the range pattern.
 
 In the second arm, where we only have a range specified in the pattern, the code associated with the arm doesn’t have a variable that contains the actual value of the `id` field. The `id` field’s value could have been 10, 11, or 12, but the code that goes with that pattern doesn’t know which it is. The pattern code isn’t able to use the value from the `id` field, because we haven’t saved the `id` value in a variable.
@@ -365,8 +363,8 @@ In the last arm, where we’ve specified a variable without a range, we do have 
 
 Using `@` lets us test a value and save it in a variable within one pattern.
 
-## Summary
+## Підсумок
 
-Rust’s patterns are very useful in distinguishing between different kinds of data. When used in `match` expressions, Rust ensures your patterns cover every possible value, or your program won’t compile. Patterns in `let` statements and function parameters make those constructs more useful, enabling the destructuring of values into smaller parts at the same time as assigning to variables. We can create simple or complex patterns to suit our needs.
+Шаблони в Rust дуже корисні для визначення різниці між різновидами даних. When used in `match` expressions, Rust ensures your patterns cover every possible value, or your program won’t compile. Patterns in `let` statements and function parameters make those constructs more useful, enabling the destructuring of values into smaller parts at the same time as assigning to variables. We can create simple or complex patterns to suit our needs.
 
 Next, for the penultimate chapter of the book, we’ll look at some advanced aspects of a variety of Rust’s features.

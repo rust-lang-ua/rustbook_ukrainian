@@ -1,90 +1,90 @@
-## Appendix C: Derivable Traits
+## Додаток C: вивідні трейти
 
-In various places in the book, we’ve discussed the `derive` attribute, which you can apply to a struct or enum definition. The `derive` attribute generates code that will implement a trait with its own default implementation on the type you’ve annotated with the `derive` syntax.
+У різних місцях книги ми обговорювали атрибут `derive`, який можна застосувати до визначення структури або енуму. Атрибут `derive` генерує код, що реалізує трейт з власною реалізацією за замовчуванням для типу, який ви позначили за допомогою синтаксичної конструкції `derive`.
 
-In this appendix, we provide a reference of all the traits in the standard library that you can use with `derive`. Each section covers:
+У цьому додатку ми надаємо довідку по всіх трейтах зі стандартної бібліотеки, які ви можете застосовувати за допомогою `derive`. Кожен розділ покриває:
 
-* What operators and methods deriving this trait will enable
-* What the implementation of the trait provided by `derive` does
-* What implementing the trait signifies about the type
-* The conditions in which you’re allowed or not allowed to implement the trait
-* Examples of operations that require the trait
+* Які оператори та методи дозволить застосування цього трейту
+* Що робить реалізація трейту, створена за допомогою `derive`
+* Що реалізація трейту позначає для типу
+* Умови, за яких вам можна чи не можна реалізовувати трейт
+* Приклади операцій, що вимагають цього трейту
 
-If you want different behavior from that provided by the `derive` attribute, consult the [standard library documentation](../std/index.html)<!-- ignore -->
-for each trait for details of how to manually implement them.
+Якщо ви хочете отримати поведінку, відмінну від наданої атрибутом `derive`, зверніться до [документації стандартної бібліотеки](../std/index.html)<!-- ignore -->
+для кожного трейту, щоб дізнатися подробиці, як реалізувати їх вручну.
 
-These traits listed here are the only ones defined by the standard library that can be implemented on your types using `derive`. Other traits defined in the standard library don’t have sensible default behavior, so it’s up to you to implement them in the way that makes sense for what you’re trying to accomplish.
+Тут наведений повний список трейтів, визначених у стандартній бібліотеці, які можуть бути реалізовані для ваших типів за допомогою `derive`. Інші трейти, визначені в стандартній бібліотеці, не мають притомної поведінки за замовчуванням, тому ви повинні реалізувати їх так, щоб вони мали сенс для досягнення вашої конкретної мети.
 
-An example of a trait that can’t be derived is `Display`, which handles formatting for end users. You should always consider the appropriate way to display a type to an end user. What parts of the type should an end user be allowed to see? What parts would they find relevant? What format of the data would be most relevant to them? The Rust compiler doesn’t have this insight, so it can’t provide appropriate default behavior for you.
+Приклад трейту, який не можна вивести, це `Display`, що обробляє форматування для кінцевих користувачів. Ви завжди маєте продумати відповідний спосіб, як показати ваш тип кінцевому користувачеві. Які частини типу має кінцевий користувач право бачити? Які частини будуть для них актуальними? Який формат даних буде для них найбільш адекватним? Компілятор Rust не може цього знати, тож не може й забезпечити відповідну поведінку за замовчуванням.
 
-The list of derivable traits provided in this appendix is not comprehensive: libraries can implement `derive` for their own traits, making the list of traits you can use `derive` with truly open-ended. Implementing `derive` involves using a procedural macro, which is covered in the [“Macros”][macros]<!-- ignore --> section of Chapter 19.
+Список вивідних трейтів, наданий у цьому додатку, не є вичерпним: бібліотеки можуть реалізувати `derive` для своїх власних трейтів, що робить список трейтів, які ви можете використовувати з `derive`, повністю відкритим. Реалізація `derive` включає в себе використання процедурного макросу, про що розповідається в підрозділі ["Макроси"][macros]<!-- ignore --> Розділу 19.
 
-### `Debug` for Programmer Output
+### `Debug` - форматування для програмістів
 
-The `Debug` trait enables debug formatting in format strings, which you indicate by adding `:?` within `{}` placeholders.
+Трейт `Debug` надає зневаджувальний формат у рядках форматування, який зазначається додаванням `:?` у заповнювач `{}`.
 
-The `Debug` trait allows you to print instances of a type for debugging purposes, so you and other programmers using your type can inspect an instance at a particular point in a program’s execution.
+Трейт `Debug` дозволяє виводити екземпляри типу для цілей зневадження, щоб ви та інші програмісти, які використовують ваш тип, могли переглянути екземпляр у певному місці виконання програми.
 
-The `Debug` trait is required, for example, in use of the `assert_eq!` macro. This macro prints the values of instances given as arguments if the equality assertion fails so programmers can see why the two instances weren’t equal.
+Трейт `Debug` потрібен, наприклад, при використанні макросу `assert_eq!`. Цей макрос виводить значення екземплярів, переданих йому аргументами, якщо перевірка на рівність не пройшла, щоб програмісти могли побачити, чому два екземпляри не були однаковими.
 
-### `PartialEq` and `Eq` for Equality Comparisons
+### `PartialEq` та `Eq` для порівняння на рівність
 
-The `PartialEq` trait allows you to compare instances of a type to check for equality and enables use of the `==` and `!=` operators.
+Трейт `PartialEq` дозволяє вам порівнювати екземпляри типу, щоб перевірити на рівність, і дозволяє використання операторів`==` та `!=`.
 
-Deriving `PartialEq` implements the `eq` method. When `PartialEq` is derived on structs, two instances are equal only if *all* fields are equal, and the instances are not equal if any fields are not equal. When derived on enums, each variant is equal to itself and not equal to the other variants.
+Виведення `PartialEq` реалізує метод `eq`. Коли `PartialEq` виведено для структури, два екземпляри рівні лише тоді, коли *всі* поля є рівними, і не рівні, якщо хоча б в одному полі розрізняються. При виведенні на енумах кожен варіант дорівнює собі і не дорівнює іншим варіантам.
 
-The `PartialEq` trait is required, for example, with the use of the `assert_eq!` macro, which needs to be able to compare two instances of a type for equality.
+Трейт `PartialEq` потрібен, наприклад, для макросу `assert_eq!`, який має бути в змозі порівняти два екземпляри типу на рівність.
 
-The `Eq` trait has no methods. Its purpose is to signal that for every value of the annotated type, the value is equal to itself. The `Eq` trait can only be applied to types that also implement `PartialEq`, although not all types that implement `PartialEq` can implement `Eq`. One example of this is floating point number types: the implementation of floating point numbers states that two instances of the not-a-number (`NaN`) value are not equal to each other.
+Трейт `Eq` не має методів. Його мета - позначити, що кожне значення цього типу дорівнює самому собі. Трейт `Eq` може застосовуватися лише для типів, які також реалізують `PartialEq`, хоча не всі типи, що реалізують `PartialEq`, можуть реалізовувати `Eq`. Одним прикладом такого типу є числа з рухомою комою: реалізація чисел з рухомою комою позначає, що два екземпляри зі значенням не-число (`NaN`) не рівні між собою.
 
-An example of when `Eq` is required is for keys in a `HashMap<K, V>` so the `HashMap<K, V>` can tell whether two keys are the same.
+Приклад, коли `Eq` є необхідним, це ключі у `HashMap<K, V>`, щоб `HashMap<K, V>` завжди міг визначити, чи два ключі є однаковими.
 
-### `PartialOrd` and `Ord` for Ordering Comparisons
+### `PartialOrd` та `Ord` для порівнянь упорядкування
 
-The `PartialOrd` trait allows you to compare instances of a type for sorting purposes. A type that implements `PartialOrd` can be used with the `<`, `>`, `<=`, and `>=` operators. You can only apply the `PartialOrd` trait to types that also implement `PartialEq`.
+Трейт `PartialOrd` дозволяє порівнювати екземпляри типу з метою сортування. Для типу, що реалізує `PartialOrd`, можуть застосовуватися оператори `<` `>`, `<=`та `>=`. Ви можете застосувати трейт `PartialOrd` лише для типів, що також реалізують `PartialEq`.
 
-Deriving `PartialOrd` implements the `partial_cmp` method, which returns an `Option<Ordering>` that will be `None` when the values given don’t produce an ordering. An example of a value that doesn’t produce an ordering, even though most values of that type can be compared, is the not-a-number (`NaN`) floating point value. Calling `partial_cmp` with any floating point number and the `NaN` floating point value will return `None`.
+Виведення `PartialOrd` реалізує метод `partial_cmp`, який повертає `Option<Ordering>`, що буде `None`, якщо вказані значення неможливо впорядкувати. Приклад значення, яке не можна впорядкувати, навіть якщо більшість значень такого типу можуть бути порівнянні, це значення не-число (`NaN`) чисел з рухомою комою. Виклик `partial_cmp` для будь-якого числа з рухомою комою і значення `NaN` поверне `None`.
 
-When derived on structs, `PartialOrd` compares two instances by comparing the value in each field in the order in which the fields appear in the struct definition. When derived on enums, variants of the enum declared earlier in the enum definition are considered less than the variants listed later.
+При виведенні для структур `PartialOrd` порівнює два екземпляри, порівнюючи значення кожного поля у порядку, в якому ці поля присутні у проголошенні структури. При виведенні для енумів, варіанти енуму, проголошені раніше, вважаються меншими, ніж вказані пізніше.
 
-The `PartialOrd` trait is required, for example, for the `gen_range` method from the `rand` crate that generates a random value in the range specified by a range expression.
+Трейт `PartialOrd` потрібен, наприклад, методу `gen_range` з крейту `rand`, що генерує випадкові значення в інтервалі, заданому інтервальним виразом.
 
-The `Ord` trait allows you to know that for any two values of the annotated type, a valid ordering will exist. The `Ord` trait implements the `cmp` method, which returns an `Ordering` rather than an `Option<Ordering>` because a valid ordering will always be possible. You can only apply the `Ord` trait to types that also implement `PartialOrd` and `Eq` (and `Eq` requires `PartialEq`). When derived on structs and enums, `cmp` behaves the same way as the derived implementation for `partial_cmp` does with `PartialOrd`.
+Трейт `Ord` вказує, для будь-яких двох значень анотованого типу буде існувати коректний порядок. Трейт `Ord` реалізує метод `cmp`, який повертає `Ordering`, а не `Option<Ordering>`, бо правильний порядок є завжди можливим. Ви можете застосувати трейт `Ord` лише для типів, які також реалізують `PartialOrd` і `Eq` (а `Eq` вимагає `PartialEq`). При виведенні на структурах і енумах `cmp` поводиться так само, як і виведена реалізація `partial_cmp` для `PartialOrd`.
 
-An example of when `Ord` is required is when storing values in a `BTreeSet<T>`, a data structure that stores data based on the sort order of the values.
+Приклад потреби трейту `Ord` - зберігання значень у `BTreeSet<T>`, структурі даних, що зберігає дані на основі порядку сортування значень.
 
-### `Clone` and `Copy` for Duplicating Values
+### `Clone` і `Copy` для дублікації даних
 
-The `Clone` trait allows you to explicitly create a deep copy of a value, and the duplication process might involve running arbitrary code and copying heap data. See the [“Ways Variables and Data Interact: Clone”]()<!-- ignore --> section in Chapter 4 for more information on `Clone`.
+Трейт `Clone` дозволяє явно створити глибоку копію значення, і процес дублікації може містити виконання довільного коду і копіювання даних у купі. Дивіться підрозділ [“Як взаємодіють змінні з даними: клонування”]()<!-- ignore --> Розділу 4 для додаткової інформації про `Clone`.
 
-Deriving `Clone` implements the `clone` method, which when implemented for the whole type, calls `clone` on each of the parts of the type. This means all the fields or values in the type must also implement `Clone` to derive `Clone`.
+Виведення `Clone` реалізує метод `clone`, який при реалізації для всього типу викликає `clone` для кожної частини типу. Це означає, що всі поля і значення типу мають також реалізовувати `Clone`, щоб можна було вивести `Clone`.
 
-An example of when `Clone` is required is when calling the `to_vec` method on a slice. The slice doesn’t own the type instances it contains, but the vector returned from `to_vec` will need to own its instances, so `to_vec` calls `clone` on each item. Thus, the type stored in the slice must implement `Clone`.
+Приклад, коли потрібен `Clone`, це виклик методу `to_vec` для слайса. Слайс не володіє екземплярами типу, які він містить, але вектор, повернутий з `to_vec`, мусить володіти своїми екземплярами, тож `to_vec` викликає `clone` для кожного елемента. Тож тип, що зберігається в слайсі, має реалізовувати `Clone`.
 
-The `Copy` trait allows you to duplicate a value by only copying bits stored on the stack; no arbitrary code is necessary. See the [“Stack-Only Data: Copy”]()<!-- ignore --> section in Chapter 4 for more information on `Copy`.
+Трейт `Copy` дозволяє вам дублікацію значення, копіюючи біти, збережені в стеку, без жодного довільного коду. Дивіться підрозділ [“Дані в стеку: копіювання”]()<!-- ignore --> Розділу 4 для додаткової інформації про `Copy`.
 
-The `Copy` trait doesn’t define any methods to prevent programmers from overloading those methods and violating the assumption that no arbitrary code is being run. That way, all programmers can assume that copying a value will be very fast.
+Трейт `Copy` не визначає жодних методів, щоб не дозволити програмістам перевантажити ці методи і порушити припущення, що додатковий код не буде виконано. Таким чином, всі програмісти можуть виходити з припущення, що копіювання значення є дуже швидким.
 
-You can derive `Copy` on any type whose parts all implement `Copy`. A type that implements `Copy` must also implement `Clone`, because a type that implements `Copy` has a trivial implementation of `Clone` that performs the same task as `Copy`.
+Ви можете вивести `Copy` для будь-якого типу, всі частини якого реалізують `Copy`. Тип, що реалізує `Copy`, також має реалізовувати `Clone`, `Copy` має тривіальну реалізацію `Clone`, що робить те саме, що й `Copy`.
 
-The `Copy` trait is rarely required; types that implement `Copy` have optimizations available, meaning you don’t have to call `clone`, which makes the code more concise.
+Трейт `Copy` рідко коли буває потрібна; типи, що реалізовують `Copy`, мають доступні оптимізації, завдяки яким не треба викликати `clone`, що робить код більш виразним.
 
-Everything possible with `Copy` you can also accomplish with `Clone`, but the code might be slower or have to use `clone` in places.
+Все, що можливо з `Copy`, ви також можете досягти за допомогою `Clone`, але код може бути повільнішим і вам доведеться місцями використовувати `clone`.
 
-### `Hash` for Mapping a Value to a Value of Fixed Size
+### `Hash` для відображення значення у значення фіксованого розміру
 
-The `Hash` trait allows you to take an instance of a type of arbitrary size and map that instance to a value of fixed size using a hash function. Deriving `Hash` implements the `hash` method. The derived implementation of the `hash` method combines the result of calling `hash` on each of the parts of the type, meaning all fields or values must also implement `Hash` to derive `Hash`.
+Трейт `Hash` дозволяє взяти екземпляр типу довільного розміру і відобразити цей екземпляр на значення фіксованого розміру за допомогою геш-функції. Виведення `Hash` реалізовує метод `hash`. Виведена реалізація методу `hash` комбінує результати викликів `hash` для кожної частини типу, що означає, що всі поля і значення також мають реалізовувати `Hash` для виведення `Hash`.
 
-An example of when `Hash` is required is in storing keys in a `HashMap<K, V>` to store data efficiently.
+Приклад, коли потрібен `Hash`, це зберігання ключів у `HashMap<K, V>`, щоб ефективно зберігати дані.
 
-### `Default` for Default Values
+### `Default` для значень за замовчуванням
 
-The `Default` trait allows you to create a default value for a type. Deriving `Default` implements the `default` function. The derived implementation of the `default` function calls the `default` function on each part of the type, meaning all fields or values in the type must also implement `Default` to derive `Default`.
+Трейт `Default` дозволяє вам створювати значення за замовчуванням для типу. Виведення `Default` реалізовує функцію `default`. Виведена реалізація функції `default` викликає функцію `default` для кожної частини типу, що означає, що всі поля або значення в типі також повинні реалізовувати `Default`, щоб можна було вивести `Default`.
 
-The `Default::default` function is commonly used in combination with the struct update syntax discussed in the [“Creating Instances From Other Instances With Struct Update Syntax”]()<!-- ignore -->
-section in Chapter 5. You can customize a few fields of a struct and then set and use a default value for the rest of the fields by using `..Default::default()`.
+Функція `Default::default` зазвичай використовується у поєднанні з синтаксисом оновлення структури, про який ідеться в підрозділі ["Створення екземплярів з інших екземплярів за допомогою синтаксису оновлення структур"]()<!-- ignore -->
+Розділу 5. Ви можете виставити кілька полів конструкції, а потім встановити і використати значення за замовчуванням для решти полів за допомогою `..Default::default()`.
 
-The `Default` trait is required when you use the method `unwrap_or_default` on `Option<T>` instances, for example. If the `Option<T>` is `None`, the method `unwrap_or_default` will return the result of `Default::default` for the type `T` stored in the `Option<T>`.
+Наприклад, трейт `Default` необхідний, коли ви використовуєте метод `unwrap_or_default` для екземплярів `Option<T>`. Якщо `Option<T>` має значення `None`, метод `unwrap_or_default` поверне результат `Default::default` для типу `T`, що знаходиться в `Option<T>`.
 ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax ch04-01-what-is-ownership.html#stack-only-data-copy ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone
 
 [macros]: ch19-06-macros.html#macros

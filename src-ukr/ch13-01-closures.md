@@ -1,61 +1,61 @@
 <!-- Old heading. Do not remove or links may break. -->
 <a id="closures-anonymous-functions-that-can-capture-their-environment"></a>
 
-## Closures: Anonymous Functions that Capture Their Environment
+## Замикання: анонімні функції, що захоплюють своє середовище
 
-Rust’s closures are anonymous functions you can save in a variable or pass as arguments to other functions. You can create the closure in one place and then call the closure elsewhere to evaluate it in a different context. Unlike functions, closures can capture values from the scope in which they’re defined. We’ll demonstrate how these closure features allow for code reuse and behavior customization.
+У Rust замикання -- це анонімні функції, які можна зберігати у змінній або передавати як аргументи до інших функцій. Ви можете створити замикання в одному місці, а потім викликати деінде для обчислення в іншому контексті. На відміну від функції, замикання здатні використовувати значення з області видимості в якій вони були визначені. Ми продемонструємо, як наявність замикань дозволяє повторно використовувати код та змінювати поведінку програми.
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="creating-an-abstraction-of-behavior-with-closures"></a>
 <a id="refactoring-using-functions"></a>
 <a id="refactoring-with-closures-to-store-code"></a>
 
-### Capturing the Environment with Closures
+### Захоплення середовища за допомогою замикань
 
-We’ll first examine how we can use closures to capture values from the environment they’re defined in for later use. Here’s the scenario: Every so often, our t-shirt company gives away an exclusive, limited-edition shirt to someone on our mailing list as a promotion. People on the mailing list can optionally add their favorite color to their profile. If the person chosen for a free shirt has their favorite color set, they get that color shirt. If the person hasn’t specified a favorite color, they get whatever color the company currently has the most of.
+Спочатку ми розглянемо, як можна використовувати замикання для фіксації значень середовища, в якому вони визначені, для подальшого використання. Ось сценарій: Час від часу, наша компанія по виробництву футболок роздає ексклюзивну футболку, випущену ексклюзивним тиражем, комусь із нашого списку розсилки як рекламу. Люди зі списку розсилки можуть за бажанням додати свій улюблений колір до свого профілю. Якщо людина, якій надіслали безплатну футболку, обрала свій улюблений колір, вона отримає футболку такого ж кольору. Якщо людина не зазначила свій улюблений колір, то вона отримає футболку такого кольору, якого в компанії найбільше всього.
 
-There are many ways to implement this. For this example, we’re going to use an enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the number of colors available for simplicity). We represent the company’s inventory with an `Inventory` struct that has a field named `shirts` that contains a `Vec<ShirtColor>` representing the shirt colors currently in stock. The method `shirt_giveaway` defined on `Inventory` gets the optional shirt color preference of the free shirt winner, and returns the shirt color the person will get. This setup is shown in Listing 13-1:
+Існує багато способів це реалізувати. Для цього прикладу, ми використаємо енум `ShirtColor`, який складається з варіантів `Red` та `Blue` (обмежимо кількість доступних кольорів для простоти). Ми представлятимемо товарні запаси компанії за допомогою структури `Inventory`, яка має поле, що зветься `shirts`, яке містить `Vec<ShirtColor>`, що представляє кольори наявних на складі футболок. Метод `shirt_giveaway`, визначений для `Inventory`, отримує опціональний бажаний колір футболки для вручення переможцю та повертає колір футболки, яку цей переможець отримає. Ця ситуація показана в Блоці коду 13-1:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-1: Shirt company giveaway situation</span>
+<span class="caption">Блок коду 13-1: роздача подарунків у компанії по виробництву футболок</span>
 
-The `store` defined in `main` has two blue shirts and one red shirt remaining to distribute for this limited-edition promotion. We call the `giveaway` method for a user with a preference for a red shirt and a user without any preference.
+Змінна `store`, визначена в `main`, містить дві сині футболки і одну червону футболку, які лишилися для роздачі у рекламній акції. Ми викликаємо метод `giveaway` для користувача, що віддає перевагу червоній футолці, і для користувача, що не має особливих побажань.
 
-Again, this code could be implemented in many ways, and here, to focus on closures, we’ve stuck to concepts you’ve already learned except for the body of the `giveaway` method that uses a closure. In the `giveaway` method, we get the user preference as a parameter of type `Option<ShirtColor>` and call the `unwrap_or_else` method on `user_preference`. The [`unwrap_or_else` method on `Option<T>`][unwrap-or-else]<!-- ignore --> is defined by the standard library. It takes one argument: a closure without any arguments that returns a value `T` (the same type stored in the `Some` variant of the `Option<T>`, in this case `ShirtColor`). If the `Option<T>` is the `Some` variant, `unwrap_or_else` returns the value from within the `Some`. If the `Option<T>` is the `None` variant, `unwrap_or_else` calls the closure and returns the value returned by the closure.
+Знову ж таки, цей код може бути реалізований багатьма способами, і тут, щоб сфокусуватися на замиканнях, ми дотримуватимемося концепцій, які ви вже вивчили, окрім тіла методу `giveaway`, який використовує замикання. У методі `giveaway` ми отримуємо параметром побажання типу `Option<ShirtColor>` і викликаємо на `user_preference` метод `unwrap_or_else`. Метод [`unwrap_or_else` для `Option<T>`][unwrap-or-else]<!-- ignore --> визначений у стандартній бібліотеці. Він приймає один аргумент: замикання без аргументів, що повертає значення типу `T` (того ж типу, що міститься у варіанті `Some` `Option<T>`, у цьому випадку `ShirtColor`). Якщо `Option<T>` є варіантом `Some`, `unwrap_or_else` поверне значення, що міситься у `Some`. Якщо ж `Option<T>` є варіантом `None`, `unwrap_or_else` викликає замикання і повертає значення, повернене з замикання.
 
-We specify the closure expression `|| self.most_stocked()` as the argument to `unwrap_or_else`. This is a closure that takes no parameters itself (if the closure had parameters, they would appear between the two vertical bars). The body of the closure calls `self.most_stocked()`. We’re defining the closure here, and the implementation of `unwrap_or_else` will evaluate the closure later if the result is needed.
+Ми зазначаємо вираз замикання `|| self.most_stocked()`аргументом `unwrap_or_else`. Це замикання не приймає параметрів (якби замикання мало параметри, вони б з'явилися між вертикальними лініями). Тіло замикання викликає `self.most_stocked()`. Тут ми визначаємо замикання, і реалізація `unwrap_or_else` обчислить це замикання пізніше, якщо знадобиться його результат.
 
-Running this code prints:
+Виконання цього коду виводить:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-01/output.txt}}
 ```
 
-One interesting aspect here is that we’ve passed a closure that calls `self.most_stocked()` on the current `Inventory` instance. The standard library didn’t need to know anything about the `Inventory` or `ShirtColor` types we defined, or the logic we want to use in this scenario. The closure captures an immutable reference to the `self` `Inventory` instance and passes it with the code we specify to the `unwrap_or_else` method. Functions, on the other hand, are not able to capture their environment in this way.
+Тут один цікавий момент полягає в тому, що ми вже передали замикання, яке викликає `self.most_stocked()` для поточного екземпляра `Inventory`. Стандартній бібліотеці непотрібно нічого знати про типи `Inventory` або `ShirtColor`, які ми визначили, або про логіку, яку ми бажаємо використати у даному сценарії. Замикання захоплює немутабельне посилання на езкемпляр `Inventory` `self` і передає його з написаним нами кодом у метод `unwrap_or_else`. Функції, з іншого боку, не можуть захоплювати своє середовище у такий спосіб.
 
-### Closure Type Inference and Annotation
+### Виведення типів та анотації для замикань
 
-There are more differences between functions and closures. Closures don’t usually require you to annotate the types of the parameters or the return value like `fn` functions do. Type annotations are required on functions because the types are part of an explicit interface exposed to your users. Defining this interface rigidly is important for ensuring that everyone agrees on what types of values a function uses and returns. Closures, on the other hand, aren’t used in an exposed interface like this: they’re stored in variables and used without naming them and exposing them to users of our library.
+Між функціями та замиканнями існує більше відмінностей. Замикання зазвичай не потребують анотації типів параметрів чи типу, який вони повертають, на відміну від функцій `fn`. Анотації типів потрібні функціям, бо типи є частиною явного інтерфейсу, відкритого вашим користувачам. Жорстке визначення інтерфейсу важливе для забезпечення того, щоб всі погоджувались з тим, які значення функція приймає та повертає. Замикання, з іншого боку, не використовуються у подібному відкритому інтерфейсі: вони зберігаються у змінних і використовуються без назв і відкривання їх користувачам ваших бібліотек.
 
-Closures are typically short and relevant only within a narrow context rather than in any arbitrary scenario. Within these limited contexts, the compiler can infer the types of the parameters and the return type, similar to how it’s able to infer the types of most variables (there are rare cases where the compiler needs closure type annotations too).
+Замикання зазвичай короткі та актуальні тільки у конкретному контексті, а не в будь-якому довільному сценарії. У цих обмежених контекстах компілятор може вивести типи параметрів і типу, що повертається, так само як може вивести типи більшості змінних (трапляються рідкісні випадки, коли компілятор потребує також анотації типів замикань).
 
-As with variables, we can add type annotations if we want to increase explicitness and clarity at the cost of being more verbose than is strictly necessary. Annotating the types for a closure would look like the definition shown in Listing 13-2. In this example, we’re defining a closure and storing it in a variable rather than defining the closure in the spot we pass it as an argument as we did in Listing 13-1.
+Як і зі змінними, ми можемо за бажання додати анотації типів, коли хочемо збільшити виразність і ясність ціною більшої багатослівності, ніж потрібно. Анотування типів для замикання виглядатиме як визначення, наведене у Блоці коду 13-2. У цьому прикладі ми визначаємо замикання і зберігаємо його у змінній замість визначення замикання у місці, де ми передаємо його як аргумент, як ми робили у Блоці коду 13-1.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-02/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 13-2: Adding optional type annotations of the parameter and return value types in the closure</span>
+<span class="caption">Блок коду 13-2: додавання необов'язкових анотацій типу параметра і значення, яке повертає замикання</span>
 
-With type annotations added, the syntax of closures looks more similar to the syntax of functions. Here we define a function that adds 1 to its parameter and a closure that has the same behavior, for comparison. We’ve added some spaces to line up the relevant parts. This illustrates how closure syntax is similar to function syntax except for the use of pipes and the amount of syntax that is optional:
+Із анотаціями типів синтаксис замикань виглядає більш схожим на синтаксис функцій. Тут ми визначаємо функцію, що додає 1 до свого параметра і замикання, що має таку саму поведінку, для порівняння. Ми додали кілька пробілів для вирівнювання відповідних частин. Це ілюструє, чим синтаксис замикань подібний до синтаксису функцій, за виключенням використання вертикальних ліній і обсягу необов'язкового синтаксису:
 
 ```rust,ignore
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
@@ -64,87 +64,87 @@ let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
-The first line shows a function definition, and the second line shows a fully annotated closure definition. In the third line, we remove the type annotations from the closure definition. In the fourth line, we remove the brackets, which are optional because the closure body has only one expression. These are all valid definitions that will produce the same behavior when they’re called. Evaluating the closures is required for `add_one_v3` and `add_one_v4` to be able to compile because the types will be inferred from their usage. This is similar to `let v = Vec::new();` needing either type annotations or values of some type to be inserted into the `Vec` for Rust to be able to infer the type.
+У першому рядку визначення функції, а в другому анотоване визначення замикання. На третьому рядку ми прибираємо анотацію типу з визначення замикання. На четвертому рядку ми прибираємо дужки, які є опціональними через те, що замикання містить в собі тільки один вираз. Усе це є коректними визначеннями, які будуть демонструвати під час їх виклику одну й ту саму поведінку. Для `add_one_v3` and `add_one_v4` необхідно обчислення замикань, щоб компілятор зміг вивести типи з того, як ці замикання використовуються. Це схоже на те, як `let v = Vec::new();` потребує або анотацію типів, або додати значення певного типу у `Vec`, щоб Rust міг вивести тип.
 
-For closure definitions, the compiler will infer one concrete type for each of their parameters and for their return value. For instance, Listing 13-3 shows the definition of a short closure that just returns the value it receives as a parameter. This closure isn’t very useful except for the purposes of this example. Note that we haven’t added any type annotations to the definition. Because there are no type annotations, we can call the closure with any type, which we’ve done here with `String` the first time. If we then try to call `example_closure` with an integer, we’ll get an error.
+Для визначень замикань компілятор виведе один конкретний тип для кожного параметра і для значення, що повертається. Наприклад, у Блоці коду 13-3 показано визначення замикання, що повертає значення, переданого йому як параметр. Це замикання не дуже корисне, окрім як для цього прикладу. Зауважте, що ми не додавали анотації типів до визначення. Оскільки тут немає анотації типів, ми можемо викликати замикання для будь-якого типу, що ми тут вперше і зробили з `String`. Якщо ми потім спробуємо викликати `example_closure` з цілим параметром, то дістанемо помилку.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-03/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 13-3: Attempting to call a closure whose types are inferred with two different types</span>
+<span class="caption">Блок коду 13-3: спроба викликати замикання, чиї типи вже виведені, із двома різними типами</span>
 
-The compiler gives us this error:
+Компілятор повідомляє про таку помилку:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-03/output.txt}}
 ```
 
-The first time we call `example_closure` with the `String` value, the compiler infers the type of `x` and the return type of the closure to be `String`. Those types are then locked into the closure in `example_closure`, and we get a type error when we next try to use a different type with the same closure.
+Коли ми уперше викликали `example_closure` зі значенням `String`, компілятор вивів, що тип `x` і тип, що повертається із замикання, як `String`. Ці типи були зафіксовані для замикання `example_closure`, і ми отримаємо помилку типу, коли ще раз намагаємося використати інший тип для цього ж замикання.
 
-### Capturing References or Moving Ownership
+### Захоплення посилань чи переміщення володіння
 
-Closures can capture values from their environment in three ways, which directly map to the three ways a function can take a parameter: borrowing immutably, borrowing mutably, and taking ownership. The closure will decide which of these to use based on what the body of the function does with the captured values.
+Замикання можуть захоплювати значення зі свого середовища у три способи, що прямо відповідають трьом способам передачі параметра у функцію: немутабельне позичання, мутабельне позичання і взяття володіння. Замикання вирішує, яким способом скористатися, виходячи з того, що тіло функції робить із захопленими значеннями.
 
-In Listing 13-4, we define a closure that captures an immutable reference to the vector named `list` because it only needs an immutable reference to print the value:
+У Блоці коду 13-4 ми визначаємо замикання, яке захоплює немутабельне посилання на вектор з назвою `list`, тому що йому потрібно лише немутабельне посилання для виведення значення:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-04/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 13-4: Defining and calling a closure that captures an immutable reference</span>
+<span class="caption">Блок коду 13-4: визначення і виклик замикання, що захоплює немутабельне посилання</span>
 
-This example also illustrates that a variable can bind to a closure definition, and we can later call the closure by using the variable name and parentheses as if the variable name were a function name.
+Цей приклад також ілюструє, що змінна може бути зв'язана з визначенням замикання, і ми можемо пізніше викликати замикання, використовуючи назву змінної та дужки та, якби назва змінної була назвою функції.
 
-Because we can have multiple immutable references to `list` at the same time, `list` is still accessible from the code before the closure definition, after the closure definition but before the closure is called, and after the closure is called. This code compiles, runs, and prints:
+Оскільки ми можемо мати одночасно декілька немутабельних посилань на `list`, до нього можливий доступ до визначення замикання, після визначення, але до виклику замикання і після виклику замикання. Цей код компілюється, виконується і виводить:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-04/output.txt}}
 ```
 
-Next, in Listing 13-5, we change the closure body so that it adds an element to the `list` vector. The closure now captures a mutable reference:
+Далі в Блоці коду 13-5 ми змінюємо тіло замикання, щоб воно додавало елемент до вектора `list`. Це замикання тепер захоплює мутабельне посилання:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-05/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 13-5: Defining and calling a closure that captures a mutable reference</span>
+<span class="caption">Блок коду 13-5: визначення і виклик замикання, що захоплює мутабельне посилання</span>
 
-This code compiles, runs, and prints:
+Цей код компілюється, виконується і виводить:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-05/output.txt}}
 ```
 
-Note that there’s no longer a `println!` between the definition and the call of the `borrows_mutably` closure: when `borrows_mutably` is defined, it captures a mutable reference to `list`. We don’t use the closure again after the closure is called, so the mutable borrow ends. Between the closure definition and the closure call, an immutable borrow to print isn’t allowed because no other borrows are allowed when there’s a mutable borrow. Try adding a `println!` there to see what error message you get!
+Зверніть увагу, що тепер немає `println!` між визначенням і викликом замикання `borrows_mutably`: коли визначається `borrows_mutably`, воно захоплює мутабельне посилання на `list`. Ми не використовуємо замикання знову після його виклику, тож мутабельне позичання закінчується. Між визначенням замикання і його викликом не дозволене немутабельне позичання, потрібне для виведення, оскільки ніякі інші позичання не дозволені, коли є немутабельне позичання. Спробуйте додати туди `println!`, щоб побачити, яке повідомлення про помилку ви дістанете!
 
-If you want to force the closure to take ownership of the values it uses in the environment even though the body of the closure doesn’t strictly need ownership, you can use the `move` keyword before the parameter list. This technique is mostly useful when passing a closure to a new thread to move the data so that it’s owned by the new thread. We’ll have more examples of `move` closures in Chapter 16 when we talk about concurrency.
+Якщо ви хочете змусити замикання прийняти володіння значеннями, яке воно використовує у середовищі навіть якщо тіло замикання не обов'язково потребує володіння, ви можете використати ключове слово `move` перед списком параметрів. Ця техніка особливо корисна при передачі замикання новому потоку, щоб переміщеними даними володів цей новий потік. Більше прикладів замикань `move` буде в Розділі 16, коли ми говоритимемо про одночасність.
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="storing-closures-using-generic-parameters-and-the-fn-traits"></a>
 <a id="limitations-of-the-cacher-implementation"></a>
 <a id="moving-captured-values-out-of-the-closure-and-the-fn-traits"></a>
 
-### Moving Captured Values Out of Closures and the `Fn` Traits
+### Переміщення захоплених значень із замикань і трейти `Fn`
 
-Once a closure has captured a reference or captured ownership of a value where the closure is defined (thus affecting what, if anything, is moved *into* the closure), the code in the body of the closure defines what happens to the references or values when the closure is evaluated later (thus affecting what, if anything, is moved *out of* the closure). A closure body can do any of the following: move a captured value out of the closure, mutate the captured value, neither move nor mutate the value, or capture nothing from the environment to begin with.
+Коли замикання захопило посилання чи володіння значенням у місці, де це замикання визначене (таким чином впливаючи на те, що було переміщено *в* замикання), код у тілі замикання визначає, що відбувається з посиланнями або значеннями, коли пізніше замикання обчислюється (тим самим впливаючи на те, що буде переміщено *із* замикання). Тіло замикання може робити одне з: перемістити захоплене значення із замикання, змінити захоплене значення, не перемішати ані змінювати значення, чи взагалі нічого не захоплювати з середовища.
 
-The way a closure captures and handles values from the environment affects which traits the closure implements, and traits are how functions and structs can specify what kinds of closures they can use. Closures will automatically implement one, two, or all three of these `Fn` traits, in an additive fashion:
+Те, як замикання захоплює і обробляє значення з середовища, впливає на те, які трейти реалізовує замикання, а трейти - спосіб функціям і структурам зазначити, які види замикань вони можуть використовувати. Замикання автоматично реалізовують один, два чи всі три трейти `Fn`, накопичувально:
 
-1. `FnOnce` applies to closures that can be called at least once. All closures implement at least this trait, because all closures can be called. A closure that moves captured values out of its body will only implement `FnOnce` and none of the other `Fn` traits, because it can only be called once.
-2. `FnMut` applies to closures that don’t move captured values out of their body, but that might mutate the captured values. These closures can be called more than once.
-3. `Fn` applies to closures that don’t move captured values out of their body and that don’t mutate captured values, as well as closures that capture nothing from their environment. These closures can be called more than once without mutating their environment, which is important in cases such as calling a closure multiple times concurrently.
+1. `FnOnce` застосовується до замикань, які можна викликати щонайменше раз. Усі замикання реалізовують щонайменше цей трейт, бо всі замикання можна викликати. Замикання, що переміщує захоплені значення зі свого тіла можуть реалізовувати лише `FnOnce` і жодного іншого з трейтів `Fn`, бо їх можна викликати лише один раз.
+2. `FnMut` застосовується до замикань, які не переміщують захоплені значення зі свого тіла, але можуть їх змінювати. Ці замикання можуть бути викликані більше ніж один раз.
+3. `Fn` застосовується до замикань, що не переміщують захоплені значення зі свого тіла і їх не змінюють, а також до замикань, що нічого не захоплюють із середовища. Ці замикання можуть бути викликані більше одного разу без змін середовища, що важливо у таких випадках, як одночасний виклик замикання багато разів.
 
-Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that we used in Listing 13-6:
+Поглянемо на визначення методу `unwrap_or_else` для `Option<T>`, який ми використовували в Блоці Коду 13-6:
 
 ```rust,ignore
 impl<T> Option<T> {
@@ -160,64 +160,64 @@ impl<T> Option<T> {
 }
 ```
 
-Recall that `T` is the generic type representing the type of the value in the `Some` variant of an `Option`. That type `T` is also the return type of the `unwrap_or_else` function: code that calls `unwrap_or_else` on an `Option<String>`, for example, will get a `String`.
+Згадайте, що `T` - це узагальнений тип, що представляє тип значення з варіанта `Some` із `Option`. Цей тип `T` також є типом, який повертає поверненим функція `unwrap_or_else`: код, що викликає `unwrap_or_else`, наприклад, для `Option<String>` отримає `String`.
 
-Next, notice that the `unwrap_or_else` function has the additional generic type parameter `F`. The `F` type is the type of the parameter named `f`, which is the closure we provide when calling `unwrap_or_else`.
+Далі, зверніть увагу, що функція `unwrap_or_else` має додатковий параметр узагальненого типу `F`. Тип `F` є типом параметра `f`, який є замиканням, яке ми надаємо під час виклику `unwrap_or_else`.
 
-The trait bound specified on the generic type `F` is `FnOnce() -> T`, which means `F` must be able to be called at least once, take no arguments, and return a `T`. Using `FnOnce` in the trait bound expresses the constraint that `unwrap_or_else` is only going to call `f` at most one time. In the body of `unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be called. If the `Option` is `None`, `f` will be called once. Because all closures implement `FnOnce`, `unwrap_or_else` accepts the most different kinds of closures and is as flexible as it can be.
+Трейтове обмеження, вказане для узагальненого типу `F`, `FnOnce() -> T`, що означає, що `F` має бути можливо викликати щонайменше один раз, вона не приймає аргументів, і повертає `T`. Використання `FnOnce` у трейтовому обмеженні виражає обмеження, що `unwrap_or_else` збирається викликати `f` не більше одного разу. У тілі `unwrap_or_else`, як ми можемо бачити, якщо `Option` є `Some`, `f` не буде викликано. Якщо `Option` є `None`, `f` буде викликана один раз. Оскільки всі замикання реалізують `FnOnce`, `unwrap_or_else` приймає найрізноманітніші типи замикань і гнучка настільки, наскільки це можливо.
 
-> Note: Functions can implement all three of the `Fn` traits too. If what we want to do doesn’t require capturing a value from the environment, we can use the name of a function rather than a closure where we need something that implements one of the `Fn` traits. For example, on an `Option<Vec<T>>` value, we could call `unwrap_or_else(Vec::new)` to get a new, empty vector if the value is `None`.
+> Примітка: функції також можуть реалізовувати усі три трейти `Fn`. Якщо те, що ми хочемо зробити, не потребує захоплення значення з середовища, ми можемо використовувати ім'я функції замість замикання там, де нам потрібне щось, що реалізує один з трейтів `Fn`. Скажімо, для значення `Option<Vec<T>>` ми можемо викликати `unwrap_or_else(Vec:new)`, щоб отримати новий порожній вектор, якщо значення буде `None`.
 
-Now let’s look at the standard library method `sort_by_key` defined on slices, to see how that differs from `unwrap_or_else` and why `sort_by_key` uses `FnMut` instead of `FnOnce` for the trait bound.
+Тепер подивімося на метод зі стандартної бібліотеки `sort_by_key`, визначений для слайсів, щоб побачити, як це відрізняється від `unwrap_or_else`, і чому `sort_by_key` використовує `FnMut` замість `FnOnce` як трейтове обмеження.
 
-The closure gets one argument, a reference to the current item in the slice being considered, and returns a value of type `K` that can be ordered. This function is useful when you want to sort a slice by a particular attribute of each item. In Listing 13-x, we have a list of `Rectangle` instances and we use `sort_by_key` to order them by their `width` attribute from low to high:
+Замикання приймає один аргумент, посилання на поточний елемент у слайсі, і повертає значення типу `K`, яке можна впорядкувати. Ця функція корисна, коли вам треба відсортувати слайс за певним атрибутом кожного елемента. У Блоці коду 13-7 ми маємо список екземплярів `Rectangle` і використовуємо `sort_by_key`, щоб впорядкувати їх за атрибутом `width` за зростанням:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 13-7: Using `sort_by_key` to order rectangles by width</span>
+<span class="caption">Блок коду 13-7: Використання `sort_by_key` для впорядкування прямокутників за шириною</span>
 
-This code prints:
+Цей код виведе:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-07/output.txt}}
 ```
 
-The reason `sort_by_key` is defined to take an `FnMut` closure is that it calls the closure multiple times: once for each item in the slice. The closure `|r|
-r.width` doesn’t capture, mutate, or move out anything from its environment, so it meets the trait bound requirements.
+`sort_by_key` визначено для замикання `FnMut` тому, що вона викликає замикання кілька разів: один раз для кожного елемента у слайсі. Замикання `|r|
+r.width` не захоплює, не змінює і не переміщує нічого з його середовища, тож це відповідає вимогам трейтового обмеження.
 
-In contrast, Listing 13-8 shows an example of a closure that implements just the `FnOnce` trait, because it moves a value out of the environment. The compiler won’t let us use this closure with `sort_by_key`:
+На противагу цьому, у Блоці коду 13-8 наведено приклад замикання, яке реалізує тільки трейт `FnOnce`, тому що воно переміщує значення з середовища. Компілятор не дозволить нам використовувати це замикання у `sort_by_key`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 13-8: Attempting to use an `FnOnce` closure with `sort_by_key`</span>
+<span class="caption">Блок коду 13-8: спроба використати замикання `FnOnce` у `sort_by_key`</span>
 
-This is a contrived, convoluted way (that doesn’t work) to try and count the number of times `sort_by_key` gets called when sorting `list`. This code attempts to do this counting by pushing `value`—a `String` from the closure’s environment—into the `sort_operations` vector. The closure captures `value` then moves `value` out of the closure by transferring ownership of `value` to the `sort_operations` vector. This closure can be called once; trying to call it a second time wouldn’t work because `value` would no longer be in the environment to be pushed into `sort_operations` again! Therefore, this closure only implements `FnOnce`. When we try to compile this code, we get this error that `value` can’t be moved out of the closure because the closure must implement `FnMut`:
+Це надуманий, заплутаний спосіб (який не працює) спробувати підрахувати кількість викликів `sort_by_key` при сортуванні `list`. Цей код намагається виконати підрахунок, виштовхуючи `value` - `String` з середовища замикання у вектор `sort_operations`. Замикання захоплює `value`, потім переміщує `value` із замикання, передаючи володіння `value` до вектора `sort_operations`. Це замикання може бути викликане один раз; спроба викликати вдруге не спрацює, оскільки `value` більше не буде в середовищі, щоб занести його до `sort_operations` знову! Таким чином це замикання реалізує лише `FnOnce`. Коли ми намагаємося скомпілювати цей код, то отримуємо помилку про те, що `value` не можна перемістити із замикання, оскільки замикання має реалізовувати `FnMut`:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
 ```
 
-The error points to the line in the closure body that moves `value` out of the environment. To fix this, we need to change the closure body so that it doesn’t move values out of the environment. To count the number of times `sort_by_key` is called, keeping a counter in the environment and incrementing its value in the closure body is a more straightforward way to calculate that. The closure in Listing 13-x works with `sort_by_key` because it is only capturing a mutable reference to the `num_sort_operations` counter and can therefore be called more than once:
+Помилка вказує на рядок у тілі замикання, що переміщує `value` з середовища. Щоб виправити це, нам потрібно змінити тіло замикання так, щоб воно не переміщувало значення з середовища. Полічити кількість викликів `sort_by_key`, утримуючи лічильник у середовищі та збільшуючи його значення у тілі замикання є прямішим шляхом для цього обчислення. Замикання у Блоці коду 13-9 працює з `sort_by_key`, оскільки воно містить лише мутабельне посилання на лічильник `num_sort_operations` і тому може бути викликане більше ніж один раз:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 13-9: Using an `FnMut` closure with `sort_by_key` is allowed</span>
+<span class="caption">Блок коду 13-9: використання замикання `FnMut` у `sort_by_key` дозволене</span>
 
-The `Fn` traits are important when defining or using functions or types that make use of closures. In the next section, we’ll discuss iterators. Many iterator methods take closure arguments, so keep these closure details in mind as we continue!
+Трейти `Fn` мають важливе значення при визначенні або використанні функцій або типів, які використовують замикання. У наступному підрозділі ми обговоримо ітератори. Багато методів ітератора приймають аргументи-замикання, тому не забувайте, що дізналися про замикання, коли ми продовжимо!
 
 [unwrap-or-else]: ../std/option/enum.Option.html#method.unwrap_or_else

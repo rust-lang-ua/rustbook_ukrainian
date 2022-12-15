@@ -1,9 +1,9 @@
-# The Rust Programming Language
+# Мова програмування Rust
 
-*by Steve Klabnik and Carol Nichols, with contributions from the Rust Community*
+*автори Steve Klabnik та Carol Nichols, за допомогою спільноти Rust*
 
-This version of the text assumes you’re using Rust 1.61 (released 2022-05-18) or later. See the [“Installation” section of Chapter 1][install]<!-- ignore -->
-to install or update Rust.
+У цій версії тексту припускається, що ви використовуєте Rust 1.61 (випущено 18 травня 2022 року) або пізніше. Див. розділ [«Встановлення» глави 1][install]<!-- ignore -->
+щоб встановити або оновити Rust.
 
 The HTML format is available online at [https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/) and offline with installations of Rust made with `rustup`; run `rustup docs
 --book` to open.

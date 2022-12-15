@@ -1,67 +1,67 @@
-## Advanced Traits
+## Поглиблено про трейти
 
-We first covered traits in the [“Traits: Defining Shared Behavior”]()<!-- ignore --> section of Chapter 10, but we didn’t discuss the more advanced details. Now that you know more about Rust, we can get into the nitty-gritty.
+Ми вже розповідали про трейти у підрозділі [“Трейти: визначення загальної поведінки”]()<!-- ignore --> Розділу 10, але ми не говорили про глибші деталі. Тепер, коли ви більше знаєте про Rust, ми можемо перейти до дрібніших деталей.
 
-### Specifying Placeholder Types in Trait Definitions with Associated Types
+### Зазначення заповнювача типу у визначенні трейтів за допомогою асоційованих типів
 
-*Associated types* connect a type placeholder with a trait such that the trait method definitions can use these placeholder types in their signatures. The implementor of a trait will specify the concrete type to be used instead of the placeholder type for the particular implementation. That way, we can define a trait that uses some types without needing to know exactly what those types are until the trait is implemented.
+*Асоційовані типи* зв'язують заповнювач типу з трейтом таким чином, що методи трейту можуть використовувати ці заповнювачі типу у своїх сигнатурах. Той, хто реалізовуватиме трейт, зазначить конкретний тип, що буде використовуватися, замість заповнювача типу для конкретної реалізації. Таким чином ми можемо визначити трейт, що використовує деякі типи, без потреби точно знати ці типи до моменту реалізації трейту.
 
-We’ve described most of the advanced features in this chapter as being rarely needed. Associated types are somewhere in the middle: they’re used more rarely than features explained in the rest of the book but more commonly than many of the other features discussed in this chapter.
+Ми описували більшість поглиблених особливостей у цьому розділі як такі, що рідко потрібні. Пов'язані типи десь посередині: вони використовуються рідше за функціонал, описаний в решті книги, але частіше ніж багато іншого функціоналу, обговорюваного в цьому розділі.
 
-One example of a trait with an associated type is the `Iterator` trait that the standard library provides. The associated type is named `Item` and stands in for the type of the values the type implementing the `Iterator` trait is iterating over. The definition of the `Iterator` trait is as shown in Listing 19-12.
+Одним з прикладів трейту з асоційованим типом є трейт `Iterator`, наданий стандартною бібліотекою. Асоційований тип називається `Item` і позначає тип значень, по яких ітерує тип, що реалізує трейт `Iterator`. Визначення трейту `Iterator` показано у Блоці коду 19-12.
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-12/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 19-12: The definition of the `Iterator` trait that has an associated type `Item`</span>
+<span class="caption">Блок коду 19-12: визначення трейту `Iterator`, що має асоційований тип `Item`</span>
 
-The type `Item` is a placeholder, and the `next` method’s definition shows that it will return values of type `Option<Self::Item>`. Implementors of the `Iterator` trait will specify the concrete type for `Item`, and the `next` method will return an `Option` containing a value of that concrete type.
+Тип `Item` є заповнювачем, і визначення методу `next` показує, що він повертає значення типу `Option<Self::Item>`. Ті, хто реалізовуватимуть трейт `Iterator`, зазначать конкретний тип для `Item`, і метод `next` повертатиме `Option`, що міститиме значення цього конкретного типу.
 
-Associated types might seem like a similar concept to generics, in that the latter allow us to define a function without specifying what types it can handle. To examine the difference between the two concepts, we’ll look at an implementation of the `Iterator` trait on a type named `Counter` that specifies the `Item` type is `u32`:
+Асоційовані типи можуть видатися концепцією, подібною до узагальнень, у тому, що останні дозволяють визначити функцію без зазначення, які типи вона може обробляти. Для вивчення відмінностей між двома концепціями, погляньмо на реалізацію трейту `Iterator` для типу, що зветься `Counter` із зазначеним типом `Item` `u32`:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-22-iterator-on-counter/src/lib.rs:ch19}}
 ```
 
-This syntax seems comparable to that of generics. So why not just define the `Iterator` trait with generics, as shown in Listing 19-13?
+Цей синтаксис здається схожим на узагальнені параметри. То чому ж просто не визначити трейт `Iterator` з узагальненим параметром, як показано в Блоці коду 19-13?
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-13/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 19-13: A hypothetical definition of the `Iterator` trait using generics</span>
+<span class="caption">Блок коду 19-13: гіпотетичне визначення трейту `Iterator` за допомогою узагальненого параметра</span>
 
-The difference is that when using generics, as in Listing 19-13, we must annotate the types in each implementation; because we can also implement `Iterator<String> for Counter` or any other type, we could have multiple implementations of `Iterator` for `Counter`. In other words, when a trait has a generic parameter, it can be implemented for a type multiple times, changing the concrete types of the generic type parameters each time. When we use the `next` method on `Counter`, we would have to provide type annotations to indicate which implementation of `Iterator` we want to use.
+Різниця полягає в тому, що при використанні узагальнених параметрів, як у Блоці коду 19-13, ми маємо анотувати типи у кожній реалізації; а оскільки ми також можемо реалізувати `Iterator<String> для Counter` чи будь-якого іншого типу, ми можемо мати багато реалізацій `Iterator` для `Counter`. Іншими словами, коли трейт має узагальнений параметр, він може бути реалізованим для типу багато разів, кожного разу для іншого конкретного типу узагальненого параметра. Коли ми використовуємо метод `next` для `Counter`, нам доведеться надавати анотації типу, щоб позначити, яку реалізацію `Iterator` ми хочемо використати.
 
-With associated types, we don’t need to annotate types because we can’t implement a trait on a type multiple times. In Listing 19-12 with the definition that uses associated types, we can only choose what the type of `Item` will be once, because there can only be one `impl Iterator for Counter`. We don’t have to specify that we want an iterator of `u32` values everywhere that we call `next` on `Counter`.
+З асоційованими типами нам не треба анотувати типи, бо ми не можемо реалізувати трейт для типу кілька разів. У Блоці коду 19-12, з визначенням, яке використовує асоційовані типи, ми можемо обрати тип `Item` лише один раз, бо може бути лише один `impl Iterator for Counter`. Нам не треба зазначати, що ми хочемо ітератор по значеннях `u32` всюди, де ми викликаємо `next` для `Counter`.
 
-Associated types also become part of the trait’s contract: implementors of the trait must provide a type to stand in for the associated type placeholder. Associated types often have a name that describes how the type will be used, and documenting the associated type in the API documentation is good practice.
+Асоційовані типи також стають частиною контракту трейту: ті, хто реалізують трейт, мають зазначити тип для заповнювача асоційованого типу. Асоційовані типи часто мають назву, що описує, як цей тип буде використано, і документування асоційованого типу в документації API є доброю практикою.
 
-### Default Generic Type Parameters and Operator Overloading
+### Узагальнені параметри типу за замовчуванням і перевантаження операторів
 
-When we use generic type parameters, we can specify a default concrete type for the generic type. This eliminates the need for implementors of the trait to specify a concrete type if the default type works. You specify a default type when declaring a generic type with the `<PlaceholderType=ConcreteType>` syntax.
+Коли ми використовуємо узагальнені параметри типу, то можемо вказати конкретний тип за замовчуванням для узагальненого типу. Це усуває потребу для тих, хто реалізовуватиме трейт, вказувати конкретний тип, якщо тип за замовчанням працює. Ви можете вказати тип за замовчуванням при проголошенні узагальненого типу за допомогою синтаксису `<PlaceholderType=ConcreteType>`.
 
-A great example of a situation where this technique is useful is with *operator overloading*, in which you customize the behavior of an operator (such as `+`) in particular situations.
+Чудовий приклад ситуації, коли ця техніка корисна, це *перевантаження операторів*, де ви налаштовуєте поведінку оператора (наприклад, `+`) в певних ситуаціях.
 
-Rust doesn’t allow you to create your own operators or overload arbitrary operators. But you can overload the operations and corresponding traits listed in `std::ops` by implementing the traits associated with the operator. For example, in Listing 19-14 we overload the `+` operator to add two `Point` instances together. We do this by implementing the `Add` trait on a `Point` struct:
+Rust не дозволяє вам створювати власні оператори або перевантажувати довільні оператори. Але ви можете перевантажити операції і відповідні трейти, перелічені в `std::ops`, реалізувавши трейти, пов'язані з оператором. Наприклад, у Блоці коду 19-14 ми перевантажуємо оператор `+`, щоб додавати два екземпляри `Point`. Ми робимо це, реалізуючи трейт `Add` для `Point`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-14/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 19-14: Implementing the `Add` trait to overload the `+` operator for `Point` instances</span>
+<span class="caption">Блок коду 19-14: реалізація трейту `Add` для перевантаження оператора `+` для екземплярів `Point`</span>
 
-The `add` method adds the `x` values of two `Point` instances and the `y` values of two `Point` instances to create a new `Point`. The `Add` trait has an associated type named `Output` that determines the type returned from the `add` method.
+Метод `add` додає значення `x` двох екземплярів `Point` і значення `y` двох екземплярів `Point`, щоб створити нову `Point`. Трейт `Add` має асоційований тип, що називається `Output`, який визначає тип, який повертає метод `add`.
 
-The default generic type in this code is within the `Add` trait. Here is its definition:
+Узагальнений параметр типу за замовчанням у цьому коді належить трейту `Add`. Ось його визначення:
 
 ```rust
 trait Add<Rhs=Self> {
@@ -71,121 +71,121 @@ trait Add<Rhs=Self> {
 }
 ```
 
-This code should look generally familiar: a trait with one method and an associated type. The new part is `Rhs=Self`: this syntax is called *default type parameters*. The `Rhs` generic type parameter (short for “right hand side”) defines the type of the `rhs` parameter in the `add` method. If we don’t specify a concrete type for `Rhs` when we implement the `Add` trait, the type of `Rhs` will default to `Self`, which will be the type we’re implementing `Add` on.
+Цей код має виглядати в цілому знайомо: трейт з одним методом і асоційованим типом. Новим тут є `Rhs=Self`: цей синтаксис зветься *параметром типу за замовчанням*. Узагальнений параметр типу `Rhs` (скорочено для "right hand side" - "правий бік") визначає тип параметра `rhs` у методі `add`. Якщо ми не зазначимо конкретний тип для `Rhs`, коли ми реалізуємо трейт `Add`, тип `Rhs` буде взято за замовчанням як `Self`, тобто тип, для якого ми реалізуємо `Add`.
 
-When we implemented `Add` for `Point`, we used the default for `Rhs` because we wanted to add two `Point` instances. Let’s look at an example of implementing the `Add` trait where we want to customize the `Rhs` type rather than using the default.
+Коли ми реалізували `Add` для `Point`, ми використали значення за замовчанням для `Rhs`, бо ми хотіли додавати два екземпляри `Point`. Розгляньмо приклад реалізації трейта `Add`, де ми хочемо виставити свій тип `Rhs`, а не використовувати значення за замовчуванням.
 
-We have two structs, `Millimeters` and `Meters`, holding values in different units. This thin wrapping of an existing type in another struct is known as the *newtype pattern*, which we describe in more detail in the [“Using the Newtype Pattern to Implement External Traits on External Types”][newtype]<!-- ignore
---> section. We want to add values in millimeters to values in meters and have the implementation of 
+Ми маємо дві структури, `Millimeters` і `Meters`, що містять значення в різних одиницях. Ця тонка обгортка типу, що існує, у іншу структуру відома як *шаблон новий тип*, який ми описували детальніше у підрозділі [“Використання шаблону новий тип для реалізації зовнішніх трейтів на зовнішніх типах”][newtype]<!-- ignore
+--> . Ми хочемо додавати значення у міліметрах до значень у метрах, щоб реалізація 
 
-`Add` do the conversion correctly. We can implement `Add` for `Millimeters` with `Meters` as the `Rhs`, as shown in Listing 19-15.
+`Add` коректно виконувала перетворення. Ми можемо реалізувати `Add` для `Millimeters` з `Meters` як `Rhs`, як показано в Блоці коду 19-15.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-15/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 19-15: Implementing the `Add` trait on `Millimeters` to add `Millimeters` to `Meters`</span>
+<span class="caption">Блок коду 19-15: реалізація трейту `Add` для `Millimeters`, щоб додавати `Millimeters` до `Meters`</span>
 
-To add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to set the value of the `Rhs` type parameter instead of using the default of `Self`.
+Щоб додати `Millimeters` і `Meters`, вказуємо `impl Add<Meters>`, щоб встановити значення параметра типу `Rhs` замість встановленого за замовчуванням `Self`.
 
-You’ll use default type parameters in two main ways:
+Параметри типу за замовчанням використовуються у двох основних випадках:
 
-* To extend a type without breaking existing code
-* To allow customization in specific cases most users won’t need
+* Щоб розширити тип, не порушуючи коду, що існує
+* Щоб дозволити налаштування у певних випадках, не потрібних більшості користувачів
 
-The standard library’s `Add` trait is an example of the second purpose: usually, you’ll add two like types, but the `Add` trait provides the ability to customize beyond that. Using a default type parameter in the `Add` trait definition means you don’t have to specify the extra parameter most of the time. In other words, a bit of implementation boilerplate isn’t needed, making it easier to use the trait.
+Трейт `Add` зі стандартної бібліотеки є прикладом другого призначення: зазвичай ви додаєте однакові типи, але трейт `Add` надає можливість глибшого налаштування. Використовуючи параметр типу за замовчуванням в трейті `Add` означає, що у більшості випадків вам не потрібно вказувати додатковий параметр. Іншими словами, не потрібно вказувати шматок шаблонного коду реалізації, що полегшує використання трейту.
 
-The first purpose is similar to the second but in reverse: if you want to add a type parameter to an existing trait, you can give it a default to allow extension of the functionality of the trait without breaking the existing implementation code.
+Перше призначення схоже на друге, але навпаки: якщо ви хочете додати параметр типу до трейту, що вже існує, ви можете надати йому параметр типу за замовчуванням, щоб розширити функціональність трейту не порушивши наявного коду реалізації.
 
-### Fully Qualified Syntax for Disambiguation: Calling Methods with the Same Name
+### Повністю кваліфікований синтаксис для уникнення двозначностей: виклик методів з однаковою назвою
 
-Nothing in Rust prevents a trait from having a method with the same name as another trait’s method, nor does Rust prevent you from implementing both traits on one type. It’s also possible to implement a method directly on the type with the same name as methods from traits.
+Ніщо у Rust не забороняє трейту мати метод з такою самою назвою, як і в іншому трейті, ані реалізувати обидва трейти для одного типу. Також можна реалізувати метод з такою ж назвою, як у трейтах, напряму для типу.
 
-When calling methods with the same name, you’ll need to tell Rust which one you want to use. Consider the code in Listing 19-16 where we’ve defined two traits, `Pilot` and `Wizard`, that both have a method called `fly`. We then implement both traits on a type `Human` that already has a method named `fly` implemented on it. Each `fly` method does something different.
+При виклику методів з однаковою назвою вам треба вказати Rust, котрий саме метод ви хочете використати. Розгляньмо код у Блоці коду 19-16, де ми визначили два трейти, `Pilot` і `Wizard`, що обидва мають метод `fly`. Тоді ми реалізуємо обидва трейти для типу `Human`, що також має реалізований на ньому метод з назвою `fly`. Кожен метод `fly` робить щось інше.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-16/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 19-16: Two traits are defined to have a `fly` method and are implemented on the `Human` type, and a `fly` method is implemented on `Human` directly</span>
+<span class="caption">Блок коду 19-16: два трейти маю визначення, що містить метод "fly" і реалізовані для типу `Human`, а також метод `fly`, реалізований безпосередньо для `Human`</span>
 
-When we call `fly` on an instance of `Human`, the compiler defaults to calling the method that is directly implemented on the type, as shown in Listing 19-17.
+Коли ми викликаємо `fly` на екземплярі `Human`, компілятор за замовчуванням викликає метод, реалізований безпосередньо на типі, як показано у Блоці коду 19-17.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-17/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 19-17: Calling `fly` on an instance of `Human`</span>
+<span class="caption">Блок коду 19-17: виклик `fly` для екземпляра `Human`</span>
 
-Running this code will print `*waving arms furiously*`, showing that Rust called the `fly` method implemented on `Human` directly.
+Запуск цього коду виведе `*waving arms furiously*`, показуючи, що Rust викликав метод `fly`, реалізований безпосередньо для `Human`.
 
-To call the `fly` methods from either the `Pilot` trait or the `Wizard` trait, we need to use more explicit syntax to specify which `fly` method we mean. Listing 19-18 demonstrates this syntax.
+Щоб викликати методи `fly` з трейту `Pilot` або трейту `Wizard`, нам треба використати більш явний синтаксис, щоб зазначити, який саме метод `fly` ми маємо на увазі. Блок коду 19-18 демонструє такий синтаксис.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-18/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 19-18: Specifying which trait’s `fly` method we want to call</span>
+<span class="caption">Блок коду 19-18: уточнення, метод `fly` якого саме трейту ми хочемо викликати</span>
 
-Specifying the trait name before the method name clarifies to Rust which implementation of `fly` we want to call. We could also write `Human::fly(&person)`, which is equivalent to the `person.fly()` that we used in Listing 19-18, but this is a bit longer to write if we don’t need to disambiguate.
+Зазначення назви трейту перед назвою методу прояснює для Rust, котру реалізацію `fly` ми хочемо викликати. Ми також могли б написати `Human::fly(&person)`, що є еквівалентом `person.fly()`, який ми використали в Блоці коду 19-18, але так трохи довше писати, якщо нам не треба уникнути двозначності.
 
-Running this code prints the following:
+Виконання цього коду виведе наступне:
 
 ```console
 {{#include ../listings/ch19-advanced-features/listing-19-18/output.txt}}
 ```
 
-Because the `fly` method takes a `self` parameter, if we had two *types* that both implement one *trait*, Rust could figure out which implementation of a trait to use based on the type of `self`.
+Оскільки метод `fly` приймає параметр `self`, то якщо ми маємо два *типи*, що обидва реалізують один *трейт*, Rust може зрозуміти, яку реалізацію трейту використати, виходячи з типу `self`.
 
-However, associated functions that are not methods don’t have a `self` parameter. When there are multiple types or traits that define non-method functions with the same function name, Rust doesn't always know which type you mean unless you use *fully qualified syntax*. For example, in Listing 19-19 we create a trait for an animal shelter that wants to name all baby dogs *Spot*. We make an `Animal` trait with an associated non-method function `baby_name`. The `Animal` trait is implemented for the struct `Dog`, on which we also provide an associated non-method function `baby_name` directly.
+Однак асоційовані функції, що не є методами, не мають параметру `self`. Коли є багато типів чи трейтів, що визначають функції, що не є методами, з однаковими назвами, Rust не завжди знає, який тип ви мали на увазі, якщо ви не використаєте *повний кваліфікований синтаксис*. Наприклад, у Блоці коду 19-19 ми створюємо трейт для притулку тварин, що хоче називати всіх маленьких собак *Spot*. Ми створюємо трейт `Animal` з асоційованою функцією - не методом `baby_name`. Трейт `Animal` реалізований для структури `Dog`, для якої ми також визначаємо напряму асоційовану функцію - не метод `baby_name`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-19/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 19-19: A trait with an associated function and a type with an associated function of the same name that also implements the trait</span>
+<span class="caption">Блок коду 19-19: трейт з асоційованою функцією і тип з асоційованою функцією з такою ж назвою, що реалізує цей трейт</span>
 
-We implement the code for naming all puppies Spot in the `baby_name` associated function that is defined on `Dog`. The `Dog` type also implements the trait `Animal`, which describes characteristics that all animals have. Baby dogs are called puppies, and that is expressed in the implementation of the `Animal` trait on `Dog` in the `baby_name` function associated with the `Animal` trait.
+Ми реалізували код для називання всіх цуценят Spot у асоційованій функції `baby_name`, визначеній для `Dog`. Тип `Dog` також реалізує трейт `Animal`, що описує характеристики, спільні для всіх тварин. Дитинчата собак звуться цуценятами, і це виражено в реалізації трейту `Animal` доя `Dog` у функції `baby_name`, асоційованій з трейтом `Animal`.
 
-In `main`, we call the `Dog::baby_name` function, which calls the associated function defined on `Dog` directly. This code prints the following:
+У `main` ми викликаємо функцію `Dog::baby_name`, яка викликає асоційовану функцію, визначену безпосередньо для `Dog`. Цей код виводить таке:
 
 ```console
 {{#include ../listings/ch19-advanced-features/listing-19-19/output.txt}}
 ```
 
-This output isn’t what we wanted. We want to call the `baby_name` function that is part of the `Animal` trait that we implemented on `Dog` so the code prints `A baby dog is called a puppy`. The technique of specifying the trait name that we used in Listing 19-18 doesn’t help here; if we change `main` to the code in Listing 19-20, we’ll get a compilation error.
+Ми хотіли не такого виведення. Ми хотіли викликати функцію `baby_name`, що є частиною трейту `Animal`, який ми реалізували для `Dog`, щоб код вивів `A baby dog is called a puppy`. Техніка зазначення назви трейту, яку ми використали у Блоці коду 19-18 тут не допомагає; якщо ми змінимо `main` на код, наведений у Блоці коду 19-20, ми отримаємо помилку компіляції.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-20/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 19-20: Attempting to call the `baby_name` function from the `Animal` trait, but Rust doesn’t know which implementation to use</span>
+<span class="caption">Блок коду 19-20: спроба викликати функцію `baby_name` з трейту `Animal`, але Rust не знає, яку реалізацію використати</span>
 
-Because `Animal::baby_name` doesn’t have a `self` parameter, and there could be other types that implement the `Animal` trait, Rust can’t figure out which implementation of `Animal::baby_name` we want. We’ll get this compiler error:
+Оскільки `Animal::baby_name` не має параметру `self`, і можуть бути інші типи, що реалізують трейт `Animal`, Rust не може з'ясувати, яку реалізацію `Animal::baby_name` ми хочемо. Ми отримуємо цю помилку компілятора:
 
 ```console
 {{#include ../listings/ch19-advanced-features/listing-19-20/output.txt}}
 ```
 
-To disambiguate and tell Rust that we want to use the implementation of `Animal` for `Dog` as opposed to the implementation of `Animal` for some other type, we need to use fully qualified syntax. Listing 19-21 demonstrates how to use fully qualified syntax.
+Щоб розрізнити реалізації і сказати Rust, що ми хочемо використати реалізацію `Animal` для `Dog`, а не реалізацію `Animal` для якогось іншого типу, ми маємо використати повний кваліфікований синтаксис. Блок коду 19-21 демонструє, як використовувати повний кваліфікований синтаксис.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -194,27 +194,27 @@ To disambiguate and tell Rust that we want to use the implementation of `Animal`
 ```
 
 
-<span class="caption">Listing 19-21: Using fully qualified syntax to specify that we want to call the `baby_name` function from the `Animal` trait as implemented on `Dog`</span>
+<span class="caption">Блок коду 19-21: використання повністю кваліфікованого синтаксису, щоб вказати, що ми хочемо викликати функцію `baby_name` з трейту `Animal`, реалізованого для `Dog`</span>
 
-We’re providing Rust with a type annotation within the angle brackets, which indicates we want to call the `baby_name` method from the `Animal` trait as implemented on `Dog` by saying that we want to treat the `Dog` type as an `Animal` for this function call. This code will now print what we want:
+Ми надаємо Rust анотацію типу в кутових дужках, що показує, що ми хочемо викликати метод `baby_name` з трейту `Animal`, як він реалізований для `Dog`, кажучи, що ми хочемо розглядати тип e `Dog` як `Animal` для цього виклику функції. Цей код тепер виведе те, що ми хотіли:
 
 ```console
 {{#include ../listings/ch19-advanced-features/listing-19-21/output.txt}}
 ```
 
-In general, fully qualified syntax is defined as follows:
+В цілому, повний кваліфікований синтаксис визначений таким чином:
 
 ```rust,ignore
 <Type as Trait>::function(receiver_if_method, next_arg, ...);
 ```
 
-For associated functions that aren’t methods, there would not be a `receiver`: there would only be the list of other arguments. You could use fully qualified syntax everywhere that you call functions or methods. However, you’re allowed to omit any part of this syntax that Rust can figure out from other information in the program. You only need to use this more verbose syntax in cases where there are multiple implementations that use the same name and Rust needs help to identify which implementation you want to call.
+Для асоційованих функцій, які не є методами, не використовується `receiver`: там буде лише список решти аргументів. Ви можете використовувати повний кваліфікований синтаксис всюди, де викликаєте функції або методи. Однак, ви можете пропустити будь-яку частину синтаксису, яку Rust може визначити за допомогою іншої інформації у програмі. Вам потрібно використовувати цей більш багатослівний синтаксис у випадках, коли є декілька реалізацій, які використовують одну назву і Rust потребує допомоги, щоб визначити, яку реалізацію ви хочете викликати.
 
-### Using Supertraits to Require One Trait’s Functionality Within Another Trait
+### Використання супертрейтів для вимоги функціонала одного трейта в іншому трейті
 
-Sometimes, you might write a trait definition that depends on another trait: for a type to implement the first trait, you want to require that type to also implement the second trait. You would do this so that your trait definition can make use of the associated items of the second trait. The trait your trait definition is relying on is called a *supertrait* of your trait.
+Іноді ви можете написати визначення трейта, що залежить від іншого трейта: для типу, що реалізує перший трейт, ви хочете вимагати, щоб цей тип також реалізовував другий трейт. Вам може бути таке потрібно, якщо визначення вашого трейта використовує асоційовані елементи другого трейта. Трейт, на який покладається визначення вашого трейта, зветься *супертрейтом* вашого трейта.
 
-For example, let’s say we want to make an `OutlinePrint` trait with an `outline_print` method that will print a given value formatted so that it's framed in asterisks. That is, given a `Point` struct that implements the standard library trait `Display` to result in `(x, y)`, when we call `outline_print` on a `Point` instance that has `1` for `x` and `3` for `y`, it should print the following:
+Наприклад, припустимо, що ми хочемо зробити трейт `OutlinePrint` з методом `outline_print`, що виводить задане значення, форматоване рамкою з зірочок. Тобто, якщо структура `Point` реалізує трейт зі стандартної бібліотеки `Display` і виводить `(x, y)`, то коли ми викликаємо `outline_print` на екземплярі `Point`, що має значення `1` для `x` і `3` для `y`, він має вивести таке:
 
 ```text
 **********
@@ -224,66 +224,66 @@ For example, let’s say we want to make an `OutlinePrint` trait with an `outlin
 **********
 ```
 
-In the implementation of the `outline_print` method, we want to use the `Display` trait’s functionality. Therefore, we need to specify that the `OutlinePrint` trait will work only for types that also implement `Display` and provide the functionality that `OutlinePrint` needs. We can do that in the trait definition by specifying `OutlinePrint: Display`. This technique is similar to adding a trait bound to the trait. Listing 19-22 shows an implementation of the `OutlinePrint` trait.
+У реалізації методу `outline_print` ми хочемо використати функціональність трейту `Display`. Відповідно, нам потрібно вказати що трейт `OutlinePrint` буде працювати тільки для типів, які також реалізують `Display` і надають функціональність, потрібну `OutlinePrint`. Ми можемо зробити це у визначені трейта, вказавши `OutlinePrint: Display`. Ця техніка схожа на додавання до трейта трейтового обмеження. Блок коду 19-22 показує реалізацію трейту `OutlinePrint`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-22/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 19-22: Implementing the `OutlinePrint` trait that requires the functionality from `Display`</span>
+<span class="caption">Блок коду 19-22: реалізація трейту `OutlinePrint`, який вимагає функціональності `Display`</span>
 
-Because we’ve specified that `OutlinePrint` requires the `Display` trait, we can use the `to_string` function that is automatically implemented for any type that implements `Display`. If we tried to use `to_string` without adding a colon and specifying the `Display` trait after the trait name, we’d get an error saying that no method named `to_string` was found for the type `&Self` in the current scope.
+Оскільки ми вказали, що `OutlinePrint` потребує трейту `Display`, ми можемо використовувати функцію `to_string`, автоматично реалізовану для будь-якого типу, що реалізовує `Display`. Якби ми спробували використати `to_string`, не додавши двокрапки і трейту `Display` після назви трейту, ми б отримали помилку про те, що метод `to_string` не був знайдений для типу `&Self` у поточній області видимості.
 
-Let’s see what happens when we try to implement `OutlinePrint` on a type that doesn’t implement `Display`, such as the `Point` struct:
+Подивімося, що станеться, коли ми спробуємо реалізувати `OutlinePrint` для типу, що не реалізує `Display`, такому як структура `Point`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/src/main.rs:here}}
 ```
 
-We get an error saying that `Display` is required but not implemented:
+Ми отримуємо помилку, яка повідомляє, що `Display` є потрібним, але не реалізованим:
 
 ```console
 {{#include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
 ```
 
-To fix this, we implement `Display` on `Point` and satisfy the constraint that `OutlinePrint` requires, like so:
+Щоб виправити це, ми реалізуємо `Display` для `Point` і задовольняємо обмеження для `OutlinePrint` ось таким чином:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-03-impl-display-for-point/src/main.rs:here}}
 ```
 
-Then implementing the `OutlinePrint` trait on `Point` will compile successfully, and we can call `outline_print` on a `Point` instance to display it within an outline of asterisks.
+To fix this, we implement `Display` on `Point` and satisfy the constraint that `OutlinePrint` requires, like so:
 
-### Using the Newtype Pattern to Implement External Traits on External Types
+### Використання паттерну "новий тип" для реалізації зовнішніх трейтів на зовнішніх типах
 
-In Chapter 10 in the [“Implementing a Trait on a Type”]()<!-- ignore --> section, we mentioned the orphan rule that states we’re only allowed to implement a trait on a type if either the trait or the type are local to our crate. It’s possible to get around this restriction using the *newtype pattern*, which involves creating a new type in a tuple struct. (We covered tuple structs in the [“Using Tuple Structs without Named Fields to Create Different Types”][tuple-structs]<!--
-ignore --> section of Chapter 5.) The tuple struct will have one field and be a thin wrapper around the type we want to implement a trait for. Then the wrapper type is local to our crate, and we can implement the trait on the wrapper. 
+У Розділі 10, у підрозділі [“Реалізація трейта для типу”]()<!-- ignore --> , ми згадали правило сироти, яке каже, що ми можемо реалізовувати трейт для типу, якщо трейт або тип є локальним для нашого крейта. Це обмеження можна обійти за допомогою *паттерна "новий тип"*, що передбачає створення нового типу у структурі-кортежі. (Про структури-кортежі ми говорили у підрозділі ["Використання структур-кортежів без названих полів для створення нових типів"][tuple-structs]<!--
+ignore --> Розділу 5.) Структури-кортежі мають одне поле і є тонкою обгорткою для типу, для якого ми хочемо реалізувати трейт. Тоді тип-обгортка є локальним для нашого крейта, і ми можемо реалізувати трейт для обгортки. 
 
 *Newtype* is a term that originates from the Haskell programming language. There is no runtime performance penalty for using this pattern, and the wrapper type is elided at compile time.
 
-As an example, let’s say we want to implement `Display` on `Vec<T>`, which the orphan rule prevents us from doing directly because the `Display` trait and the `Vec<T>` type are defined outside our crate. We can make a `Wrapper` struct that holds an instance of `Vec<T>`; then we can implement `Display` on `Wrapper` and use the `Vec<T>` value, as shown in Listing 19-23.
+Наприклад, скажімо, ми хочемо реалізувати `Display` для `Vec<T>`, що безпосередньо заборонено правилом сироти, тому що трейт `Display` і тип `Vec<T>` визначається поза нашим крейтом. Ми можемо зробити структуру `Wrapper`, що містить екземпляр `Vec<T>`; тоді ми можемо реалізувати `Display` для `Wrapper` використати значення `Vec<T>`, як показано в Блоці коду 19-23.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-23/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 19-23: Creating a `Wrapper` type around `Vec<String>` to implement `Display`</span>
+<span class="caption">Блок коду 19-23: створення типу `Wrapper` навколо `Vec<String>для реалізації `Display`</span>
 
-The implementation of `Display` uses `self.0` to access the inner `Vec<T>`, because `Wrapper` is a tuple struct and `Vec<T>` is the item at index 0 in the tuple. Then we can use the functionality of the `Display` type on `Wrapper`.
+Реалізація `Display` використовує `self.0` для доступу до внутрішнього `Vec<T>`, оскільки `Wrapper` - це структура-кортеж, а `Vec<T>` - це елемент з індексом 0 в кортежі. Тоді ми можемо використати функціонал типу `Display` на `Wrapper`.
 
-The downside of using this technique is that `Wrapper` is a new type, so it doesn’t have the methods of the value it’s holding. We would have to implement all the methods of `Vec<T>` directly on `Wrapper` such that the methods delegate to `self.0`, which would allow us to treat `Wrapper` exactly like a `Vec<T>`. If we wanted the new type to have every method the inner type has, implementing the `Deref` trait (discussed in Chapter 15 in the [“Treating Smart Pointers Like Regular References with the `Deref` Trait”][smart-pointer-deref]<!-- ignore --> section) on the `Wrapper` to return the inner type would be a solution. If we don’t want the `Wrapper` type to have all the methods of the inner type—for example, to restrict the `Wrapper` type’s behavior—we would have to implement just the methods we do want manually.
+Недоліком використання цієї техніки є те, що `Wrapper` є новим типом, тож він не має методів значення, яке він містить. Ми мали б реалізувати всі методи `Vec<T>` безпосередньо на `Wrapper`, делегуючи всі методи `self.0`, що дозволить нам використовувати `Wrapper` точно як і `Vec<T>`. Якби ми хотіли, щоб новий тип мав кожен метод, який має внутрішній тип, то реалізація трейту `Deref` (про який йдеться у Розділі 15 у підрозділі [“Використання розумних вказівників як звичайних посилань за допомогою трейта `Deref`”][smart-pointer-deref]<!-- ignore --> ) для `Wrapper`, щоб повертав внутрішній тип, могла б бути розв'язанням проблеми. Якщо ж ми не хочемо, щоб тип `Wrapper` мав усі методи внутрішнього типу - наприклад, для обмеження поведінки типу `Wrapper` - то нам треба реалізувати потрібні нам методи вручну.
 
-This newtype pattern is also useful even when traits are not involved. Let’s switch focus and look at some advanced ways to interact with Rust’s type system.
+Цей паттерн "новий тип" також корисний навіть без залучення трейтів. Змінімо фокус і погляньмо на деякі поглиблені способи взаємодії з системою типів Rust.
 ch10-02-traits.html#implementing-a-trait-on-a-type ch10-02-traits.html#traits-defining-shared-behavior
 
 [newtype]: ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types

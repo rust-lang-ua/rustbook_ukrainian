@@ -1,61 +1,61 @@
-## Using Message Passing to Transfer Data Between Threads
+## Використання обміну повідомленнями для передачі данних між потоками
 
-One increasingly popular approach to ensuring safe concurrency is *message passing*, where threads or actors communicate by sending each other messages containing data. Here’s the idea in a slogan from [the Go language documentation](https://golang.org/doc/effective_go.html#concurrency): “Do not communicate by sharing memory; instead, share memory by communicating.”
+Одним із набираючих популярність підходів для забезпечення безпечної конкурентності є *обмін повідомленнями*, коли потоки або ж актори комунікують надсилаючи один одному повідомлення, що містять дані. Ось основна ідея, виражена в слогані з [документації мови програмування Go](https://go. dev/doc/effective_go#concurrency): "Не комунікуйте за допомогою спільної памʼяті; замість цього, діліться памʼяттю комунікуючи."
 
-To accomplish message-sending concurrency, Rust's standard library provides an implementation of *channels*. A channel is a general programming concept by which data is sent from one thread to another.
+Для досягнення конкурентності за допомогою обміну повідомленнями, стандартна бібліотека Rust надає імплементацію *каналів*. Канал - це загальна концепція програмування, основна ідея якої полягає в тому, що дані надсилаються з одного потоку в інший.
 
-You can imagine a channel in programming as being like a directional channel of water, such as a stream or a river. If you put something like a rubber duck into a river, it will travel downstream to the end of the waterway.
+Ви можете уявити канал в програмуванні схожим на напрямлений канал води, такий як струмок чи річка. Якщо ви помістите щось на кшталт гумової качечки в річку, вона попливе вниз за течією аж до кінця водного шляху.
 
-A channel has two halves: a transmitter and a receiver. The transmitter half is the upstream location where you put rubber ducks into the river, and the receiver half is where the rubber duck ends up downstream. One part of your code calls methods on the transmitter with the data you want to send, and another part checks the receiving end for arriving messages. A channel is said to be *closed* if either the transmitter or receiver half is dropped.
+Канал має дві половини: передавач (transmitter) і отримувач (receiver). Передавач - це місце, де ви пускаєте за течією гумових качечок, а отримувач - це місце куди гумова качечка потрапляє в кінці течії. Одна частина вашого коду викликає методи передавача з даними, які ви хочете відправити, а інша частина перевіряє отримувач на наявність отриманих повідомлень. Канал вважається *закритим* якщо передавач або ж отримувач були видалені.
 
-Here, we’ll work up to a program that has one thread to generate values and send them down a channel, and another thread that will receive the values and print them out. We’ll be sending simple values between threads using a channel to illustrate the feature. Once you’re familiar with the technique, you could use channels for any threads that needs to communicate between each other, such as a chat system or a system where many threads perform parts of a calculation and send the parts to one thread that aggregates the results.
+Надалі, ми попрацюємо над програмою, яка має один потік для генерації значень і надсилання їх по каналу, а інший потік отримуватиме значення і виводитиме їх на екран. Ми відправлятимемо прості значення між потоками використовуючи канали для ілюстрації даного функціоналу. Як тільки ви познайомитесь з даним підходом, ви зможете використовувати канали для будь-яких потоків, яким потрібно комунікувати між собою, таким як чат-системи або ж системи, де багато потоків виконують частини обчислень і надсилають результати в один потік, котрий агрегує ці результати.
 
-First, in Listing 16-6, we’ll create a channel but not do anything with it. Note that this won’t compile yet because Rust can’t tell what type of values we want to send over the channel.
+Спочатку, в Блоці коду 16-6, ми створимо канал, але не будемо нічого з ним робити. Зверніть увагу, що даний приклад поки що не скомпілюється, оскільки Rust не може визначити які типи значень ми хочемо надсилати через канал.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-06/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 16-6: Creating a channel and assigning the two halves to `tx` and `rx`</span>
+<span class="caption">Блок коду 16-6: Створення каналу і присвоєння двох його половин в `tx` і `rx`</span>
 
-We create a new channel using the `mpsc::channel` function; `mpsc` stands for *multiple producer, single consumer*. In short, the way Rust’s standard library implements channels means a channel can have multiple *sending* ends that produce values but only one *receiving* end that consumes those values. Imagine multiple streams flowing together into one big river: everything sent down any of the streams will end up in one river at the end. We’ll start with a single producer for now, but we’ll add multiple producers when we get this example working.
+Ми створюємо новий канал за допомогою функції `mpsc::channel`, `mpsc` означає *multiple producer, single consumer* (*декілька виробників, один споживач*). Словом, спосіб, в який стандартна бібліотека Rust імплементує канали означає, що канал може мати декілька *відправляючих* кінців, які створюють значення, але лише один *споживаючий* кінець, який споживає значення. Уявіть декілька струмків, що зливаються в одну велику річку: все що буде відправлено за течією будь-якого з струмків в кінці-кінців потрапить в річку. Наразі ми почнемо з одного виробника, але ми додамо ще декілька коли змусимо цей приклад працювати.
 
-The `mpsc::channel` function returns a tuple, the first element of which is the sending end--the transmitter--and the second element is the receiving end--the receiver. The abbreviations `tx` and `rx` are traditionally used in many fields for *transmitter* and *receiver* respectively, so we name our variables as such to indicate each end. We’re using a `let` statement with a pattern that destructures the tuples; we’ll discuss the use of patterns in `let` statements and destructuring in Chapter 18. For now, know that using a `let` statement this way is a convenient approach to extract the pieces of the tuple returned by `mpsc::channel`.
+Функція `mpsc::channel` повертає кортеж, першим елементом якого є відправляючий кінець - передавач, а другим елементом є отримуючий кінець - отримувач. Абревіатури `tx` і `rx` традиційно використовуються в багатьох сферах для позначення *передавача (transmitter)* та *отримувача (receiver)* відповідно, тому ми називаємо наші змінні таким чином, щоб позначити відповідні кінці каналу. Ми використовуємо інструкцію `let` з шаблоном, що деструктуризує кортежі; ми обговоримо використання шаблонів в інструкціях `let` та деструктуризацію в Розділі 18. Наразі ж знайте, що використання інструкції `let` в такий спосіб є зручним підходом для витягування (extract) частин кортежу, який повертає після виконання `mpsc::channel`.
 
-Let’s move the transmitting end into a spawned thread and have it send one string so the spawned thread is communicating with the main thread, as shown in Listing 16-7. This is like putting a rubber duck in the river upstream or sending a chat message from one thread to another.
+Давайте перемістимо передавач в створений потік і попросимо його надіслати одну стрічку, щоб даний потік комунікував з основним потоком, як показано в Блоці коду 16-7. Це як помістити гумову качечку в річку вище за течією або ж надіслати чат-повідомлення з одного потоку в інший.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-07/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 16-7: Moving `tx` to a spawned thread and sending “hi”</span>
+<span class="caption">Блок коду 16-7: Переміщення `tx` в створений потік і відправка "hi"</span>
 
-Again, we’re using `thread::spawn` to create a new thread and then using `move` to move `tx` into the closure so the spawned thread owns `tx`. The spawned thread needs to own the transmitter to be able to send messages through the channel. The transmitter has a `send` method that takes the value we want to send. The `send` method returns a `Result<T, E>` type, so if the receiver has already been dropped and there’s nowhere to send a value, the send operation will return an error. In this example, we’re calling `unwrap` to panic in case of an error. But in a real application, we would handle it properly: return to Chapter 9 to review strategies for proper error handling.
+Знову ж таки, ми використовуємо `thread::spawn` щоб створити новий потік і потім використовуємо `move` щоб помістити `tx` всередину замикання, адже таким чином потік володітиме `tx`. Створений потік має володіти передавачем, щоб мати можливість надсилати повідомлення по каналу. Передавач має метод `send`, котрий приймає значення, яке ми хочемо надіслати. Метод `send` повертає `Result<T, E>`, отже, якщо отримувач був видалений й немає куди надіслати значення, операція поверне помилку. В даному прикладі, ми викликаємо `unwrap`, щоб наш код запанікував у випадку помилки. Однак в справжньому додатку ми б обробили помилки належним чином: поверніться до Розділу 9 щоб переглянути стратегії належної обробки помилок.
 
-In Listing 16-8, we’ll get the value from the receiver in the main thread. This is like retrieving the rubber duck from the water at the end of the river or receiving a chat message.
+В Блоці коду 16-8 ми в основному потоці отримаємо/дістанемо значення з отримувача. Це як дістати гумову качечку з води в кінці річки або ж отримати повідомлення в чаті.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-08/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 16-8: Receiving the value “hi” in the main thread and printing it</span>
+<span class="caption">Блок коду 16-8: Отримання значення "hi" в основному потоці та вивід його на екран</span>
 
-The receiver has two useful methods: `recv` and `try_recv`. We’re using `recv`, short for *receive*, which will block the main thread’s execution and wait until a value is sent down the channel. Once a value is sent, `recv` will return it in a `Result<T, E>`. When the transmitter closes, `recv` will return an error to signal that no more values will be coming.
+Отримувач має два корисні методі: `recv` та `try_recv`. Ми використовуємо `recv`, скорочено від *receive*, який заблокує виконання основного потоку і чекатиме доки значення буде надіслане в канал. Як тільки значення буде надіслане, `recv` поверне його, обернувши в `Result<T, E>`. Коли передавач закриється, `recv` поверне помилку, яка сигналізує про те, що значення більше не надходитимуть.
 
-The `try_recv` method doesn’t block, but will instead return a `Result<T, E>` immediately: an `Ok` value holding a message if one is available and an `Err` value if there aren’t any messages this time. Using `try_recv` is useful if this thread has other work to do while waiting for messages: we could write a loop that calls `try_recv` every so often, handles a message if one is available, and otherwise does other work for a little while until checking again.
+Метод `try_recv` не блокує основний потік, а натомість одразу повертає `Result<T, E>`: значення `Ok`, котре містить повідомлення, якщо воно доступне, і `Err` якщо цього разу немає жодних повідомлень. Використання `try_recv` корисне якщо потік має виконувати іншу роботу, очікуючи на повідомлення: ми можемо написати цикл, котрий періодично викликає `try_recv`, обробляє повідомлення, якщо воно доступне, а в іншому випадку деякий час виконує іншу роботу аж до наступної перевірки.
 
-We’ve used `recv` in this example for simplicity; we don’t have any other work for the main thread to do other than wait for messages, so blocking the main thread is appropriate.
+Ми використали `recv` в цьому прикладі для простоти; ми не маємо жодної іншої роботи для основного потоку, окрім очікування повідомлень, тому блокування основного потоку є доречним/виправданим.
 
-When we run the code in Listing 16-8, we’ll see the value printed from the main thread:
+Коли ми запустимо код з Блоку коду 16-8, ми побачимо, що значення виводиться з основного потоку:
 
 
 <!-- Not extracting output because changes to this output aren't significant;
@@ -66,47 +66,47 @@ changes in the compiler -->
 Got: hi
 ```
 
-Perfect!
+Ідеально!
 
-### Channels and Ownership Transference
+### Канали та передача володіння
 
-The ownership rules play a vital role in message sending because they help you write safe, concurrent code. Preventing errors in concurrent programming is the advantage of thinking about ownership throughout your Rust programs. Let’s do an experiment to show how channels and ownership work together to prevent problems: we’ll try to use a `val` value in the spawned thread *after* we’ve sent it down the channel. Try compiling the code in Listing 16-9 to see why this code isn’t allowed:
+Правила володіння відіграють важливу роль в обміні повідомленнями, оскільки вони допомагають вам писати безпечний конкурентний код. Запобігання помилкам в конкурентних програмах - це перевага, яку надає мислення в термінах володіння в ваших Rust програмах. Давайте проведемо експеримент для демонстрації того як канали та володіння працюють разом для запобігання проблемам: ми спробуємо використати значення `val` в створеному потоці вже *після* того, як ми надіслали його далі по каналу. Спробуйте скомпілювати код з Блоку коду 16-9 щоб побачити чому він не пропускається компілятором:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-09/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 16-9: Attempting to use `val` after we’ve sent it down the channel</span>
+<span class="caption">Блок коду 16-9: Спроба використати `val` після того, як воно було надіслане в канал</span>
 
-Here, we try to print `val` after we’ve sent it down the channel via `tx.send`. Allowing this would be a bad idea: once the value has been sent to another thread, that thread could modify or drop it before we try to use the value again. Potentially, the other thread’s modifications could cause errors or unexpected results due to inconsistent or nonexistent data. However, Rust gives us an error if we try to compile the code in Listing 16-9:
+Тут ми намагаємось вивести `val` на екран вже після того як ми надіслали його по каналу за допомогою `tx.send`. Дозволяти таке було б поганою ідеєю: як тільки значення буде надіслане в інший потік, такий потік може модифікувати або ж навіть видалити значення, перш ніж ми спробуємо використати його знову. Потенційно, зміни в іншому потоці можуть привести до помилок або ж неочікуваних результатів через суперечливі (inconsistent) або ж неіснуючі дані. Однак, Rust видасть помилку якщо ми спробуємо скомпілювати код з Блоку коду 16-9:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-09/output.txt}}
 ```
 
-Our concurrency mistake has caused a compile time error. The `send` function takes ownership of its parameter, and when the value is moved, the receiver takes ownership of it. This stops us from accidentally using the value again after sending it; the ownership system checks that everything is okay.
+Наша помилка в роботі з конкурентністю спричинила помилку компіляції. Функція `send` бере володіння над своїм параметром, а коли значення переміщується (moved), отримувач бере над ним володіння. Це не дає нам випадково повторно використати значення після того як ми його надіслали; правила володіння перевіряють чи все гаразд.
 
-### Sending Multiple Values and Seeing the Receiver Waiting
+### Відправка декількох значень і спостерігання за очікуванням отримувача
 
-The code in Listing 16-8 compiled and ran, but it didn’t clearly show us that two separate threads were talking to each other over the channel. In Listing 16-10 we’ve made some modifications that will prove the code in Listing 16-8 is running concurrently: the spawned thread will now send multiple messages and pause for a second between each message.
+Код в Блоці коду 16-8 скомпілювався і виконався, але він не продемонстрував, що два окремі потоки спілкуються між собою через канал. В Блоці коду 16-10 ми зробили деякі зміни, які підтвердять, що код в Блоці коду 16-8 виконується конкурентно: створений потік тепер відсилатиме декілька повідомлень і робитиме секундну паузу між кожним повідомленням.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-10/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 16-10: Sending multiple messages and pausing between each</span>
+<span class="caption">Блок коду 16-10: Відправка декількох повідомлень із паузою між відправками</span>
 
-This time, the spawned thread has a vector of strings that we want to send to the main thread. We iterate over them, sending each individually, and pause between each by calling the `thread::sleep` function with a `Duration` value of 1 second.
+Цього разу створений потік має вектор стрічок, які ми хочемо надіслати в основний потік. Ми ітеруємось по ним, надсилаючи кожну стрічку окремо, і робимо паузу між кожною відправкою, викликаючи функцію `thread::sleep` із значенням `Duration` в 1 секунду.
 
-In the main thread, we’re not calling the `recv` function explicitly anymore: instead, we’re treating `rx` as an iterator. For each value received, we’re printing it. When the channel is closed, iteration will end.
+В основному потоці, ми більше не викликаємо функцію `recv` явно: замість цього ми розглядаємо `rx` як ітератор. Отримуючи значення, ми виводимо його на екран. Якщо канал закриється, ітерування припиниться.
 
-When running the code in Listing 16-10, you should see the following output with a 1-second pause in between each line:
+Під час виконання коду із Блоку коду 16-10, ви маєте побачити наступний вивід із 1-секундною паузою між кожним рядком:
 
 
 <!-- Not extracting output because changes to this output aren't significant;
@@ -120,24 +120,24 @@ Got: the
 Got: thread
 ```
 
-Because we don’t have any code that pauses or delays in the `for` loop in the main thread, we can tell that the main thread is waiting to receive values from the spawned thread.
+Оскільки ми не маємо жодного коду, що призупиняє або ж відкладає виконання циклу `for` в основному потоці, ми можемо сказати, що основний потік очікує отримання значень із створеного потоку.
 
-### Creating Multiple Producers by Cloning the Transmitter
+### Створення декількох виробників шляхом клонування передавача
 
-Earlier we mentioned that `mpsc` was an acronym for *multiple producer, single consumer*. Let’s put `mpsc` to use and expand the code in Listing 16-10 to create multiple threads that all send values to the same receiver. We can do so by cloning the transmitter, as shown in Listing 16-11:
+Раніше ми вже згадували, що `mpsc` - це абревіатура для *multiple producer, single consumer* (*кілька виробників, один споживач*). Давайте використаємо `mpsc` і розширимо код в Блоці коду 16-10 щоб створити кілька потоків, котрі надсилають дані одному й тому ж отримувачу. Ми можемо зробити це склонувавши передавач, як показано в Блоці коду 16-11:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-11/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 16-11: Sending multiple messages from multiple producers</span>
+<span class="caption">Блок коду 16-11: Відправка декількох повідомлень з кількох виробників (producers)</span>
 
-This time, before we create the first spawned thread, we call `clone` on the transmitter. This will give us a new transmitter we can pass to the first spawned thread. We pass the original transmitter to a second spawned thread. This gives us two threads, each sending different messages to the one receiver.
+Цього разу, перед тим як ми створимо перший потік, ми викликаємо `clone` на передавачі. Це дасть нам новий передавач, який ми зможемо потім передати в створений потік. Ми передаємо оригінальний передавач в другий створений потік. Це дає нам два потоки, кожен з яких надсилає різні повідомленнями одному отримувачу.
 
-When you run the code, your output should look something like this:
+Коли ви виконаєте код, ваш вивід має виглядати приблизно так:
 
 
 <!-- Not extracting output because changes to this output aren't significant;
@@ -155,6 +155,6 @@ Got: thread
 Got: you
 ```
 
-You might see the values in another order, depending on your system. This is what makes concurrency interesting as well as difficult. If you experiment with `thread::sleep`, giving it various values in the different threads, each run will be more nondeterministic and create different output each time.
+Ви можете бачити значення в іншому порядку, залежно від вашої системи. Саме це робить конкурентність цікавою, але й складною одночасно. Якщо ви поекспериментуєте з `thread::sleep`, підставляючи різні значення в різні потоки, кожен запуск буде ще більш недетермінованим і щоразу створюватиме різний вивід.
 
-Now that we’ve looked at how channels work, let’s look at a different method of concurrency.
+Тепер, коли ми поглянули на те, як працюють канали, давайте розглянемо інший метод конкурентності.

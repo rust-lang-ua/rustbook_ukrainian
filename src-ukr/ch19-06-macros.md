@@ -1,65 +1,65 @@
-## Macros
+## Макроси
 
-We’ve used macros like `println!` throughout this book, but we haven’t fully explored what a macro is and how it works. The term *macro* refers to a family of features in Rust: *declarative* macros with `macro_rules!` and three kinds of *procedural* macros:
+Ми використовували макроси на кшталт `println!` по всій книзі, але досі повністю не розкривали, що таке макроси і як вони працюють. Термін *макрос* стосується родини особливостей Rust: *декларативні* макроси за допомогою `macro_rules!` і три типи *процедурних * макросів:
 
-* Custom `#[derive]` macros that specify code added with the `derive` attribute used on structs and enums
-* Attribute-like macros that define custom attributes usable on any item
-* Function-like macros that look like function calls but operate on the tokens specified as their argument
+* Користувацькі макроси `#[derive]`, які визначають код, що додається з атрибутом `derive`, застосованим на структурах та енумах
+* Атрибутоподібні макроси, що визначають користувацькі атрибути, застосовані до будь-чого
+* Функцієподібні макроси, що виглядають як функції, але оперують переданими ним як аргумент мовними конструкціями
 
-We’ll talk about each of these in turn, but first, let’s look at why we even need macros when we already have functions.
+Ми поговоримо про кожен з них по черзі, але спершу погляньмо, чому нам взагалі потрібні макроси, коли ми вже маємо функції.
 
-### The Difference Between Macros and Functions
+### Відмінність між макросами та функціями
 
-Fundamentally, macros are a way of writing code that writes other code, which is known as *metaprogramming*. In Appendix C, we discuss the `derive` attribute, which generates an implementation of various traits for you. We’ve also used the `println!` and `vec!` macros throughout the book. All of these macros *expand* to produce more code than the code you’ve written manually.
+Засадничо макроси є способом писати код, що пише інший код, що також відомо як *метапрограмування*. У Додатку C ми обговорюємо атрибут `derive`, який генерує для вас реалізацію різних трейтів. Ми також використовували макроси `println!` і `vec!` по всій книзі. Всі ці макроси *розгортаються*, виробляючи більше коду, ніж написаний вами вручну.
 
-Metaprogramming is useful for reducing the amount of code you have to write and maintain, which is also one of the roles of functions. However, macros have some additional powers that functions don’t.
+Метапрограмування є корисним для зменшення кількості коду, що вам треба писати та підтримувати, що також є однією з ролей функцій. Однак макроси мають деякі додаткові здібності, яких бракує функціям.
 
-A function signature must declare the number and type of parameters the function has. Macros, on the other hand, can take a variable number of parameters: we can call `println!("hello")` with one argument or `println!("hello {}", name)` with two arguments. Also, macros are expanded before the compiler interprets the meaning of the code, so a macro can, for example, implement a trait on a given type. A function can’t, because it gets called at runtime and a trait needs to be implemented at compile time.
+Сигнатура функції має проголосити число і тип її параметрів. Макрос, з іншого боку, може приймати довільне число параметрів: ми можемо викликати `println!("hello")` з одним аргументом чи `println!("hello {}", name)` з двома. Також макроси розгортаються до того, як компілятор інтерпретує значення коду, тож макрос може, наприклад, реалізувати трейт на заданому типі. Функція не може такого, бо її викликають під час виконання, а трейт має бути реалізованим під час компіляції.
 
-The downside to implementing a macro instead of a function is that macro definitions are more complex than function definitions because you’re writing Rust code that writes Rust code. Due to this indirection, macro definitions are generally more difficult to read, understand, and maintain than function definitions.
+Недоліком реалізації макросу замість функції є те, що визначення макросів складніші, ніж визначення функцій, бо ви пишете код на Rust, що пише код на Rust. Через таку опосередкованість визначення макросів у цілому складніше читати, розуміти та підтримувати, ніж визначення функцій.
 
-Another important difference between macros and functions is that you must define macros or bring them into scope *before* you call them in a file, as opposed to functions you can define anywhere and call anywhere.
+Ще однією важливою відмінністю між макросами та функціями є те, що ви маєте визначити макроси або принести їх в область видимості *до* їхнього виклику у файлі, на відміну від функцій, які ви можете визначити будь-де і викликати звідки завгодно.
 
-### Declarative Macros with `macro_rules!` for General Metaprogramming
+### Декларативні макроси, проголошені за допомогою `macro_rules!`, для загального метапрограмування
 
-The most widely used form of macros in Rust is the *declarative macro*. These are also sometimes referred to as “macros by example,” “`macro_rules!` macros,” or just plain “macros.” At their core, declarative macros allow you to write something similar to a Rust `match` expression. As discussed in Chapter 6, `match` expressions are control structures that take an expression, compare the resulting value of the expression to patterns, and then run the code associated with the matching pattern. Macros also compare a value to patterns that are associated with particular code: in this situation, the value is the literal Rust source code passed to the macro; the patterns are compared with the structure of that source code; and the code associated with each pattern, when matched, replaces the code passed to the macro. This all happens during compilation.
+Найчастіше використана форма макросів у Rust - *декларативні макроси*. Їх також іноді називають "макросами за прикладом", "макросами `macro_rules!`" чи просто "макросами." За своєю суттю декларативні макроси дозволяють вам написати щось подібне до виразу Rust `match`. Як говорилося в Розділі 6, вирази `match` - це керівні структури, які приймають вираз, зіставляють результат обчислення виразу з шаблонами, а потім виконують код, пов'язаний з відповідним шаблоном. Макроси так само порівнюють значення з шаблонами, які пов'язані з певним кодом: в цій ситуації значенням є літерал початкового коду Rust, переданого макросу; шаблони зіставляються зі структурою цього початкового коду; і код, пов'язаний з кожним шаблоном, коли збігається, замінює код, переданий в макрос. Це все відбувається під час компіляції.
 
-To define a macro, you use the `macro_rules!` construct. Let’s explore how to use `macro_rules!` by looking at how the `vec!` macro is defined. Chapter 8 covered how we can use the `vec!` macro to create a new vector with particular values. For example, the following macro creates a new vector containing three integers:
+Щоб визначити макрос, використовується конструкція `macro_rules!`. Дослідимо, як користуватися `macro_rules!`, подивившися, як визначений макрос `vec!`. В Розділі 8 розповідалося, як використовувати макрос `vec!` для створення нового вектора з конкретними значеннями. Наприклад, наступний макрос створить новий вектор, що містить три цілі числа:
 
 ```rust
 let v: Vec<u32> = vec![1, 2, 3];
 ```
 
-We could also use the `vec!` macro to make a vector of two integers or a vector of five string slices. We wouldn’t be able to use a function to do the same because we wouldn’t know the number or type of values up front.
+Ми також можемо використати макрос `vec!` для створення вектора з двох цілих чисел або вектора з 5 стрічкових слайсів. Ми б не змогли скористатися функцією, щоб зробити те саме, оскільки не знали б кількості або типу значень наперед.
 
-Listing 19-28 shows a slightly simplified definition of the `vec!` macro.
+Блок коду 19-28 показує трохи спрощене визначення макросу `vec!`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Ім'я файлу: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-28/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 19-28: A simplified version of the `vec!` macro definition</span>
+<span class="caption">Блок коду 19-28: спрощена версія визначення макросу `vec!`</span>
 
-> Note: The actual definition of the `vec!` macro in the standard library includes code to preallocate the correct amount of memory up front. That code is an optimization that we don’t include here to make the example simpler.
+> Примітка: Справжнє визначення макросу `vec!` зі стандартної бібліотеки містить спершу код для розподілу необхідної кількості пам'яті. Цей код є оптимізацією, яку ми не включаємо тут для спрощення прикладу.
 
-The `#[macro_export]` annotation indicates that this macro should be made available whenever the crate in which the macro is defined is brought into scope. Without this annotation, the macro can’t be brought into scope.
+Анотація `#[macro_export]` вказує, що цей макрос слід зробити доступним кожного разу, коли крейт, у якому його визначено вводиться до області видимості. Без цієї анотації макрос не було б введено до області видимості.
 
-We then start the macro definition with `macro_rules!` and the name of the macro we’re defining *without* the exclamation mark. The name, in this case `vec`, is followed by curly brackets denoting the body of the macro definition.
+Потім ми почнемо визначення макросу за допомогою `macro_rules!` і назви макросу, який ми визначаємо, *без* знаку оклику. За назвою, у цьому випадку `vec`, слідують фігурні дужки, що позначають тіло визначення макросу.
 
-The structure in the `vec!` body is similar to the structure of a `match` expression. Here we have one arm with the pattern `( $( $x:expr ),* )`, followed by `=>` and the block of code associated with this pattern. If the pattern matches, the associated block of code will be emitted. Given that this is the only pattern in this macro, there is only one valid way to match; any other pattern will result in an error. More complex macros will have more than one arm.
+Структура тіла `vec!` подібна до структури виразу `match`. Тут ми маємо один рукав із шаблоном `( $( $x:expr ),* )`, за яким іде `=>` і блок коду, пов'язаний із цим шаблоном. Якщо шаблон зіставляється, буде видано пов'язаний блок коду. Оскільки це є єдиним шаблоном у цьому макросі, є лише один коректний спосіб зіставлення; будь-який інший шаблон призведе до помилки. Складніші макроси матимуть більше ніж один рукав.
 
-Valid pattern syntax in macro definitions is different than the pattern syntax covered in Chapter 18 because macro patterns are matched against Rust code structure rather than values. Let’s walk through what the pattern pieces in Listing 19-28 mean; for the full macro pattern syntax, see the [Rust Reference][ref].
+Правильний синтаксис шаблону у макросах відрізняється від синтаксису шаблону, розглянутого у Розділі 18, оскільки шаблони макросів зіставляються зі структурою коду Rust, а не значеннями. Розберімо, що означають фрагменти шаблону в Блоці коду 19-28; повний синтаксис шаблонів макросів ви можете подивитися в [Rust Reference][ref].
 
-First, we use a set of parentheses to encompass the whole pattern. We use a dollar sign (`$`) to declare a variable in the macro system that will contain the Rust code matching the pattern. The dollar sign makes it clear this is a macro variable as opposed to a regular Rust variable. Next comes a set of parentheses that captures values that match the pattern within the parentheses for use in the replacement code. Within `$()` is `$x:expr`, which matches any Rust expression and gives the expression the name `$x`.
+Спочатку ми використовуємо набір дужок для того, щоб охопити весь шаблон. Ми використовуємо знак долара (`$`) для проголошення змінної у системі макросів, що міститиме код Rust, що відповідає шаблону. Знак долара дає зрозуміти, що це змінна макросу, а не звичайна змінна Rust. Далі іде набір дужок, що містять значення, що відповідають шаблону в дужках, для використання в коді для заміщення. У `$()` знаходиться `$x:expr`, що зіставляється з будь-яким виразом Rust і дає цьому виразу назву `$x`.
 
-The comma following `$()` indicates that a literal comma separator character could optionally appear after the code that matches the code in `$()`. The `*` specifies that the pattern matches zero or more of whatever precedes the `*`.
+Кома після `$()` позначає, що символ-розділювач кома може опціонально з'явитися після коду, що зіставляється з кодом у `$()`. `*` позначає, що шаблон зіставляється з нулем чи більше того, що іде перед `*`.
 
-When we call this macro with `vec![1, 2, 3];`, the `$x` pattern matches three times with the three expressions `1`, `2`, and `3`.
+Коли ми викликаємо цей макрос за допомогою `vec![1, 2, 3];`, шаблон `$x` зіставляється три рази з трьома виразами `1`, `2` і `3`.
 
-Now let’s look at the pattern in the body of the code associated with this arm: `temp_vec.push()` within `$()*` is generated for each part that matches `$()` in the pattern zero or more times depending on how many times the pattern matches. The `$x` is replaced with each expression matched. When we call this macro with `vec![1, 2, 3];`, the code generated that replaces this macro call will be the following:
+Тепер погляньмо на шаблон у тілі коду, пов'язаного з цим рукавом: `temp_vec.push()` у `$()*` генерується для кожної частини, що зіставляється з `$()` у шаблоні нуль чи більше разів, залежно від того, скільки разів зіставляється шаблон. `$x` замінюється у кожному зіставленому виразі. Коли ми викликаємо цей макрос за допомогою `vec![1, 2, 3];`, згенерований код, що замінює виклик макросу, буде таким:
 
 ```rust,ignore
 {
@@ -71,17 +71,17 @@ Now let’s look at the pattern in the body of the code associated with this arm
 }
 ```
 
-We’ve defined a macro that can take any number of arguments of any type and can generate code to create a vector containing the specified elements.
+Ми визначили макрос, який може прийняти будь-яку кількість аргументів будь-якого типу і може згенерувати код для створення вектора, що містить зазначені елементи.
 
-To learn more about how to write macros, consult the online documentation or other resources, such as [“The Little Book of Rust Macros”][tlborm] started by Daniel Keep and continued by Lukas Wirth.
+Щоб дізнатися більше про те, як писати макроси, зверніться до документації в Інтернеті або інших ресурсів, таких як ["Маленька книжка макросів Rust"][tlborm], яку розпочав Деніел Кіп та продовжує Лукас Вірт.
 
-### Procedural Macros for Generating Code from Attributes
+### Процедурні макроси для генерації коду з атрибутів
 
-The second form of macros is the *procedural macro*, which acts more like a function (and is a type of procedure). Procedural macros accept some code as an input, operate on that code, and produce some code as an output rather than matching against patterns and replacing the code with other code as declarative macros do. The three kinds of procedural macros are custom derive, attribute-like, and function-like, and all work in a similar fashion.
+Друга форма макросів - це *процедурні макроси*, які працюють більш схоже на функції (і є типом процедур). Процедурні макроси беруть певний код на вході, працюють над цим кодом і виробляють певний код на виході замість зіставлення з шаблонами і заміни коду іншим кодом, як роблять декларативні макроси. Три види процедурних макросів це користувацькі вивідні, атрибутоподібні та функцієподібні макроси, і всі працюють схожим чином.
 
-When creating procedural macros, the definitions must reside in their own crate with a special crate type. This is for complex technical reasons that we hope to eliminate in the future. In Listing 19-29, we show how to define a procedural macro, where `some_attribute` is a placeholder for using a specific macro variety.
+При створені процедурних макросів визначення мають розміщуватися у їхньому власному крейті з особливим типом крейта. Так зроблено зі складних технічних причин, які ми сподіваємося усунути в майбутньому. У Блоці коду 19-29 ми показуємо, як визначити процедурний макрос, де `some_attribute` є заповнювачем для використання конкретного різновиду макросу.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Ім'я файлу: src/lib.rs</span>
 
 ```rust,ignore
 use proc_macro;
@@ -92,86 +92,86 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 ```
 
 
-<span class="caption">Listing 19-29: An example of defining a procedural macro</span>
+<span class="caption">Блок коду 19-29: приклад визначення процедурного макросу</span>
 
-The function that defines a procedural macro takes a `TokenStream` as an input and produces a `TokenStream` as an output. The `TokenStream` type is defined by the `proc_macro` crate that is included with Rust and represents a sequence of tokens. This is the core of the macro: the source code that the macro is operating on makes up the input `TokenStream`, and the code the macro produces is the output `TokenStream`. The function also has an attribute attached to it that specifies which kind of procedural macro we’re creating. We can have multiple kinds of procedural macros in the same crate.
+Функція, що визначає процедурний макрос, приймає `TokenStream` на вхід і продукує `TokenStream` на виході. Тип `TokenStream` визначений у крейті `proc_macro`, що постачається разом із Rust, і являє собою послідовність токенів. Це основа макросу: початковий код, з яким працює макрос, є вхідним `TokenStream`, а код, що макрос продукує, є вихідним `TokenStream`. Функція також має атрибут, що визначає, який вид процедурного макросу ми створюємо. Можна мати багато видів процедурних макросів в одному крейті.
 
-Let’s look at the different kinds of procedural macros. We’ll start with a custom derive macro and then explain the small dissimilarities that make the other forms different.
+Подивімося на різні види процедурних макросів. Ми почнемо з користувальницького вивідного макросу, а потім пояснимо невеликі розбіжності, що роблять інші форми відмінними.
 
-### How to Write a Custom `derive` Macro
+### Як писати користувацький макрос `derive`
 
-Let’s create a crate named `hello_macro` that defines a trait named `HelloMacro` with one associated function named `hello_macro`. Rather than making our users implement the `HelloMacro` trait for each of their types, we’ll provide a procedural macro so users can annotate their type with `#[derive(HelloMacro)]` to get a default implementation of the `hello_macro` function. The default implementation will print `Hello, Macro! My name is
-TypeName!` where `TypeName` is the name of the type on which this trait has been defined. In other words, we’ll write a crate that enables another programmer to write code like Listing 19-30 using our crate.
+Створімо крейт з назвою `hello_macro`, що визначає трейт з назвою `HelloMacro` з однією асоційованою функцією з назвою `hello_macro`. Замість примушувати користувачів крейту реалізовувати трейт `HelloMacro` для кожного з їхніх типів, ми надамо процедурний макрос, щоб користувачі могли анотувати свої типи `#[derive(HelloMacro)]` і отримувати реалізацію функції `hello_macro` за замовчуванням. Реалізація за замовчуванням виведе `Hello, Macro! My name is
+TypeName!`, де `TypeName` - це назва типу, для якого цей трейт визначено. Іншими словами, ми створимо крейт, за допомогою якого інші програмісти зможуть писати код на кшталт Блоку коду 19-30.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-30/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 19-30: The code a user of our crate will be able to write when using our procedural macro</span>
+<span class="caption">Блок коду 19-30: код, який користувачі нашого крету зможуть писати, використовуючи наш процедурний макрос</span>
 
-This code will print `Hello, Macro! My name is Pancakes!` when we’re done. The first step is to make a new library crate, like this:
+Коли ми закінчимо, цей код виведе `Hello, Macro! My name is Pancakes!` Перший крок - це створити новий бібліотечний крейт, ось так:
 
 ```console
 $ cargo new hello_macro --lib
 ```
 
-Next, we’ll define the `HelloMacro` trait and its associated function:
+Далі ми визначаємо трейт `HelloMacro` і асоційовану функцію:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Ім'я файлу: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-20-impl-hellomacro-for-pancakes/hello_macro/src/lib.rs}}
 ```
 
-We have a trait and its function. At this point, our crate user could implement the trait to achieve the desired functionality, like so:
+Ми маємо трейт і його функцію. На цей момент користувач нашого крейта може реалізувати трейт для досягення бажаної функціональності, ось так:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-20-impl-hellomacro-for-pancakes/pancakes/src/main.rs}}
 ```
 
-However, they would need to write the implementation block for each type they wanted to use with `hello_macro`; we want to spare them from having to do this work.
+Однак для кожного типу, для якого хочеться використовувати `hello_macro`, треба написати блок реалізації, а ми хочемо позбавити їх від необхідності це робити.
 
-Additionally, we can’t yet provide the `hello_macro` function with default implementation that will print the name of the type the trait is implemented on: Rust doesn’t have reflection capabilities, so it can’t look up the type’s name at runtime. We need a macro to generate code at compile time.
+Додатково, ми ще не в змозі надати реалізацію за замовчуванням для функції `hello_macro`, яка надрукує ім'я типу, для якого її реалізовано. Rust не має можливостей рефлексії, так що не можна дізнатися назву типу під час виконання. Нам потрібен макрос для генерації коду під час компіляції.
 
-The next step is to define the procedural macro. At the time of this writing, procedural macros need to be in their own crate. Eventually, this restriction might be lifted. The convention for structuring crates and macro crates is as follows: for a crate named `foo`, a custom derive procedural macro crate is called `foo_derive`. Let’s start a new crate called `hello_macro_derive` inside our `hello_macro` project:
+Наступний крок - визначити процедурний макрос. На час написання цього, процедурні макроси мають міститися у своїх власних крейтах. Згодом це обмеження може бути зняте. За угодою, крейти і крейти для макросів мають бути такі: для крейту, що зветься `foo`, крейт з користувацьким вивідним макросом має зватися `foo_derive`. Почнімо новий крейт, що зветься `hello_macro_derive`, усередині нашого проєкту `hello_macro`:
 
 ```console
 $ cargo new hello_macro_derive --lib
 ```
 
-Our two crates are tightly related, so we create the procedural macro crate within the directory of our `hello_macro` crate. If we change the trait definition in `hello_macro`, we’ll have to change the implementation of the procedural macro in `hello_macro_derive` as well. The two crates will need to be published separately, and programmers using these crates will need to add both as dependencies and bring them both into scope. We could instead have the `hello_macro` crate use `hello_macro_derive` as a dependency and re-export the procedural macro code. However, the way we’ve structured the project makes it possible for programmers to use `hello_macro` even if they don’t want the `derive` functionality.
+Наші два крейти тісно пов'язані, тому ми створюємо крейт для процедурного макросу в каталозі нашого крейта `hello_macro`. Якщо ми змінимо визначення трейту в `hello_macro`, то мусимо також змінити реалізацію процедурного макросу в `hello_macro_derive`. Два крейти треба буде публікувати окремо, і програмістам, що використовують ці крейти, доведеться додавати обидва як залежності і вводити обидва до області видимості. Ми могли б натомість додати `hello_macro_derive` як залежність у `hello_macro` і реекспортувати код процедурного макросу. Однак те, як ми структурували проєкт, надає програмістам можливість використовувати `hello_macro` навіть якщо вони не хочуть мати функціонал `derive`.
 
-We need to declare the `hello_macro_derive` crate as a procedural macro crate. We’ll also need functionality from the `syn` and `quote` crates, as you’ll see in a moment, so we need to add them as dependencies. Add the following to the *Cargo.toml* file for `hello_macro_derive`:
+Нам треба оголосити крейт `hello_macro_derive` як крейт процедурного макросу. Нам також знадобиться функціонал крейтів `syn` та `quote`, як ви побачите за хвилину, тому ми маємо додати їх як залежності. Додайте наступне у файл *Cargo.toml* для `hello_macro_derive`:
 
-<span class="filename">Filename: hello_macro_derive/Cargo.toml</span>
+<span class="filename">Файл: hello_macro_derive/Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch19-advanced-features/listing-19-31/hello_macro/hello_macro_derive/Cargo.toml:6:12}}
 ```
 
-To start defining the procedural macro, place the code in Listing 19-31 into your *src/lib.rs* file for the `hello_macro_derive` crate. Note that this code won’t compile until we add a definition for the `impl_hello_macro` function.
+Щоб почати визначення процедурного макросу, розмістіть код з Блоку коду 19-31 у файлі *src/lib.rs* з крейту `hello_macro_derive`. Зверніть увагу, що цей код не компілюватиметься, поки ми не додамо визначення для функції `impl_hello_macro`.
 
-<span class="filename">Filename: hello_macro_derive/src/lib.rs</span>
+<span class="filename">Файл: hello_macro_derive/src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-31/hello_macro/hello_macro_derive/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 19-31: Code that most procedural macro crates will require in order to process Rust code</span>
+<span class="caption">Блок коду 19-31: код, який потребують більшість крейтів з процедурними макросами для того, щоб обробляти код Rust</span>
 
-Notice that we’ve split the code into the `hello_macro_derive` function, which is responsible for parsing the `TokenStream`, and the `impl_hello_macro` function, which is responsible for transforming the syntax tree: this makes writing a procedural macro more convenient. The code in the outer function (`hello_macro_derive` in this case) will be the same for almost every procedural macro crate you see or create. The code you specify in the body of the inner function (`impl_hello_macro` in this case) will be different depending on your procedural macro’s purpose.
+Зверніть увагу, що ми розділили код на функцію `hello_macro_derive`, що відповідає за аналіз `TokenStream`, і функцію `impl_hello_macro` що відповідає за перетворення синтаксичного дерева: це робить написання процедурного макросу зручнішим. Код у зовнішній функції (у цьому випадку `hello_macro_derive`) буде однаковим для майже кожного крейта процедурного макросу, що ви зустрінете або створення. Код, який ви вкажете у тілі внутрішньої функції (у цьому випадку `impl_hello_macro`), буде різним залежно від призначення вашого процедурного макросу.
 
-We’ve introduced three new crates: `proc_macro`, [`syn`][], and [`quote`][]. The `proc_macro` crate comes with Rust, so we didn’t need to add that to the dependencies in *Cargo.toml*. The `proc_macro` crate is the compiler’s API that allows us to read and manipulate Rust code from our code.
+Ми додали три нові крейти: `proc_macro`, [`syn`][], а [`quote`][]. Крейт `proc_macro` постачається з Rust, тож нам не треба додавати його у залежності у *Cargo.toml*. Крейт `proc_macro` - це API компілятора, що дозволяє нам читати та маніпулювати кодом Rust у нашому коді.
 
-The `syn` crate parses Rust code from a string into a data structure that we can perform operations on. The `quote` crate turns `syn` data structures back into Rust code. These crates make it much simpler to parse any sort of Rust code we might want to handle: writing a full parser for Rust code is no simple task.
+Крейт `syn` розбирає код Rust зі стрічки у структуру даних, з якою ми можемо виконувати операції. Крейт `quote` перетворює структуру даних `syn` назад у код Rust. Ці крейти дуже спрощують розбір будь-якого коду Rust, який нам треба обробити: написати повний аналізатор коду Rust - це непросте завдання.
 
-The `hello_macro_derive` function will be called when a user of our library specifies `#[derive(HelloMacro)]` on a type. This is possible because we’ve annotated the `hello_macro_derive` function here with `proc_macro_derive` and specified the name `HelloMacro`, which matches our trait name; this is the convention most procedural macros follow.
+Функцію `hello_macro_derive` буде викликано, коли користувач нашої бібліотеки зазначить `#[derive(HelloMacro)]` для типу. Це можливо, тому що ми анотували функцію `hello_macro_derive` за допомогою `proc_macro_derive` і вказали назву `HelloMacro`, яка відповідає назві нашого трейта; цій угоді слідує більшість процедурних макросів.
 
-The `hello_macro_derive` function first converts the `input` from a `TokenStream` to a data structure that we can then interpret and perform operations on. This is where `syn` comes into play. The `parse` function in `syn` takes a `TokenStream` and returns a `DeriveInput` struct representing the parsed Rust code. Listing 19-32 shows the relevant parts of the `DeriveInput` struct we get from parsing the `struct Pancakes;` string:
+Функція `hello_макро_derive` спочатку перетворює `input` з `TokenStream` на структури даних, яку ми потім можемо інтерпретувати та працювати з нею. І тут вступає в гру `syn`. Функція `parse` із `syn` приймає `TokenStream` і повертає структуру `DeriveInput`, що представляє розібраний код Rust. Блок коду 19-32 показує відповідні частини структури `DeriveInput`, яку ми отримали розбором стрічки `struct Pancakes;`:
 
 ```rust,ignore
 DeriveInput {
@@ -194,87 +194,87 @@ DeriveInput {
 ```
 
 
-<span class="caption">Listing 19-32: The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 19-30</span>
+<span class="caption">Блок коду 19-32: екземпляр `DeriveInput`, який ми отримаємо розбором коду, що має атрибут макросу з Блоку коду 19-30</span>
 
-The fields of this struct show that the Rust code we’ve parsed is a unit struct with the `ident` (identifier, meaning the name) of `Pancakes`. There are more fields on this struct for describing all sorts of Rust code; check the [`syn` documentation for `DeriveInput`][syn-docs] for more information.
+Поля цієї структури показують, що код Rust, який ми розібрали, є одиничною структурою з `ident` (ідентифікатором, тобто назвою) `Pancakes`. У цієї структури є більше полів для опису різноманітних кодів Rust; зверніться до документації [`syn` про `DeriveInput`][syn-docs] для детальнішої інформації.
 
-Soon we’ll define the `impl_hello_macro` function, which is where we’ll build the new Rust code we want to include. But before we do, note that the output for our derive macro is also a `TokenStream`. The returned `TokenStream` is added to the code that our crate users write, so when they compile their crate, they’ll get the extra functionality that we provide in the modified `TokenStream`.
+Незабаром ми визначатимемо функцію `impl_hello_macro`, де ми зберемо новий код Rust, який ми хочемо додати. Але перед тим зауважте, що вихід для нашого макросу - це також `TokenStream`. `TokenStream`, що повертається, додається до коду, написаного користувачами нашого крейту, тод коли вони компілюватимуть свої крейти, то отримають додатковий функціонал, наданий нами в зміненому `TokenStream`.
 
-You might have noticed that we’re calling `unwrap` to cause the `hello_macro_derive` function to panic if the call to the `syn::parse` function fails here. It’s necessary for our procedural macro to panic on errors because `proc_macro_derive` functions must return `TokenStream` rather than `Result` to conform to the procedural macro API. We’ve simplified this example by using `unwrap`; in production code, you should provide more specific error messages about what went wrong by using `panic!` or `expect`.
+Ви могли не звернути увагу, що ми викликаємо `unwrap`, щоб функція `hello_macro_derive` запанікувала, якщо виклик функції `syn::parse` буде невдалим. Необхідно, щоб наш процедурний макрос панікував при помилках, бо функції `proc_macro_derive` мають повертати `TokenStream`, а не `Result`, щоб відповідати API процедурних макросів. Ми спростили цей приклад, використовуючи `unwrap`; у реальному коді ви маєте забезпечувати конкретніші повідомлення про помилки, описуючи, що саме пішло не так за допомогою `panic!` або `expect`.
 
-Now that we have the code to turn the annotated Rust code from a `TokenStream` into a `DeriveInput` instance, let’s generate the code that implements the `HelloMacro` trait on the annotated type, as shown in Listing 19-33.
+Тепер, коли у нас є код, що перетворює анотований код Rust з `TokenStream` на екземпляр `DeriveInput`, згенеруймо код, що реалізує трейт `HelloMacro` на анотованому типі, як показано у Блоці коду 19-33.
 
-<span class="filename">Filename: hello_macro_derive/src/lib.rs</span>
+<span class="filename">Файл: hello_macro_derive/src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-33/hello_macro/hello_macro_derive/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Listing 19-33: Implementing the `HelloMacro` trait using the parsed Rust code</span>
+<span class="caption">Блок коду 19-33: реалізація трейту `HelloMacro` за допомогою розібраного коду Rust</span>
 
-We get an `Ident` struct instance containing the name (identifier) of the annotated type using `ast.ident`. The struct in Listing 19-32 shows that when we run the `impl_hello_macro` function on the code in Listing 19-30, the `ident` we get will have the `ident` field with a value of `"Pancakes"`. Thus, the `name` variable in Listing 19-33 will contain an `Ident` struct instance that, when printed, will be the string `"Pancakes"`, the name of the struct in Listing 19-30.
+Ми отримуємо екземпляр структури `Ident`, що містить ім'я (ідентифікатор) анотованого типу, використовуючи `ast.ident`. Структура у Блоці коду 19-32 показує, що коли ми запускаємо функцію `impl_hello_macro` на коді з Блоку коду 19-30, `ident`, що ми отримуємо, має поле `ident` зі значенням `"Pancakes"`. Таким чином, змінна `name` з Блоку коду 19-33 міститиме екземпляр структури `Ident`, який при виведенні стане стрічкою `"Pancakes"`, назвою структури з Блоку коду 19-30.
 
-The `quote!` macro lets us define the Rust code that we want to return. The compiler expects something different to the direct result of the `quote!` macro’s execution, so we need to convert it to a `TokenStream`. We do this by calling the `into` method, which consumes this intermediate representation and returns a value of the required `TokenStream` type.
+Макрос `quote!` дозволяє нам визначати код Rust, який ми хочемо повернути. Компілятор очікує на щось відмінне від безпосереднього результату виконання макросу `quote!`, тож ми маємо конвертувати його у `TokenStream`. Ми це робимо викликом методу `into`, який `TokenStream`.
 
-The `quote!` macro also provides some very cool templating mechanics: we can enter `#name`, and `quote!` will replace it with the value in the variable `name`. You can even do some repetition similar to the way regular macros work. Check out [the `quote` crate’s docs][quote-docs] for a thorough introduction.
+Макрос `quote!` також надає дуже круті механізми шаблонізації: ми можемо ввести `#name` і `quote!` замінить його на значення у змінній `name`. Ви можете навіть зробити деякі повторення, схожі на те, як працюють звичайні макроси. Зверніться до [документації крейту `quote`][quote-docs] для детального ознайомлення.
 
-We want our procedural macro to generate an implementation of our `HelloMacro` trait for the type the user annotated, which we can get by using `#name`. The trait implementation has the one function `hello_macro`, whose body contains the functionality we want to provide: printing `Hello, Macro! My name is` and then the name of the annotated type.
+Ми хочемо, щоб наш процедурний макрос генерував реалізацію трейту `HelloMacro` для анотованого користувачем типи, який ми можемо отримати за допомогою `#name`. Реалізація трету має одну функцію `hello_macro`, чиє тіло містить функціональність, яку ми хочемо надати: виводить `Hello, Macro! My name is` і потім назву анотованого типу.
 
-The `stringify!` macro used here is built into Rust. It takes a Rust expression, such as `1 + 2`, and at compile time turns the expression into a string literal, such as `"1 + 2"`. This is different than `format!` or `println!`, macros which evaluate the expression and then turn the result into a `String`. There is a possibility that the `#name` input might be an expression to print literally, so we use `stringify!`. Using `stringify!` also saves an allocation by converting `#name` to a string literal at compile time.
+Використаний тут макрос `stringify!` вбудований у Rust. Він приймає вираз Rust, такий як `1 + 2`, і під час компіляції перетворює цей вираз у стрічковий літерал на кшталт `"1 + 2"`. Це відрізняється від макросів `format!` чи `println!`, які обчислюють вираз і потім перетворюють результат на `String`. Є можливість, що вхідний `#name` може бути виразом, який треба вивести буквально, тож ми використовуємо `stringify!`. Використання `stringify!` також економить розподілену пам'ять, бо перетворює `#name` на стрічковий літерал під час компіляції.
 
-At this point, `cargo build` should complete successfully in both `hello_macro` and `hello_macro_derive`. Let’s hook up these crates to the code in Listing 19-30 to see the procedural macro in action! Create a new binary project in your *projects* directory using `cargo new pancakes`. We need to add `hello_macro` and `hello_macro_derive` as dependencies in the `pancakes` crate’s *Cargo.toml*. If you’re publishing your versions of `hello_macro` and `hello_macro_derive` to [crates.io](https://crates.io/), they would be regular dependencies; if not, you can specify them as `path` dependencies as follows:
+На цей момент `cargo build` має успішно завершуватися для обох `hello_macro` та `hello_macro_derive`. Під'єднаймо ці крейти до коду з Блок коду 19-30, щоб побачити процедурні макроси в дії! Створіть новий двійковий проєкт у каталозі *projects* командою `cargo new pancakes`. Нам треба додати `hello_macro` та `hello_macro_derive` як залежності до файлу *Cargo.toml* крейту `pancakes`. Якщо ви публікуєте ваші версії `hello_macro` та `hello_macro_derive` на [crates.io](https://crates.io/), вони будуть звичайними залежностями; якщо ж ні, ви можете зазначити як залежності із `path`, ось так:
 
 ```toml
 {{#include ../listings/ch19-advanced-features/no-listing-21-pancakes/pancakes/Cargo.toml:7:9}}
 ```
 
-Put the code in Listing 19-30 into *src/main.rs*, and run `cargo run`: it should print `Hello, Macro! My name is Pancakes!` The implementation of the `HelloMacro` trait from the procedural macro was included without the `pancakes` crate needing to implement it; the `#[derive(HelloMacro)]` added the trait implementation.
+Помістіть код з Блоку коду 19-30 до *src/main.rs* і запустіть `cargo run`: має вивестися `Hello, Macro! My name is Pancakes!` Реалізація трейту `HelloMacro` з процедурного макросу була включена без потреби в реалізації у крейті `pancakes`; анотація `#[derive(HelloMacro)]` додала реалізацію трейту.
 
-Next, let’s explore how the other kinds of procedural macros differ from custom derive macros.
+Далі дослідімо, як інші види процедурних макросів відрізняються від користувацьких вивідних макросів.
 
-### Attribute-like macros
+### Атрибутоподібні макроси
 
-Attribute-like macros are similar to custom derive macros, but instead of generating code for the `derive` attribute, they allow you to create new attributes. They’re also more flexible: `derive` only works for structs and enums; attributes can be applied to other items as well, such as functions. Here’s an example of using an attribute-like macro: say you have an attribute named `route` that annotates functions when using a web application framework:
+Атрибутоподібні макроси схожі на користувацькі вивідні макроси, але замість генерації коду для атрибута `derive` вони дозволяють вам створювати нові атрибути. Вони також гнучкіші: `derive` працює лише зі структурами та енумами; атрибути можна застосовувати також і до інших елементів, наприклад функцій. Ось приклад використання атрибутоподібного макросу: скажімо, ви маєте атрибут з назвою `route`, що анотує функції при використанні фреймворку вебзастосунків:
 
 ```rust,ignore
 #[route(GET, "/")]
 fn index() {
 ```
 
-This `#[route]` attribute would be defined by the framework as a procedural macro. The signature of the macro definition function would look like this:
+Цей атрибут `#[route]` буде визначено фреймворком як процедурний макрос. Сигнатура функції, що визначає макрос, виглядатиме ось так:
 
 ```rust,ignore
 #[proc_macro_attribute]
 pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 ```
 
-Here, we have two parameters of type `TokenStream`. The first is for the contents of the attribute: the `GET, "/"` part. The second is the body of the item the attribute is attached to: in this case, `fn index() {}` and the rest of the function’s body.
+Тут ми маємо два параметри типу `TokenStream`. Перший для вмісту атрибута, тобто частини `GET, "/"`. Другий - це тіло елементу, до якого застосований атрибут, у цьому випадку `fn index() {}` і решта тіла функції.
 
-Other than that, attribute-like macros work the same way as custom derive macros: you create a crate with the `proc-macro` crate type and implement a function that generates the code you want!
+Окрім цього, атрибутоподібні макроси працюють так само, як і користувацькі вивідні макроси: ви створюєте крейт із типом крейту `proc-macro` і реалізуєте функцію, що створює потрібний вам код!
 
-### Function-like macros
+### Функцієподібні макроси
 
-Function-like macros define macros that look like function calls. Similarly to `macro_rules!` macros, they’re more flexible than functions; for example, they can take an unknown number of arguments. However, `macro_rules!` macros can be defined only using the match-like syntax we discussed in the section [“Declarative Macros with `macro_rules!` for General Metaprogramming”][decl]<!-- ignore --> earlier. Function-like macros take a `TokenStream` parameter and their definition manipulates that `TokenStream` using Rust code as the other two types of procedural macros do. An example of a function-like macro is an `sql!` macro that might be called like so:
+Функцієподібні макроси визначають макроси, що виглядають, як виклики функцій. Подібно до макросів `macro_rules!`, вони гнучкіші за функції; наприклад, вони можуть приймати довільну кількість аргументів. Однак `macro_rules!` можуть бути визначені лише за допомогою синтаксису, схожого на match, про який ми говорили раніше у підрозділі [Декларативні макроси, проголошені за допомогою `macro_rules!`, для загального метапрограмування][decl]<!-- ignore --> . Функцієподібні макроси приймають параметр `TokenStream`, а їхнє визначення маніпулює цим `TokenStream` за допомогою коду Rust, як і два інші типи процедурних макросів. Прикладом функцієподібних макросів може бути макрос `sql!`, який міг би бути викликаний таким чином:
 
 ```rust,ignore
 let sql = sql!(SELECT * FROM posts WHERE id=1);
 ```
 
-This macro would parse the SQL statement inside it and check that it’s syntactically correct, which is much more complex processing than a `macro_rules!` macro can do. The `sql!` macro would be defined like this:
+Цей макрос розбирає інструкції SQL і перевіряє їх на синтаксичну коректність, що значно складніше, ніж обробка, яку може здійснювати `macro_rules!`. Макрос `sql!` був би визначений ось так:
 
 ```rust,ignore
 #[proc_macro]
 pub fn sql(input: TokenStream) -> TokenStream {
 ```
 
-This definition is similar to the custom derive macro’s signature: we receive the tokens that are inside the parentheses and return the code we wanted to generate.
+Це визначення схоже на сигнатуру користувацького вивідного макросу: ми отримаємо токени, що знаходяться в дужках, і повертаємо код, який нам треба створити.
 
-## Summary
+## Підсумок
 
-Whew! Now you have some Rust features in your toolbox that you likely won’t use often, but you’ll know they’re available in very particular circumstances. We’ve introduced several complex topics so that when you encounter them in error message suggestions or in other peoples’ code, you’ll be able to recognize these concepts and syntax. Use this chapter as a reference to guide you to solutions.
+Хух! Тепер у вашому інструментарії є функціонал Rust, який ви навряд чи часто використовуватимете, але ви знатимете, що він доступний за певних обставин. Ми ознайомили вас із кількома складними темами, щоб зустрівши їх у пропозиціях у повідомленнях про помилки або в коді інших людей ви могли розпізнати ці концепції та синтаксис. Використовуйте цей розділ як довідник, що приведе вас до рішення.
 
-Next, we’ll put everything we’ve discussed throughout the book into practice and do one more project!
+Далі ми покажемо на практиці все, що ми обговорювали протягом усієї книги, і зробимо ще один проєкт!
 
 [ref]: ../reference/macros-by-example.html
 [tlborm]: https://veykril.github.io/tlborm/

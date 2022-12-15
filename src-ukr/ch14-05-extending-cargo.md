@@ -1,8 +1,8 @@
-## Extending Cargo with Custom Commands
+## Розширення Cargo із Користувацькими Командами
 
-Cargo is designed so you can extend it with new subcommands without having to modify Cargo. If a binary in your `$PATH` is named `cargo-something`, you can run it as if it was a Cargo subcommand by running `cargo something`. Custom commands like this are also listed when you run `cargo --list`. Being able to use `cargo install` to install extensions and then run them just like the built-in Cargo tools is a super convenient benefit of Cargo’s design!
+Cargo розроблений таким чином, щоб ви могли розширювати його за допомогою нових підкоманд без необхідності модифікації Cargo. Якщо двійковий файл у вашому `$PATH` названий `cargo-something`, то ви можете запустити його, ніби це підкоманда Cargo, викликавши `cargo something`. Користувальницькі команди, такі як ця, також зазначені під час запуску `cargo --list`. Можливість використати `cargo install` для встановлення розширень, а потім запускати їх, так само як і вбудовані інструменти Cargo є дуже зручною перевагою дизайну Cargo!
 
-## Summary
+## Підсумок
 
-Sharing code with Cargo and [crates.io](https://crates.io/)<!-- ignore --> is part of what makes the Rust ecosystem useful for many different tasks. Rust’s standard library is small and stable, but crates are easy to share, use, and improve on a timeline different from that of the language. Don’t be shy about sharing code that’s useful to you on [crates.io](https://crates.io/)<!-- ignore
--->; it’s likely that it will be useful to someone else as well!
+Обмін кодом використовуючи Cargo і [crates.io](https://crates.io/)<!-- ignore --> є частиною того, що робить екосистему Rust корисною для багатьох різноманітних задач. Стандартна бібліотека Rust маленька та стабільна, але крейтами легко ділитися, використовувати та покращувати за графіком, відмінним від графіка розвитку мови. Не соромтеся ділитися корисними для вас кодом на [crates.io](https://crates.io/)<!-- ignore
+-->; цілком ймовірно, що це буде корисно і комусь іншому!

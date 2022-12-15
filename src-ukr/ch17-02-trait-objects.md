@@ -1,133 +1,133 @@
-## Using Trait Objects That Allow for Values of Different Types
+## Використання трейт-об'єктів, які допускають значення різних типів
 
-In Chapter 8, we mentioned that one limitation of vectors is that they can store elements of only one type. We created a workaround in Listing 8-9 where we defined a `SpreadsheetCell` enum that had variants to hold integers, floats, and text. This meant we could store different types of data in each cell and still have a vector that represented a row of cells. This is a perfectly good solution when our interchangeable items are a fixed set of types that we know when our code is compiled.
+У розділі 8 ми казали, що одним з обмежень векторів є те, що вони можуть зберігати елементи тільки одного типу. Ми обійшли цю проблему в Роздруку 8-9, де ми визначили енум `SpreadsheetCell` який мав варіанти для зберігання цілих чисел, чисел з рухомою комою й тексту. Це означало, що ми мали змогу зберігати різні типи даних в кожній комірці та все одно мати вектор, який представляє рядок комірок. Це дуже гарне рішення коли наші взаємозамінні елементи є типами з фіксованим набором, відомим на етапі компіляції.
 
-However, sometimes we want our library user to be able to extend the set of types that are valid in a particular situation. To show how we might achieve this, we’ll create an example graphical user interface (GUI) tool that iterates through a list of items, calling a `draw` method on each one to draw it to the screen—a common technique for GUI tools. We’ll create a library crate called `gui` that contains the structure of a GUI library. This crate might include some types for people to use, such as `Button` or `TextField`. In addition, `gui` users will want to create their own types that can be drawn: for instance, one programmer might add an `Image` and another might add a `SelectBox`.
+Проте іноді ми хочемо, щоб користувач нашої бібліотеки зміг розширити набір типів, які є допустимими в конкретній ситуації. Щоб показати, як ми можемо досягти цього, ми створимо приклад інструменту з графічним інтерфейсом користувача (GUI), який ітерує список елементів, викликаючи метод `draw` на кожному з них, щоб намалювати його на екрані — це поширена техніка для GUI інструментів. Ми створимо бібліотечний крейт `gui`, який містить структуру бібліотеки GUI. Цей крейт може містити деякі готові до використання типи, наприклад тип `Button` чи `TextField`. Крім того, користувачі крейту `gui` можуть захотіти створити свої власні типи, які можуть бути намальовані: наприклад, один програміст може додати тип `Image`, а інший - `SelectBox`.
 
-We won’t implement a fully fledged GUI library for this example but will show how the pieces would fit together. At the time of writing the library, we can’t know and define all the types other programmers might want to create. But we do know that `gui` needs to keep track of many values of different types, and it needs to call a `draw` method on each of these differently typed values. It doesn’t need to know exactly what will happen when we call the `draw` method, just that the value will have that method available for us to call.
+Ми не будемо реалізовувати повноцінну GUI бібліотеку для цього прикладу, але покажемо як її частини будуть поєднуватися. Коли ми пишемо бібліотеку, ми не можемо знати та визначити всі типи, які можуть захотіти створити інші програмісти. Але ми знаємо що `gui` повинен відстежувати багато значень різного типу та викликати метод `draw` кожного з цих по-різному типізованому значень. Крейт не повинен знати, що станеться, коли ми викличемо метод `draw`, просто у значення буде доступний для виклику такий метод.
 
-To do this in a language with inheritance, we might define a class named `Component` that has a method named `draw` on it. The other classes, such as `Button`, `Image`, and `SelectBox`, would inherit from `Component` and thus inherit the `draw` method. They could each override the `draw` method to define their custom behavior, but the framework could treat all of the types as if they were `Component` instances and call `draw` on them. But because Rust doesn’t have inheritance, we need another way to structure the `gui` library to allow users to extend it with new types.
+Для того, щоб зробити це на мові, в якій є наслідування, ми можемо визначити клас під назвою `Component`, який має метод `draw`. Інші класи, такі як `Button`, `Image`, та `SelectBox`, можуть успадкуватися від `Component` й таким чином успадкувати метод `draw`. Кожен з них може перевизначити реалізацію методу `draw`, щоб описати власну поведінку, але фреймворк може розглядати всі типи ніби вони є екземпляром `Component` та міг би викликати їх метод `draw`. Але, оскільки Rust не має механізму успадкування, нам потрібен інший спосіб структурувати `gui` бібліотеку, щоб дозволити користувачам розширювати її новими типами.
 
-### Defining a Trait for Common Behavior
+### Визначення трейту для загальної поведінки
 
-To implement the behavior we want `gui` to have, we’ll define a trait named `Draw` that will have one method named `draw`. Then we can define a vector that takes a *trait object*. A trait object points to both an instance of a type implementing our specified trait and a table used to look up trait methods on that type at runtime. We create a trait object by specifying some sort of pointer, such as a `&` reference or a `Box<T>` smart pointer, then the `dyn` keyword, and then specifying the relevant trait. (We’ll talk about the reason trait objects must use a pointer in Chapter 19 in the section [“Dynamically Sized Types and the `Sized` Trait.”][dynamically-sized]<!-- ignore -->) We can use trait objects in place of a generic or concrete type. Wherever we use a trait object, Rust’s type system will ensure at compile time that any value used in that context will implement the trait object’s trait. Consequently, we don’t need to know all the possible types at compile time.
+Для реалізації поведінки, яку ми хочемо мати в `gui`, визначимо трейт під назвою `Draw`, який буде містити один метод `draw`. Тоді ми можемо визначити вектор, який приймає *трейт-об'єкт*. Трейт-об'єкт вказує як на екземпляр типу, що реалізує вказаний нами трейт, так і на внутрішню таблицю, що використовується для пошуку методів трейту вказаного типу під час виконання. Ми створюємо трейт-об'єкт в такому порядку: використовуємо якийсь вид вказівнику, наприклад посилання `&` або розумний вказівник `Box<T>`, потім ключове слово `dyn` й відповідний трейт. (Ми будемо говорити чому трейт-об'єкти повинні використовувати вказівник у Розділі 19 в секції [“Dynamically Sized Types and the `Sized` Trait.”][dynamically-sized]<!-- ignore -->) Ми можемо використовувати трейт-об'єкт замість узагальненого або конкретного типу. Де б ми не використовували трейт-об'єкт, система типів Rust забезпечить, що під час компіляції будь-яке значення використане у цьому контексті буде реалізовувати трейт трейт-об'єкту. Отже, ми не повинні знати всі можливі типи під час компіляції.
 
-We’ve mentioned that, in Rust, we refrain from calling structs and enums “objects” to distinguish them from other languages’ objects. In a struct or enum, the data in the struct fields and the behavior in `impl` blocks are separated, whereas in other languages, the data and behavior combined into one concept is often labeled an object. However, trait objects *are* more like objects in other languages in the sense that they combine data and behavior. But trait objects differ from traditional objects in that we can’t add data to a trait object. Trait objects aren’t as generally useful as objects in other languages: their specific purpose is to allow abstraction across common behavior.
+Ми нагадували, що в Rust ми не називаємо структури та енуми "об'єктами", щоб розрізняти їх з об'єктами в інших мовах програмування. У структурі або енумі, дані в полях структури та поведінка в блоку `impl` розділені, тоді як в інших мовах вони об'єднанні в один концепт, який часто називають об'єкт. Однак, трейт-об'єкти *є* більше схожими на об'єкти в інших мовах, в тому сенсі що вони об'єднують дані та поведінку. Але трейт-об'єкти відрізняються від традиційних об'єктів у том, що ми не можемо додати дані до трейт-об'єкту. Трейт-об'єкти загалом не настільки корисні як об'єкти в інших мовах програмування: їх конкретна ціль - забезпечити абстракцію через загальну поведінку.
 
-Listing 17-3 shows how to define a trait named `Draw` with one method named `draw`:
+Роздрук 17-3 показує як визначити трейт під назвою `Draw` з одним методом `draw`:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch17-oop/listing-17-03/src/lib.rs}}
 ```
 
-<span class="caption">Listing 17-3: Definition of the `Draw` trait</span>
+<span class="caption">Роздрук 17-3: Визначення трейту `Draw`</span>
 
-This syntax should look familiar from our discussions on how to define traits in Chapter 10. Next comes some new syntax: Listing 17-4 defines a struct named `Screen` that holds a vector named `components`. This vector is of type `Box<dyn Draw>`, which is a trait object; it’s a stand-in for any type inside a `Box` that implements the `Draw` trait.
+Цей синтаксис має бути знайомим після наших дискусій про те, як визначати трейти в розділі 10. Далі йде новий синтаксис: у Роздруку 17-4 визначена структура під назвою `Screen`, яка містить вектор з ім'ям `components`. Цей вектор має тип `Box<dyn Draw>`, який і є трейт-об'єктом; це позначення будь-якого типу всередині `Box`, який реалізує трейт `Draw`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch17-oop/listing-17-04/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Listing 17-4: Definition of the `Screen` struct with a `components` field holding a vector of trait objects that implement the `Draw` trait</span>
+<span class="caption">Роздрук 17-4: Визначення структури `Screen` з полем `components`, яке є вектором трейт-об'єктів, що реалізують трейт `Draw`</span>
 
-On the `Screen` struct, we’ll define a method named `run` that will call the `draw` method on each of its `components`, as shown in Listing 17-5:
+У структурі `Screen` ми визначено метод під назвою `run`, який буде викликати метод `draw` кожного елементу вектора `components`, як показано у Роздруку 17-5:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch17-oop/listing-17-05/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Listing 17-5: A `run` method on `Screen` that calls the `draw` method on each component</span>
+<span class="caption">Роздрук 17-5: Метод `run` в структурі `Screen`, який викликає метод `draw` кожного компоненту</span>
 
-This works differently from defining a struct that uses a generic type parameter with trait bounds. A generic type parameter can only be substituted with one concrete type at a time, whereas trait objects allow for multiple concrete types to fill in for the trait object at runtime. For example, we could have defined the `Screen` struct using a generic type and a trait bound as in Listing 17-6:
+Це працює інакше ніж визначення структури, яка використовує параметр узагальненого типу з обмеженнями трейтів. Узагальнений параметр типу може бути замінений тільки одним конкретним типом, тоді як трейт-об'єкти дозволяють декільком конкретним типам бути на його місці під час виконання. Наприклад, визначимо структуру `Screen` використовуючи узагальнені типи та обмеження трейту в Роздруку 17-6:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch17-oop/listing-17-06/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Listing 17-6: An alternate implementation of the `Screen` struct and its `run` method using generics and trait bounds</span>
+<span class="caption">Лістинг 17-6: Альтернативна реалізація структури `Screen` та її методу `run` за допомогою узагальнених типів та обмежень трейту</span>
 
-This restricts us to a `Screen` instance that has a list of components all of type `Button` or all of type `TextField`. If you’ll only ever have homogeneous collections, using generics and trait bounds is preferable because the definitions will be monomorphized at compile time to use the concrete types.
+Це обмежує екземпляр `Screen` до одного з двох можливих варіантів: наповнений лише компонентами типу `Button`, або лише компонентами типу `TextField`. Якщо у вас коли-небудь будуть тільки однорідні колекції, використання узагальнених типів та обмежень трейту краще, оскільки визначення будуть мономорфізованими під час компіляції для використання з конкретними типами.
 
-On the other hand, with the method using trait objects, one `Screen` instance can hold a `Vec<T>` that contains a `Box<Button>` as well as a `Box<TextField>`. Let’s look at how this works, and then we’ll talk about the runtime performance implications.
+З іншого боку, за допомогою методу, який використовує трейт-об'єкт, один екземпляр `Screen` може містити `Vec<T>`, який містить `Box<Button>`, так само як і `Box<TextField>`. Нумо подивімось як це працює, а потім поговоримо про вплив на швидкодію під час виконання.
 
-### Implementing the Trait
+### Реалізація трейту
 
-Now we’ll add some types that implement the `Draw` trait. We’ll provide the `Button` type. Again, actually implementing a GUI library is beyond the scope of this book, so the `draw` method won’t have any useful implementation in its body. To imagine what the implementation might look like, a `Button` struct might have fields for `width`, `height`, and `label`, as shown in Listing 17-7:
+Тепер ми додамо деякі типи, які реалізуються трейт `Draw`. Запровадимо тип `Button`. Знову ж таки, фактична реалізація бібліотеки GUI виходить за межі цієї книги, тому тіло методу `draw` не буде мати ніякої корисної реалізації. Щоб уявити, як може виглядати така реалізація, структура `Button` може мати поля для `width`, `height`, та `label`, як показано в Роздруку 17-7:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch17-oop/listing-17-07/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Listing 17-7: A `Button` struct that implements the `Draw` trait</span>
+<span class="caption">Роздрук 17-7: Структура `Button`, яка реалізує трейт `Draw`</span>
 
-The `width`, `height`, and `label` fields on `Button` will differ from the fields on other components; for example, a `TextField` type might have those same fields plus a `placeholder` field. Each of the types we want to draw on the screen will implement the `Draw` trait but will use different code in the `draw` method to define how to draw that particular type, as `Button` has here (without the actual GUI code, as mentioned). The `Button` type, for instance, might have an additional `impl` block containing methods related to what happens when a user clicks the button. These kinds of methods won’t apply to types like `TextField`.
+Поля `width`, `height`, та `label` структури `Button` будуть відрізнятися від полів інших компонентів; наприклад, тип `TextField` міг би мати такі самі поля плюс поле `placeholder`. Кожен тип, який ми хочемо намалювати на екрані, буде реалізовувати трейт `Draw`, але буде мати інший код методу `draw` для визначення того, як саме малювати конкретний тип, наприклад `Button` в цьому прикладі (без фактичного коду GUI, який виходить за межі цього розділу). Наприклад, тип `Button` може мати додаткові блоки `impl`, що містять методи, які визначають що станеться, коли користувач натисне на кнопку. Такі методи не застосовуватимуться до таких типів, як `TextField`.
 
-If someone using our library decides to implement a `SelectBox` struct that has `width`, `height`, and `options` fields, they implement the `Draw` trait on the `SelectBox` type as well, as shown in Listing 17-8:
+Якщо користувач нашої бібліотеки вирішить реалізувати структуру `SelectBox`, яка має `width`, `height`, та `options` поля, він реалізує також і трейт `Draw` для структури `SelectBox`, як показано в Роздруку 17-8:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-oop/listing-17-08/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 17-8: Another crate using `gui` and implementing the `Draw` trait on a `SelectBox` struct</span>
+<span class="caption">Роздрук 17-8: Інший крейт використовує `gui` та реалізує трейт `Draw` для структури `SelectBox`</span>
 
-Our library’s user can now write their `main` function to create a `Screen` instance. To the `Screen` instance, they can add a `SelectBox` and a `Button` by putting each in a `Box<T>` to become a trait object. They can then call the `run` method on the `Screen` instance, which will call `draw` on each of the components. Listing 17-9 shows this implementation:
+Тепер користувач нашої бібліотеки може написати свою `main` функцію, щоб створити екземпляр `Screen`. До екземпляра `Screen`, він може додати `SelectBox` та `Button`, розмістивши кожен з них у `Box<T>`, щоб він став трейт-об'єктом. Потім він може викликати метод `run` в екземпляра `Screen`, який викличе метод `draw` для кожного компонента. Роздрук 17-9 показує цю реалізацію:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-oop/listing-17-09/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 17-9: Using trait objects to store values of different types that implement the same trait</span>
+<span class="caption">Роздрук 17-9: Використання трейт-об'єктів для зберігання значень різних типів, які реалізують той самий трейт</span>
 
-When we wrote the library, we didn’t know that someone might add the `SelectBox` type, but our `Screen` implementation was able to operate on the new type and draw it because `SelectBox` implements the `Draw` trait, which means it implements the `draw` method.
+Коли ми писали бібліотеку, ми не знали, що хтось може додати тип `SelectBox`, але наша реалізація `Screen` мала змогу працювати з новим типом та малювати його, тому що `SelectBox` реалізує трейт `Draw`, що означає, що він реалізує метод `draw`.
 
-This concept—of being concerned only with the messages a value responds to rather than the value’s concrete type—is similar to the concept of *duck typing* in dynamically typed languages: if it walks like a duck and quacks like a duck, then it must be a duck! In the implementation of `run` on `Screen` in Listing 17-5, `run` doesn’t need to know what the concrete type of each component is. It doesn’t check whether a component is an instance of a `Button` or a `SelectBox`, it just calls the `draw` method on the component. By specifying `Box<dyn Draw>` as the type of the values in the `components` vector, we’ve defined `Screen` to need values that we can call the `draw` method on.
+Ця концепція, яка стосується тільки повідомлень на які значення відповідає, на відміну від конкретного типу в значення, аналогічна концепції *duck typing* (качкової типізації) у динамічно типізованих мовах: якщо хтось ходить як качка та крякає як качка, то він - качка! У реалізації методу `run` структури `Screen` в Роздруку 17-5, `run` не повинен знати конкретний тип кожного компонента. Він не перевіряє чи є компонент екземпляром `Button` чи `SelectBox`, він просто викликає метод `draw` компоненту. Вказавши `Box<dyn Draw>` як тип значень у вектору `components`, ми визначили `Screen` для значень у яких ми можемо викликати метод `draw`.
 
-The advantage of using trait objects and Rust’s type system to write code similar to code using duck typing is that we never have to check whether a value implements a particular method at runtime or worry about getting errors if a value doesn’t implement a method but we call it anyway. Rust won’t compile our code if the values don’t implement the traits that the trait objects need.
+Перевага використання трейт-об'єктів і системи типів Rust для написання коду подібного до коду з використанням качкової типізації полягає в тому, що нам ніколи не потрібно перевіряти, чи реалізує значення певний метод під час виконання або турбуватися про отримання помилок якщо значення не реалізує метод. Rust не буде компілювати наш код, якщо значення не реалізують трейт потрібного трейт-об'єкту.
 
-For example, Listing 17-10 shows what happens if we try to create a `Screen` with a `String` as a component:
+Наприклад, Роздрук 17-10 показує, що станеться, якщо ми спробуємо створити `Screen` з `String` в якості компонента:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-oop/listing-17-10/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 17-10: Attempting to use a type that doesn’t implement the trait object’s trait</span>
+<span class="caption">Роздрук 17-10: Спроба використати тип, який не реалізує трейт трейт-об'єкту</span>
 
-We’ll get this error because `String` doesn’t implement the `Draw` trait:
+Ми отримаємо помилку, тому що `String` не реалізує трейт `Draw`:
 
 ```console
 {{#include ../listings/ch17-oop/listing-17-10/output.txt}}
 ```
 
-This error lets us know that either we’re passing something to `Screen` we didn’t mean to pass and so should pass a different type or we should implement `Draw` on `String` so that `Screen` is able to call `draw` on it.
+Ця помилка дає зрозуміти, що або ми передаємо в компонент `Screen` щось, що ми не збиралися передавати, і тоді ми повинні передати інший тип, або ми повинні реалізувати трейт `Draw` у типу `String`, щоб `Screen` міг викликати `draw` у нього.
 
-### Trait Objects Perform Dynamic Dispatch
+### Трейт-об'єкти виконують динамічну диспетчеризацію (зв'язування)
 
-Recall in the [“Performance of Code Using Generics”]()<!-- ignore --> section in Chapter 10 our discussion on the monomorphization process performed by the compiler when we use trait bounds on generics: the compiler generates nongeneric implementations of functions and methods for each concrete type that we use in place of a generic type parameter. The code that results from monomorphization is doing *static dispatch*, which is when the compiler knows what method you’re calling at compile time. This is opposed to *dynamic dispatch*, which is when the compiler can’t tell at compile time which method you’re calling. In dynamic dispatch cases, the compiler emits code that at runtime will figure out which method to call.
+Нагадаємо, у секції [“Швидкодія коду з узагальненими типами”]()<!-- ignore --> розділу 10 обговорюється процес мономорфізації, який виконується компілятором, коли ми використовуємо обмеження трейтів для узагальнених типів: компілятор генерує конкретні типи, які ми використовуємо замість параметра узагальненого типу. Код, отриманий в результаті мономорфізації, виконує *статичну диспетчеризацію*, коли компілятор знає який метод ви викликаєте під час компіляції. Це протилежний підхід до *динамічної диспетчеризації*, коли компілятор не може сказати під час компіляції, який метод ви викликаєте. У випадках динамічної диспетчеризації компілятор генерує код, який під час виконання визначає, який метод необхідно викликати.
 
-When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’t know all the types that might be used with the code that’s using trait objects, so it doesn’t know which method implemented on which type to call. Instead, at runtime, Rust uses the pointers inside the trait object to know which method to call. This lookup incurs a runtime cost that doesn’t occur with static dispatch. Dynamic dispatch also prevents the compiler from choosing to inline a method’s code, which in turn prevents some optimizations. However, we did get extra flexibility in the code that we wrote in Listing 17-5 and were able to support in Listing 17-9, so it’s a trade-off to consider.
+Коли ми використовуємо трейт-об'єкти, Rust має використовувати динамічну диспетчеризацію. Компілятор не знає всі типи, які можуть бути використані з кодом, який використовує трейт-об'єкти, тому він не знає, який метод реалізований для якого типу при виклику. Замість цього, під час виконання, Rust використовує вказівники всередині трейт-об'єкту, щоб дізнатися який метод викликати. Такий пошук провокує додаткові витрати під час виконання, які не потребуються під час статичної диспетчеризації. Динамічна диспетчеризація також не дозволяє компілятору обрати вбудовування коду метода, що робить неможливим деякі оптимізації. Однак, ми отримали додаткову гнучкість у коді, який ми написали у Роздруку 17-5, і змогли підтримати у Роздруку 17-9, так що це - компроміс для розгляду.
 ch10-01-syntax.html#performance-of-code-using-generics
 
 [dynamically-sized]: ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait

@@ -1,8 +1,8 @@
-## The Slice Type
+## Тип даних слайс
 
-*Slices* let you reference a contiguous sequence of elements in a collection rather than the whole collection. A slice is a kind of reference, so it does not have ownership.
+*Слайси* дозволяють вам посилатися на неперервні послідовності елементів у колекції замість усієї колекції. Слайс - це посилання, тому він не володіє данними.
 
-Here’s a small programming problem: write a function that takes a string of words separated by spaces and returns the first word it finds in that string. If the function doesn’t find a space in the string, the whole string must be one word, so the entire string should be returned.
+Ось проста задача з програмування: написати функцію, що приймає стрічку зі слів, розділених пробілами, і повертає перше слово, яке знаходиться в цій стрічці. Якщо функція не знайде пробіл у стрічці, це означає, що вся стрічка є одним словом і, відтак, функція має повернути всю стрічку.
 
 Let’s work through how we’d write the signature of this function without using slices, to understand the problem that slices will solve:
 
@@ -10,9 +10,9 @@ Let’s work through how we’d write the signature of this function without usi
 fn first_word(s: &String) -> ?
 ```
 
-The `first_word` function has a `&String` as a parameter. We don’t want ownership, so this is fine. But what should we return? We don’t really have a way to talk about *part* of a string. However, we could return the index of the end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
+Ця функція, `first_word`, приймає параметром `&String`. Нам не потрібне володіння, тому це нормально. Але що ми маємо повернути? У нас немає способу, що виразити *частину* стрічки. Однак ми можемо повернути індекс кінця слова, позначений пробілом. Спробуємо зробити це у Блоці коду 4-7.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:here}}
@@ -27,25 +27,25 @@ Because we need to go through the `String` element by element and check whether 
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method:
+Далі ми створюємо ітератор по масиву байтів за допомогою методу `iter`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
-We’ll discuss iterators in more detail in [Chapter 13][ch13]<!-- ignore -->. For now, know that `iter` is a method that returns each element in a collection and that `enumerate` wraps the result of `iter` and returns each element as part of a tuple instead. The first element of the tuple returned from `enumerate` is the index, and the second element is a reference to the element. This is a bit more convenient than calculating the index ourselves.
+Ітератори будуть детальніше обговорені в [Розділі 13][ch13]<!-- ignore -->. Поки що достатньо знати, що `iter` - метод, що повертає кожен елемент у колекції, а метод `enumerate` обгортає результат `iter` у кортеж. Перший елемент кортежу, що його повертає `enumerate` - індекс, а другий - посилання на елемент. Це трохи зручніше, ніж обчислювати індекс самостійно.
 
-Because the `enumerate` method returns a tuple, we can use patterns to destructure that tuple. We’ll be discussing patterns more in [Chapter 6][ch6]<!-- ignore -->. In the `for` loop, we specify a pattern that has `i` for the index in the tuple and `&item` for the single byte in the tuple. Because we get a reference to the element from `.iter().enumerate()`, we use `&` in the pattern.
+Оскільки метод `enumerate` повертає кортеж, ми можемо скористатися шаблонами для деструктуризації цього кортежу. Ми ще будемо обговорювати шаблони в [Розділі 6][ch6]<!-- ignore -->. В циклі `for` ми визначаємо шаблон, що складається з індексу `i` і байту `&item` в кортежі. Оскільки ми отримуємо посилання на елемент від `.iter().enumerate()`, то використовуємо в шаблоні `&`.
 
-Inside the `for` loop, we search for the byte that represents the space by using the byte literal syntax. If we find a space, we return the position. Otherwise, we return the length of the string by using `s.len()`:
+У циклі `for` ми шукаємо байт, що представляє пробіл, за допомогою байтового літералу. Коли знаходимо пробіл, ми повертаємо його індекс. Якщо цього не сталося, повертаємо довжину стрічки за допомогою методу `s.len()`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
 ```
 
-We now have a way to find out the index of the end of the first word in the string, but there’s a problem. We’re returning a `usize` on its own, but it’s only a meaningful number in the context of the `&String`. In other words, because it’s a separate value from the `String`, there’s no guarantee that it will still be valid in the future. Consider the program in Listing 4-8 that uses the `first_word` function from Listing 4-7.
+Тепер ми маємо спосіб знайти індекс кінця першого слова у стрічці, але є проблема. Ми повертаємо одне значення `usize`, але це значення має сенс лише в контексті нашої стрічки `&String`. Іншими словами, оскільки це значення не пов'язане із зі стрічкою, немає гарантії, що воно буде коректним надалі. Розглянемо програму у Блоці коду 4-8, що використовує функцію `first_word` з Блоку коду 4-7.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-08/src/main.rs:here}}
@@ -54,36 +54,36 @@ We now have a way to find out the index of the end of the first word in the stri
 
 <span class="caption">Listing 4-8: Storing the result from calling the `first_word` function and then changing the `String` contents</span>
 
-This program compiles without any errors and would also do so if we used `word` after calling `s.clear()`. Because `word` isn’t connected to the state of `s` at all, `word` still contains the value `5`. We could use that value `5` with the variable `s` to try to extract the first word out, but this would be a bug because the contents of `s` have changed since we saved `5` in `word`.
+Ця програма компілюється без помилок, і також скомпілювалася б, якби ви використали `word` після виклику `s.clear()`. `word` ніяк не пов'язане зі станом `s`, і тому `word` міститиме значення `5`. Ми можемо використати це значення `5` зі змінною `s`, щоб спробувати видобути з неї перше слово, але це буде помилкою, бо вміст `s` змінився відколи ми зберегли `5` до `word`.
 
-Having to worry about the index in `word` getting out of sync with the data in `s` is tedious and error prone! Managing these indices is even more brittle if we write a `second_word` function. Its signature would have to look like this:
+Необхідність дбати про актуальність індексу в `word` відносно даних в `s` нудна і може спровокувати помилки! Керування такими індексами стає ще більш ламким, якщо ми напишемо функцію `second_word`. Її сигнатура буде виглядати так:
 
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking a starting *and* an ending index, and we have even more values that were calculated from data in a particular state but aren’t tied to that state at all. We have three unrelated variables floating around that need to be kept in sync.
+Тепер ми відстежуємо початковий *і* кінцевий індекси, і ми маємо ще більше значень, обчислених з даних у конкретному стані, але ніяк не прив'язаних до цього стану. Тепер ми маємо три непов'язані змінні, підвішені в повітрі, які нам треба тримати синхронізованими.
 
-Luckily, Rust has a solution to this problem: string slices.
+На щастя, у Rust є розв'язання цієї проблеми: слайси стрічок.
 
-### String Slices
+### Слайси стрічок
 
-A *string slice* is a reference to part of a `String`, and it looks like this:
+*Слайс стрічки* - це посилання на частину стрічки `String`, і виглядає він так:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
 ```
 
-Rather than a reference to the entire `String`, `hello` is a reference to a portion of the `String`, specified in the extra `[0..5]` bit. We create slices using a range within brackets by specifying `[starting_index..ending_index]`, where `starting_index` is the first position in the slice and `ending_index` is one more than the last position in the slice. Internally, the slice data structure stores the starting position and the length of the slice, which corresponds to `ending_index` minus `starting_index`. So in the case of `let
-world = &s[6..11];`, `world` would be a slice that contains a pointer to the byte at index 6 of `s` with a length value of 5.
+Замість того, щоб посилатися на всю `String`, `hello` посилається на частину `String`, указану у фрагменті `[0..5]`. Ми створюємо слайси за допомогою діапазону з квадратними дужками, вказуючи `[starting_index..ending_index]`, де `starting_index` - це перша позиція в слайсі, а `ending_index` - позиція на одну більша за останню позицію в слайсі. В середині структура даних слайсу насправді зберігає початкову позицію і довжину слайсу, що відповідає `ending_index` мінус `starting_index`. Тому в прикладі `let
+world = &s[6..11];`, `world` буде слайсом, що складається зі вказівника на байт з індексом 6 у `s` і довжини 5.
 
-Figure 4-6 shows this in a diagram.
+Рисунок 4-6 показує це у формі діаграми.
 
 <img alt="world containing a pointer to the byte at index 6 of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
 <span class="caption">Figure 4-6: String slice referring to part of a `String`</span>
 
-With Rust’s `..` range syntax, if you want to start at index zero, you can drop the value before the two periods. In other words, these are equal:
+Синтаксис діапазонів `..` у Rust дозволяє, якщо ви хочете почати слайс на індексі нуль, пропустити значення перед крапками. Іншими словами, ці рядки тотожні:
 
 ```rust
 let s = String::from("hello");
@@ -92,7 +92,7 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if your slice includes the last byte of the `String`, you can drop the trailing number. That means these are equal:
+Так само, якщо ваш слайс включає останній байт `String`, ви можете пропустити останнє число. Таким чином, ці рядки також тотожні:
 
 ```rust
 let s = String::from("hello");
@@ -103,7 +103,7 @@ let slice = &s[3..len];
 let slice = &s[3..];
 ```
 
-You can also drop both values to take a slice of the entire string. So these are equal:
+Також можна пропустити обидва значення, щоб взяти слайс з усієї стрічки. Це також тотожні рядки. Це також тотожні рядки:
 
 ```rust
 let s = String::from("hello");
@@ -114,53 +114,53 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-> Note: String slice range indices must occur at valid UTF-8 character boundaries. If you attempt to create a string slice in the middle of a multibyte character, your program will exit with an error. For the purposes of introducing string slices, we are assuming ASCII only in this section; a more thorough discussion of UTF-8 handling is in the [“Storing UTF-8 Encoded Text with Strings”][strings]<!-- ignore --> section of Chapter 8.
+> Примітка: Індекси діапазону слайсу стрічки мають бути коректними границями символів UTF-8. Якщо ви спробуєте створити слайс стрічки посеред багатобайтового символу, ваша програма завершиться з помилкою. Заради ознайомлення зі слайсами стрічок, ми припускаємо в цьому розділі, що стрічка буде складатися лише з ASCII;  ретельніше обговорення обробки UTF-8 міститься в підрозділі [“Зберігання тексту, кодованого в UTF-8, у стрічках”][strings]<!-- ignore --> Розділу 8.
 
-With all this information in mind, let’s rewrite `first_word` to return a slice. The type that signifies “string slice” is written as `&str`:
+Враховуючи всю цю інформацію, перепишімо `first_word`, щоб вона повертала слайс. Тип, що позначає слайс стрічки, записується як `&str`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-18-first-word-slice/src/main.rs:here}}
 ```
 
-We get the index for the end of the word in the same way as we did in Listing 4-7, by looking for the first occurrence of a space. When we find a space, we return a string slice using the start of the string and the index of the space as the starting and ending indices.
+Ми отримуємо індекс кінця слова тим же чином, що й у Блоці коду 4-7, пошуком першого стрічного пробілу. Коли ми знаходимо пробіл, ми повертаємо слайс стрічки за допомогою початку стрічки та індексу пробілу як початкового і кінцевого індексів.
 
-Now when we call `first_word`, we get back a single value that is tied to the underlying data. The value is made up of a reference to the starting point of the slice and the number of elements in the slice.
+Тепер при виклику `first_word` ми отримаємо одне значення, пов'язане з даними. Це значення складається з посилання на початкову точку слайсу і кількість елементів у ньому.
 
-Returning a slice would also work for a `second_word` function:
+Повернення слайсу також спрацює для функції `second_word`:
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up, because the compiler will ensure the references into the `String` remain valid. Remember the bug in the program in Listing 4-8, when we got the index to the end of the first word but then cleared the string so our index was invalid? That code was logically incorrect but didn’t show any immediate errors. The problems would show up later if we kept trying to use the first word index with an emptied string. Slices make this bug impossible and let us know we have a problem with our code much sooner. Using the slice version of `first_word` will throw a compile-time error:
+Тепер ми маємо нехитрий API, з яким значно складніше потрапити в халепу, оскільки компілятор забезпечить коректність посилань на `String`. Пам'ятаєте помилку в програмі з Блоці коду 4-8, коли ми мали індекс кінця першого слова, але очистили стрічку, чим зробили наш індекс некоректним? Цей код мав логічну помилку, але не призводив до жодних негайних помилок. Проблеми з'явилися б надалі, якби ми спробували використовувати індекс першого слова з порожньою стрічкою. Слайси унеможливлюють цю помилку і дають знати про проблему в коді значно раніше. Використання слайсової версії `first_word` призведе до помилки під час компіляції:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/src/main.rs:here}}
 ```
 
-Here’s the compiler error:
+Ось текст помилки компілятора:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
 ```
 
-Recall from the borrowing rules that if we have an immutable reference to something, we cannot also take a mutable reference. Because `clear` needs to truncate the `String`, it needs to get a mutable reference. The `println!` after the call to `clear` uses the reference in `word`, so the immutable reference must still be active at that point. Rust disallows the mutable reference in `clear` and the immutable reference in `word` from existing at the same time, and compilation fails. Not only has Rust made our API easier to use, but it has also eliminated an entire class of errors at compile time!
+Пригадаємо, що за правилами позичання, якщо ми маємо немутабельне посилання на щось, ми не можемо робити мутабельне посилання на це ж. Оскільки `clear` має скоротити `String`, він намагається взяти мутабельне посилання. `println!` після виклику `clear` використовує посилання в `word`, так що немутабельне посилання все ще має бути активним в цій точці. Rust забороняє водночас мутабельне посилання в `clear` і немутабельне посилання у `word`, і компіляція зазнає невдачі. Rust не тільки робить наш API простішим у використанні, а ще й усуває під час компіляції цілий клас помилок!
 
-#### String Literals Are Slices
+#### Стрічкові літерали є слайсами
 
-Recall that we talked about string literals being stored inside the binary. Now that we know about slices, we can properly understand string literals:
+Згадайте, що ми говорили про стрічкові літерали, збережені у двійковому файлі. Оскільки тепер ми вже знаємо про слайси, ми можемо як слід зрозуміти стрічкові літерали:
 
 ```rust
 let s = "Hello, world!";
 ```
 
-The type of `s` here is `&str`: it’s a slice pointing to that specific point of the binary. This is also why string literals are immutable; `&str` is an immutable reference.
+Типом `s` є `&str`: це слайс, що вказує на конкретне місце у двійковому файлі. Це також є причиною, чому стрічкові літерали є немутабельними; `&str` - немутабельне посиланням.
 
-#### String Slices as Parameters
+#### Слайси стрічок як параметри
 
 Knowing that you can take slices of literals and `String` values leads us to one more improvement on `first_word`, and that’s its signature:
 
@@ -177,23 +177,23 @@ A more experienced Rustacean would write the signature shown in Listing 4-9 inst
 
 <span class="caption">Listing 4-9: Improving the `first_word` function by using a string slice for the type of the `s` parameter</span>
 
-If we have a string slice, we can pass that directly. If we have a `String`, we can pass a slice of the `String` or a reference to the `String`. This flexibility takes advantage of *deref coercions*, a feature we will cover in the [“Implicit Deref Coercions with Functions and Methods”][deref-coercions]<!--ignore--> section of Chapter 15. Defining a function to take a string slice instead of a reference to a `String` makes our API more general and useful without losing any functionality:
+Якщо у нас є слайс стрічки, ми можемо передати його прямо. Якщо у нас є `String`, ми можемо передати слайс цього `String` чи посилання на `String`. Ця гнучкість є можливою завдяки *приведенню при розіменуванні*, особливості, про яку ми розкажемо в підрозділі [“Неявні приведення при розіменуваннях у функціях та методах”][deref-coercions]<!--ignore--> Розділу 15. Визначення функції, що приймає слайс стрічки замість посилання на `String` робить наш API більш загальним і корисним без втрати функціональності:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:usage}}
 ```
 
-### Other Slices
+### Інші слайси
 
-String slices, as you might imagine, are specific to strings. But there’s a more general slice type, too. Consider this array:
+Слайси стрічок, як можна зрозуміти, пов'язані зі стрічками. Але є також і більш загальний тип слайсів. Розгляньмо такий масив:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-Just as we might want to refer to a part of a string, we might want to refer to part of an array. We’d do so like this:
+Так само як ми можемо захотіти послатися на частину стрічки, ми можемо захотіти послатися на частину масиву. Це робиться так:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -203,13 +203,13 @@ let slice = &a[1..3];
 assert_eq!(slice, &[2, 3]);
 ```
 
-This slice has the type `&[i32]`. It works the same way as string slices do, by storing a reference to the first element and a length. You’ll use this kind of slice for all sorts of other collections. We’ll discuss these collections in detail when we talk about vectors in Chapter 8.
+Цей слайс має тип `&[i32]`. Він працює тим же чином, що й слайси стрічок, зберігаючи посилання на перший елемент і довжину. Цей тип слайсів можна використовувати для всіх інших видів колекцій. Ми поговоримо про ці колекції детальніше, коли будемо обговорювати вектори в Розділі 8.
 
-## Summary
+## Висновки
 
-The concepts of ownership, borrowing, and slices ensure memory safety in Rust programs at compile time. The Rust language gives you control over your memory usage in the same way as other systems programming languages, but having the owner of data automatically clean up that data when the owner goes out of scope means you don’t have to write and debug extra code to get this control.
+Концепції власності, позичання, і зрізів - це те, що гарантує безпеку роботи із пам'яттю в програмах на Rust під час компіляції. Мова Rust надає вам контроль над використанням пам'яті так само як і інші системні мови програмування, але те, що наявність власника даних автоматично призводить до очищення даних, коли власник виходить з області видимості, означає, що вам не треба писати і зневаджувати додатковий код, щоб отримати цей контроль.
 
-Ownership affects how lots of other parts of Rust work, so we’ll talk about these concepts further throughout the rest of the book. Let’s move on to Chapter 5 and look at grouping pieces of data together in a `struct`.
+Власність впливає на те, як працює велика кількість інших частин Rust, тому ми говоритимемо про ці концепції й надалі у цій книзі. Перейдімо далі до наступного розділу і погляньмо на групування окремих даних докупи в структури `struct`.
 
 [ch13]: ch13-02-iterators.html
 [ch6]: ch06-02-match.html#patterns-that-bind-to-values

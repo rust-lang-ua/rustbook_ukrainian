@@ -1,99 +1,98 @@
-## Developing the Library’s Functionality with Test-Driven Development
+## Розробка Функціонала Бібліотеки із Test-Driven Development
 
-Now that we’ve extracted the logic into *src/lib.rs* and left the argument collecting and error handling in *src/main.rs*, it’s much easier to write tests for the core functionality of our code. We can call functions directly with various arguments and check return values without having to call our binary from the command line.
+Тепер, коли ми перенесли логіку в *src/lib.rs* та залишили збір аргументів та обробку помилок в *src/main.rs*, стало набагато простіше писати тести для основного функціонала нашого коду. Ми можемо викликати функції напряму із різноманітними аргументами та перевіряти повернуті значення без потреби виклику нашого двійкового файлу із командного рядка.
 
-In this section, we’ll add the searching logic to the `minigrep` program using the test-driven development (TDD) process with the following steps:
+У цій секції ми додамо пошукову логіку до програми `minigrep`, використовуючи стиль розробки через тестування (TDD) із наступними кроками:
 
-1. Write a test that fails and run it to make sure it fails for the reason you expect.
-2. Write or modify just enough code to make the new test pass.
-3. Refactor the code you just added or changed and make sure the tests continue to pass.
-4. Repeat from step 1!
+1. Напишіть тест, який дає збій і запустить його, щоб переконатися, що він це робить через очікувану причину.
+2. Напишіть або змініть мінімум коду, щоб новий тест пройшов.
+3. Відрефакторіть щойно доданий або змінений код та впевніться, що тести продовжують проходити.
+4. Повторіть з першого кроку!
 
-Though it’s just one of many ways to write software, TDD can help drive code design. Writing the test before you write the code that makes the test pass helps to maintain high test coverage throughout the process.
+Хоча це лише один з багатьох способів написання програмного забезпечення, TDD може допомагати надавати потрібного напрямку оформленню коду. Створення тесту перед тим, як написати код, який забезпечить проходження тесту, допомагає підтримувати високий рівень покриття тестуванням протягом всього процесу розробки.
 
-We’ll test drive the implementation of the functionality that will actually do the searching for the query string in the file contents and produce a list of lines that match the query. We’ll add this functionality in a function called `search`.
+Ми протестуємо імплементацію функціоналу який буде робити пошуковий запит стрічки у вмісті файлу та створювати список рядків, які відповідають запиту. Ми додамо цей функціонал у функцію під назвою `search`.
 
-### Writing a Failing Test
+### Написання Провального Тесту
 
-Because we don’t need them anymore, let’s remove the `println!` statements from *src/lib.rs* and *src/main.rs* that we used to check the program’s behavior. Then, in *src/lib.rs*, add a `tests` module with a test function, as we did in [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies the behavior we want the `search` function to have: it will take a query and the text to search, and it will return only the lines from the text that contain the query. Listing 12-15 shows this test, which won’t compile yet.
+Видалімо інструкції `println!` які ми використовували для перевірки поведінки програми з *src/lib.rs* та *src/main.rs*, бо нам вони більше не потрібні. Потім додамо в *src/lib.rs* модуль `tests` із тестовою функцією, як ми зробили в [Розділі 11][ch11-anatomy]<!-- ignore -->. Тестова функція визначає бажану поведінку функції `search`: вона отримає запит та текст для пошуку, і вона буде повертати лише рядки з тексту, які містять запит. Блок коду 12-15 показує цей тест, який ще не компілюється.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-15: Creating a failing test for the `search` function we wish we had</span>
+<span class="caption">Блок коду 12-15: Створення невдалого тесту для функції `search`, яку ми хотіли б мати</span>
 
-This test searches for the string `"duct"`. The text we’re searching is three lines, only one of which contains `"duct"` (Note that the backslash after the opening double quote tells Rust not to put a newline character at the beginning of the contents of this string literal). We assert that the value returned from the `search` function contains only the line we expect.
+Цей тест шукає рядок `"duct"`. Текст, в якому ми робимо пошук, це три рядки, лише один з яких містить `"duct"` (Зауважте, що зворотний слеш після першої подвійної лапки каже Rust не розміщувати символ нового рядку на початку цієї стрічки). Ми стверджуємо, що значення, повернене з функції `search` містить тільки рядки, які ми очікуємо.
 
-We aren’t yet able to run this test and watch it fail because the test doesn’t even compile: the `search` function doesn’t exist yet! In accordance with TDD principles, we’ll add just enough code to get the test to compile and run by adding a definition of the `search` function that always returns an empty vector, as shown in Listing 12-16. Then the test should compile and fail because an empty vector doesn’t match a vector containing the line `"safe,
-fast, productive."`
+Ми ще не готові запустити цей тест та подивитися, як він дає збій, бо тест навіть не компілюється: функція `search` ще не існує! Згідно з принципами TDD, ми додамо лише мінімум коду, щоб тест почав компілюватися та виконуватися, додав визначення функції `search`, яке завжди повертає порожній вектор, як показано в Блоці коду 12-16. Тоді тест повинен скомпілюватися та провалитися, бо порожній вектор не зіставляється з вектором, який містить рядок `"safe, fast, productive."`
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-16: Defining just enough of the `search` function so our test will compile</span>
+<span class="caption">Блок коду 12-16: Визначення функції `search`, якого досить для проходження тесту</span>
 
-Notice that we need to define an explicit lifetime `'a` in the signature of `search` and use that lifetime with the `contents` argument and the return value. Recall in [Chapter 10][ch10-lifetimes]<!-- ignore --> that the lifetime parameters specify which argument lifetime is connected to the lifetime of the return value. In this case, we indicate that the returned vector should contain string slices that reference slices of the argument `contents` (rather than the argument `query`).
+Зауважте, що нам потрібно явно визначити час існування `'a` в сигнатурі `search` та використати цей час існування з аргументом `contents` та поверненим значенням. Згадаємо [Розділ 10][ch10-lifetimes]<!-- ignore --> де час існування параметрів вказував, який час існування аргументу пов'язаний з поверненим значенням. У цьому випадку, ми вказуємо, що повернутий вектор має містити слайси стрічки, які посилаються на слайси аргументу `contents` (замість аргументу `query`).
 
-In other words, we tell Rust that the data returned by the `search` function will live as long as the data passed into the `search` function in the `contents` argument. This is important! The data referenced *by* a slice needs to be valid for the reference to be valid; if the compiler assumes we’re making string slices of `query` rather than `contents`, it will do its safety checking incorrectly.
+Інакше кажучи, ми повідомляємо Rust, що дані, отримані `search` функцією будуть існувати допоки вони передаються в `search` функцію аргументом `contents`. Це важливо! Дані, на які посилається *слайс* мають бути валідними, щоб посилання було валідним; якщо компілятор вважає, що ми робимо строкові слайси `query` замість `contents`, він зробить перевірку безпеки некоректно.
 
-If we forget the lifetime annotations and try to compile this function, we’ll get this error:
+Якщо ми забудемо анотації часу існування і спробуємо скомпілювати цю функцію, ми отримаємо цю помилку:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-02-missing-lifetimes/output.txt}}
 ```
 
-Rust can’t possibly know which of the two arguments we need, so we need to tell it explicitly. Because `contents` is the argument that contains all of our text and we want to return the parts of that text that match, we know `contents` is the argument that should be connected to the return value using the lifetime syntax.
+Rust не має можливості дізнатися, який з двох аргументів нам потрібен, тому ми маємо явно це вказати. Оскільки `contents` це аргумент, який містить увесь наш текст і ми хочемо повертати відповідні частини цього тексту, ми розуміємо, що `contents` це аргумент який має бути пов'язаний з поверненим значенням використовуючи синтаксис часу існування.
 
-Other programming languages don’t require you to connect arguments to return values in the signature, but this practice will get easier over time. You might want to compare this example with the [“Validating References with Lifetimes”]()<!-- ignore --> section in Chapter 10.
+Інші мови програмування не вимагають від вас пов'язувати аргументи із поверненим значенням в сигнатурі функції, але ця практика з часом стане легшою. Ви можете захотіти порівняти цей приклад із [“Validating References with Lifetimes”]()<!-- ignore --> Розділу 10.
 
-Now let’s run the test:
+Тепер запустимо тест:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-16/output.txt}}
 ```
 
-Great, the test fails, exactly as we expected. Let’s get the test to pass!
+Чудово, тест провалюється, як ми й очікували. Нумо зробимо тест, який пройде!
 
-### Writing Code to Pass the Test
+### Написання Коду, Щоб Тест Пройшов
 
-Currently, our test is failing because we always return an empty vector. To fix that and implement `search`, our program needs to follow these steps:
+Наразі наш тест провалюється, бо він завжди повертає порожній вектор. Щоб виправити це та імплементувати `search`, наша програма має виконати такі дії:
 
-* Iterate through each line of the contents.
-* Check whether the line contains our query string.
-* If it does, add it to the list of values we’re returning.
-* If it doesn’t, do nothing.
-* Return the list of results that match.
+* Ітерувати через кожний рядок вмісту.
+* Перевірити, чи містить цей рядок нашу стрічку запиту.
+* Якщо так, то додати його до списку значень який ми повертаємо.
+* Якщо ні, то нічого не робити.
+* Повернути отриманий список рядків, які збігаються.
 
-Let’s work through each step, starting with iterating through lines.
+Пройдімо кожен крок, починаючи з ітерації по рядках.
 
-#### Iterating Through Lines with the `lines` Method
+#### Ітерація Рядками із Методом `lines`
 
-Rust has a helpful method to handle line-by-line iteration of strings, conveniently named `lines`, that works as shown in Listing 12-17. Note this won’t compile yet.
+Rust має корисний метод для керування ітерацією по стрічці рядок за рядком який зручно названий `lines`, який працює як показано в Блоці Коду 12-17. Зверніть увагу, це ще не буде компілюватися.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-17/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-17: Iterating through each line in `contents` </span>
+<span class="caption">Блок коду 12-17: Ітерація по кожному рядку в `contents` </span>
 
-The `lines` method returns an iterator. We’ll talk about iterators in depth in [Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way of using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a `for` loop with an iterator to run some code on each item in a collection.
+Метод `lines` повертає ітератор. Ми поговоримо про ітератори більш детально в [Розділі 13][ch13-iterators]<!-- ignore -->, але пригадайте, що ви бачили цей спосіб використання ітератора в [Блоці Коду 3-5][ch3-iter]<!-- ignore -->, де ми використовували цикл `for` з ітератором для виконання деякого коду на кожному елементі колекції.
 
-#### Searching Each Line for the Query
+#### Пошук Запиту в Кожному Рядку
 
-Next, we’ll check whether the current line contains our query string. Fortunately, strings have a helpful method named `contains` that does this for us! Add a call to the `contains` method in the `search` function, as shown in Listing 12-18. Note this still won’t compile yet.
+Далі, ми перевіримо, чи містить поточний рядок стрічку запиту. На щастя, стрічки мають корисний метод названий `contains`, який робить це для нас! Додайте виклик методу `contains` в функцію `search`, як показано в Блоці Коду 12-18. Зауважте, що це ще не буде компілюватися.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-18/src/lib.rs:here}}
@@ -102,13 +101,13 @@ Next, we’ll check whether the current line contains our query string. Fortunat
 
 <span class="caption">Listing 12-18: Adding functionality to see whether the line contains the string in `query`</span>
 
-At the moment, we’re building up functionality. To get it to compile, we need to return a value from the body as we indicated we would in the function signature.
+Ми зараз створюємо функціонал. Щоб він компілювався, нам потрібно повертати значення з вмісту функції, як ми вказали в її сигнатурі.
 
-#### Storing Matching Lines
+#### Зберігання Відповідних Рядків
 
-To finish this function, we need a way to store the matching lines that we want to return. For that, we can make a mutable vector before the `for` loop and call the `push` method to store a `line` in the vector. After the `for` loop, we return the vector, as shown in Listing 12-19.
+Щоб завершити цю функцію, нам потрібен спосіб зберігання зіставлених рядків, які ми хочемо повертати. Для цього, ми можемо створити мутабельний вектор перед циклом `for` та викликати метод `push`, щоб зберегти `line` в векторі. Після циклу `for`, ми повертаємо вектор, як показано в Блоці Коду 12-19.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}
@@ -117,35 +116,35 @@ To finish this function, we need a way to store the matching lines that we want 
 
 <span class="caption">Listing 12-19: Storing the lines that match so we can return them</span>
 
-Now the `search` function should return only the lines that contain `query`, and our test should pass. Let’s run the test:
+Тепер функція `search` повинна повертати тільки рядки, що містять `query`, і наш тест повинен пройти. Запустимо тест:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-19/output.txt}}
 ```
 
-Our test passed, so we know it works!
+Наш тест пройшов, тому ми знаємо, що він працює!
 
-At this point, we could consider opportunities for refactoring the implementation of the search function while keeping the tests passing to maintain the same functionality. The code in the search function isn’t too bad, but it doesn’t take advantage of some useful features of iterators. We’ll return to this example in [Chapter 13][ch13-iterators]<!-- ignore -->, where we’ll explore iterators in detail, and look at how to improve it.
+На цьому етапі ми могли б розглянути можливості рефакторингу імплементації функції пошуку, зберігаючи проходження тестів та зберігаючи той самий функціонал. Код функції пошуку не настільки й поганий, але він не використовує переваги деяких корисних особливостей ітераторів. Ми повернемось до цього прикладу в [Розділі 13][ch13-iterators]<!-- ignore -->, де ми дослідимо ітератори детальніше та розглянемо, як ми можемо їх вдосконалити.
 
-#### Using the `search` Function in the `run` Function
+#### Використовування Функції `search` в Функції `run`
 
-Now that the `search` function is working and tested, we need to call `search` from our `run` function. We need to pass the `config.query` value and the `contents` that `run` reads from the file to the `search` function. Then `run` will print each line returned from `search`:
+Тепер, коли функція `search` працює та протестована, нам потрібно викликати `search` з нашої функції `run`. Нам потрібно передати значення `config.query` та `contents` яке `run` читає з файлу в функцію `search`. Потім `run` виведе в консолі кожен рядок повернений з `search`:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/src/lib.rs:here}}
 ```
 
-We’re still using a `for` loop to return each line from `search` and print it.
+Ми досі використовуємо цикл `for` для повернення кожного рядка із `search` та його виводу в консолі.
 
-Now the entire program should work! Let’s try it out, first with a word that should return exactly one line from the Emily Dickinson poem, “frog”:
+Тепер вся програма має працювати! Нумо спробуємо, спочатку зі словом, яке має повертати річно один рядок із поеми Емілі Дікінсон, "frog":
 
 ```console
 {{#include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/output.txt}}
 ```
 
-Cool! Now let’s try a word that will match multiple lines, like “body”:
+Круто! Спробуємо слово, яке зіставлятиметься з кількома рядками, наприклад "body":
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-03-multiple-matches/output.txt}}
@@ -157,9 +156,9 @@ And finally, let’s make sure that we don’t get any lines when we search for 
 {{#include ../listings/ch12-an-io-project/output-only-04-no-matches/output.txt}}
 ```
 
-Excellent! We’ve built our own mini version of a classic tool and learned a lot about how to structure applications. We’ve also learned a bit about file input and output, lifetimes, testing, and command line parsing.
+Блискуче! Ми побудували нашу власну мініверсію класичного інструменту та багато дізналися про структурування застосунків. Ми також дізналися дещо про ввід у файл, вивід файлу, часи існування, тестування та парсинг командного рядка.
 
-To round out this project, we’ll briefly demonstrate how to work with environment variables and how to print to standard error, both of which are useful when you’re writing command line programs.
+To round out this project, we’ll briefly demonstrate how to work with environment variables and how to print to standard error, both of which are useful when you’re writing command line programs. ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 
 [ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function

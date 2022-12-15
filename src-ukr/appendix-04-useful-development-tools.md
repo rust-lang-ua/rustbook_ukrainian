@@ -1,30 +1,30 @@
-## Appendix D - Useful Development Tools
+## Додаток D - корисні інструменти розробки
 
-In this appendix, we talk about some useful development tools that the Rust project provides. We’ll look at automatic formatting, quick ways to apply warning fixes, a linter, and integrating with IDEs.
+В цьому додатку ми говоримо про деякі корисні інструменти розробки, які надає проєкт Rust. Ми оглянемо автоматичне форматування, швидкі способи застосувати виправлення для попереджень, linter і інтеграцію з IDE.
 
-### Automatic Formatting with `rustfmt`
+### Автоматичне форматування за допомогою `rustfmt`
 
-The `rustfmt` tool reformats your code according to the community code style. Many collaborative projects use `rustfmt` to prevent arguments about which style to use when writing Rust: everyone formats their code using the tool.
+Інструмент `rustfmt` переформатовує ваш код відповідно до стилю коду спільноти. Багато спільних проєктів використовують `rustfmt` для запобігання суперечкам, який стиль використовувати під час написання Rust: всі форматують свій код за допомогою цього інструменту.
 
-To install `rustfmt`, enter the following:
+Щоб встановити `rustfmt`, введіть наступне:
 
 ```console
 $ rustup component add rustfmt
 ```
 
-This command gives you `rustfmt` and `cargo-fmt`, similar to how Rust gives you both `rustc` and `cargo`. To format any Cargo project, enter the following:
+Ця команда дає вам `rustfmt` і `cargo-fmt`, подібно до того, як Rust дає вам `rustc` та `cargo`. Щоб відформатувати будь-який проєкт Cargo, введіть наступне:
 
 ```console
 $ cargo fmt
 ```
 
-Running this command reformats all the Rust code in the current crate. This should only change the code style, not the code semantics. For more information on `rustfmt`, see [its documentation][rustfmt].
+Запуск цієї команди переформатує весь код Rust в поточному крейті. Це має змінювати лише стиль коду, а не його семантику. Для отримання додаткової інформації по `rustfmt` перегляньте [його документацію][rustfmt].
 
-### Fix Your Code with `rustfix`
+### Виправте ваш код за допомогою `rustfix`
 
-The rustfix tool is included with Rust installations and can automatically fix compiler warnings that have a clear way to correct the problem that’s likely what you want. It’s likely you’ve seen compiler warnings before. For example, consider this code:
+Інструмент rustfix включений у встановлення Rust і може автоматично виправити попередження компілятора, які мають чіткий спосіб виправити проблему, що скоріш за все те, що ви хочете. Ймовірно, ви вже бачили попередження компілятора. Наприклад, розглянемо цей код:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn do_something() {}
@@ -36,7 +36,7 @@ fn main() {
 }
 ```
 
-Here, we’re calling the `do_something` function 100 times, but we never use the variable `i` in the body of the `for` loop. Rust warns us about that:
+Тут ми викликаємо функцію `do_something` 100 разів. але ми ніколи не використовуємо змінну `і` в тілі циклу `for`. Rust попереджає нас про це:
 
 ```console
 $ cargo build
@@ -52,7 +52,7 @@ warning: unused variable: `i`
     Finished dev [unoptimized + debuginfo] target(s) in 0.50s
 ```
 
-The warning suggests that we use `_i` as a name instead: the underscore indicates that we intend for this variable to be unused. We can automatically apply that suggestion using the `rustfix` tool by running the command `cargo
+Попередження пропонує нам використати `_i` як назву змінної: підкреслення вказує на те, що не збираємося використовувати цю змінну. Ми можемо автоматично застосувати цю пропозицію, використовуючи інструмент `rustfix`, запустивши команду `cargo
 fix`:
 
 ```console
@@ -62,9 +62,9 @@ $ cargo fix
     Finished dev [unoptimized + debuginfo] target(s) in 0.59s
 ```
 
-When we look at *src/main.rs* again, we’ll see that `cargo fix` has changed the code:
+Коли ми знову подивимось на *src/main.rs*, то побачимо, що `cargo fix` змінив код:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn do_something() {}
@@ -76,29 +76,29 @@ fn main() {
 }
 ```
 
-The `for` loop variable is now named `_i`, and the warning no longer appears.
+Змінна циклу `for` тепер називається `_i`, і попередження більше не з'являється.
 
-You can also use the `cargo fix` command to transition your code between different Rust editions. Editions are covered in Appendix E.
+Ви також можете використовувати команду `cargo fix` для перенесення коду між різними редакціями Rust. Про редакції розповідає Додаток E.
 
-### More Lints with Clippy
+### Більше lint від Clippy
 
-The Clippy tool is a collection of lints to analyze your code so you can catch common mistakes and improve your Rust code.
+Clippy - це інструмент, що містить набір lint для аналізу вашого коду, щоб ви могли спіймати загальні помилки та поліпшити ваш код на Rust.
 
-To install Clippy, enter the following:
+Щоб встановити Clippy, введіть наступне:
 
 ```console
 $ rustup component add clippy
 ```
 
-To run Clippy’s lints on any Cargo project, enter the following:
+Щоб запустити lint Clippy для будь-якого проєкту Cargo, введіть наступне:
 
 ```console
 $ cargo clippy
 ```
 
-For example, say you write a program that uses an approximation of a mathematical constant, such as pi, as this program does:
+Наприклад, ви пишете програму, що використовує наближення математичної константи, такої як Пі, як ця програма:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -108,7 +108,7 @@ fn main() {
 }
 ```
 
-Running `cargo clippy` on this project results in this error:
+Запуск `cargo clippy` на цьому проєкті призводить до помилки:
 
 ```text
 error: approximate value of `f{32, 64}::consts::PI` found. Consider using it directly
@@ -121,9 +121,9 @@ error: approximate value of `f{32, 64}::consts::PI` found. Consider using it dir
   = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
-This error lets you know that Rust already has a more precise `PI` constant defined, and that your program would be more correct if you used the constant instead. You would then change your code to use the `PI` constant. The following code doesn’t result in any errors or warnings from Clippy:
+Ця помилка повідомляє, що Rust вже має більш точну константу `Пі` і що ваша програма буде коректнішою, якщо ви скористаєтеся цією константою. Тоді ви зміните свій код, щоб використовувати константу `Пі`. Наступний код не призводить до помилок або попереджень від Clippy:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -133,16 +133,16 @@ fn main() {
 }
 ```
 
-For more information on Clippy, see [its documentation][clippy].
+Для отримання додаткової інформації про Clippy перегляньте [його документацію][clippy].
 
-### IDE Integration Using `rust-analyzer`
+### Інтеграція в IDE за допомогою `rust-analyzer`
 
-To help IDE integration, the Rust community recommends using [`rust-analyzer`][rust-analyzer]<!-- ignore -->. This tool is a set of compiler-centric utilities that speaks the [Language Server Protocol][lsp]<!--
-ignore -->, which is a specification for IDEs and programming languages to communicate with each other. Different clients can use 
+Для покращення інтеграції в IDE спільнота Rust рекомендує використовувати [`rust-analyzer`][rust-analyzer]<!-- ignore -->. Цей інструмент є набором довколокомпіляторних утиліт, що спілкуються за допомогою [Language Server Protocol][lsp]<!--
+ignore -->, що є специфікацією для IDE і мов програмування для взаємного спілкування. Різні клієнти можуть використовувати 
 
-`rust-analyzer`, such as [the Rust analyzer plug-in for Visual Studio Code][vscode].
+`rust-analyzer`, наприклад [the Rust analyzer plug-in for Visual Studio Code][vscode].
 
-Visit the `rust-analyzer` project’s [home page][rust-analyzer] for installation instructions, then install the language server support in your particular IDE. Your IDE will gain abilities such as autocompletion, jump to definition, and inline errors.
+Відвідайте [домашню сторінку][rust-analyzer] проєкту `rust-analyzer`, щоб отримати інструкцію для встановлення, тоді встановіть підтримку мовного сервера у вашому конкретному IDE. Ваше IDE набуде можливостей, таких, як автодоповнення, перехід до визначення і вбудовані помилки.
 
 [rustfmt]: https://github.com/rust-lang/rustfmt
 

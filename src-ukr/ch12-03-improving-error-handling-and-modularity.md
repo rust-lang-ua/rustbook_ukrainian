@@ -1,139 +1,137 @@
-## Refactoring to Improve Modularity and Error Handling
+## Рефакторизація для покращення модульності та обробки помилок
 
-To improve our program, we’ll fix four problems that have to do with the program’s structure and how it’s handling potential errors. First, our `main` function now performs two tasks: it parses arguments and reads files. As our program grows, the number of separate tasks the `main` function handles will increase. As a function gains responsibilities, it becomes more difficult to reason about, harder to test, and harder to change without breaking one of its parts. It’s best to separate functionality so each function is responsible for one task.
+Для покращення програми ми розв'яжемо чотири проблеми, пов’язані зі структурою програми та тим, як вона обробляє потенційні помилки. По-перше, наша функція `main` тепер виконує два завдання: розбирає параметри та читає файли. Зі зростанням нашої програми кількість окремих завдань, які обробляє функція `main`, збільшуватиметься. Зі збільшенням відповідальності функції її стає складніше розуміти, важче тестувати, важче змінювати, не порушуючи інших її частин. Найкраще розділити функціональність, щоб кожна функція відповідала за одне завдання.
 
-This issue also ties into the second problem: although `query` and `file_path` are configuration variables to our program, variables like `contents` are used to perform the program’s logic. The longer `main` becomes, the more variables we’ll need to bring into scope; the more variables we have in scope, the harder it will be to keep track of the purpose of each. It’s best to group the configuration variables into one structure to make their purpose clear.
+Це питання також пов'язане з другою проблемою: у той час, як змінні `query` та `file_path` є конфігураційними змінними нашої програми, змінні на кшталт `contents` використовуються для реалізації логіки програм. Що довшим ставатиме `main`, то більше змінних треба буде додати в область видимості; що більше змінних в області видимості, тим складніше буде відстежувати призначення кожної з них. Найкраще згрупувати конфігураційні змінні в одну структуру, щоб унаочнити їнє призначення.
 
-The third problem is that we’ve used `expect` to print an error message when reading the file fails, but the error message just prints `Should have been
-able to read the file`. Reading a file can fail in a number of ways: for example, the file could be missing, or we might not have permission to open it. Right now, regardless of the situation, we’d print the same error message for everything, which wouldn’t give the user any information!
+Третя проблема полягає в тому, що ми використали `expect`, щоб вивести повідомлення про помилку, коли не вдається прочитати файл, але саме повідомлення лише каже `Should have been able to read the file`. Читання файлу може бути невдалим через багато причин: скажімо, такого файлу може не існувати, або у нас може не бути прав відкривати його. Поки що, незалежно від ситуації, ми виводимо те саме повідомлення про помилку для будь-якої причини, що не дає користувачеві жодної інформації!
 
-Fourth, we use `expect` repeatedly to handle different errors, and if the user runs our program without specifying enough arguments, they’ll get an `index out
-of bounds` error from Rust that doesn’t clearly explain the problem. It would be best if all the error-handling code were in one place so future maintainers had only one place to consult the code if the error-handling logic needed to change. Having all the error-handling code in one place will also ensure that we’re printing messages that will be meaningful to our end users.
+По-четверте, ми використовуємо `expect` знову і знову для обробки різних помилок, і якщо користувач запустить програму, не вказавши потрібні параметри, то побачить лише повідомлення Rust про помилку `index out of bounds`, що не дуже чітко описує проблему. Найкраще буде, якщо код обробки помилок буде в одному місці, щоб той, хто підтримуватиме код у майбутньому, мав зазирнути лише в одне місце в коді, якщо треба буде змінити логіку обробки помилок. Те, що код обробки помилок знаходиться в одному місці, також гарантує, що ми друкуємо повідомлення, зрозумілі для наших кінцевих користувачів.
 
-Let’s address these four problems by refactoring our project.
+Щоб виправити ці чотири проблеми, зробімо рефакторинг нашого проєкту.
 
-### Separation of Concerns for Binary Projects
+### Розділення зон інтересів у двійкових проєктах
 
-The organizational problem of allocating responsibility for multiple tasks to the `main` function is common to many binary projects. As a result, the Rust community has developed guidelines for splitting the separate concerns of a binary program when `main` starts getting large. This process has the following steps:
+Організаційна проблема поділу відповідальності за різні завдання у функції `main` є спільною для багатьох двійкових проєктів. У результаті спільнота Rust розробила рекомендації для поділу окремих інтересів у двійковій програмі, коли функція `main` починає ставати великою. Процес складається з наступних кроків:
 
-* Split your program into a *main.rs* and a *lib.rs* and move your program’s logic to *lib.rs*.
-* As long as your command line parsing logic is small, it can remain in *main.rs*.
-* When the command line parsing logic starts getting complicated, extract it from *main.rs* and move it to *lib.rs*.
+* Поділіть свою програму на *main.rs* та *lib.rs* і перенесіть логіку програми до *lib.rs*.
+* Поки логіка для аналізу командного рядка невелика, вона може залишатися в *main.rs*.
+* Коли обробка логіки командного рядка починає ускладнюватись, витягніть її з *main.rs* і перемістіть до *lib.rs*.
 
-The responsibilities that remain in the `main` function after this process should be limited to the following:
+Відповідальність коду, що залишиться в функції `main` після цього, має бути обмеженою до такого:
 
-* Calling the command line parsing logic with the argument values
-* Setting up any other configuration
-* Calling a `run` function in *lib.rs*
-* Handling the error if `run` returns an error
+* Виклик логіки аналізу командного рядка і передача їй значень аргументів
+* Налаштування решти конфігурації
+* Виклик функції `run` із *lib.rs*
+* Обробка помилок, якщо `run` поверне помилку
 
-This pattern is about separating concerns: *main.rs* handles running the program, and *lib.rs* handles all the logic of the task at hand. Because you can’t test the `main` function directly, this structure lets you test all of your program’s logic by moving it into functions in *lib.rs*. The code that remains in *main.rs* will be small enough to verify its correctness by reading it. Let’s rework our program by following this process.
+Цей шаблон стосується поділу інтересів: *main.rs* обробляє запуск програми, а *lib.rs* обробляє всю логіку основного завдання. Оскільки функцію `main` неможливо тестувати напряму, ця структура дозволяє вам тестувати усю логіку вашої програми, перенісши її до функцій у *lib.rs*. Код, що залишився в *main.rs* буде досить маленьким, щоб перевірити його правильність, прочитавши його. Переробімо нашу програму відповідно до цього процесу.
 
-#### Extracting the Argument Parser
+#### Перенесення аналізатора аргументів
 
-We’ll extract the functionality for parsing arguments into a function that `main` will call to prepare for moving the command line parsing logic to *src/lib.rs*. Listing 12-5 shows the new start of `main` that calls a new function `parse_config`, which we’ll define in *src/main.rs* for the moment.
+Ми перенесемо функціональність для аналізу аргументів у функцію, котру буде викликати `main`, щоб підготувати переміщення логіки розбору командного рядка до *src/lib. s*. Блок коду 12-5 показує початок нової функції `main`, яка викликає нову функцію `parse_config`, котру ми скоро визначимо в *src/main.rs*.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-05/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-5: Extracting a `parse_config` function from `main`</span>
+<span class="caption">Блок коду 12-5: Вилучення функції `parse_config` з `main`</span>
 
-We’re still collecting the command line arguments into a vector, but instead of assigning the argument value at index 1 to the variable `query` and the argument value at index 2 to the variable `file_path` within the `main` function, we pass the whole vector to the `parse_config` function. The `parse_config` function then holds the logic that determines which argument goes in which variable and passes the values back to `main`. We still create the `query` and `file_path` variables in `main`, but `main` no longer has the responsibility of determining how the command line arguments and variables correspond.
+Ми все ще збираємо аргументи командного рядка до вектора, але замість присвоювати значення аргументу з індексом 1 змінній `query`, а значення аргументу з індексом 2 змінній `file_path` у функції `main`, ми передаємо весь вектор до функції `parse_config`. Функція `parse_config` містить логіку, що визначає, який аргумент потрапляє до якої змінної і передає значення на назад до `main`. Ми все ще створюємо змінні `query` та `file_path` у `main`, але `main` більше не відповідає за визначення, як співвідносяться аргументи командного рядка та змінні.
 
-This rework may seem like overkill for our small program, but we’re refactoring in small, incremental steps. After making this change, run the program again to verify that the argument parsing still works. It’s good to check your progress often, to help identify the cause of problems when they occur.
+Це перероблення може виглядати надмірним для нашої програми, але ми робимо рефакторизацію невеликими поступовими кроками. Після внесення цієї зміни знову запустіть програму, щоб перевірити, що аналіз аргументів все ще працює. Дуже добра ідея - часто перевіряти ваш прогрес, щоб легше було визначити причину проблем, коли вони з'являться.
 
-#### Grouping Configuration Values
+#### Групування конфігураційних значень
 
-We can take another small step to improve the `parse_config` function further. At the moment, we’re returning a tuple, but then we immediately break that tuple into individual parts again. This is a sign that perhaps we don’t have the right abstraction yet.
+Ми можемо зробити ще один невеликий крок, щоб поліпшити функцію `parse_config`. На цей момент вона повертає кортеж, а потім ми відразу ж розбираємо цей кортеж на окремі частини. Це ознака того, що, можливо, ми ще не досягли правильної абстракції.
 
-Another indicator that shows there’s room for improvement is the `config` part of `parse_config`, which implies that the two values we return are related and are both part of one configuration value. We’re not currently conveying this meaning in the structure of the data other than by grouping the two values into a tuple; we’ll instead put the two values into one struct and give each of the struct fields a meaningful name. Doing so will make it easier for future maintainers of this code to understand how the different values relate to each other and what their purpose is.
+Інший показник, що вказує на місце для покращення - це частина `config` функції `parse_config`, яка має на увазі, що два значення, що ми повертаємо, пов'язані і є частинами одного конфігураційного значення. Наразі ми передаємо це в структурі даних простим групуванням двох значень у кортеж, що не дуже виразно; натомість покладімо два значення в одну структуру і дамо кожному з полів змістовну назву. Таким чином ми полегшимо тим, хто підтримуватиме цей код у майбутньому, розуміння, як різні значення стосуються одне одного і яке їхнє призначення.
 
-Listing 12-6 shows the improvements to the `parse_config` function.
+Блок коду 12-6 показує покращення до функції `parse_config`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-06/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-6: Refactoring `parse_config` to return an instance of a `Config` struct</span>
+<span class="caption">Блок коду 12-6: Рефакторизація функції `parse_config`, що тепер повертає екземпляр структури `Config`</span>
 
-We’ve added a struct named `Config` defined to have fields named `query` and `file_path`. The signature of `parse_config` now indicates that it returns a `Config` value. In the body of `parse_config`, where we used to return string slices that reference `String` values in `args`, we now define `Config` to contain owned `String` values. The `args` variable in `main` is the owner of the argument values and is only letting the `parse_config` function borrow them, which means we’d violate Rust’s borrowing rules if `Config` tried to take ownership of the values in `args`.
+Ми додали структуру, що зветься `Config`, у якій визначили поля, що звуться `query` та `file_path`. Сигнатура `parse_config` тепер показує, що вона повертає значення типу `Config`. У тілі `parse_config`, де раніше ми повертали стрічкові слайси, які посилалися на значення `String` у `args`, тепер ми задаємо значення `String`, якими володіє `Config`. Змінна `args` у `main` є власником значень аргументів і лише дозволяє функції `parse_config` позичити їх, тобто ми б порушили правила позичання Rust якби `Config` пробував взяти володіння значеннями з `args`.
 
-There are a number of ways we could manage the `String` data; the easiest, though somewhat inefficient, route is to call the `clone` method on the values. This will make a full copy of the data for the `Config` instance to own, which takes more time and memory than storing a reference to the string data. However, cloning the data also makes our code very straightforward because we don’t have to manage the lifetimes of the references; in this circumstance, giving up a little performance to gain simplicity is a worthwhile trade-off.
+Є багато способів, як ми могли б керувати даними `String`; найпростіший, хоча і дещо неефективний спосіб - викликати метод `clone` для значень. Це зробить повну копію даних для надання володіння екземпляра `Config`, що потребує більше часу і пам'яті, ніж зберігання посилання на дані стрічки. Однак клонування даних також робить наш код вкрай прямолінійним, бо нам не треба керувати часами існування посилань; за цих обставин, віддати трохи продуктивності задля спрощення є гідним компромісом.
 
-> ### The Trade-Offs of Using `clone`
+> ### Використання `clone` як компроміс
 > 
-> There’s a tendency among many Rustaceans to avoid using `clone` to fix ownership problems because of its runtime cost. In [Chapter 13][ch13]<!-- ignore -->, you’ll learn how to use more efficient methods in this type of situation. But for now, it’s okay to copy a few strings to continue making progress because you’ll make these copies only once and your file path and query string are very small. It’s better to have a working program that’s a bit inefficient than to try to hyperoptimize code on your first pass. As you become more experienced with Rust, it’ll be easier to start with the most efficient solution, but for now, it’s perfectly acceptable to call `clone`.
+> Існує тенденція, якої дотримується багато растацеанців, уникати використання `clone` для виправлення проблем із володінням через його ціну часу виконання. У  [Розділі 13][ch13]<!-- ignore -->ви дізнаєтеся, як застосовувати ефективніші методи для ситуацій на кшталт цієї. Та поки що цілком прийнятно скопіювати кілька стрічок для продовження розробки, бо ці копії робляться лише один раз і шлях до файлу та стрічка запиту дуже маленькі. Краще мати дещо неефективну робочу програму, ніж намагатися з першого разу переоптимізувати код. Як ви ставатимете досвідченішими з Rust, ставатиме легше починати з найефективнішого рішення, та поки що цілком прийнятно викликати `clone`.
 
-We’ve updated `main` so it places the instance of `Config` returned by `parse_config` into a variable named `config`, and we updated the code that previously used the separate `query` and `file_path` variables so it now uses the fields on the `Config` struct instead.
+Ми змінили `main`, і тепер він розміщує екземпляр `Config`, повернутий `parse_config`, у змінну на ім'я `config`, і змінили код, що раніше розділяв змінні `query` та `file_path`, щоб він натомість використовував поля у структурі `Config`.
 
-Now our code more clearly conveys that `query` and `file_path` are related and that their purpose is to configure how the program will work. Any code that uses these values knows to find them in the `config` instance in the fields named for their purpose.
+Тепер наш код ясніше передає, що `query` та `file_path` пов'язані, і що їхнє призначення - конфігурувати роботу програми. Будь-який код, що використовує ці значення, знає, що їх треба шукати у екземплярі `config` у полях з назвами, що відповідають їхньому призначенню.
 
-#### Creating a Constructor for `Config`
+#### Створення конструктора для `Config`
 
-So far, we’ve extracted the logic responsible for parsing the command line arguments from `main` and placed it in the `parse_config` function. Doing so helped us to see that the `query` and `file_path` values were related and that relationship should be conveyed in our code. We then added a `Config` struct to name the related purpose of `query` and `file_path` and to be able to return the values’ names as struct field names from the `parse_config` function.
+Ми вже перенесли логіку, що відповідає за обробку аргументів командного рядка, з `main` і помістили її у функції `parse_config`. Це допомогло нам побачити, що змінні `query` та `file_path` пов'язані і цей зв'язок має бути показаним у коді. Потім ми додали структуру `Config`, щоб назвати об'єднані за призначенням змінні `query` та `file_path` і щоб можна було повертати імена значень як поля структури з функції `parse_config`.
 
-So now that the purpose of the `parse_config` function is to create a `Config` instance, we can change `parse_config` from a plain function to a function named `new` that is associated with the `Config` struct. Making this change will make the code more idiomatic. We can create instances of types in the standard library, such as `String`, by calling `String::new`. Similarly, by changing `parse_config` into a `new` function associated with `Config`, we’ll be able to create instances of `Config` by calling `Config::new`. Listing 12-7 shows the changes we need to make.
+Тож тепер, оскільки призначення функції `parse_config` - створити екземпляр `Config`, ми можемо змінити `parse_config` зі звичайної функції на функцію, що зветься `new`, асоційонвану зі структурою `Config`. Ця зміна зробить код більш ідіоматичним. Ми можемо створювати екземпляри типів зі стандартної бібліотеки, такі як `String`, викликом `String::new`. Подібним чином, змінивши `parse_config` на функцію `new`, асоційовану з `Config`, ми зможемо створювати екземпляри `Config` викликом `Config::new`. Блок коду 12-7 показує, які зміни треба зробити.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-07/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-7: Changing `parse_config` into `Config::new`</span>
+<span class="caption">Listing 12-7: Зміна `parse_config` на `Config::new`</span>
 
-We’ve updated `main` where we were calling `parse_config` to instead call `Config::new`. We’ve changed the name of `parse_config` to `new` and moved it within an `impl` block, which associates the `new` function with `Config`. Try compiling this code again to make sure it works.
+Ми замінили у `main` виклик `parse_config` на виклик `Config::new`. Ми змінили ім'я `parse_config` на `new` і перенесли її в блок `impl`, асоціювавши функцію `new` з `Config`. Спробуйте скомпілювати цей код ще раз, щоб переконатися, що він працює.
 
-### Fixing the Error Handling
+### Виправлення обробки помилок
 
-Now we’ll work on fixing our error handling. Recall that attempting to access the values in the `args` vector at index 1 or index 2 will cause the program to panic if the vector contains fewer than three items. Try running the program without any arguments; it will look like this:
+Тепер ми попрацюємо над виправленням обробки помилок. Згадайте, що спроби отримати доступ до значень у векторі `args` за індексами 1 чи 2 призведе до паніки програми, якщо у векторі менш ніж три елементи. Спробуйте запустити програму без будь-яких аргументів; це виглядатиме так:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-07/output.txt}}
 ```
 
-The line `index out of bounds: the len is 1 but the index is 1` is an error message intended for programmers. It won’t help our end users understand what they should do instead. Let’s fix that now.
+Рядок `index out of bounds: the len is 1 but the index is 1` - це повідомлення про помилку, призначене для програмістів. Воно не допоможе кінцевим користувачам зрозуміти, що вони мають робити. Полагодьмо це.
 
-#### Improving the Error Message
+#### Поліпшення повідомлення про помилку
 
-In Listing 12-8, we add a check in the `new` function that will verify that the slice is long enough before accessing index 1 and 2. If the slice isn’t long enough, the program panics and displays a better error message.
+У Блоці коду 12-8 ми додаємо перевірку у функцію `new`, що підтверджує, що слайс достатньо довгий, перед тим як звертатися до індексів 1 та 2. Якщо слайс недостатньо довгий, програма панікує і показує краще повідомлення про помилку.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-08/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-8: Adding a check for the number of arguments</span>
+<span class="caption">Блок коду 12-8: Додавання перевірки на число аргументів</span>
 
-This code is similar to [the `Guess::new` function we wrote in Listing 9-13][ch9-custom-types]<!-- ignore -->, where we called `panic!` when the `value` argument was out of the range of valid values. Instead of checking for a range of values here, we’re checking that the length of `args` is at least 3 and the rest of the function can operate under the assumption that this condition has been met. If `args` has fewer than three items, this condition will be true, and we call the `panic!` macro to end the program immediately.
+Цей код подібний до [функції `Guess::new`, яку ми написали у Блоці коду 9-13][ch9-custom-types]<!-- ignore -->, де ми викликали `panic!`, коли аргумент `value` був поза діапазоном припустимих значень. Тут, замість перевірки діапазону значень, ми перевіряємо, що довжина `args` є принаймні 3, і решта функції може працювати з припущенням, що ця умова виконується. Якщо `args` має менш ніж три елементи, ця умова буде істинною, і ми викличемо макрос `panic!`, щоб негайно завершити програму.
 
-With these extra few lines of code in `new`, let’s run the program without any arguments again to see what the error looks like now:
+Після додавання цих кількох рядків коду до `new` знову запустімо програму без аргументів, щоб побачити, як помилка виглядатиме тепер:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-08/output.txt}}
 ```
 
-This output is better: we now have a reasonable error message. However, we also have extraneous information we don’t want to give to our users. Perhaps using the technique we used in Listing 9-13 isn’t the best to use here: a call to `panic!` is more appropriate for a programming problem than a usage problem, [as discussed in Chapter 9][ch9-error-guidelines]<!-- ignore -->. Instead, we’ll use the other technique you learned about in Chapter 9—[returning a `Result`][ch9-result]<!-- ignore --> that indicates either success or an error.
+Це вже краще: тепер ми маємо зрозуміле повідомлення про помилку. Однак, ми також маємо побічну інформацію, яку не хочемо надавати нашим користувачам. Мабуть, техніка, яку ми використовували в Блоці коду 9-13, не найліпше підходить сюди: виклик `panic!` більш доречний для проблеми з програмуванням, ніж до проблеми з використанням, [що обговорювалося в Розділі 9][ch9-error-guidelines]<!-- ignore -->. Натомість ми використаємо іншу техніку, про яку ви дізналися з Розділу 9 - [повернення `Result`][ch9-result]<!-- ignore --> , що позначає успіх чи помилку.
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="returning-a-result-from-new-instead-of-calling-panic"></a>
 
-#### Returning a `Result` Instead of Calling `panic!`
+#### Повертаємо `Result` замість виклику `panic!`
 
-We can instead return a `Result` value that will contain a `Config` instance in the successful case and will describe the problem in the error case. We’re also going to change the function name from `new` to `build` because many programmers expect `new` functions to never fail. When `Config::build` is communicating to `main`, we can use the `Result` type to signal there was a problem. Then we can change `main` to convert an `Err` variant into a more practical error for our users without the surrounding text about `thread
-'main'` and `RUST_BACKTRACE` that a call to `panic!` causes.
+Ми можемо натомість повернути значення `Result`, що мітитиме екземпляр `Config` при успіху і описуватиме проблему у випадку помилки. Ми також збираємося змінити назву функції з `new` на `build`, бо багато програмістів очікують, що функції `new` ніколи не зазнають невдачі. Коли `Config::build` передає повідомлення до `main`, ми можемо використати тип `Result`, щоб сигналізувати про проблему. Потім ми можемо змінити `main`, щоб перетворити варіант `Err` на більш практичне повідомлення для наших користувачів без зайвого тексту про `thread
+'main'` і `RUST_BACKTRACE`, як робить виклик `panic!`.
 
-Listing 12-9 shows the changes we need to make to the return value of the function we’re now calling `Config::build` and the body of the function needed to return a `Result`. Note that this won’t compile until we update `main` as well, which we’ll do in the next listing.
+Блок коду 12-9 показує зміни до функції, що тепер зветься `Config::build`, які ми маємо зробити, щоб значення, що повертається з неї, було типу `Result`, і відповідне тіло функції. Зверніть увагу, що цей код не скомпілюється, доки ми не змінимо також і `main`, що ми робимо в наступному блоці коду.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -142,140 +140,140 @@ Listing 12-9 shows the changes we need to make to the return value of the functi
 ```
 
 
-<span class="caption">Listing 12-9: Returning a `Result` from `Config::build`</span>
+<span class="caption">Блок коду 12-9: Повертання `Result` з `Config::build`</span>
 
-Our `build` function now returns a `Result` with a `Config` instance in the success case and a `&'static str` in the error case. Our error values will always be string literals that have the `'static` lifetime.
+Наша функція `build` тепер повертає `Result` з екземпляром `Config` у разі успіху і `&'static str` у разі помилки. Значення наших помилок завжди будуть стрічковими літералами з часом існування `'static`.
 
-We’ve made two changes in the body of the function: instead of calling `panic!` when the user doesn’t pass enough arguments, we now return an `Err` value, and we’ve wrapped the `Config` return value in an `Ok`. These changes make the function conform to its new type signature.
+Ми зробили дві зміни у тілі функції: замість виклику `panic!`, коли користувач не надав достатньо аргументів, ми тепер повертаємо значення `Err`, і ми обгорнули значення `Config`, що ми повертаємо, у `Ok`. Ці зміни узгоджують функцію з новою сигнатурою типу.
 
-Returning an `Err` value from `Config::build` allows the `main` function to handle the `Result` value returned from the `build` function and exit the process more cleanly in the error case.
+Повертання значення `Err` з `Config::build` дозволяє функції `main` обробити значення `Result`, повернуте з функції `build`, і вийти з процесу чистіше у випадку помилки.
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="calling-confignew-and-handling-errors"></a>
 
-#### Calling `Config::build` and Handling Errors
+#### Виклик `Config::build` і обробка помилок
 
-To handle the error case and print a user-friendly message, we need to update `main` to handle the `Result` being returned by `Config::build`, as shown in Listing 12-10. We’ll also take the responsibility of exiting the command line tool with a nonzero error code away from `panic!` and instead implement it by hand. A nonzero exit status is a convention to signal to the process that called our program that the program exited with an error state.
+Щоб обробити випадок з помилкою і вивести дружнє для користувача повідомлення, нам треба змінити `main`, щоб обробити `Result`, повернений `Config::build`, як показано у Блоці коду 12-10. Ми також візьмемо відповідальність за вихід з інструменту командного рядка з ненульовим кодом помилки з `panic!` і реалізуємо його самостійно. Ненульовий статус на виході - це угода, щоб повідомити процесу, який викликав нашу програму, що програма завершилася з помилкою.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-10/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-10: Exiting with an error code if building a `Config` fails</span>
+<span class="caption">Блок коду 12-10: Вихід з кодом помилки, якщо збірка `Config` була невдалою</span>
 
-In this listing, we’ve used a method we haven’t covered in detail yet: `unwrap_or_else`, which is defined on `Result<T, E>` by the standard library. Using `unwrap_or_else` allows us to define some custom, non-`panic!` error handling. If the `Result` is an `Ok` value, this method’s behavior is similar to `unwrap`: it returns the inner value `Ok` is wrapping. However, if the value is an `Err` value, this method calls the code in the *closure*, which is an anonymous function we define and pass as an argument to `unwrap_or_else`. We’ll cover closures in more detail in [Chapter 13][ch13]<!-- ignore -->. For now, you just need to know that `unwrap_or_else` will pass the inner value of the `Err`, which in this case is the static string `"not enough arguments"` that we added in Listing 12-9, to our closure in the argument `err` that appears between the vertical pipes. The code in the closure can then use the `err` value when it runs.
+У цьому блоці коду ми скористалися методом, про який ще детально не розповідали - `unwrap_or_else`, що визначено на `Result<T, E>` у стандартній бібліотеці. `unwrap_or_else` дозволяє визначати власну обробку помилок, без `panic!`. Якщо `Result` є значенням `Ok`, цей метод робить те саме, що й `unwrap`: повертає внутрішнє значення, загорнуте в `Ok`. Але якщо значення є `Err`, цей метод викликає код у *замиканні*, тобто анонімній функції, що ми визначаємо і передаємо аргументом до `unwrap_or_else`. Про замикання детальніше піде у [Розділі 13][ch13]<!-- ignore -->. Поки що вам лише слід знати, що `unwrap_or_else` передасть внутрішнє значення `Err`, тобто у нашому випадку статичну стрічку `"not enough arguments"`, що ми додали в Блоці коду 12-9, нашому замиканню, як аргумент `err`, що визначається між вертикальними лініями. Код у замиканні зможе під час виконання використати значення `err`.
 
-We’ve added a new `use` line to bring `process` from the standard library into scope. The code in the closure that will be run in the error case is only two lines: we print the `err` value and then call `process::exit`. The `process::exit` function will stop the program immediately and return the number that was passed as the exit status code. This is similar to the `panic!`-based handling we used in Listing 12-8, but we no longer get all the extra output. Let’s try it:
+Ми додали новий рядок `use`, щоб ввести `process` зі стандартної бібліотеки до області видимості. Код у замиканні, що буде виконано у випадку помилки, складається лише з двох рядків: ми виводимо значення `err` і потім викликаємо `process::exit`. Функція `process::exit` негайно зупиняє програму і повертає передане число як код статусу виходу. Це схоже на обробку помилок за допомогою `panic!`, як ми робили в Блоці коду 12-8, але ми більше не отримуємо зайвий вивід. Спробуймо:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-10/output.txt}}
 ```
 
-Great! This output is much friendlier for our users.
+Чудово! Це повідомлення набагато дружніше до наших користувачів.
 
-### Extracting Logic from `main`
+### Перенесення логіки з `main`
 
-Now that we’ve finished refactoring the configuration parsing, let’s turn to the program’s logic. As we stated in [“Separation of Concerns for Binary Projects”](#separation-of-concerns-for-binary-projects)<!-- ignore -->, we’ll extract a function named `run` that will hold all the logic currently in the `main` function that isn’t involved with setting up configuration or handling errors. When we’re done, `main` will be concise and easy to verify by inspection, and we’ll be able to write tests for all the other logic.
+Тепер, коли ми закінчили рефакторизацію аналізу конфігурації, повернімося до логіки програми. Як ми казали в ["Розділення зон інтересів у двійкових проєктах"](#separation-of-concerns-for-binary-projects)<!-- ignore -->, ми виділимо функцію, що зветься `run`, що міститиме всю логіку, наразі розміщену у функції `main`, яка не бере участі у встановленні конфігурації чи обробці помилок. Коли ми закінчимо, `main` стане виразним і легким для перевірки на помилки простим переглядом, і ми зможемо написати тести для решти логіки програми.
 
-Listing 12-11 shows the extracted `run` function. For now, we’re just making the small, incremental improvement of extracting the function. We’re still defining the function in *src/main.rs*.
+Блок коду 12-11 показує виокремлену функцію `run`. Поки що, ми робимо маленькі, поступові покращення при виділенні функції. Ми все ще визначаємо цю функцію у *src/main.rs*.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-11/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-11: Extracting a `run` function containing the rest of the program logic</span>
+<span class="caption">Блок коду 12-11: Виділення функції `run`, що містить решту логіки програми</span>
 
-The `run` function now contains all the remaining logic from `main`, starting from reading the file. The `run` function takes the `Config` instance as an argument.
+Функція `run` тепер містить решту логіки з `main`, починаючи з читання файлу. Функція `run` приймає аргументом екземпляр `Config`.
 
-#### Returning Errors from the `run` Function
+#### Повертання помилок з функції `run`
 
-With the remaining program logic separated into the `run` function, we can improve the error handling, as we did with `Config::build` in Listing 12-9. Instead of allowing the program to panic by calling `expect`, the `run` function will return a `Result<T, E>` when something goes wrong. This will let us further consolidate the logic around handling errors into `main` in a user-friendly way. Listing 12-12 shows the changes we need to make to the signature and body of `run`.
+Для решти логіки програми, виділеної в функцію `run`, ми можемо покращити обробку помилок, як ми зробили з `Config::build` у Блоці коду 12-9. Замість дозволяти програмі панікувати викликом `expect`, функція `run` повертатиме `Result<T, E>`, коли щось піде не так. Це дозволить нам об'єднати логіку обробки помилок у `main` у дружній для користувача спосіб. Блок коду 12-12 показує зміни, які нам треба зробити в сигнатурі і тілі `run`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-12/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-12: Changing the `run` function to return `Result`</span>
+<span class="caption">Блок коду 12-12: Зміна функції `run`, що повертає `Result`</span>
 
-We’ve made three significant changes here. First, we changed the return type of the `run` function to `Result<(), Box<dyn Error>>`. This function previously returned the unit type, `()`, and we keep that as the value returned in the `Ok` case.
+Ми зробили тут три суттєві зміни. По-перше, ми змінили тип, що повертає функція `run`, на `Result<(), Box<dyn Error>>`. Ця функція раніше повертала одиничний тип, `()`, і ми залишаємо це значення у випадку `Ok`.
 
-For the error type, we used the *trait object* `Box<dyn Error>` (and we’ve brought `std::error::Error` into scope with a `use` statement at the top). We’ll cover trait objects in [Chapter 17][ch17]<!-- ignore -->. For now, just know that `Box<dyn Error>` means the function will return a type that implements the `Error` trait, but we don’t have to specify what particular type the return value will be. This gives us flexibility to return error values that may be of different types in different error cases. The `dyn` keyword is short for “dynamic.”
+Для типу помилок, ми використовуємо *трейтовий об'єкт* `Box<dyn Error>` (і ми внесли `std::error::Error` до області видимості за допомогою інструкції `use` на початку). Ми розкажемо про трейтові об'єкти у [Розділі 17][ch17]<!-- ignore -->. Поки що, вам достатньо знати, що `Box<dyn Error>` означає, що функція поверне тип, що реалізує трейт `Error`, але ми не маємо зазначати який це буде конкретний тип значення. Це надає нам гнучкості, щоб повертати значення, які можуть бути різних типів у випадках різних помилок. Ключове слово `dyn` - це скорочення для "динамічний" (“dynamic”).
 
-Second, we’ve removed the call to `expect` in favor of the `?` operator, as we talked about in [Chapter 9][ch9-question-mark]<!-- ignore -->. Rather than `panic!` on an error, `?` will return the error value from the current function for the caller to handle.
+По-друге, ми прибрали виклик `expect`, замінивши його натомість оператором `?`, як ми й говорили у [Розділі 9][ch9-question-mark]<!-- ignore -->. Замість виклику `panic!` при помилці, `?` поверне значення помилки з поточної функції тому, хто її викликав, для обробки.
 
-Third, the `run` function now returns an `Ok` value in the success case. We’ve declared the `run` function’s success type as `()` in the signature, which means we need to wrap the unit type value in the `Ok` value. This `Ok(())` syntax might look a bit strange at first, but using `()` like this is the idiomatic way to indicate that we’re calling `run` for its side effects only; it doesn’t return a value we need.
+По-третє, функція `run` тепер повертає значення `Ok` у випадку успіху. Ми проголосили у сигнатурі, що тип успіху функції `run` - `()`, що означає, що нам потрібно обгорнути значення одиничного типу у значення `Ok`. Цей запис `Ok(())` може спершу видаватися трохи дивним, але використання `()` подібним чином є ідіоматичним способом позначити, що ми викликаємо `run` лише задля його побічних ефектів; він не повертає потрібного значення.
 
-When you run this code, it will compile but will display a warning:
+Коли ви запускаєте цей код, він скомпілюється, але покаже попередження:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-12/output.txt}}
 ```
 
-Rust tells us that our code ignored the `Result` value and the `Result` value might indicate that an error occurred. But we’re not checking to see whether or not there was an error, and the compiler reminds us that we probably meant to have some error-handling code here! Let’s rectify that problem now.
+Rust каже нам, що наш код проігнорував значення `Result` і що це значення `Result` може показувати, що сталася помилка. Але ми не перевіряємо, чи не було помилки, і компілятор нагадує нам, що ми, мабуть, хотіли б додати сюди код для обробки помилок! Виправмо одразу цю проблему.
 
-#### Handling Errors Returned from `run` in `main`
+#### Обробка помилок, повернутих з `run` до `main`
 
-We’ll check for errors and handle them using a technique similar to one we used with `Config::build` in Listing 12-10, but with a slight difference:
+Ми перевірятимемо на помилки і оброблятимемо їх за допомогою техніки, подібної до тої, якою ми скористалися з `Config::build`, з невеликою відмінністю:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/no-listing-01-handling-errors-in-main/src/main.rs:here}}
 ```
 
-We use `if let` rather than `unwrap_or_else` to check whether `run` returns an `Err` value and call `process::exit(1)` if it does. The `run` function doesn’t return a value that we want to `unwrap` in the same way that `Config::build` returns the `Config` instance. Because `run` returns `()` in the success case, we only care about detecting an error, so we don’t need `unwrap_or_else` to return the unwrapped value, which would only be `()`.
+Ми використовуємо `if let` замість `unwrap_or_else` для перевірки, чи `run` повертає значення `Err` і викликаємо в цьому випадку `process::exit(1)`. Функція `run` не повертає значення, яке б ми хотіли отримати за допомогою `unwrap`, на відміну від `Config::build`, що повертає екземпляр `Config`. Оскільки `run` у випадку успіху повертає `()`, нас турбує лише виявлення помилки, тож нам не потрібен `unwrap_or_else` для отримання видобутого значення, яке може бути лише `()`.
 
-The bodies of the `if let` and the `unwrap_or_else` functions are the same in both cases: we print the error and exit.
+Тіла `if let` та функції `unwrap_or_else` однакові в обох випадках: ми виводимо помилку і виходимо.
 
-### Splitting Code into a Library Crate
+### Виділення коду у бібліотечний крейт
 
-Our `minigrep` project is looking good so far! Now we’ll split the *src/main.rs* file and put some code into the *src/lib.rs* file. That way we can test the code and have a *src/main.rs* file with fewer responsibilities.
+Наш проєкт `minigrep` поки що має непоганий вигляд! Тепер ми поділимо файл *src/main.rs* і перенесемо частину коду у файл *src/lib.rs*. Таким чином, ми зможемо тестувати код, залишивши файлу *src/main.rs* менше відповідальності.
 
-Let’s move all the code that isn’t the `main` function from *src/main.rs* to *src/lib.rs*:
+Перенесімо весь код, крім функції `main`, з *src/main.rs* до *src/lib.rs*:
 
-* The `run` function definition
-* The relevant `use` statements
-* The definition of `Config`
-* The `Config::build` function definition
+* Визначення функції `run`
+* Відповідні інструкції `use`
+* Визначення `Config`
+* Визначення функції `Config::build`
 
-The contents of *src/lib.rs* should have the signatures shown in Listing 12-13 (we’ve omitted the bodies of the functions for brevity). Note that this won’t compile until we modify *src/main.rs* in Listing 12-14.
+Вміст *src/lib.rs* має містити сигнатури, показані в Блоці коду 12-13 (ми опустили тіла функцій для стислості). Зверніть увагу, що цей код не скомпілюється, поки ми не змінимо *src/main.rs* у Блоці коду 12-14.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-13: Moving `Config` and `run` into *src/lib.rs*</span>
+<span class="caption">Блок коду 12-13: Перенесення `Config` і `run` до *src/lib.rs*</span>
 
-We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its `new` method, and on the `run` function. We now have a library crate that has a public API we can test!
+Ми дещо вільно використали ключове слово `pub`: для `Config`, його полів і його методу `build`, а також для функції `run`. Тепер ми маємо бібліотечний крейт, що має публічний API, який ми можемо тестувати!
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the binary crate in *src/main.rs*, as shown in Listing 12-14.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-14: Using the `minigrep` library crate in *src/main.rs*</span>
+<span class="caption">Блок коду 12-14: Використання бібліотечного крейту `minigrep` у *src/main.rs*</span>
 
-We add a `use minigrep::Config` line to bring the `Config` type from the library crate into the binary crate’s scope, and we prefix the `run` function with our crate name. Now all the functionality should be connected and should work. Run the program with `cargo run` and make sure everything works correctly.
+Ми додали рядок `use minigrep::Config`, щоб внести тип `Config` з бібліотечного крейту до області видимості двійкового крейту, і додали перед функцією `run` назву нашого крейту. Тепер уся функціональність має бути з'єднана і мусить працювати. Запустіть програму за допомогою `cargo run` і переконайтеся, що все працює правильно.
 
-Whew! That was a lot of work, but we’ve set ourselves up for success in the future. Now it’s much easier to handle errors, and we’ve made the code more modular. Almost all of our work will be done in *src/lib.rs* from here on out.
+Хух! Добряче попрацювали, але налаштували себе на успіх у майбутньому. Тепер буде значно легше обробляти помилки, і ми зробили код більш модульним. Майже вся наша робота з цього моменту буде виконуватися в *src/lib.rs*.
 
-Let’s take advantage of this newfound modularity by doing something that would have been difficult with the old code but is easy with the new code: we’ll write some tests!
+Скористаймося з цієї новоствореної модульності, зробивши дещо, що було б складним зі старим кодом, але легко з новим: напишемо кілька тестів!
 
 [ch13]: ch13-00-functional-features.html
 [ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation

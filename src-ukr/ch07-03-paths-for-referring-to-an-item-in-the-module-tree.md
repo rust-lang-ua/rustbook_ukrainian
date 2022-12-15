@@ -1,153 +1,153 @@
-## Paths for Referring to an Item in the Module Tree
+## Шлях для доступу до елементів у дереві модулів
 
-To show Rust where to find an item in a module tree, we use a path in the same way we use a path when navigating a filesystem. To call a function, we need to know its path.
+Щоб вказати Rust, де шукати елемент у дереві модулів, ми використовуємо шляхи так само як ми використовуємо шляхи для навігації по файловій системі. Щоб викликати функцію, ми повинні знати її шлях.
 
-A path can take two forms:
+Шлях може приймати дві форми:
 
-* An *absolute path* is the full path starting from a crate root; for code from an external crate, the absolute path begins with the crate name, and for code from the current crate, it starts with the literal `crate`.
-* A *relative path* starts from the current module and uses `self`, `super`, or an identifier in the current module.
+* *Aбсолютний шлях* це повний шлях, що починається в кореневій директорії крейту; для коду від зовнішнього крейту, абсолютний шлях починається з назви крейту, і для коду з поточного ящика починається з рядка `crate`.
+* *Відносний шлях* починається у поточному модулі і використовує `self`, `super` чи ідентифікатор поточного модуля.
 
-Both absolute and relative paths are followed by one or more identifiers separated by double colons (`::`).
+І абсолютні, і відносні шляхи складаються з одного чи кількох ідентифікаторів, розділених подвійною двокрапкою (`::`).
 
-Returning to Listing 7-1, say we want to call the `add_to_waitlist` function. This is the same as asking: what’s the path of the `add_to_waitlist` function? Listing 7-3 contains Listing 7-1 with some of the modules and functions removed.
+Повернімося до Блоку коду 7-1. Скажімо, ми хочемо викликати функцію `add_to_waitlist`. Це те саме, що й запитати: який шлях до функції `add_to_waitlist`? Блок коду 7-3 містить Блок коду 7-1, але деякі з модулів та функцій прибрані.
 
-We’ll show two ways to call the `add_to_waitlist` function from a new function `eat_at_restaurant` defined in the crate root. These paths are correct, but there’s another problem remaining that will prevent this example from compiling as-is. We’ll explain why in a bit.
+Ми покажемо два способи викликати функцію `add_to_waitlist` з нової функції `eat_at_restaurant`, визначеної в корені крейта. Ці шляхи є правильними, але залишилася інша проблема, яка перешкоджає компілюванню цього прикладу "як є". Ми пояснимо, чому, трохи пізніше.
 
-The `eat_at_restaurant` function is part of our library crate’s public API, so we mark it with the `pub` keyword. In the [“Exposing Paths with the `pub` Keyword”][pub]<!-- ignore --> section, we’ll go into more detail about `pub`.
+Функція `eat_at_restaurant` є частиною публічного API нашого бібліотечного крейта, тому ми позначимо її ключевим словом `pub`. Детальніше про `pub` йтиметься у підрозділі ["Надання доступу до шляхів за допомогою ключового слова <1>pub</1>][pub]<!-- ignore --> .
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-03/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 7-3: Calling the `add_to_waitlist` function using absolute and relative paths</span>
+<span class="caption">Блок коду 7-3: виклик функції `add_to_waitlist` за допомогою абсолютного та відносного шляхів</span>
 
-The first time we call the `add_to_waitlist` function in `eat_at_restaurant`, we use an absolute path. The `add_to_waitlist` function is defined in the same crate as `eat_at_restaurant`, which means we can use the `crate` keyword to start an absolute path. We then include each of the successive modules until we make our way to `add_to_waitlist`. You can imagine a filesystem with the same structure: we’d specify the path `/front_of_house/hosting/add_to_waitlist` to run the `add_to_waitlist` program; using the `crate` name to start from the crate root is like using `/` to start from the filesystem root in your shell.
+Коли ми вперше ми викликаємо функцію `add_to_waitlist` в `eat_at_restaurant`, то використовуємо абсолютний шлях. Функція `add_to_waitlist` визначена у тому ж крейті, що й `eat_at_restaurant`, тобто ми можемо використати ключове слово `crate` на початку абсолютного шляху. Потім ми додаємо кожен з вкладених модулів, доки не не вкажемо весь шлях до `add_to_waitlist`. Уявіть собі файлову систему з такою ж структурою: ми повинні вказати шлях `/front_of_house/hosting/add_to_waitlist`, щоб запустити програму `add_to_waitlist`; використання назви `crate`, щоб почати з кореня, схожий на використання `/`, щоб почати шлях з кореня файлової системи у вашій оболонці.
 
-The second time we call `add_to_waitlist` in `eat_at_restaurant`, we use a relative path. The path starts with `front_of_house`, the name of the module defined at the same level of the module tree as `eat_at_restaurant`. Here the filesystem equivalent would be using the path `front_of_house/hosting/add_to_waitlist`. Starting with a module name means that the path is relative.
+Коли ми вдруге викликаємо `add_to_waitlist` у `eat_at_restaurant`, то використовуємо відносний шлях. Шлях починається з `front_of_house`, назви модуля, визначеного на тому ж рівні дерева модулів, що й `eat_at_restaurant`. Тут аналогом з файлової системи буде використання шляху `front_of_house/hosting/add_to_waitlist`. Початок з назви модуля означає, що шлях є відносним.
 
-Choosing whether to use a relative or absolute path is a decision you’ll make based on your project, and depends on whether you’re more likely to move item definition code separately from or together with the code that uses the item. For example, if we move the `front_of_house` module and the `eat_at_restaurant` function into a module named `customer_experience`, we’d need to update the absolute path to `add_to_waitlist`, but the relative path would still be valid. However, if we moved the `eat_at_restaurant` function separately into a module named `dining`, the absolute path to the `add_to_waitlist` call would stay the same, but the relative path would need to be updated. Our preference in general is to specify absolute paths because it’s more likely we’ll want to move code definitions and item calls independently of each other.
+Рішення, використовувати відносний або абсолютний шлях, вам доведеться робити, виходячи з від вашого проєкту, і залежить від того, чи код, що визначає елемент, окремо від коду, що використовує його, чи разом. Наприклад, якщо ми перемістимо модуль `front_of_house` і функцію `eat_at_restaurant` у модуль `customer_experience`, нам знадобиться оновити абсолютний шлях до `add_to_waitlist`, але відносний шлях усе ще буде коректним. Однак, якби ми перенесли функцію `eat_at_restaurant` окремо до модуля з назвою `dining`, абсолютний шлях до виклику `add_to_waitlist` залишаться таким самим, але відносний шлях треба буде оновити. Загалом, ми вважаємо за краще вказувати абсолютні шляхи, тому що з більшою ймовірністю ми захочемо перемістити код визначення та виклики елементів незалежно один від одного.
 
-Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The error we get is shown in Listing 7-4.
+Спробуймо скомпілювати Блок коду 7-3 і дізнатися, чому він досі не компілюється! Помилка, що ми отримуємо, показана у Блоці коду 7-4.
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
 ```
 
 
-<span class="caption">Listing 7-4: Compiler errors from building the code in Listing 7-3</span>
+<span class="caption">Блок коду 7-4: помилки компілятора при збірці коду в Блоці коду 7-3</span>
 
-The error messages say that module `hosting` is private. In other words, we have the correct paths for the `hosting` module and the `add_to_waitlist` function, but Rust won’t let us use them because it doesn’t have access to the private sections. In Rust, all items (functions, methods, structs, enums, modules, and constants) are private to parent modules by default. If you want to make an item like a function or struct private, you put it in a module.
+Повідомлення про помилки кажуть, що модуль `hosting` є приватним. Іншими словами, ми маємо коректні шляхи для модуля `hosting` і функції `add_to_waitlist`, але Rust не дозволяє нам використовувати їх, бо немає доступу до приватних частин. У Rust усі елементи (функції, методи, структури, енуми, модулі і константи) за замовчуванням є приватними в батьківських модулях. Якщо ви хочете зробити елемент на кшталт функції чи структури приватним, то розміщуєте його у модулі.
 
-Items in a parent module can’t use the private items inside child modules, but items in child modules can use the items in their ancestor modules. This is because child modules wrap and hide their implementation details, but the child modules can see the context in which they’re defined. To continue with our metaphor, think of the privacy rules as being like the back office of a restaurant: what goes on in there is private to restaurant customers, but office managers can see and do everything in the restaurant they operate.
+Елементи батьківського модуля не можуть використовувати приватні елементи дочірніх модулів, але елементи дочірніх модулів можуть використовувати елементи у модулях-предках. Так зроблено, щоб дочірні модулі огортали і ховали деталі своєї реалізації, але дочірні модулі можуть бачити контекст, у якому їх визначено. Щоб розвинути нашу метафору, уявіть собі правила приватності як бек-офіс ресторану: те, що там відбувається, недоступно для клієнтів ресторану, але менеджери можуть бачити і робити все у ресторані, яким вони керують.
 
-Rust chose to have the module system function this way so that hiding inner implementation details is the default. That way, you know which parts of the inner code you can change without breaking outer code. However, Rust does give you the option to expose inner parts of child modules’ code to outer ancestor modules by using the `pub` keyword to make an item public.
+У Rust вирішено зробити модульну систему, де деталі реалізації є прихованими за замовчуванням. Таким чином, ви знаєте, які частини внутрішнього коду ви можете змінити, не зламавши зовнішній код. Однак Rust надає вам можливість виставити внутрішні частини коду дочірніх модулів для зовнішніх модулів-предків за допомогою ключового слова `pub`, щоб зробити елемент публічним.
 
-### Exposing Paths with the `pub` Keyword
+### Надання доступу до шляхів за допомогою ключового слова `pub`
 
-Let’s return to the error in Listing 7-4 that told us the `hosting` module is private. We want the `eat_at_restaurant` function in the parent module to have access to the `add_to_waitlist` function in the child module, so we mark the `hosting` module with the `pub` keyword, as shown in Listing 7-5.
+Повернімося до помилки у Блоці коду 7-4, яка каже нам, що модуль `hosting` є приватним. Ми хочемо, щоб функція `eat_at_restaurant` в батьківському модулі мала доступ до функції `add_to_waitlist` в дочірньому модулі, тож ми позначили модуль `hosting` за допомогою ключового слова `pub`, як показано в Блоці коду 7-5.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-05/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 7-5: Declaring the `hosting` module as `pub` to use it from `eat_at_restaurant`</span>
+<span class="caption">Блок коду 7-5: проголошення модуля `hosting` як `pub`, щоб використовувати його з `eat_at_restaurant`</span>
 
-Unfortunately, the code in Listing 7-5 still results in an error, as shown in Listing 7-6.
+На жаль, код у Блоці коду 7-5 все ще призводить до помилки, як це показано в Блоці коду 7-6.
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
 ```
 
 
-<span class="caption">Listing 7-6: Compiler errors from building the code in Listing 7-5</span>
+<span class="caption">Блок коду 7-6: помилки компілятора від збірки коду у Блоці коду 7-5</span>
 
-What happened? Adding the `pub` keyword in front of `mod hosting` makes the module public. With this change, if we can access `front_of_house`, we can access `hosting`. But the *contents* of `hosting` are still private; making the module public doesn’t make its contents public. The `pub` keyword on a module only lets code in its ancestor modules refer to it, not access its inner code. Because modules are containers, there’s not much we can do by only making the module public; we need to go further and choose to make one or more of the items within the module public as well.
+Що сталося? Додавання ключового слова `pub` перед `mod hosting` робить модуль публічним. Після цієї зміни, якщо ми маємо доступ `front_of_house`, ми можемо отримати доступ до `hosting`. Але *вміст* `hosting` все ще є приватним; зробивши модуль публічним, ми робимо публічним його вміст. Ключове слово `pub` для модуля дозволяє коду в модулях-предках тільки посилатися на нього, а не мати доступ до його внутрішнього коду. Оскільки модулі є контейнерами, ми багато не зробимо, лише зробивши модуль публічним; ми маємо піти далі і також зробити ще один або більше елементів модуля публічними.
 
-The errors in Listing 7-6 say that the `add_to_waitlist` function is private. The privacy rules apply to structs, enums, functions, and methods as well as modules.
+Помилки у Блоці коду 7-6 кажуть, що функція `add_to_waitlist` є приватною. Правила приватності  застосовуються до структур, енумів, функцій і методів, як і до модулів.
 
-Let’s also make the `add_to_waitlist` function public by adding the `pub` keyword before its definition, as in Listing 7-7.
+Також зробімо публічною функцію `add_to_waitlist`, додавши ключове слово `pub` перед її визначенням, як у Блоці коду 7-7.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-07/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 7-7: Adding the `pub` keyword to `mod hosting` and `fn add_to_waitlist` lets us call the function from `eat_at_restaurant`</span>
+<span class="caption">Блок коду 7-7: Додавання ключового слова `pub` до `mod hosting` і `fn add_to_waitlist` дозволяє нам викликати функцію з `eat_at_restaurant`</span>
 
-Now the code will compile! To see why adding the `pub` keyword lets us use these paths in `add_to_waitlist` with respect to the privacy rules, let’s look at the absolute and the relative paths.
+Тепер код скомпілюється! Щоб побачити, чому додавання ключового слова `pub` дозволяє нам використовувати ці шляхи у `add_to_waitlist` відповідно до правил приватності, розгляньмо абсолютні та відносні шляхи.
 
-In the absolute path, we start with `crate`, the root of our crate’s module tree. The `front_of_house` module is defined in the crate root. While `front_of_house` isn’t public, because the `eat_at_restaurant` function is defined in the same module as `front_of_house` (that is, `eat_at_restaurant` and `front_of_house` are siblings), we can refer to `front_of_house` from `eat_at_restaurant`. Next is the `hosting` module marked with `pub`. We can access the parent module of `hosting`, so we can access `hosting`. Finally, the `add_to_waitlist` function is marked with `pub` and we can access its parent module, so this function call works!
+Абсолютний шлях ми починаємо з `crate`, кореня дерева модулів нашого крейта. Модуль `front_of_house` визначено в корені крейта. Оскільки функція `eat_at_restaurant` визначена в тому ж модулі, що й `front_of_house` (тобто, `eat_at_restaurant` та `front_of_house` є сестрами), то поки `front_of_house` не є публічним, ми можемо посилатися на `front_of_house` лише з `eat_at_restaurant`. Наступний модуль `hosting` позначений як `pub`. Ми маємо доступ до батьківського модуля `hosting`, тож маємо доступ до `hosting`. Нарешті, функція `add_to_waitlist` позначена як `pub` і ми маємо доступ до її батьківського модуля, тож виклик функції працює!
 
-In the relative path, the logic is the same as the absolute path except for the first step: rather than starting from the crate root, the path starts from `front_of_house`. The `front_of_house` module is defined within the same module as `eat_at_restaurant`, so the relative path starting from the module in which `eat_at_restaurant` is defined works. Then, because `hosting` and `add_to_waitlist` are marked with `pub`, the rest of the path works, and this function call is valid!
+У відносному шляху логіка така ж сама як і в абсолютному, окрім першого кроку: замість починати з кореня крейта, шлях починається з `front_of_house`. Модуль `front_of_house` визначено в тому ж модулі, що й `eat_at_restaurant`, тому відносний шлях, що починається з модуля, в якому визначено `eat_at_restaurant`, працює. Потім, оскільки `hosting` і `add_to_waitlist` позначені як `pub`, решта шляху працює, і цей виклик функції - коректний!
 
-If you plan on sharing your library crate so other projects can use your code, your public API is your contract with users of your crate that determines how they can interact with your code. There are many considerations around managing changes to your public API to make it easier for people to depend on your crate. These considerations are out of the scope of this book; if you’re interested in this topic, see [The Rust API Guidelines][api-guidelines].
+Якщо ви плануєте поділитися своєю бібліотекою, щоб інші проєкти могли використовувати ваш код, ваш публічний API - це ваш контракт з користувачами вашого крейта, який визначає, як вони можуть взаємодіяти з вашим кодом. Існує багато міркувань щодо управління змінами у вашому публічному API для полегшення залежності від Вашого крейта. Ці міркування не лежать за межами цієї книжки; якщо вам цікава ця тема, дивіться [Керівництво з API Rust][api-guidelines].
 
-> #### Best Practices for Packages with a Binary and a Library
+> #### Кращі практики для пакунків з двійковим крейтом і бібліотекою
 > 
-> We mentioned a package can contain both a *src/main.rs* binary crate root as well as a *src/lib.rs* library crate root, and both crates will have the package name by default. Typically, packages with this pattern of containing both a library and a binary crate will have just enough code in the binary crate to start an executable that calls code with the library crate. This lets other projects benefit from the most functionality that the package provides, because the library crate’s code can be shared.
+> Ми згадували, що пакунок може містити одночасно корінь як двійкового крейта *src/main.rs*, так і корінь бібліотечного крейта *src/lib.rs*, і обидва крейти матимуть за замовчуванням назву пакету. Зазвичай, пакунки, створені за таким шаблоном, з бібліотекою і двійковим крейтом, матимуть у двійковому крейті лише код, потрібний для запуску виконуваного коду з бібліотечного крейта. Це дозволяє іншим проєктам отримувати максимум функціоналу, який надає пакунок, бо бібліотечний крейт можна використовувати спільно.
 > 
-> The module tree should be defined in *src/lib.rs*. Then, any public items can be used in the binary crate by starting paths with the name of the package. The binary crate becomes a user of the library crate just like a completely external crate would use the library crate: it can only use the public API. This helps you design a good API; not only are you the author, you’re also a client!
+> Дерево модулів має бути визначеним в *src/lib.rs*. Тоді будь-які публічні елементи можна використовувати у двійковому крейті, починаючи шлях з назви пакунку. Двійковий крейт стає таким самим користувачем бібліотечного крейта, як і абсолютно зовнішній крейт, що використовує бібліотечний крейт: він може користуватися лише публічним API. Це допомагає вам розробити хороший API; ви не лише його автор, але також і користувач!
 > 
-> In [Chapter 12][ch12]<!-- ignore -->, we’ll demonstrate this organizational practice with a command-line program that will contain both a binary crate and a library crate.
+> У [Розділі 12][ch12]<!-- ignore -->ми покажемо цю практику організації крейта у програмі командного рядка, що міститиме як двійковий крейт, так і бібліотечний крейт.
 
-### Starting Relative Paths with `super`
+### Початок відносних шляхів з `super`
 
-We can construct relative paths that begin in the parent module, rather than the current module or the crate root, by using `super` at the start of the path. This is like starting a filesystem path with the `..` syntax. Using `super` allows us to reference an item that we know is in the parent module, which can make rearranging the module tree easier when the module is closely related to the parent, but the parent might be moved elsewhere in the module tree someday.
+Ми можемо створювати відносні шляхи, які починаються в батьківському модулі, а не в поточному чи корені крейта, застосувавши `super` на початку шляху. Це схоже на `..` на початку шляху в файловій системі. За допомогою `super` ми можемо посилатися на елемент, що, як ми знаємо, знаходиться в батьківському модулі, що спрощує зміну дерева модулів, коли модуль є тісно пов'язаним із батьком, але батьківський елемент може бути переміщений в інше місця дерева модулів.
 
-Consider the code in Listing 7-8 that models the situation in which a chef fixes an incorrect order and personally brings it out to the customer. The function `fix_incorrect_order` defined in the `back_of_house` module calls the function `deliver_order` defined in the parent module by specifying the path to `deliver_order` starting with `super`:
+Розглянемо код у Блоці коду 7-8, який моделює ситуацію, в якій шеф-кухар виправляє неправильне замовлення і особисто приносить його клієнту. Функція `fix_incorrect_order`, визначена у модулі `back_of_house` викликає функцію `deliver_order`, визначену в батьківському модулі, вказавши шлях до `deliver_order`, починаючи з `super`:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-08/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 7-8: Calling a function using a relative path starting with `super`</span>
+<span class="caption">Блок коду 7-8: виклик функції за допомогою відносного шляху, що починається з `super`</span>
 
-The `fix_incorrect_order` function is in the `back_of_house` module, so we can use `super` to go to the parent module of `back_of_house`, which in this case is `crate`, the root. From there, we look for `deliver_order` and find it. Success! We think the `back_of_house` module and the `deliver_order` function are likely to stay in the same relationship to each other and get moved together should we decide to reorganize the crate’s module tree. Therefore, we used `super` so we’ll have fewer places to update code in the future if this code gets moved to a different module.
+Функція `fix_incorrect_order` знаходиться в модулі `back_of_house`, тож ми можемо використатися `super`, щоб перейти до батьківсього модуля `back_of_house`, який у цьому випадку є коренем, `crate`. Звідси ми шукаємо `deliver_order` і знаходимо її. Успіх! Ми гадаємо, що модуль `back_of_house` і функція `deliver_order` найімовірніше залишатимуться у такому відношенні одне до одного і будуть переміщені разом, якщо ми вирішимо реорганізувати дерево модулів крейта. Таким чином, ми скористалися `super`, щоб мати менше місць, де треба буде для оновлювати код у майбутньому, якщо цей код перемістять в інший модуль.
 
-### Making Structs and Enums Public
+### Робимо структури і енуми публічними
 
-We can also use `pub` to designate structs and enums as public, but there are a few details extra to the usage of `pub` with structs and enums. If we use `pub` before a struct definition, we make the struct public, but the struct’s fields will still be private. We can make each field public or not on a case-by-case basis. In Listing 7-9, we’ve defined a public `back_of_house::Breakfast` struct with a public `toast` field but a private `seasonal_fruit` field. This models the case in a restaurant where the customer can pick the type of bread that comes with a meal, but the chef decides which fruit accompanies the meal based on what’s in season and in stock. The available fruit changes quickly, so customers can’t choose the fruit or even see which fruit they’ll get.
+Також ми можемо використовувати `pub` для визначення структур та енумів публічними, але є додаткові особливості використання `pub` зі структурами та енумами. Якщо ми використовуємо `pub` перед визначенням структури, ми робимо структуру публічною, але поля структури все одно будуть приватними. Ми можемо зробити публічним чи ні кожне поле окремо в кожному конкретному випадку. У Блоці коду 7-9 ми визначили публічну структуру `back_of_house::Breakfast` з публічним полем `toast`, але приватним полем `seasonal_fruit`. Це моделює ситуацію в ресторані, коли покупець може обрати тип хліба, що додається до їжі, але кухар вирішує, які фрукти йдуть до їжі залежно від сезону і наявності. Доступні фрукти швидко змінюються, тому клієнти не можуть вибрати фрукти і навіть побачити, які фрукти вони отримають.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-09/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 7-9: A struct with some public fields and some private fields</span>
+<span class="caption">Блок коду 7-9: структура, деякі поля якої є публічними, а деякі приватними</span>
 
-Because the `toast` field in the `back_of_house::Breakfast` struct is public, in `eat_at_restaurant` we can write and read to the `toast` field using dot notation. Notice that we can’t use the `seasonal_fruit` field in `eat_at_restaurant` because `seasonal_fruit` is private. Try uncommenting the line modifying the `seasonal_fruit` field value to see what error you get!
+Оскільки поле `toast` у структурі `back_of_house::Breakfast` є публічним, у `eat_at_restaurant` ми можемо писати та читати поле `toast`, використовуючи точку. Зверніть увагу, що ми не можемо використовувати поле `seasonal_fruit` у `eat_at_restaurant`, тому що `seasonal_fruit` є приватним. Спробуйте розкоментувати рядок, що змінює значення поля `seasonal_fruit`, щоб подивитися, яку помилку ви отримуєте!
 
-Also, note that because `back_of_house::Breakfast` has a private field, the struct needs to provide a public associated function that constructs an instance of `Breakfast` (we’ve named it `summer` here). If `Breakfast` didn’t have such a function, we couldn’t create an instance of `Breakfast` in `eat_at_restaurant` because we couldn’t set the value of the private `seasonal_fruit` field in `eat_at_restaurant`.
+Крім того, зауважте, що оскільки `back_of_house::Breakfast` має приватне поле, структура має надавати публічну асоційовану функцію, що створює екземпляр `Breakfast` (тут ми назвали її `summer`). Якби `Breakfast` не мав такої функції, ми не могли б створити екземпляр `Breakfast` у `eat_at_restaurant`, бо не могли б виставити значення приватного поля `seasonal_fruit` у `eat_at_restaurant`.
 
-In contrast, if we make an enum public, all of its variants are then public. We only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
+На відміну від цього, якщо ми робимо енум публічним, усі його варіанти є публічними. Потрібно лише одне ключове слово `pub` перед `enum`, як показано в Блоці коду 7-10.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-10/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 7-10: Designating an enum as public makes all its variants public</span>
+<span class="caption">Блок коду 7-10: позначення енума публічним робить публічними усі його варіанти</span>
 
-Because we made the `Appetizer` enum public, we can use the `Soup` and `Salad` variants in `eat_at_restaurant`.
+Оскільки ми зробили енум `Appetizer` публічним, то можемо використовувати варіанти `Soup` та `Salad` у `eat_at_restaurant`.
 
-Enums aren’t very useful unless their variants are public; it would be annoying to have to annotate all enum variants with `pub` in every case, so the default for enum variants is to be public. Structs are often useful without their fields being public, so struct fields follow the general rule of everything being private by default unless annotated with `pub`.
+Енуми не дуже корисні, коли їхні варіанти не є публічними; було б набридливим анотувати всі варіанти енуму як `pub` у будь-якому випадку, то за замовчуванням варіанти переліку є публічними. Структури часто є корисними без публічних полів, тож поля структур слідують загальному правилу, що все є приватним за замовчуванням, якщо не анотовано як `pub`.
 
-There’s one more situation involving `pub` that we haven’t covered, and that is our last module system feature: the `use` keyword. We’ll cover `use` by itself first, and then we’ll show how to combine `pub` and `use`.
+Є ще одна ситуація, пов’язана з `pub`, про яку ми не розповіли, і це остання деталь системи модулів: ключове слово `use`. Ми спершу розповімо про `use`, а потім покажемо, як комбінувати `pub` і `use`.
 
 [pub]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
 [api-guidelines]: https://rust-lang.github.io/api-guidelines/
