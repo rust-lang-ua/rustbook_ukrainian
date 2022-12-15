@@ -1,78 +1,78 @@
-## Advanced Functions and Closures
+## Поглиблено про функції та замикання
 
-This section explores some advanced features related to functions and closures, including function pointers and returning closures.
+Цей підрозділ поглиблено досліджує функціонал, що стосується функцій та замикань, і включає з вказівники на функції та повернення замикань.
 
-### Function Pointers
+### Вказівники на функції
 
-We’ve talked about how to pass closures to functions; you can also pass regular functions to functions! This technique is useful when you want to pass a function you’ve already defined rather than defining a new closure. Functions coerce to the type `fn` (with a lowercase f), not to be confused with the `Fn` closure trait. The `fn` type is called a *function pointer*. Passing functions with function pointers will allow you to use functions as arguments to other functions.
+Ми говорили про те, як передати замикання до функцій; ви також можете передати звичайні функції до функцій! Ця техніка є корисною, коли ви хочете передати вже визначену функцію, а не визначати нове замикання. Функції приводяться до типу `fn` (f у нижньому регістрі), не плутайте з трейтом замикань `Fn`. Тип `fn` зветься *вказівником на функцію*. Передача функцій за допомогою вказівників на функції дозволяє вам використовувати функції як аргументи до інших функцій.
 
-The syntax for specifying that a parameter is a function pointer is similar to that of closures, as shown in Listing 19-27, where we’ve defined a function `add_one` that adds one to its parameter. The function `do_twice` takes two parameters: a function pointer to any function that takes an `i32` parameter and returns an `i32`, and one `i32 value`. The `do_twice` function calls the function `f` twice, passing it the `arg` value, then adds the two function call results together. The `main` function calls `do_twice` with the arguments `add_one` and `5`.
+Синтаксис для зазначення, що параметр є вказівником на функцію, схожий на замикання, як показано у Блоці коду 19-27, де ми визначили функцію `add_one`, яка додає один до свого параметра. Функція `do_twice` приймає два параметри: вказівник на функцію для будь-якої функції, що приймає параметр `i32` і повертає `i32`, та інше значення `i32`. Функція `do_twice` викликає функцію `f` двічі, передаючи їй значення `arg`, а потім додає результати двох викликів. Функція `main` викликає `do_twice` з аргументами `add_one` та `5`.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-27/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 19-27: Using the `fn` type to accept a function pointer as an argument</span>
+<span class="caption">Блок коду 19-27: використання типу `fn` для прийняття вказівник на функцію як аргументу</span>
 
-This code prints `The answer is: 12`. We specify that the parameter `f` in `do_twice` is an `fn` that takes one parameter of type `i32` and returns an `i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass the function name `add_one` as the first argument to `do_twice`.
+Цей код виводить `The answer is: 12`. Ми вказуємо, що параметр `f`у `do_twice` є `fn`, що приймає один параметр `i32` і повертає `i32`. Тоді ми можемо викликати `f` у тілі `do_twice`. У `main` ми можемо передати назву функції `add_one` першим аргументом `do_twice`.
 
-Unlike closures, `fn` is a type rather than a trait, so we specify `fn` as the parameter type directly rather than declaring a generic type parameter with one of the `Fn` traits as a trait bound.
+На відміну від замикань, `fn` є типом, а не трейтом, тож ми вказуємо `fn` як тип параметра безпосередньо, а не заявляємо узагальнений параметр типу одного з трейтів `Fn`, як обмеження трейту.
 
-Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and `FnOnce`), meaning you can always pass a function pointer as an argument for a function that expects a closure. It’s best to write functions using a generic type and one of the closure traits so your functions can accept either functions or closures.
+Вказівники на функції реалізують усі три трейти замикань (`Fn`, `FnMut` і `FnOnce`), тобто ви завжди можете передати вказівник на функції аргументом до функції, що очікує на замикання. Найкраще писати функції, використовуючи узагальнений тип і один з трейтів замикань, щоб ваші функції могли приймати і функції, і замикання.
 
-That said, one example of where you would want to only accept `fn` and not closures is when interfacing with external code that doesn’t have closures: C functions can accept functions as arguments, but C doesn’t have closures.
+До слова, один приклад того, де ви хочете приймати лише `fn`, а не замикання - це коли ви надаєте інтерфейс зовнішньому коду, що не має замикань: функції C можуть приймати функції як аргументи, але у C немає замикань.
 
-As an example of where you could use either a closure defined inline or a named function, let’s look at a use of the `map` method provided by the `Iterator` trait in the standard library. To use the `map` function to turn a vector of numbers into a vector of strings, we could use a closure, like this:
+Як приклад того, де ви можете використовувати або визначене на місці замикання, або функцію, подивімося на використання методу `map` з трейту `Iterator` у стандартній бібліотеці. Щоб використати функцію `map` для перетворення вектора чисел на вектор стрічок, ми можемо використати замикання, ось так:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-15-map-closure/src/main.rs:here}}
 ```
 
-Or we could name a function as the argument to `map` instead of the closure, like this:
+Або ж ми можемо передати функцію аргументом до `map` замість замикання, ось так:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-16-map-function/src/main.rs:here}}
 ```
 
-Note that we must use the fully qualified syntax that we talked about earlier in the [“Advanced Traits”]()<!-- ignore --> section because there are multiple functions available named `to_string`. Here, we’re using the `to_string` function defined in the `ToString` trait, which the standard library has implemented for any type that implements `Display`.
+Зверніть увагу, що ми повинні використовувати повністю кваліфікований синтаксис, про який ми говорили раніше у підрозділі ["Поглиблено про трейти"]()<!-- ignore --> , бо існує багато доступних функцій, що звуться `to_string`. Тут ми використовуємо функцію `to_string`, визначену у трейті `ToString`, який стандартна бібліотека реалізує для будь-якого типу, що реалізує `Display`.
 
-Recall from the [“Enum values”][enum-values]<!-- ignore --> section of Chapter 6 that the name of each enum variant that we define also becomes an initializer function. We can use these initializer functions as function pointers that implement the closure traits, which means we can specify the initializer functions as arguments for methods that take closures, like so:
+Згадайте з підрозділу ["Значення енумів"][enum-values]<!-- ignore --> Розділу 6, що назва кожного варіанту енуму, який ми визначаємо, також стає функціює ініціалізації. Ми можемо використовувати ці функції ініціалізації як вказівники на функції, які реалізовують трейти замикань, що значить, що функції ініціалізації можуть бути аргументами для методів, що приймають замикання, ось так:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-17-map-initializer/src/main.rs:here}}
 ```
 
-Here we create `Status::Value` instances using each `u32` value in the range that `map` is called on by using the initializer function of `Status::Value`. Some people prefer this style, and some people prefer to use closures. They compile to the same code, so use whichever style is clearer to you.
+Тут ми створюємо екземпляри `Status::Value`, використовуючи кожне значення `u32` у діапазоні, для якого викликається `mao`, використовуючи функцію ініціалізації `Status::Value`. Деякі люди надають перевагу цьому стилю, а деякі люди вважають за краще використовувати замикання. Вони компілюються в однаковий код, тому використовуйте стиль, зрозуміліший для вас.
 
-### Returning Closures
+### Повертання замикань
 
-Closures are represented by traits, which means you can’t return closures directly. In most cases where you might want to return a trait, you can instead use the concrete type that implements the trait as the return value of the function. However, you can’t do that with closures because they don’t have a concrete type that is returnable; you’re not allowed to use the function pointer `fn` as a return type, for example.
+Закриття представлено трейтами, що означає, що ви не можете повертати замикання безпосередньо. У більшості випадків, коли ви могли б повернути трейт, ви можете натомість використовувати конкретний тип, який реалізує трейт, як значення, що повертає функція. Однак ви не можете зробити цього з замиканнями, оскільки у них немає конкретного типу, який можна було б повернути; наприклад, ви не можете використовувати вказівник на функцію `fn` як типу, що повертається.
 
-The following code tries to return a closure directly, but it won’t compile:
+Наступний код намагається повернути замикання безпосередньо, але він не компілюється:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-18-returns-closure/src/lib.rs}}
 ```
 
-The compiler error is as follows:
+Ось помилка компілятора:
 
 ```console
 {{#include ../listings/ch19-advanced-features/no-listing-18-returns-closure/output.txt}}
 ```
 
-The error references the `Sized` trait again! Rust doesn’t know how much space it will need to store the closure. We saw a solution to this problem earlier. We can use a trait object:
+Помилка знову посилається на трейт `Sized`! Іржа не знає, скільки місця потрібно для зберігання замикання. Ви вже бачили розв'язок цієї проблеми. Ми можемо скористатися трейтовим об'єктом:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-19-returns-closure-trait-object/src/lib.rs}}
 ```
 
-This code will compile just fine. For more about trait objects, refer to the section [“Using Trait Objects That Allow for Values of Different Types”]()<!--
-ignore --> in Chapter 17.
+Цей код чудово компілюється. Щоб дізнатися більше про трейтові об'єкти, зверніться до підрозділу ["Використання трейтових об'єктів, що можуть бути значеннями різних типів"]()<!--
+ignore --> з Розділу 17.
 
-Next, let’s look at macros!
+Далі розгляньмо макроси!
 ch19-03-advanced-traits.html#advanced-traits ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 
 [enum-values]: ch06-01-defining-an-enum.html#enum-values
