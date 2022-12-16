@@ -55,9 +55,9 @@ pub trait Iterator {
 
 Зверніть увагу, що нам потрібно зробити `v1_iter` мутабельним: виклик методу `next` для ітератора змінює його внутрішній стан, який використовується для відстеження, де він знаходиться в послідовності. Іншими словами, цей код *поглинає*, чи використовує, ітератор. Кожен виклик `next` з'їдає елемент з ітератора. Нам не треба було робити `v1_iter` мутабельним, коли ми використали його в циклі `for`, бо цикл взяв володіння `v1_iter` і зробив його мутабельним за лаштунками.
 
-Also note that the values we get from the calls to `next` are immutable references to the values in the vector. The `iter` method produces an iterator over immutable references. If we want to create an iterator that takes ownership of `v1` and returns owned values, we can call `into_iter` instead of `iter`. Similarly, if we want to iterate over mutable references, we can call `iter_mut` instead of `iter`.
+Також зверніть увагу, що значення, які ми отримуємо від викликів `next`, є немутабельними посиланнями на значення у векторі. Метод `iter` створює ітератор по незмінних посиланнях. Якщо ми хочемо створити ітератор, який приймає володіння `v1` і повертає значення, що належать нам, ми можемо викликати `into_iter` замість `iter`. Аналогічно, якщо ми хочемо ітерувати по мутабельних посиланнях, ми можемо викликати `iter_mut` замість `iter`.
 
-### Methods that Consume the Iterator
+### Методи, що поглинають ітератор
 
 The `Iterator` trait has a number of different methods with default implementations provided by the standard library; you can find out about these methods by looking in the standard library API documentation for the `Iterator` trait. Some of these methods call the `next` method in their definition, which is why you’re required to implement the `next` method when implementing the `Iterator` trait.
 
