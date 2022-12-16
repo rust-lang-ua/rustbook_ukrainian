@@ -59,11 +59,11 @@ pub trait Iterator {
 
 ### Методи, що поглинають ітератор
 
-The `Iterator` trait has a number of different methods with default implementations provided by the standard library; you can find out about these methods by looking in the standard library API documentation for the `Iterator` trait. Some of these methods call the `next` method in their definition, which is why you’re required to implement the `next` method when implementing the `Iterator` trait.
+Трейт `Iterator` має ряд різних методів з реалізаціями по замовчуванню що надаються стандартною бібліотекою; ви можете дізнатися про ці методи в стандартній документації API для трейта `Iterator`. Деякі з цих методів викликають у своєму визначенні метод `next`, чому і необхідно визначити метод `next` при реалізації трейта `Iterator`.
 
-Methods that call `next` are called *consuming adaptors*, because calling them uses up the iterator. One example is the `sum` method, which takes ownership of the iterator and iterates through the items by repeatedly calling `next`, thus consuming the iterator. As it iterates through, it adds each item to a running total and returns the total when iteration is complete. Listing 13-13 has a test illustrating a use of the `sum` method:
+Методи, що викликають `next`, звуться *поглинаючими адапторами*, бо їх виклик використовує ітератор. One example is the `sum` method, which takes ownership of the iterator and iterates through the items by repeatedly calling `next`, thus consuming the iterator. As it iterates through, it adds each item to a running total and returns the total when iteration is complete. Listing 13-13 has a test illustrating a use of the `sum` method:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-13/src/lib.rs:here}}
