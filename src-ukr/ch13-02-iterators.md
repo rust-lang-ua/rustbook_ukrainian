@@ -61,7 +61,7 @@ pub trait Iterator {
 
 Трейт `Iterator` має ряд різних методів з реалізаціями по замовчуванню що надаються стандартною бібліотекою; ви можете дізнатися про ці методи в стандартній документації API для трейта `Iterator`. Деякі з цих методів викликають у своєму визначенні метод `next`, чому і необхідно визначити метод `next` при реалізації трейта `Iterator`.
 
-Методи, що викликають `next`, звуться *поглинаючими адапторами*, бо їх виклик використовує ітератор. One example is the `sum` method, which takes ownership of the iterator and iterates through the items by repeatedly calling `next`, thus consuming the iterator. As it iterates through, it adds each item to a running total and returns the total when iteration is complete. Listing 13-13 has a test illustrating a use of the `sum` method:
+Методи, що викликають `next`, звуться *поглинаючими адапторами*, бо їх виклик використовує ітератор. Один із прикладів - це метод `sum`, який бере володіння ітератором і ітерує по елементах, раз за разом викликаючи `next`, таким чином поглинаючи ітератор. Під час ітерації він додає кожен елемент до поточної загальної суми і повертає загальну суму, коли ітерація завершена. Блок коду 13-13 має тест, що ілюструє використання методу `sum`:
 
 <span class="filename">Файл: src/lib.rs</span>
 
@@ -70,11 +70,11 @@ pub trait Iterator {
 ```
 
 
-<span class="caption">Listing 13-13: Calling the `sum` method to get the total of all items in the iterator</span>
+<span class="caption">Блок коду 13-13: виклик методу `sum` для отримання загальної суми усіх елементів ітератора</span>
 
-We aren’t allowed to use `v1_iter` after the call to `sum` because `sum` takes ownership of the iterator we call it on.
+Нам не дозволено використовувати `v1_iter` після виклику `sum`, оскільки `sum` перебирає володіння ітератором, на якому його викликано.
 
-### Methods that Produce Other Iterators
+### Методи, що створюють інші ітератори
 
 *Iterator adaptors* are methods defined on the `Iterator` trait that don’t consume the iterator. Instead, they produce different iterators by changing some aspect of the original iterator.
 
