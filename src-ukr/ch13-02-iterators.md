@@ -76,7 +76,7 @@ pub trait Iterator {
 
 ### Методи, що створюють інші ітератори
 
-*Iterator adaptors* are methods defined on the `Iterator` trait that don’t consume the iterator. Instead, they produce different iterators by changing some aspect of the original iterator.
+*Адаптери ітераторів* - це методи, визначені для трейта `Iterator`, які не споживають ітератор. Instead, they produce different iterators by changing some aspect of the original iterator.
 
 Listing 13-17 shows an example of calling the iterator adaptor method `map`, which takes a closure to call on each item as the items are iterated through. The `map` method returns a new iterator that produces the modified items. The closure here creates a new iterator in which each item from the vector will be incremented by 1:
 
