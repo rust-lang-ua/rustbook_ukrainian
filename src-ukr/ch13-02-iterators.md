@@ -78,24 +78,24 @@ pub trait Iterator {
 
 *Адаптери ітераторів* - це методи, визначені для трейта `Iterator`, які не поглинають ітератор. Натомість вони створюють інші ітератори, змінюючи певний аспект оригінального ітератора.
 
-Listing 13-17 shows an example of calling the iterator adaptor method `map`, which takes a closure to call on each item as the items are iterated through. The `map` method returns a new iterator that produces the modified items. The closure here creates a new iterator in which each item from the vector will be incremented by 1:
+Блок коду 13-17 показує приклад виклику метода-адаптора ітератора `map`, який приймає замикання, яке викличе для кожного елементу під час ітерації. Метод `map` повертає новий ітератор, який виробляє модифіковані елементи. Замикання створює новий ітератор, у якому кожен елемент вектора буде збільшено на 1:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,not_desired_behavior
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-14/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 13-14: Calling the iterator adaptor `map` to create a new iterator</span>
+<span class="caption">Блок коду 13-14: Виклик адаптора `map` для створення нового ітератора</span>
 
-However, this code produces a warning:
+Однак, цей код видає попередження:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-14/output.txt}}
 ```
 
-The code in Listing 13-14 doesn’t do anything; the closure we’ve specified never gets called. The warning reminds us why: iterator adaptors are lazy, and we need to consume the iterator here.
+Код у Блоці коду 13-14 нічого не робить; замикання, яке ми вказали, ніколи не було викликано. The warning reminds us why: iterator adaptors are lazy, and we need to consume the iterator here.
 
 To fix this warning and consume the iterator, we’ll use the `collect` method, which we used in Chapter 12 with `env::args` in Listing 12-1. This method consumes the iterator and collects the resulting values into a collection data type.
 
