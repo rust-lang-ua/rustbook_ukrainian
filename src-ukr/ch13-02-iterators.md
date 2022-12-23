@@ -95,7 +95,7 @@ pub trait Iterator {
 {{#include ../listings/ch13-functional-features/listing-13-14/output.txt}}
 ```
 
-Код у Блоці коду 13-14 нічого не робить; замикання, яке ми вказали, ніколи не було викликано. The warning reminds us why: iterator adaptors are lazy, and we need to consume the iterator here.
+Код у Блоці коду 13-14 нічого не робить; замикання, яке ми вказали, ніколи не було викликано. Попередження нагадує нам, чому: адаптори ітераторів ліниві, і нам потрібно поглинути ітератор.
 
 To fix this warning and consume the iterator, we’ll use the `collect` method, which we used in Chapter 12 with `env::args` in Listing 12-1. This method consumes the iterator and collects the resulting values into a collection data type.
 
