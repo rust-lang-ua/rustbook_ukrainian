@@ -101,38 +101,38 @@ pub trait Iterator {
 
 У Блоці коду 13-15 ми зібрали результати ітерування по ітератору, повернутому викликом `map`, у вектор. Цей вектор в результаті міститиме всі елементи оригінального вектора, збільшені на 1.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-15/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 13-15: Calling the `map` method to create a new iterator and then calling the `collect` method to consume the new iterator and create a vector</span>
+<span class="caption">Блок коду 13-15: виклик методу `map` для створення нового ітератора і виклик методу `collect` для поглинання цього нового ітератора і створення вектора</span>
 
-Because `map` takes a closure, we can specify any operation we want to perform on each item. This is a great example of how closures let you customize some behavior while reusing the iteration behavior that the `Iterator` trait provides.
+Оскільки `map` приймає замикання, ми можемо вказати будь-яку операцію, яку хочемо виконати з кожним елементом. Це чудовий приклад того, як замикання дозволяють вам встановити певну поведінку, використовуючи поведінку ітерацій, надану трейтом `Iterator`.
 
-You can chain multiple calls to iterator adaptors to perform complex actions in a readable way. But because all iterators are lazy, you have to call one of the consuming adaptor methods to get results from calls to iterator adaptors.
+Ви можете з'єднати багато викликів адаптерів ітераторів для виконання складних дій, щоб це було читабельно. Але оскільки всі ітератори є ледачими, ви маєте викликати один з методів, що поглинають адаптер, щоб отримати результати викликів адаптерів ітераторів.
 
-### Using Closures that Capture Their Environment
+### Використання замикань, що захоплюють своє середовище
 
-Many iterator adapters take closures as arguments, and commonly the closures we’ll specify as arguments to iterator adapters will be closures that capture their environment. For this example, we’ll use the `filter` method that takes a closure. The closure gets an item from the iterator and returns a Boolean. If the closure returns `true`, the value will be included in the iteration produced by `filter`. If the closure returns `false`, the value won’t be included.
+Багато адаптерів ітераторів приймають аргументами замикання, і зазвичай замикання, які ми вказуємо аргументами до адаптерів ітераторів будуть замиканнями, що захоплюють своє середовище. Для цього прикладу ми скористаємося методом `filter`, що приймає замикання. Замикання отримає елемент з ітератора і повертає булеве значення. Якщо замикання повертає `true`, значення буде включено в ітерації, вироблені `filter`. Якщо замикання повертає `false`, значення не буде включено.
 
-In Listing 13-16, we use `filter` with a closure that captures the `shoe_size` variable from its environment to iterate over a collection of `Shoe` struct instances. It will return only shoes that are the specified size.
+У Блоці коду 13-16 ми використовуємо `filter` із замиканням, яке захоплює змінну `shoe_size` зі свого середовища для ітерування по колекції екземплярів структур `Shoe`. Воно поверне лише взуття зазначеного розміру.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-16/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 13-16: Using the `filter` method with a closure that captures `shoe_size`</span>
+<span class="caption">Блок коду 13-16: використання методу `filter` із замиканням, що захоплює `shoe_size`</span>
 
-The `shoes_in_size` function takes ownership of a vector of shoes and a shoe size as parameters. It returns a vector containing only shoes of the specified size.
+Функція `shoes_in_size` приймає параметрами вектор взуття (за володінням) і розмір взуття. Вона повертає вектор, що містить лише взуття зазначеного розміру.
 
-In the body of `shoes_in_size`, we call `into_iter` to create an iterator that takes ownership of the vector. Then we call `filter` to adapt that iterator into a new iterator that only contains elements for which the closure returns `true`.
+У тілі `shoes_in_size` ми викликаємо `into_iter` для створення ітератора, що перебирає володіння вектором. Тоді ми викликаємо `filter`, щоб адаптувати ітератор у новий ітератор, що містить лише елементи, для яких замикання повертає `true`.
 
-The closure captures the `shoe_size` parameter from the environment and compares the value with each shoe’s size, keeping only shoes of the size specified. Finally, calling `collect` gathers the values returned by the adapted iterator into a vector that’s returned by the function.
+Замикання захоплює параметр `shoe_size` із середовища і порівнює значення із розміром кожної пари взуття, лишаючи тільки взуття зазначеного розміру. Нарешті, виклик `collect` збирає значення, повернуті адаптованим ітератором, у вектор, який функція повертає.
 
-The test shows that when we call `shoes_in_size`, we get back only shoes that have the same size as the value we specified.
+Тест показує, що коли ми викликаємо `shoes_in_size`, ми отримуємо назад лише взуття, яке має розмір, що дорівнює значенню, яке ми вказали.
