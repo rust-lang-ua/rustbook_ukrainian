@@ -97,9 +97,9 @@ pub trait Iterator {
 
 Код у Блоці коду 13-14 нічого не робить; замикання, яке ми вказали, ніколи не було викликано. Попередження нагадує нам, чому: адаптори ітераторів ліниві, і нам потрібно поглинути ітератор.
 
-To fix this warning and consume the iterator, we’ll use the `collect` method, which we used in Chapter 12 with `env::args` in Listing 12-1. This method consumes the iterator and collects the resulting values into a collection data type.
+Щоб виправити це попередження і поглинути ітератор, ми використаємо метод `collect`, який ми використовували у Розділі 12 із `env::args` у Блоці коду 12-1. Цей метод поглинає ітератор і збирає отримані в результаті значення в колекцію.
 
-In Listing 13-15, we collect the results of iterating over the iterator that’s returned from the call to `map` into a vector. This vector will end up containing each item from the original vector incremented by 1.
+У Блоці коду 13-15 ми зібрали результати ітерування по ітератору, повернутому викликом `map`, у вектор. Цей вектор в результаті міститиме всі елементи оригінального вектора, збільшені на 1.
 
 <span class="filename">Filename: src/main.rs</span>
 
