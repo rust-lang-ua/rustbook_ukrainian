@@ -352,7 +352,7 @@ After running the code, the precedence behavior is evident: if the match guard w
 ```
 
 
-<span class="caption">Listing 18-29: Using `@` to bind to a value in a pattern while also testing it</span>
+<span class="caption">Блок коду 18-29: використання `@` для зв'язування зі значенням у шаблоні і водночас перевірки</span>
 
 Цей приклад виведе в консолі `Found an id in range: 5`. By specifying `id_variable
 @` before the range `3..=7`, we’re capturing whatever value matched the range while also testing that the value matched the range pattern.
