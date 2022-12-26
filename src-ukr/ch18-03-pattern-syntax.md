@@ -343,9 +343,9 @@ The match condition states that the arm only matches if the value of `x` is equa
 
 After running the code, the precedence behavior is evident: if the match guard were applied only to the final value in the list of values specified using the `|` operator, the arm would have matched and the program would have printed `yes`.
 
-### `@` Bindings
+### `@` зв'язування
 
-The *at* operator `@` lets us create a variable that holds a value at the same time as we’re testing that value for a pattern match. In Listing 18-29, we want to test that a `Message::Hello` `id` field is within the range `3..=7`. We also want to bind the value to the variable `id_variable` so we can use it in the code associated with the arm. We could name this variable `id`, the same as the field, but for this example we’ll use a different name.
+Оператор *at* `@` дозволяє нам створити змінну, яка містить значення, у той час, коли ми перевіряємо значення на відповідність шаблону. У Блоці коду 18-29 ми хочемо перевірити, що поле `id` у `Message::Hello` є в межах `3..=7`. Ми також хочемо зв'язати значення зі змінною `id_variable`, щоб ми могли використати її у коді рукава. Ми могли назвати цю змінну `id`, так само як і поле, але для цього прикладу ми використаємо іншу назву.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-29/src/main.rs:here}}
