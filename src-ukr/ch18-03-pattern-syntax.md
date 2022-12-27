@@ -158,9 +158,9 @@ Remember that a `match` expression stops checking arms once it has found the fir
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-05-destructuring-structs-and-tuples/src/main.rs:here}}
 ```
 
-This code lets us break complex types into their component parts so we can use the values we’re interested in separately.
+Цей код дозволяє нам розбивати складні типи на складові частини, щоб ми могли окремо використовувати потрібні нам значення.
 
-Destructuring with patterns is a convenient way to use pieces of values, such as the value from each field in a struct, separately from each other.
+Деструктуризація за допомогою шаблонів є зручним способом використання фрагментів значень, таких як значення з кожного поля в структурі, окремо один від одного.
 
 ### Ігнорування Значень Шаблона
 
