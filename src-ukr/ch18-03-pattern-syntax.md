@@ -164,11 +164,11 @@ Remember that a `match` expression stops checking arms once it has found the fir
 
 ### Ігнорування Значень Шаблона
 
-You’ve seen that it’s sometimes useful to ignore values in a pattern, such as in the last arm of a `match`, to get a catchall that doesn’t actually do anything but does account for all remaining possible values. There are a few ways to ignore entire values or parts of values in a pattern: using the `_` pattern (which you’ve seen), using the `_` pattern within another pattern, using a name that starts with an underscore, or using `..` to ignore remaining parts of a value. Розглянемо, як і навіщо використовувати кожен з цих шаблонів.
+Ви бачили, що іноді корисно ігнорувати значення в шаблоні, наприклад в останньому рукаві `match`, щоб отримати загальний шаблон, який не робить деструктуризації, але враховує всі можливі значення, що залишилися. Існує декілька способів ігнорувати цілі значення або частини значень у шаблоні: використання шаблону `_` (який ви вже бачили), використання шаблону `_` всередині іншого шаблону, використання імені, яке починається з символу підкреслення, або використання `..` для ігнорування решти частини значення. Розглянемо, як і навіщо використовувати кожен з цих шаблонів.
 
 #### Ігнорування цілого значення з _ `_`
 
-Ми використали символ підкреслення як шаблон підстановки, який буде відповідати будь-якому значенню, але не прив'язуватиметься до нього. This is especially useful as the last arm in a `match` expression, but we can also use it in any pattern, including function parameters, as shown in Listing 18-17.
+Ми використали символ підкреслення як загальний шаблон, який буде відповідати будь-якому значенню, але не прив'язуватиметься до нього. Це особливо корисно як останній рукав виразу `match`, але ми також можемо використовувати його в будь-якому шаблоні, включно з параметрами функцій, як показано в Блоці Коду 18-17.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -178,22 +178,22 @@ You’ve seen that it’s sometimes useful to ignore values in a pattern, such a
 
 <span class="caption">Блок Коду 18-17: Використання `_` в сигнатурі функції</span>
 
-This code will completely ignore the value `3` passed as the first argument, and will print `This code only uses the y parameter: 4`.
+Цей код повністю проігнорує значення `3`, передане першим аргументом, і виведе `Даний код використовує тільки y параметр: 4`.
 
-In most cases when you no longer need a particular function parameter, you would change the signature so it doesn’t include the unused parameter. Ignoring a function parameter can be especially useful in cases when, for example, you're implementing a trait when you need a certain type signature but the function body in your implementation doesn’t need one of the parameters. You then avoid getting a compiler warning about unused function parameters, as you would if you used a name instead.
+У більшості випадків, коли вам більше не потрібен певний параметр функції, ви змінили б підпис так, щоб він не включав невикористаний параметр. Ігнорування параметру функції може бути особливо корисним у випадках, коли, наприклад, ви реалізуєте трейт і вам потрібна сигнатура певного типу, але тіло функції у вашій реалізації не потребує жодного з параметрів. Ви тоді уникаєте попередження компілятора про невикористані параметри функції, яке було б у випадку використання назви.
 
-#### Ignoring Parts of a Value with a Nested `_`
+#### Ігнорування Частин Значення з Вкладеним `_`
 
-We can also use `_` inside another pattern to ignore just part of a value, for example, when we want to test for only part of a value but have no use for the other parts in the corresponding code we want to run. Listing 18-18 shows code responsible for managing a setting’s value. The business requirements are that the user should not be allowed to overwrite an existing customization of a setting but can unset the setting and give it a value if it is currently unset.
+Ми також можемо використовувати `_` всередині іншого шаблону, щоб ігнорувати тільки частину значення, наприклад, коли ми хочемо перевірити тільки частину значення, але не використовуємо інші частини у відповідному коді, який ми хочемо виконати. У Блоці Коду 18-18 наведено код що відповідає за керування значенням налаштувань. Бізнес-вимоги полягають в тому, що користувачеві не повинно бути дозволено перезаписувати існуюче задане налаштування, але користувач може скасувати налаштування та надати йому значення, якщо воно наразі не задане.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-18/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 18-18: Using an underscore within patterns that match `Some` variants when we don’t need to use the value inside the `Some`</span>
+<span class="caption">Блок Коду 18-18: Використання підкреслення всередині шаблонів, які відповідають варіантам `Some`, коли нам не потрібно використовувати значення всередині `Some` варіанту</span>
 
-This code will print `Can't overwrite an existing customized value` and then `setting is Some(5)`. In the first match arm, we don’t need to match on or use the values inside either `Some` variant, but we do need to test for the case when `setting_value` and `new_setting_value` are the `Some` variant. In that case, we print the reason for not changing `setting_value`, and it doesn’t get changed.
+Цей код виведе `Неможливо перезаписати існуюче користувацьке значення`, а потім `налаштування це Some(5)`. In the first match arm, we don’t need to match on or use the values inside either `Some` variant, but we do need to test for the case when `setting_value` and `new_setting_value` are the `Some` variant. In that case, we print the reason for not changing `setting_value`, and it doesn’t get changed.
 
 In all other cases (if either `setting_value` or `new_setting_value` are `None`) expressed by the `_` pattern in the second arm, we want to allow `new_setting_value` to become `setting_value`.
 
