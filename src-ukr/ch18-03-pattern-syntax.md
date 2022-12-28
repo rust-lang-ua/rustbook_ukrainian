@@ -98,7 +98,7 @@ Listing 18-12 shows a `Point` struct with two fields, `x` and `y`, that we can b
 
 Ми також можемо деструктурувати за допомогою буквених значень як частини шаблону struct замість того, щоб створювати змінні для всіх полів. Це дозволяє нам перевіряти деякі з полів на наявність певних значень, створюючи змінні для деструктуризації інших полів.
 
-In Listing 18-14, we have a `match` expression that separates `Point` values into three cases: points that lie directly on the `x` axis (which is true when `y = 0`), on the `y` axis (`x = 0`), or neither.
+У Блоці Коду 18-14 ми маємо вираз `match`, який розділяє значення `Point` на три випадки: точки, які лежать безпосередньо на осі `x` (що вірно, коли `y = 0`), на осі `y` (`x = 0`), або не лежать ні на одній з них.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -193,11 +193,11 @@ Remember that a `match` expression stops checking arms once it has found the fir
 
 <span class="caption">Блок Коду 18-18: Використання підкреслення всередині шаблонів, які відповідають варіантам `Some`, коли нам не потрібно використовувати значення всередині `Some` варіанту</span>
 
-Цей код виведе `Неможливо перезаписати існуюче користувацьке значення`, а потім `налаштування це Some(5)`. In the first match arm, we don’t need to match on or use the values inside either `Some` variant, but we do need to test for the case when `setting_value` and `new_setting_value` are the `Some` variant. In that case, we print the reason for not changing `setting_value`, and it doesn’t get changed.
+Цей код виведе `Неможливо перезаписати існуюче користувацьке значення`, а потім `налаштування це Some(5)`. У першому рукаві match нам не потрібно зіставляти або використовувати значення всередині будь-якого з варіантів `Some`, але нам потрібно перевірити випадок, коли `setting_value` і `new_setting_value` є варіантом `Some`. У цьому випадку ми виводимо причину незмінності `setting_value`, і воно не зміниться.
 
-In all other cases (if either `setting_value` or `new_setting_value` are `None`) expressed by the `_` pattern in the second arm, we want to allow `new_setting_value` to become `setting_value`.
+У всіх інших випадках (якщо або `setting_value`, або `new_setting_value` є `None`), виражених шаблоном `_` у другому плечі, ми хочемо дозволити `new_setting_value` стати `setting_value`.
 
-We can also use underscores in multiple places within one pattern to ignore particular values. Listing 18-19 shows an example of ignoring the second and fourth values in a tuple of five items.
+Ми також можемо використовувати підкреслення в декількох місцях в межах одного шаблону, щоб ігнорувати певні значення. Listing 18-19 shows an example of ignoring the second and fourth values in a tuple of five items.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-19/src/main.rs:here}}
