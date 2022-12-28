@@ -197,7 +197,7 @@ Remember that a `match` expression stops checking arms once it has found the fir
 
 У всіх інших випадках (якщо або `setting_value`, або `new_setting_value` є `None`), виражених шаблоном `_` у другому плечі, ми хочемо дозволити `new_setting_value` стати `setting_value`.
 
-Ми також можемо використовувати підкреслення в декількох місцях в межах одного шаблону, щоб ігнорувати певні значення. Listing 18-19 shows an example of ignoring the second and fourth values in a tuple of five items.
+Ми також можемо використовувати підкреслення в декількох місцях в межах одного шаблону, щоб ігнорувати певні значення. У Блоку Коду 18-19 наведено приклад ігнорування другого та четвертого значень у кортежі з п'яти елементів.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-19/src/main.rs:here}}
@@ -205,11 +205,11 @@ Remember that a `match` expression stops checking arms once it has found the fir
 
 <span class="caption">Блок Коду 18-19: Ігнорування кількох частин кортежу</span>
 
-This code will print `Some numbers: 2, 8, 32`, and the values 4 and 16 will be ignored.
+Цей код виведе `Деякі числа: 2, 8, 32`, а значення 4 та 16 будуть проігноровані.
 
-#### Ignoring an Unused Variable by Starting Its Name with `_`
+#### Ігнорування Невикористаної Змінної, Починаючи її Назву з `_`
 
-If you create a variable but don’t use it anywhere, Rust will usually issue a warning because an unused variable could be a bug. However, sometimes it’s useful to be able to create a variable you won’t use yet, such as when you’re prototyping or just starting a project. In this situation, you can tell Rust not to warn you about the unused variable by starting the name of the variable with an underscore. In Listing 18-20, we create two unused variables, but when we compile this code, we should only get a warning about one of them.
+Якщо ви створюєте змінну, але ніде її не використовуєте, Rust зазвичай попередить про це, оскільки невикористана змінна може бути помилкою. Однак, іноді буває корисно мати можливість створити змінну, яку ви поки що не будете використовувати, наприклад, коли ви створюєте прототип або тільки починаєте проєкт. У цій ситуації ви можете заборонити Rust попереджати вас про невикористану змінну, почавши назву змінної з символу підкреслення. У Боку Коду 18-20 ми створюємо дві невикористовувані змінні, але при компіляції цього коду ми повинні отримати попередження лише про одну з них.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -218,20 +218,20 @@ If you create a variable but don’t use it anywhere, Rust will usually issue a 
 ```
 
 
-<span class="caption">Listing 18-20: Starting a variable name with an underscore to avoid getting unused variable warnings</span>
+<span class="caption">Блок Коду 18-20: Початок назви змінної з символу підкреслення, щоб уникнути попередження про невикористані змінні</span>
 
-Here we get a warning about not using the variable `y`, but we don’t get a warning about not using `_x`.
+Тут ми отримуємо попередження про невикористання змінної `y`, але не отримуємо попередження про невикористання `_x`.
 
-Note that there is a subtle difference between using only `_` and using a name that starts with an underscore. The syntax `_x` still binds the value to the variable, whereas `_` doesn’t bind at all. To show a case where this distinction matters, Listing 18-21 will provide us with an error.
+Зверніть увагу, що існує тонка різниця між використанням тільки `_` і використанням імені яке починається з підкреслення. Синтаксис `_x` все ще прив'язує значення до змінної тоді як `_` не прив'язує взагалі. Щоб показати випадок, коли ця відмінність має значення, в Блоці Коду 18-21 ми наведемо помилку.
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-21/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 18-21: An unused variable starting with an underscore still binds the value, which might take ownership of the value</span>
+<span class="caption">Блок Коду 18-21: Невикористана змінна, що починається з підкреслення все ще прив'язує значення, що може отримати над ним володіння</span>
 
-We’ll receive an error because the `s` value will still be moved into `_s`, which prevents us from using `s` again. However, using the underscore by itself doesn’t ever bind to the value. Listing 18-22 will compile without any errors because `s` doesn’t get moved into `_`.
+Ми отримаємо помилку, тому що значення `s` однаково буде переміщено в `_s`, що не дозволить нам використовувати `s` знову. However, using the underscore by itself doesn’t ever bind to the value. Listing 18-22 will compile without any errors because `s` doesn’t get moved into `_`.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-22/src/main.rs:here}}
