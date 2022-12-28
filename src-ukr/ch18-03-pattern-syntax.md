@@ -354,17 +354,17 @@ After running the code, the precedence behavior is evident: if the match guard w
 
 <span class="caption">Блок коду 18-29: використання `@` для зв'язування зі значенням у шаблоні і водночас перевірки</span>
 
-Цей приклад виведе в консолі `Found an id in range: 5`. By specifying `id_variable
-@` before the range `3..=7`, we’re capturing whatever value matched the range while also testing that the value matched the range pattern.
+Цей приклад виведе в консолі `Found an id in range: 5`. Зазначивши `id_variable
+@` перед інтервалом `3..=7` ми захоплюємо будь-яке значення, що відповідає інтервалу, перевіряючи при цьому, що значення відповідає шаблону.
 
-In the second arm, where we only have a range specified in the pattern, the code associated with the arm doesn’t have a variable that contains the actual value of the `id` field. The `id` field’s value could have been 10, 11, or 12, but the code that goes with that pattern doesn’t know which it is. The pattern code isn’t able to use the value from the `id` field, because we haven’t saved the `id` value in a variable.
+У другому рукаві, де є лише інтервал, зазначений у шаблоні, код, асоційований з цим рукавом, не має змінної, яка містила б фактичне значення поля `id`. Значення поля `id` могло б бути 10, 11, або 12, але код, що йде з цим шаблоном, не знає, яким воно є. Код шаблону нездатний використати значення поля `id`, оскільки ми не зберегли значення `id` у змінній.
 
-In the last arm, where we’ve specified a variable without a range, we do have the value available to use in the arm’s code in a variable named `id`. The reason is that we’ve used the struct field shorthand syntax. But we haven’t applied any test to the value in the `id` field in this arm, as we did with the first two arms: any value would match this pattern.
+В останньому рукаві, де ми вказали змінну без інтервалу, ми маємо значення, доступне для використання в коді рукава, в змінній з назвою `id`. Це тому, що ми скористалися скороченим синтаксисом поля структури. Але ми не застосували жодної перевірки для поля `id` у цьому рукаві, як робили у двох перших рукавах: будь-яке значення відповідає цьому шаблону.
 
-Using `@` lets us test a value and save it in a variable within one pattern.
+Використання `@` дозволяє нам перевірити значення і зберегти його в змінній в одному шаблоні.
 
-## Підсумок
+## Висновки
 
-Шаблони в Rust дуже корисні для визначення різниці між різновидами даних. When used in `match` expressions, Rust ensures your patterns cover every possible value, or your program won’t compile. Patterns in `let` statements and function parameters make those constructs more useful, enabling the destructuring of values into smaller parts at the same time as assigning to variables. We can create simple or complex patterns to suit our needs.
+Шаблони в Rust дуже корисні для розрізнення між різновидами даних. При використанні у виразах `match` Rust гарантує, що ваші шаблони покривають усі можливі значення, бо інакше ваша програма не скомпілюється. Шаблони в інструкціях `let` і параметрах функцій роблять ці конструкції кориснішими, дозволяючи деструктуризацію значень на менші частини одночасно з що присвоєнням їх змінним. Ми можемо створювати прості або складні шаблони відповідно до наших потреб.
 
-Next, for the penultimate chapter of the book, we’ll look at some advanced aspects of a variety of Rust’s features.
+Далі, у передостанньому розділі книжки ми подивимося на деякі розширені аспекти низки функціоналів Rust.
