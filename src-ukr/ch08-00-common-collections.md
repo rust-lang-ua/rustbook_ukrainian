@@ -1,6 +1,6 @@
-# Common Collections
+# Звичайні колекції
 
-Rust’s standard library includes a number of very useful data structures called *collections*. Most other data types represent one specific value, but collections can contain multiple values. Unlike the built-in array and tuple types, the data these collections point to is stored on the heap, which means the amount of data does not need to be known at compile time and can grow or shrink as the program runs. Each kind of collection has different capabilities and costs, and choosing an appropriate one for your current situation is a skill you’ll develop over time. In this chapter, we’ll discuss three collections that are used very often in Rust programs:
+Стандартна бібліотека Rust містить декілька дуже корисних структур даних, що звуться *колекції*. Більшість інших типів даних представляють одне певне значення, але колекції можуть містити багато значень. На відміну від вбудованих типів масив і кортеж, дані, на які вказують ці колекції, зберігаються на купі, тобто кількість даних не має бути обов'язково відомою під час компіляції і може збільшуватися або скорочуватися під час виконання програми. Кожен вид колекції має різні можливості і недоліки, і вибір відповідної колекції для поточної ситуації - це вміння, що ви розвиваєте з часом. У цьому розділі ми обговоримо три колекції, які дуже часто використовуються в програмах Rust:
 
 * A *vector* allows you to store a variable number of values next to each other.
 * A *string* is a collection of characters. We’ve mentioned the `String` type previously, but in this chapter we’ll talk about it in depth.
