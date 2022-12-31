@@ -1,17 +1,17 @@
-## Storing Lists of Values with Vectors
+## Зберігання списків значень у векторах
 
-The first collection type we’ll look at is `Vec<T>`, also known as a *vector*. Vectors allow you to store more than one value in a single data structure that puts all the values next to each other in memory. Vectors can only store values of the same type. They are useful when you have a list of items, such as the lines of text in a file or the prices of items in a shopping cart.
+Перший тип колекцій, який ми розглянемо - це `Vec<T>`, також відомий як *вектор*. Вектори дозволять вам зберігати більше одного значення в єдиній структурі даних, що розташовує ці значення поруч один з одним у пам'яті. Вектор може зберігати лише значення одного типу. Вони корисні, коли ви маєте список предметів, наприклад рядки тексту у файлі або ціни на товари у кошику.
 
-### Creating a New Vector
+### Створення нового вектора
 
-To create a new empty vector, we call the `Vec::new` function, as shown in Listing 8-1.
+Щоб створити новий порожній вектор, ми викликаємо `Vec:new`, як показано в Блоці коду 8-1.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-01/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-1: Creating a new, empty vector to hold values of type `i32`</span>
+<span class="caption">Блок коду 8-1: створення нового порожнього вектора для зберігання значень типу `i32`</span>
 
 Note that we added a type annotation here. Because we aren’t inserting any values into this vector, Rust doesn’t know what kind of elements we intend to store. This is an important point. Vectors are implemented using generics; we’ll cover how to use generics with your own types in Chapter 10. For now, know that the `Vec<T>` type provided by the standard library can hold any type. When we create a vector to hold a specific type, we can specify the type within angle brackets. In Listing 8-1, we’ve told Rust that the `Vec<T>` in `v` will hold elements of the `i32` type.
 
