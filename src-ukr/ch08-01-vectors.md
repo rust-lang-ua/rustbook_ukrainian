@@ -41,9 +41,9 @@
 
 ### Читання елементів векторів
 
-There are two ways to reference a value stored in a vector: via indexing or using the `get` method. In the following examples, we’ve annotated the types of the values that are returned from these functions for extra clarity.
+Існує два способи послатися на значення, що зберігається у векторі: через індексацію або використовуючи метод `get`. У наступних прикладах ми анотували типи значень, які повертаються з цих функцій, для додаткової ясності.
 
-Listing 8-4 shows both methods of accessing a value in a vector, with indexing syntax and the `get` method.
+Блок коду 8-4 показує обидва методи доступу до значення у векторі - синтаксис індексування і метод `get`.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
