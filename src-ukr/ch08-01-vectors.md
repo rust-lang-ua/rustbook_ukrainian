@@ -24,22 +24,22 @@
 
 <span class="caption">Блок коду 8-2: створення нового вектора, що містить значення</span>
 
-Because we’ve given initial `i32` values, Rust can infer that the type of `v` is `Vec<i32>`, and the type annotation isn’t necessary. Next, we’ll look at how to modify a vector.
+Оскільки ми надали початкові значення `i32`, Rust може вивести, що типом `v` є `Vec<i32>` і анотація типу тут не потрібна. Далі ми поглянемо, як змінити вектор.
 
-### Updating a Vector
+### Оновлення вектора
 
-To create a vector and then add elements to it, we can use the `push` method, as shown in Listing 8-3.
+Щоб створити вектор і додати до нього елементи ми можемо використати метод `push`, як показано в Блоці коду 8-3.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-03/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-3: Using the `push` method to add values to a vector</span>
+<span class="caption">Блок коду 8-3: використання методу `push` для додавання значень у вектор</span>
 
-As with any variable, if we want to be able to change its value, we need to make it mutable using the `mut` keyword, as discussed in Chapter 3. The numbers we place inside are all of type `i32`, and Rust infers this from the data, so we don’t need the `Vec<i32>` annotation.
+Як і для будь-якої змінної, якщо ми хочемо змінювати її значення, ми повинні зробити його мутабельним за допомогою ключового слова `mut`, як говорилося в Розділі 3. Числа, як ми розміщуємо у векторі, мають тип `i32`, і Rust виводить це з даних, тож нам не потрібна анотація `Vec<i32>`.
 
-### Reading Elements of Vectors
+### Читання елементів векторів
 
 There are two ways to reference a value stored in a vector: via indexing or using the `get` method. In the following examples, we’ve annotated the types of the values that are returned from these functions for extra clarity.
 
