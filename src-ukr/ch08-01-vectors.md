@@ -15,14 +15,14 @@
 
 Зауважте, що тут ми додали анотації типу. Оскільки ми не вставляємо жодного значення в цей вектор, Rust не знає, які елементи ми маємо намір зберігати. Це важлива деталь. Вектори реалізовані за допомогою узагальнень; ми розкажемо, як використовувати узагальнення з вашими власними типами в Розділі 10. Наразі треба знати лише, що тип `Vec<T>`, наданий стандартною бібліотекою, може містити будь-який тип. Коли ми створюємо вектор, що міститиме певний тип, ми можемо зазначити тип у кутових дужках. У Блоці коду 8-1 ми кажемо Rust, що `Vec<T>` у `v` міститиме елементи типу `i32`.
 
-More often, you’ll create a `Vec<T>` with initial values and Rust will infer the type of value you want to store, so you rarely need to do this type annotation. Rust conveniently provides the `vec!` macro, which will create a new vector that holds the values you give it. Listing 8-2 creates a new `Vec<i32>` that holds the values `1`, `2`, and `3`. The integer type is `i32` because that’s the default integer type, as we discussed in the [“Data Types”][data-types]<!-- ignore --> section of Chapter 3.
+Зазвичай ви створюватимете `Vec<T>` з початковими значеннями, і Rust виведе тип значень, які ви хочете зберігати, тож вам нечасто буде потрібно додавати таку анотацію типу. Rust для зручності надає макрос `vec!`, який створює новий вектор, який містить ваші значення. Блок коду 8-2 створює новий `Vec<i32>`, що містить значення `1`, `2`, і `3`. Тип цілих - `i32`, бо це тип цілих за замовчуванням, як ми вже говорили в підрозділі [“Типи даних”][data-types]<!-- ignore --> Розділу 3.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-02/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-2: Creating a new vector containing values</span>
+<span class="caption">Блок коду 8-2: створення нового вектора, що містить значення</span>
 
 Because we’ve given initial `i32` values, Rust can infer that the type of `v` is `Vec<i32>`, and the type annotation isn’t necessary. Next, we’ll look at how to modify a vector.
 
