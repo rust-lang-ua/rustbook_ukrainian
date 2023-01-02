@@ -113,11 +113,11 @@ section of Chapter 15.
 
 Iterating over a vector, whether immutably or mutably, is safe because of the borrow checker's rules. If we attempted to insert or remove items in the `for` loop bodies in Listing 8-7 and Listing 8-8, we would get a compiler error similar to the one we got with the code in Listing 8-6. The reference to the vector that the `for` loop holds prevents simultaneous modification of the whole vector.
 
-### Using an Enum to Store Multiple Types
+### Використання енума для зберігання декількох типів
 
-Vectors can only store values that are the same type. This can be inconvenient; there are definitely use cases for needing to store a list of items of different types. Fortunately, the variants of an enum are defined under the same enum type, so when we need one type to represent elements of different types, we can define and use an enum!
+Вектор може зберігати лише значення одного типу. Це може бути незручно; точно існують випадки, коли є потреба у зберіганні списку елементів різних типів. На щастя, варіанти енума визначені як один тип, тож коли нам потрібен один тип для представлення елементів різних типів, ми можемо визначити і використовувати енум!
 
-For example, say we want to get values from a row in a spreadsheet in which some of the columns in the row contain integers, some floating-point numbers, and some strings. We can define an enum whose variants will hold the different value types, and all the enum variants will be considered the same type: that of the enum. Then we can create a vector to hold that enum and so, ultimately, holds different types. We’ve demonstrated this in Listing 8-9.
+Наприклад, нехай ми хочемо отримати значення з рядка в таблиці, у якій деякі стовпці в рядку містять цілі числа, деякі — числа з рухомими точками, а деякі — рядки. Ми можемо визначити енум, варіанти якого будуть містити різні типи значень, і всі варіанти енума будуть вважатися одним і тим же типом — енумом. Тоді ми можемо створити вектор, який міститиме цей енум і, зрештою, міститиме різні типи. Ми продемонстрували це у Блоці коду 8-9.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-09/src/main.rs:here}}
