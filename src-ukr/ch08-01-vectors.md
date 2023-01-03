@@ -126,7 +126,7 @@ Iterating over a vector, whether immutably or mutably, is safe because of the bo
 
 <span class="caption">Блок коду 8-9: Визначення `enum` для зберігання значень різних типів у одному векторі</span>
 
-Rust needs to know what types will be in the vector at compile time so it knows exactly how much memory on the heap will be needed to store each element. We must also be explicit about what types are allowed in this vector. If Rust allowed a vector to hold any type, there would be a chance that one or more of the types would cause errors with the operations performed on the elements of the vector. Using an enum plus a `match` expression means that Rust will ensure at compile time that every possible case is handled, as discussed in Chapter 6.
+Rust має знати, які типи будуть у векторі, під час компіляції, щоб знати, скільки саме пам'яті у купі буде потрібно для зберігання кожного елемента. Ми також маємо явно зазначити, які типи можуть бути в цьому векторі. Якби Rust дозволив вектору містити будь-який тип, була б імовірність, що один або кілька з типів призведуть до помилок при виконанні операцій на елементах вектора. Використання енуму і виразу `match` означає, що Rust гарантує під час компіляції, що умі можливі випадки буде оброблено, як обговорювалося в Розділі 6.
 
 If you don’t know the exhaustive set of types a program will get at runtime to store in a vector, the enum technique won’t work. Instead, you can use a trait object, which we’ll cover in Chapter 17.
 
