@@ -8,14 +8,14 @@
 
 ### Запобігання висячим посиланням з використанням часів існування
 
-The main aim of lifetimes is to prevent *dangling references*, which cause a program to reference data other than the data it’s intended to reference. Consider the program in Listing 10-16, which has an outer scope and an inner scope.
+Головною метою використання часів існування є запобігання *висячим посиланням*, які зберігають в памʼяті дані, котрі більше не будуть використані програмою. Розглянемо приклад з блоку коду 10-16, який має внутрішню і зовнішню область видимості.
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 10-16: An attempt to use a reference whose value has gone out of scope</span>
+<span class="caption">Блок коду 10-16: Спроба використати посилання, значення якого лежить за межами області видимості</span>
 
 > Note: The examples in Listings 10-16, 10-17, and 10-23 declare variables without giving them an initial value, so the variable name exists in the outer scope. At first glance, this might appear to be in conflict with Rust’s having no null values. However, if we try to use a variable before giving it a value, we’ll get a compile-time error, which shows that Rust indeed does not allow null values.
 
