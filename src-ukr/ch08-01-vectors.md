@@ -50,7 +50,7 @@
 ```
 
 
-<span class="caption">Listing 8-4: Using indexing syntax or the `get` method to access an item in a vector</span>
+<span class="caption">Блок коду 8-4: використання синтаксису індексів або методу `get` для доступу до елементів вектора</span>
 
 Note a few details here. We use the index value of `2` to get the third element because vectors are indexed by number, starting at zero. Using `&` and `[]` gives us a reference to the element at the index value. When we use the `get` method with the index passed as an argument, we get an `Option<&T>` that we can use with `match`.
 
@@ -128,7 +128,7 @@ Iterating over a vector, whether immutably or mutably, is safe because of the bo
 
 Rust має знати, які типи будуть у векторі, під час компіляції, щоб знати, скільки саме пам'яті у купі буде потрібно для зберігання кожного елемента. Ми також маємо явно зазначити, які типи можуть бути в цьому векторі. Якби Rust дозволив вектору містити будь-який тип, була б імовірність, що один або кілька з типів призведуть до помилок при виконанні операцій на елементах вектора. Використання енуму і виразу `match` означає, що Rust гарантує під час компіляції, що умі можливі випадки буде оброблено, як обговорювалося в Розділі 6.
 
-If you don’t know the exhaustive set of types a program will get at runtime to store in a vector, the enum technique won’t work. Instead, you can use a trait object, which we’ll cover in Chapter 17.
+Якщо ви не маєте вичерпного списку типів, з якими програма працюватиме під час виконання для зберігання у векторі, техніка енумів не спрацює. Натомість ви можете скористатися трейтовими об'єктами, про які йдеться у Розділі 17.
 
 Now that we’ve discussed some of the most common ways to use vectors, be sure to review [the API documentation][vec-api]<!-- ignore --> for all the many useful methods defined on `Vec<T>` by the standard library. For example, in addition to `push`, a `pop` method removes and returns the last element.
 
