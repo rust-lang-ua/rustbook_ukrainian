@@ -130,22 +130,22 @@ Rust має знати, які типи будуть у векторі, під �
 
 Якщо ви не маєте вичерпного списку типів, з якими програма працюватиме під час виконання для зберігання у векторі, техніка енумів не спрацює. Натомість ви можете скористатися трейтовими об'єктами, про які йдеться у Розділі 17.
 
-Now that we’ve discussed some of the most common ways to use vectors, be sure to review [the API documentation][vec-api]<!-- ignore --> for all the many useful methods defined on `Vec<T>` by the standard library. For example, in addition to `push`, a `pop` method removes and returns the last element.
+Тепер, коли ми обговорили деякі найпоширеніші способи використання векторів, обов'язково подивитися [документацію API ][vec-api]<!-- ignore --> щоб дізнатися про багато інших корисних методів, визначених для `Vec<T>` у стандартній бібліотеці. Наприклад, на додачу до методу `push`, метод `pop` видаляє і повертає останній елемент.
 
-### Dropping a Vector Drops Its Elements
+### Очищення вектора очищує його елементи
 
-Like any other `struct`, a vector is freed when it goes out of scope, as annotated in Listing 8-10.
+Як і будь-яка інша `struct`, вектор вивільняється, коли виходить з області видимості, як підписано в Блоці коду 8-10.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-10/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-10: Showing where the vector and its elements are dropped</span>
+<span class="caption">Блок коду 8-10: демонстрація, де саме вектор і його елементи очищуються</span>
 
-When the vector gets dropped, all of its contents are also dropped, meaning the integers it holds will be cleaned up. The borrow checker ensures that any references to contents of a vector are only used while the vector itself is valid.
+Коли вектор очищуються, також очищується і його вміст, тобто цілі числа, які він містить, будуть очищені. Borrow checker гарантує, що будь-які посилання на вміст вектора використовуються лише поки сам вектор є коректним.
 
-Let’s move on to the next collection type: `String`!
+Перейдімо до наступного типу колекцій: `String`!
 
 [data-types]: ch03-02-data-types.html#data-types
 [nomicon]: ../nomicon/vec/vec.html
