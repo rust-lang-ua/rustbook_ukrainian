@@ -88,30 +88,30 @@ The code in Listing 8-6 might look like it should work: why should a reference t
 
 > Note: For more on the implementation details of the `Vec<T>` type, see [“The Rustonomicon”][nomicon].
 
-### Iterating over the Values in a Vector
+### Ітерування по значеннях у векторі
 
-To access each element in a vector in turn, we would iterate through all of the elements rather than use indices to access one at a time. Listing 8-7 shows how to use a `for` loop to get immutable references to each element in a vector of `i32` values and print them.
+Для доступу до кожного елемента вектора по черзі ми ітеруємо по всіх елементах замість використання індексів для доступу по одному за раз. Блок коду 8-7 показує, як використовувати цикл `for`, щоб отримати немутабельні посилання на кожен елемент вектора значень `i32` і вивести їх.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-07/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-7: Printing each element in a vector by iterating over the elements using a `for` loop</span>
+<span class="caption">Блок коду 8-7: виведення кожного елементу вектора ітеруванням по елементах у циклі `for`</span>
 
-We can also iterate over mutable references to each element in a mutable vector in order to make changes to all the elements. The `for` loop in Listing 8-8 will add `50` to each element.
+Ми також можемо ітерувати по мутабельних посиланнях на кожен елемент у мутабельному векторі, щоб змінити всі елементи. Цикл `для` у Блоці коду 8-8 додасть `50` до кожного елемента.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-08/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-8: Iterating over mutable references to elements in a vector</span>
+<span class="caption">Блок коду 8-8: Ітерування по мутабельних посиланнях на елементи у векторі</span>
 
-To change the value that the mutable reference refers to, we have to use the `*` dereference operator to get to the value in `i` before we can use the `+=` operator. We’ll talk more about the dereference operator in the [“Following the Pointer to the Value with the Dereference Operator”][deref]<!-- ignore -->
-section of Chapter 15.
+Щоб змінити значення, на яке посилається мутабельне посилання, нам потрібно скористатися оператором розіменування `*` для отримання значення в `і` до того, як ми зможемо використовувати оператор `+=`. Ми поговоримо більше про оператора розіменування у підрозділі ["Перехід за вказівником до значення"][deref]<!-- ignore -->
+Розділу 15.
 
-Iterating over a vector, whether immutably or mutably, is safe because of the borrow checker's rules. If we attempted to insert or remove items in the `for` loop bodies in Listing 8-7 and Listing 8-8, we would get a compiler error similar to the one we got with the code in Listing 8-6. The reference to the vector that the `for` loop holds prevents simultaneous modification of the whole vector.
+Ітерування по вектору, мутабельне чи немутабельне, є безпечним завдяки правилам borrow checker. Якби ми спробували вставити або видалити елементи в циклі `for` у Блоці коду 8-7 і Блоці коду 8-8, то отримали б помилку компілятора, схожу на той, що ми отримали з кодом у Блоці коду 8-6. Посилання на вектор, яке тримає цикл `for`, запобігає одночасній зміні усього вектора.
 
 ### Використання енума для зберігання декількох типів
 
