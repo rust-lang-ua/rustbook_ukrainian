@@ -52,18 +52,18 @@
 
 <span class="caption">Блок коду 8-4: використання синтаксису індексів або методу `get` для доступу до елементів вектора</span>
 
-Note a few details here. We use the index value of `2` to get the third element because vectors are indexed by number, starting at zero. Using `&` and `[]` gives us a reference to the element at the index value. When we use the `get` method with the index passed as an argument, we get an `Option<&T>` that we can use with `match`.
+Зверніть тут увагу на декілька деталей. Ми використовуємо значення індексу `2`, щоб отримати третій елемент, бо вектори індексуються числами, починаючи з нуля. Використання `&` і `[]` надає нам посилання на елемент за значенням індексу. Коли ми використовуємо метод `get` з індексом, переданим аргументом, то отримуємо `Option<&T>`, який ми можемо використати у `match`.
 
-The reason Rust provides these two ways to reference an element is so you can choose how the program behaves when you try to use an index value outside the range of existing elements. As an example, let’s see what happens when we have a vector of five elements and then we try to access an element at index 100 with each technique, as shown in Listing 8-5.
+Rust надає ці два способи посилання на елемент, щоб ви могли вибрати, як програма поводиться при спробі використовувати значення індексу поза діапазоном наявних елементів. Як приклад, подивімося, що станеться, коли ми матємо вектор з п'яти елементів, а потім спробуємо отримати доступ до елемента з індексом 100 за допомогою кожної техніки, як показано в Блоці коду 8-5.
 
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-5: Attempting to access the element at index 100 in a vector containing five elements</span>
+<span class="caption">Блок коду 8-5: спроба доступу до елементу з індексом 100 у векторі, що містить п'ять елементів</span>
 
-When we run this code, the first `[]` method will cause the program to panic because it references a nonexistent element. This method is best used when you want your program to crash if there’s an attempt to access an element past the end of the vector.
+Коли ми запустимо цей код, перший метод `[]` призведе до паніки програми через те, що він посилається на елемент, якого не існує. This method is best used when you want your program to crash if there’s an attempt to access an element past the end of the vector.
 
 When the `get` method is passed an index that is outside the vector, it returns `None` without panicking. You would use this method if accessing an element beyond the range of the vector may happen occasionally under normal circumstances. Your code will then have logic to handle having either `Some(&element)` or `None`, as discussed in Chapter 6. For example, the index could be coming from a person entering a number. If they accidentally enter a number that’s too large and the program gets a `None` value, you could tell the user how many items are in the current vector and give them another chance to enter a valid value. That would be more user-friendly than crashing the program due to a typo!
 
