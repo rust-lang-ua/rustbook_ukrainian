@@ -63,11 +63,11 @@ Rust надає ці два способи посилання на елемен�
 
 <span class="caption">Блок коду 8-5: спроба доступу до елементу з індексом 100 у векторі, що містить п'ять елементів</span>
 
-Коли ми запустимо цей код, перший метод `[]` призведе до паніки програми через те, що він посилається на елемент, якого не існує. This method is best used when you want your program to crash if there’s an attempt to access an element past the end of the vector.
+Коли ми запустимо цей код, перший метод `[]` призведе до паніки програми через те, що він посилається на елемент, якого не існує. Цей метод найкраще використовувати, коли ви хочете, щоб програма аварійно завершилася, якщо сталася спроба отримати доступ до елемента за кінцем вектора.
 
-When the `get` method is passed an index that is outside the vector, it returns `None` without panicking. You would use this method if accessing an element beyond the range of the vector may happen occasionally under normal circumstances. Your code will then have logic to handle having either `Some(&element)` or `None`, as discussed in Chapter 6. For example, the index could be coming from a person entering a number. If they accidentally enter a number that’s too large and the program gets a `None` value, you could tell the user how many items are in the current vector and give them another chance to enter a valid value. That would be more user-friendly than crashing the program due to a typo!
+Коли методу `get` передається індекс, що знаходиться поза вектором, він повертає `None` без паніки. Цей метод краще використовувати, якщо доступ до елемента за межами вектора може ставатися час від часу за нормальних умов. Ваш код тоді міститиме логіку обробки як `Some(&element)`, так і `None`, як пояснюється в Розділі 6. Наприклад, індекс може бути отримано від людини, що вводить число. Якщо хтось випадково введе завелике число і програма отримає значення `None`, чи можете повідомити користувачеві, скільки елементів є у векторі надати йому ще одну спробу ввести коректне значення. Це буде більш дружньо до користувача, ніж аварійне завершення програми через хибодрук!
 
-When the program has a valid reference, the borrow checker enforces the ownership and borrowing rules (covered in Chapter 4) to ensure this reference and any other references to the contents of the vector remain valid. Recall the rule that states you can’t have mutable and immutable references in the same scope. That rule applies in Listing 8-6, where we hold an immutable reference to the first element in a vector and try to add an element to the end. This program won’t work if we also try to refer to that element later in the function:
+Коли у програми є посилання, borrow checker забезпечує правила володіння і позичання (про які йдеться у Розділі 4), забезпечуючи, що це посилання та будь-які інші посилання на вміст вектора залишаються коректними. Згадайте правило, яке каже, що не можна мати мутабельні і немутабельні посилання в одній області видимості. Це правило застосовується в Блоці коду 806, де ми тримаємо немутабельне посилання на перший елемент вектора і намагаємося додати елемент у кінець. Ця програма не спрацює, якщо ми спробуємо звернутися до цього елемента пізніше у функції:
 
 
 ```rust,ignore,does_not_compile
@@ -75,16 +75,16 @@ When the program has a valid reference, the borrow checker enforces the ownershi
 ```
 
 
-<span class="caption">Listing 8-6: Attempting to add an element to a vector while holding a reference to an item</span>
+<span class="caption">Блок коду 8-6: спроба додати елемент до вектора, тримаючи посилання на його елемент</span>
 
-Compiling this code will result in this error:
+Компіляція цього коду завершиться з такою помилкою:
 
 
 ```console
 {{#include ../listings/ch08-common-collections/listing-08-06/output.txt}}
 ```
 
-The code in Listing 8-6 might look like it should work: why should a reference to the first element care about changes at the end of the vector? This error is due to the way vectors work: because vectors put the values next to each other in memory, adding a new element onto the end of the vector might require allocating new memory and copying the old elements to the new space, if there isn’t enough room to put all the elements next to each other where the vector is currently stored. In that case, the reference to the first element would be pointing to deallocated memory. The borrowing rules prevent programs from ending up in that situation.
+Код у Блоці коду 8-6, можливо, має вигляд, ніби він повинен працювати: чому посилання на перший елемент має турбуватися про зміни в кінці вектора? This error is due to the way vectors work: because vectors put the values next to each other in memory, adding a new element onto the end of the vector might require allocating new memory and copying the old elements to the new space, if there isn’t enough room to put all the elements next to each other where the vector is currently stored. In that case, the reference to the first element would be pointing to deallocated memory. The borrowing rules prevent programs from ending up in that situation.
 
 > Note: For more on the implementation details of the `Vec<T>` type, see [“The Rustonomicon”][nomicon].
 
