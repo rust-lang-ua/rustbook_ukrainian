@@ -6,20 +6,20 @@
 
 У цьому розділі ми пройдемося базовим API хеш-відображень, але багато інших корисностей ховаються у функціях, визначених на `HashMap<K, V>` у стандартній бібліотеці. Як завжди, зверніться до документації стандартної бібліотеки для додаткової інформації.
 
-### Creating a New Hash Map
+### Створення нового хеш-відображення
 
-One way to create an empty hash map is using `new` and adding elements with `insert`. In Listing 8-20, we’re keeping track of the scores of two teams whose names are *Blue* and *Yellow*. The Blue team starts with 10 points, and the Yellow team starts with 50.
+Один зі способів створення порожньої хеш-карти - це застосувати `new` і додати елементи за допомогою `insert`. У Блоці коду 8-20 ми відстежуємо рахунки двох команд, що називаються *Сині* and *Жовті*. Синя команда починає з 10 очками, а Жовта - з 50.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-20/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-20: Creating a new hash map and inserting some keys and values</span>
+<span class="caption">Блок коду 8-20: Створення нового хеш-відображення і вставлення деяких ключів та значень</span>
 
-Note that we need to first `use` the `HashMap` from the collections portion of the standard library. Of our three common collections, this one is the least often used, so it’s not included in the features brought into scope automatically in the prelude. Hash maps also have less support from the standard library; there’s no built-in macro to construct them, for example.
+Зверніть увагу, що нам, по-перше, треба зробити `use` для `HashMap` з розділу колекцій стандартної бібліотеки. З трьох наших загальних колекцій ця використовується найрідше, тож вона не включена до функціонала, який автоматично додається до області видимості у прелюдії. Хеш-відображення також мають меншу підтримку від стандартної бібліотеки; скажімо, не існує вбудованого макросу для їхнього конструювання.
 
-Just like vectors, hash maps store their data on the heap. This `HashMap` has keys of type `String` and values of type `i32`. Like vectors, hash maps are homogeneous: all of the keys must have the same type as each other, and all of the values must have the same type.
+Так само як і вектори, хеш-відображення зберігають свої дані у купі. Цей `HashMap` має ключі типу `String` і значення типу `i32`. Як і вектори, хеш-відображення є однорідними: усі ключі мають бути одного і того ж самого типу, і всі значення мають бути одного типу.
 
 ### Accessing Values in a Hash Map
 
