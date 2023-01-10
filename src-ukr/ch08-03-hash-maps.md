@@ -1,10 +1,10 @@
-## Storing Keys with Associated Values in Hash Maps
+## Зберігання ключів і пов'язаних значень у Хеш-відображеннях
 
-The last of our common collections is the *hash map*. The type `HashMap<K, V>` stores a mapping of keys of type `K` to values of type `V` using a *hashing function*, which determines how it places these keys and values into memory. Many programming languages support this kind of data structure, but they often use a different name, such as hash, map, object, hash table, dictionary, or associative array, just to name a few.
+Остання з поширених колекцій - це *хеш-відображення*. Тип `HashMap<K, V>` зберігає відображення ключів типу `K` на значення типу `V`, використовуючи *функцію хешування*, яка визначає, як розмістити ці ключі та значень у пам'яті. Багато мов програмування підтримують таку структуру даних, але часто використовують іншу назву, таку як хеш, відображення, хеш-таблиця, словник або асоціативний масив, це тільки декілька назв.
 
-Hash maps are useful when you want to look up data not by using an index, as you can with vectors, but by using a key that can be of any type. For example, in a game, you could keep track of each team’s score in a hash map in which each key is a team’s name and the values are each team’s score. Given a team name, you can retrieve its score.
+Хеш-відображення є корисними, коли ви хочете шукати дані не за індексом, як у векторах, а за допомогою ключа довільного типу. Наприклад, у грі ви можете відстежувати результат кожної команди за хеш-відображенням, у якому кожен ключ є назвою команди, а значення є рахунком кожної команди. Маючи назву команди, ви можете отримати її рахунок.
 
-We’ll go over the basic API of hash maps in this section, but many more goodies are hiding in the functions defined on `HashMap<K, V>` by the standard library. As always, check the standard library documentation for more information.
+У цьому розділі ми пройдемося базовим API хеш-відображень, але багато інших корисностей ховаються у функціях, визначених на `HashMap<K, V>` у стандартній бібліотеці. Як завжди, зверніться до документації стандартної бібліотеки для додаткової інформації.
 
 ### Creating a New Hash Map
 
