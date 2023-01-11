@@ -21,26 +21,26 @@
 
 Так само як і вектори, хеш-відображення зберігають свої дані у купі. Цей `HashMap` має ключі типу `String` і значення типу `i32`. Як і вектори, хеш-відображення є однорідними: усі ключі мають бути одного і того ж самого типу, і всі значення мають бути одного типу.
 
-### Accessing Values in a Hash Map
+### Доступ до значень у хеш-відображенні
 
-We can get a value out of the hash map by providing its key to the `get` method, as shown in Listing 8-21.
+Ми можемо отримати значення з хеш-відображення, надавши її ключ методу `get`, як показано у Блоці коду 8-21.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-21: Accessing the score for the Blue team stored in the hash map</span>
+<span class="caption">Блок коду 8-21: доступ до рахунку Синьої команди, що зберігається у хеш-відображенні</span>
 
-Here, `score` will have the value that’s associated with the Blue team, and the result will be `10`. The `get` method returns an `Option<&V>`; if there’s no value for that key in the hash map, `get` will return `None`. This program handles the `Option` by calling `unwrap_or` to set `score` to zero if `scores` doesn't have an entry for the key.
+Тут `score` буде мати значення, пов'язане з Синьою командою, і результат буде `10`. Метод `get` повертає `Option<&V>`; якщо у хеш-відображенні для цього ключа немає відповідного значення, `get` поверне `None`. Ця програма обробляє `Option` викликом `unwrap_or`, щоб встановити `score` у нуль, якщо `scores` не має запису для цього ключа.
 
-We can iterate over each key/value pair in a hash map in a similar manner as we do with vectors, using a `for` loop:
+Ми можемо ітерувати по кожній парі ключ/значення в хеш-відображенні схожим чином, як ми робимо з векторами, використовуючи цикл `for`:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-03-iterate-over-hashmap/src/main.rs:here}}
 ```
 
-This code will print each pair in an arbitrary order:
+Цей код виведе кожну пару в довільному порядку:
 
 ```text
 Yellow: 50
