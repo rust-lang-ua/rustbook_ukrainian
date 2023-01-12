@@ -56,11 +56,11 @@ Blue: 10
 ```
 
 
-<span class="caption">Listing 8-22: Showing that keys and values are owned by the hash map once they’re inserted</span>
+<span class="caption">Блок коду 8-22: демонстрація, що ключі та значення є у володінні хешмапи після додавання</span>
 
-We aren’t able to use the variables `field_name` and `field_value` after they’ve been moved into the hash map with the call to `insert`.
+Ми не можемо використовувати змінні `field_name` і `field_value` після переміщення в хешмапу за допомогою виклику `insert`.
 
-If we insert references to values into the hash map, the values won’t be moved into the hash map. The values that the references point to must be valid for at least as long as the hash map is valid. We’ll talk more about these issues in the [“Validating References with Lifetimes”]()<!-- ignore --> section in Chapter 10.
+Якщо ми вставляємо посилання на значення до хешмапи, ці значення не будуть переміщені до хешмапи. Значення, на які вказують посилання, мають бути коректними щонайменше стільки ж, скільки існує хешмапа. Ви поговоримо більше про ці справи у підрозділі ["Перевірка коректності посилань за допомогою часів існування"]()<!-- ignore --> Розділу 10.
 
 ### Updating a Hash Map
 
