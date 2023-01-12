@@ -23,7 +23,7 @@
 
 ### Доступ до значень у хешмапі
 
-Ми можемо отримати значення з хеш-відображення, надавши її ключ методу `get`, як показано у Блоці коду 8-21.
+Ми можемо отримати значення з хешмари, надавши її ключ методу `get`, як показано у Блоці коду 8-21.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
@@ -49,7 +49,7 @@ Blue: 10
 
 ### Хешмапи і володіння
 
-For types that implement the `Copy` trait, like `i32`, the values are copied into the hash map. For owned values like `String`, the values will be moved and the hash map will be the owner of those values, as demonstrated in Listing 8-22.
+Для типів, які реалізують трейт `Copy`, наприклад `i32`, значення копіюються до хешмапи. Для значень, які мають володіння, таких як `String`, значення будуть переміщені і хешмапа буде володіти цими значеннями, як це показано у Блоці коду 8-22.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-22/src/main.rs:here}}
