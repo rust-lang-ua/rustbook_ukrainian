@@ -70,36 +70,36 @@ Blue: 10
 
 #### Перезапис значення
 
-If we insert a key and a value into a hash map and then insert that same key with a different value, the value associated with that key will be replaced. Even though the code in Listing 8-23 calls `insert` twice, the hash map will only contain one key/value pair because we’re inserting the value for the Blue team’s key both times.
+Якщо ми вставляємо ключ і значення до хешмапи і тоді вставляємо той самий ключ із іншим значенням, то значення, асоційоване з цим ключем, буде замінено. Попри те, що код у Блоці коду 8-23 викликає `insert` двічі, хешмапа міститиме лише одну пару ключ/значення, оскільки ми обидва рази вставляємо значення для ключа Синьої команди.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-23: Replacing a value stored with a particular key</span>
+<span class="caption">Блок коду 8-23: заміна значення, збереженого з певним ключем</span>
 
-This code will print `{"Blue": 25}`. The original value of `10` has been overwritten.
+Цей код виведе `{"Blue": 25}`. Початкове значення `10` було перезаписане.
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="only-inserting-a-value-if-the-key-has-no-value"></a>
 
-#### Adding a Key and Value Only If a Key Isn’t Present
+#### Додавання ключа та значення тільки якщо ключ відсутній
 
-It’s common to check whether a particular key already exists in the hash map with a value then take the following actions: if the key does exist in the hash map, the existing value should remain the way it is. If the key doesn’t exist, insert it and a value for it.
+Доволі поширено перевіряти, чи певний ключ уже присутній у хешмапі зі значенням, а тоді якщо ключ існує, то наявне значення має залишатися таким, яким воно є. Якщо ж ключ відсутній, вставити його і значення для нього.
 
-Hash maps have a special API for this called `entry` that takes the key you want to check as a parameter. The return value of the `entry` method is an enum called `Entry` that represents a value that might or might not exist. Let’s say we want to check whether the key for the Yellow team has a value associated with it. If it doesn’t, we want to insert the value 50, and the same for the Blue team. Using the `entry` API, the code looks like Listing 8-24.
+Хешмапи мають спеціальне API для цього, що зветься `entry`, яке приймає параметром ключ, який ви хочете перевірити. Значення, що повертається з методу `entry` - це енум, що зветься `Entry`, який представляє значення, що може існувати або не існувати. Скажімо, ми хочемо перевірити, чи ключ для Жовтої команди має пов'язане з ним значення. Як ні, ми хочемо вставити значення 50, і те саме для Синьої команди. За допомогою API `entry`, код стає схожим на Блок коду 8-24.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-24: Using the `entry` method to only insert if the key does not already have a value</span>
+<span class="caption">Блок коду 8-24: використання методу `entry` для вставляння лише якщо ключ ще не має відповідного значення</span>
 
-The `or_insert` method on `Entry` is defined to return a mutable reference to the value for the corresponding `Entry` key if that key exists, and if not, inserts the parameter as the new value for this key and returns a mutable reference to the new value. This technique is much cleaner than writing the logic ourselves and, in addition, plays more nicely with the borrow checker.
+Метод `or_insert` для `Entry` за визначенням повертає мутабельне посилання на відповідний ключ `Entry`, якщо ключ існує, а як ні, то вставляє параметр як нове значення для цього ключа і повертає мутабельне посилання на нове значення. Ця техніка набагато чистіша, ніж написання логіки самостійно і ще, крім того, краще працює з borrow checker.
 
-Running the code in Listing 8-24 will print `{"Yellow": 50, "Blue": 10}`. The first call to `entry` will insert the key for the Yellow team with the value 50 because the Yellow team doesn’t have a value already. The second call to `entry` will not change the hash map because the Blue team already has the value 10.
+Запуск коду у Блоці коду 8-24 надрукує `{"Yellow": 50, "Blue": 10}`. Перший виклик `entry` вставить ключ для Жовтої команди зі значенням 50, бо Жовта команда ще не має свого значення. Другий виклик `entry` не змінить хешмапу, бо Синя команда вже має значення 10.
 
 #### Updating a Value Based on the Old Value
 
