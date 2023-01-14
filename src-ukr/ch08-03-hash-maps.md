@@ -103,34 +103,34 @@ Blue: 10
 
 #### Оновлення значення на основі старого значення
 
-Інший поширений сценарій використання хешмап - пошук значення ключа і оновлення його на основі старого значення. For instance, Listing 8-25 shows code that counts how many times each word appears in some text. We use a hash map with the words as keys and increment the value to keep track of how many times we’ve seen that word. If it’s the first time we’ve seen a word, we’ll first insert the value 0.
+Інший поширений сценарій використання хешмап - пошук значення ключа і оновлення його на основі старого значення. Наприклад, Блок коду 8-25 показує код, який підраховує, скільки разів кожне слово з'являється в певному тексті. Ми використовуємо хешмапу з ключами - словами і збільшуємо значення, щоб відстежувати, скільки разів ми бачили це слово. Якщо ми зустрічаємо слово уперше, то спершу вставляємо значення 0.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-25: Counting occurrences of words using a hash map that stores words and counts</span>
+<span class="caption">Блок коду 8-25: підрахунок кількості слів за допомогою хешмапи слів, що зберігає слова і кількість</span>
 
-This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see the same key/value pairs printed in a different order: recall from the [“Accessing Values in a Hash Map”][access]<!-- ignore --> section that iterating over a hash map happens in an arbitrary order.
+Цей код виведе `{"world": 2, "hello": 1, "wonderful": 1}`. Ви можете побачити ті ж пари ключів/значень, виведені в іншому порядку: згадайте з підрозділу ["Доступ до значень у хешмапі"][access]<!-- ignore --> , що ітерування по хешмапі відбувається у довільному порядку.
 
-The `split_whitespace` method returns an iterator over sub-slices, separated by whitespace, of the value in `text`. The `or_insert` method returns a mutable reference (`&mut V`) to the value for the specified key. Here we store that mutable reference in the `count` variable, so in order to assign to that value, we must first dereference `count` using the asterisk (`*`). The mutable reference goes out of scope at the end of the `for` loop, so all of these changes are safe and allowed by the borrowing rules.
+Метод `split_whitespace` повертає ітератор по підслайсах, розділених пробілами, значення у `text`. Метод `or_insert` повертає мутабельне посилання (`&mut V`) на значення для вказаного ключа. Тут ми зберігаємо це мутабельне посилання у змінній `count`, тож для того, щоб присвоїти цьому значенню, нам необхідно спочатку розіменувати `count` за допомогою зірочки (`*`). Мутабельне посилання виходить з області видимості в кінці циклу `for`, тож всі ці зміни є безпечними та дозволеними правилами позичання.
 
-### Hashing Functions
+### Функції хешування
 
-By default, `HashMap` uses a hashing function called *SipHash* that can provide resistance to Denial of Service (DoS) attacks involving hash tables[^siphash]<!-- ignore -->. This is not the fastest hashing algorithm available, but the trade-off for better security that comes with the drop in performance is worth it. If you profile your code and find that the default hash function is too slow for your purposes, you can switch to another function by specifying a different hasher. A *hasher* is a type that implements the `BuildHasher` trait. We’ll talk about traits and how to implement them in Chapter 10. You don’t necessarily have to implement your own hasher from scratch; [crates.io](https://crates.io/)<!-- ignore --> has libraries shared by other Rust users that provide hashers implementing many common hashing algorithms.
+За замовчуванням, `HashMap` використовує функцію хешування під назвою *SipHash*, яка забезпечує стійкість до атак на відмову в обслуговуванні (Denial of Service, DoS) з використанням хеш-таблиць [^siphash]<!-- ignore -->. Це не найшвидший з доступних алгоритмів хешування, але покращення безпеки, отримане з падінням продуктивності, того варте. Якщо ви профілюєте свій код і виявите, що функція хешування за замовчуванням є надто повільною для ваших потреб, ви можете перейти на іншу функцію, вказавши інший хешер. *Хешер* - це тип, який реалізує трейт `BuildHasher`. Ми поговоримо про трейти і як їх реалізовувати у Розділі 10. Вам не обов'язково потрібно реалізувати власний хеш з нуля; [crates.io](https://crates.io/)<!-- ignore --> містить бібліотеки, надані іншими користувачами Rust, що забезпечують реалізацію багатьох поширених алгоритмів хешування.
 
-## Summary
+## Висновки
 
-Vectors, strings, and hash maps will provide a large amount of functionality necessary in programs when you need to store, access, and modify data. Here are some exercises you should now be equipped to solve:
+Вектори, стрічки та хешмапи забезпечать значну частину функціональності, необхідної для програм під час зберігання, доступу і зміни даних. Ось деякі вправи, які ви вже маєте бути в змозі виконати:
 
-* Given a list of integers, use a vector and return the median (when sorted, the value in the middle position) and mode (the value that occurs most often; a hash map will be helpful here) of the list.
-* Convert strings to pig latin. The first consonant of each word is moved to the end of the word and “ay” is added, so “first” becomes “irst-fay.” Words that start with a vowel have “hay” added to the end instead (“apple” becomes “apple-hay”). Keep in mind the details about UTF-8 encoding!
-* Using a hash map and vectors, create a text interface to allow a user to add employee names to a department in a company. For example, “Add Sally to Engineering” or “Add Amir to Sales.” Then let the user retrieve a list of all people in a department or all people in the company by department, sorted alphabetically.
+* Дано список цілих чисел; використайте вектор і поверніть медіану (значення посередині після сортування) та моду (значення, яке зустрічається найчастіше; тут стане в пригоді хешмапа) цього списку.
+* Перетворіть рядки на "поросячу латину". Перший приголосний кожного слова переноситься в кінець слова і додається "ay", так що "first" стає "irst-fay." До слів, що починаються на голосну, натомість додається в кінці “hay” (“apple” стає “apple-hay”). Не забувайте, що використовується кодування UTF-8!
+* За допомогою хешмапи і векторів створіть текстовий інтерфейс, що дозволить користувачеві додати імена співробітників у відділ компанії. Наприклад, “Add Sally to Engineering” чи “Add Amir to Sales.” Тоді дайте користувачеві можливість отримати список усіх людей у відділі чи всіх людей у компанії по відділах, відсортованих за алфавітом.
 
-The standard library API documentation describes methods that vectors, strings, and hash maps have that will be helpful for these exercises!
+Документація API стандартної бібліотеки описує методи, які мають вектори, стрічки і хешпами, які будуть корисними для цих вправ!
 
-We’re getting into more complex programs in which operations can fail, so, it’s a perfect time to discuss error handling. We’ll do that next!
+Ми переходимо до складніших програм, у яких операції можуть зазнавати невдачу, тому зараз ідеальний час для обговорення обробки помилок. Цим ми й займемося!
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 
 [^siphash]: [https://en.wikipedia.org/wiki/SipHash](https://en.wikipedia.org/wiki/SipHash)
