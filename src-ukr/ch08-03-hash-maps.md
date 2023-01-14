@@ -101,9 +101,9 @@ Blue: 10
 
 Запуск коду у Блоці коду 8-24 надрукує `{"Yellow": 50, "Blue": 10}`. Перший виклик `entry` вставить ключ для Жовтої команди зі значенням 50, бо Жовта команда ще не має свого значення. Другий виклик `entry` не змінить хешмапу, бо Синя команда вже має значення 10.
 
-#### Updating a Value Based on the Old Value
+#### Оновлення значення на основі старого значення
 
-Another common use case for hash maps is to look up a key’s value and then update it based on the old value. For instance, Listing 8-25 shows code that counts how many times each word appears in some text. We use a hash map with the words as keys and increment the value to keep track of how many times we’ve seen that word. If it’s the first time we’ve seen a word, we’ll first insert the value 0.
+Інший поширений сценарій використання хешмап - пошук значення ключа і оновлення його на основі старого значення. For instance, Listing 8-25 shows code that counts how many times each word appears in some text. We use a hash map with the words as keys and increment the value to keep track of how many times we’ve seen that word. If it’s the first time we’ve seen a word, we’ll first insert the value 0.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
