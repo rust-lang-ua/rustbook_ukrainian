@@ -62,13 +62,13 @@ Blue: 10
 
 Якщо ми вставляємо посилання на значення до хешмапи, ці значення не будуть переміщені до хешмапи. Значення, на які вказують посилання, мають бути коректними щонайменше стільки ж, скільки існує хешмапа. Ви поговоримо більше про ці справи у підрозділі ["Перевірка коректності посилань за допомогою часів існування"]()<!-- ignore --> Розділу 10.
 
-### Updating a Hash Map
+### Оновлення хешмапи
 
-Although the number of key and value pairs is growable, each unique key can only have one value associated with it at a time (but not vice versa: for example, both the Blue team and the Yellow team could have value 10 stored in the `scores` hash map).
+Хоча кількість пар ключів і значень зростає, кожен унікальний ключ може мати тільки одне значення, пов’язане з ним, в кожен момент (але не навпаки: наприклад, команда Синя і Жовта могли мати значення 10, збережене в хешмапі `scores`).
 
-When you want to change the data in a hash map, you have to decide how to handle the case when a key already has a value assigned. You could replace the old value with the new value, completely disregarding the old value. You could keep the old value and ignore the new value, only adding the new value if the key *doesn’t* already have a value. Or you could combine the old value and the new value. Let’s look at how to do each of these!
+Коли ви хочете змінити дані в хешмапі, вам необхідно вирішити, як обробляти випадок, коли ключ уже має присвоєне значення. Ви можете замінити старе значення на нове значення, повністю проігнорувавши старе значення. Ви можете зберегти старе значення і проігнорувати нове значення, і лише коли ключ *не має* значення, додавати нове. Або ж ви можете поєднати старе значення і нове значення. Подивімося, як зробити кожен варіант!
 
-#### Overwriting a Value
+#### Перезапис значення
 
 If we insert a key and a value into a hash map and then insert that same key with a different value, the value associated with that key will be replaced. Even though the code in Listing 8-23 calls `insert` twice, the hash map will only contain one key/value pair because we’re inserting the value for the Blue team’s key both times.
 
