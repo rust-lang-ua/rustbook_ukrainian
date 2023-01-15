@@ -17,17 +17,17 @@
 
 <span class="caption">Блок коду 10-16: Спроба використати посилання, значення якого лежить за межами області видимості</span>
 
-> Примітка: Приклади у Блоках коду 10-16, 10-17 та 10-23 проголошують змінні без надання їм початкового значення, тож, назва змінної існує в зовнішньої області видимості. На перший погляд, може видатися, що це суперечить тому, що Rust не має нульових значень. However, if we try to use a variable before giving it a value, we’ll get a compile-time error, which shows that Rust indeed does not allow null values.
+> Примітка: Приклади у Блоках коду 10-16, 10-17 та 10-23 проголошують змінні без надання їм початкового значення, тож, назва змінної існує в зовнішньої області видимості. На перший погляд, може видатися, що це суперечить тому, що Rust не має нульових значень. Однак, якщо ми спробуємо використати змінну перед наданням їй значення, ми отримаємо помилку часу компіляції, що показує, що Rust дійсно не допускає значення null.
 
-The outer scope declares a variable named `r` with no initial value, and the inner scope declares a variable named `x` with the initial value of 5. Inside the inner scope, we attempt to set the value of `r` as a reference to `x`. Then the inner scope ends, and we attempt to print the value in `r`. This code won’t compile because the value `r` is referring to has gone out of scope before we try to use it. Here is the error message:
+Зовнішня область видимості проголошує змінну з назвою `r` без початкового значення, а внутрішня область видимості проголошує змінну з назвою `x` з початковим значенням 5. Усередині внутрішньої області видимості ми намагаємося встановити значення r у посилання до `x`. Тоді внутрішня область видимості закінчується, і ми намагаємося вивести значення `r`. Цей код не компілюється, бо значення, на яке посилається `r`, вийшло з області видимості до того, як ми спробували ним скористатися. Ось повідомлення про помилку:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/output.txt}}
 ```
 
-The variable `x` doesn’t “live long enough.” The reason is that `x` will be out of scope when the inner scope ends on line 7. But `r` is still valid for the outer scope; because its scope is larger, we say that it “lives longer.” If Rust allowed this code to work, `r` would be referencing memory that was deallocated when `x` went out of scope, and anything we tried to do with `r` wouldn’t work correctly. So how does Rust determine that this code is invalid? It uses a borrow checker.
+Змінна `x` не "існує достатньо довго". Причина в тому, що `x` вийде з області видимості коли внутрішня область видимості скінчиться у рядку 7. Але змінна `r` все ще валідна у зовнішній області видимості; оскільки її область видимості більша, ми кажемо, що вона "існує довше". Якби Rust дозволив цьому коду працювати, `r` посилався би на пам'ять, що була звільнена, коли `x` вийшов з області видимості, і все, що ми намагатимемося робити з `r`, не працюватиме належним чином. То як Rust визначає, що код є некоректним? Вона використовує borrow checker.
 
-### The Borrow Checker
+### Borrow Checker
 
 The Rust compiler has a *borrow checker* that compares scopes to determine whether all borrows are valid. Listing 10-17 shows the same code as Listing 10-16 but with annotations showing the lifetimes of the variables.
 
