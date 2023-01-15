@@ -1,6 +1,6 @@
 ## Перевірка коректності посилань за допомогою часів існування
 
-Часи існування (lifetimes) є ще одним узагальненим типом даних, який ми вже використовували. Замість того щоб гарантувати що тип має бажану поведінку, часи існування гарантують що посилання є валідним доти, доки воно може бути нам потрібним.
+Часи існування (lifetimes) є ще одним узагальненим типом даних, який ми вже використовували. Замість того щоб гарантувати, що тип має бажану поведінку, часи існування гарантують що посилання є валідним доти, доки воно може бути нам потрібним.
 
 В частині [“Посилання і позичання”]()<!-- ignore --> четвертого розділу ми не згадали про те, що кожне посилання в Rust має свій *час існування*, який обмежує час протягом якого посилання є дійсним. В більшості випадків, часи існування є неявними (implicit) та виведеними (inferred), так само як і типи. Ми зобовʼязані додавати анотації лише у випадках коли можливий більше ніж один тип. Відповідно, ми мусимо додавати анотації до часів існування лише якщо останні можуть бути використані у кілька різних способів. Rust зобовʼязує нас анотувати звʼязки використовуючи узагальнені параметри часу існування, щоб впевнитися що посилання використані протягом часу виконання програми будуть коректними.
 
@@ -17,7 +17,7 @@
 
 <span class="caption">Блок коду 10-16: Спроба використати посилання, значення якого лежить за межами області видимості</span>
 
-> Note: The examples in Listings 10-16, 10-17, and 10-23 declare variables without giving them an initial value, so the variable name exists in the outer scope. At first glance, this might appear to be in conflict with Rust’s having no null values. However, if we try to use a variable before giving it a value, we’ll get a compile-time error, which shows that Rust indeed does not allow null values.
+> Примітка: Приклади у Блоках коду 10-16, 10-17 та 10-23 проголошують змінні без надання їм початкового значення, тож, назва змінної існує в зовнішньої області видимості. На перший погляд, може видатися, що це суперечить тому, що Rust не має нульових значень. However, if we try to use a variable before giving it a value, we’ll get a compile-time error, which shows that Rust indeed does not allow null values.
 
 The outer scope declares a variable named `r` with no initial value, and the inner scope declares a variable named `x` with the initial value of 5. Inside the inner scope, we attempt to set the value of `r` as a reference to `x`. Then the inner scope ends, and we attempt to print the value in `r`. This code won’t compile because the value `r` is referring to has gone out of scope before we try to use it. Here is the error message:
 
