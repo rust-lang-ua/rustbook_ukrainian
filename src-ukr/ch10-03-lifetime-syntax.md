@@ -29,29 +29,29 @@
 
 ### Borrow Checker
 
-The Rust compiler has a *borrow checker* that compares scopes to determine whether all borrows are valid. Listing 10-17 shows the same code as Listing 10-16 but with annotations showing the lifetimes of the variables.
+Компілятор Rust має *borrow checker*, який порівнює області видимості і визначає, чи всі позичання валідні. Блок коду 10-17 показує такий самий код, як у Блоці коду 10-16, але з анотаціями, які показують часи існування змінних.
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 10-17: Annotations of the lifetimes of `r` and `x`, named `'a` and `'b`, respectively</span>
+<span class="caption">Блок коду 10-17: анотації часів існування `r` та `x`, що називаються відповідно `'a` та `'b`</span>
 
-Here, we’ve annotated the lifetime of `r` with `'a` and the lifetime of `x` with `'b`. As you can see, the inner `'b` block is much smaller than the outer `'a` lifetime block. At compile time, Rust compares the size of the two lifetimes and sees that `r` has a lifetime of `'a` but that it refers to memory with a lifetime of `'b`. The program is rejected because `'b` is shorter than `'a`: the subject of the reference doesn’t live as long as the reference.
+Тут ми анотували час існування `r` як `'a` і час існування `x` як `'b`. Як бачите, час існування внутрішнього блоку `'b` є набагато меншим, ніж зовнішнього `'a`. Під час компіляції Rust порівнює розмір двох часів існування і бачить, що `r` має час існування `'a`, але він посилається на пам'ять з часом існування `'b`. Програма буде відхилена через те, що `'b` коротший за `'a`: те, на що посилаються, існує менше, ніж посилання.
 
-Listing 10-18 fixes the code so it doesn’t have a dangling reference and compiles without any errors.
+Блок коду 10-18 виправляє код, щоб не було висячого посилання, і компілюється без жодних помилок.
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-18/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 10-18: A valid reference because the data has a longer lifetime than the reference</span>
+<span class="caption">Блок коду 10-18: посилання є валідним, бо дані мають довший час існування, ніж посилання</span>
 
-Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This means `r` can reference `x` because Rust knows that the reference in `r` will always be valid while `x` is valid.
+Тут `x` має час існування `'b`, що у цьому випадку більше, ніж `'a`. Це означає, що `r` може посилатись на `x`, тому що Rust знає, що посилання в `r` завжди буде дійсним, поки `x` є дійсним.
 
-Now that you know where the lifetimes of references are and how Rust analyzes lifetimes to ensure references will always be valid, let’s explore generic lifetimes of parameters and return values in the context of functions.
+Тепер, коли ви знаєте, де знаходяться часи існування посилань і як Rust аналізує часи існування, щоб гарантувати, що посилання завжди будуть валідними, розгляньмо узагальнені часи існування параметрів та значень, що повертаються, в контексті функцій.
 
 ### Generic Lifetimes in Functions
 
