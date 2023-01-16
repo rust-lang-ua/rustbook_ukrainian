@@ -93,17 +93,17 @@
 
 Анотації часу існування не змінюють як довго існує посилання. Натомість вони описують взаємозв'язок часів існування багатьох посилань між собою, не впливаючи на ці часи існування. Так само як функції можуть приймати будь-який тип, коли сигнатура визначає параметр узагальненого типу, функції можуть приймати посилання з будь-яким часом існування, якщо заданий узагальнений параметр часу існування.
 
-Lifetime annotations have a slightly unusual syntax: the names of lifetime parameters must start with an apostrophe (`'`) and are usually all lowercase and very short, like generic types. Most people use the name `'a` for the first lifetime annotation. We place lifetime parameter annotations after the `&` of a reference, using a space to separate the annotation from the reference’s type.
+Анотації часу існування мають дещо незвичний синтаксис: імена параметрів часу існування мають починатися на апостроф (`'`) і зазвичай в нижньому регістрі та дуже короткі, як узагальнені типи. Більшість людей використовують ім'я `'a` для першої анотації часу існування. Ми розміщуємо анотації часу існування параметрів після `&` посилання, використовуючи пробіл для відокремлення анотації від типу посилання.
 
-Here are some examples: a reference to an `i32` without a lifetime parameter, a reference to an `i32` that has a lifetime parameter named `'a`, and a mutable reference to an `i32` that also has the lifetime `'a`.
+Ось кілька прикладів: посилання на `i32` без параметру часу існування, посилання на на `i32`, що має параметр часу існування `'a`, і мутабельне посилання на `i32`, що також має час існування `'a`.
 
 ```rust,ignore
-&i32        // a reference
-&'a i32     // a reference with an explicit lifetime
-&'a mut i32 // a mutable reference with an explicit lifetime
+&i32        // посилання
+&'a i32     // посилання з явним часом існування
+&'a mut i32 // мутабельне посилання з явним часом існування
 ```
 
-One lifetime annotation by itself doesn’t have much meaning, because the annotations are meant to tell Rust how generic lifetime parameters of multiple references relate to each other. Let’s examine how the lifetime annotations relate to each other in the context of the `longest` function.
+Сам по собі одна анотація часу існування не має великого значення. оскільки анотації мають повідомляти Rust, як узагальнені параметри часу існування багатьох посилань співвідносяться один з одним. Дослідімо, як анотації часу існування співвідносяться одна з одною в контексті функції `longest`.
 
 ### Lifetime Annotations in Function Signatures
 
