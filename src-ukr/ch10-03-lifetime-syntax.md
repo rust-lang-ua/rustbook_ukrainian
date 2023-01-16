@@ -89,9 +89,9 @@
 
 Коли ми визначаємо цю функцію, ми не знаємо конкретних значень, які будуть передані в цю функцію, тому ми не знаємо, спрацює випадок `if` чи `else`. Ми також не знаємо конкретного часу існування посилань, які будуть передані, тож ми не можемо подивитися на область видимості, як ми робили у Блоках коду 10-17 та 10-18, щоб визначити, чи посилання, яке ми повертаємо, буде завжди валідним. Borrow checker також не може визначити цього, оскільки він не знає як час існування `x` або `y` стосується часу існування значення, що повертається. Щоб виправити цю помилку, ми додамо узагальнені параметри часу існування, які визначають зв'язок між посиланнями, щоб borrow checker міг його проаналізувати.
 
-### Lifetime Annotation Syntax
+### Синтаксис анотацій часу існування
 
-Lifetime annotations don’t change how long any of the references live. Rather, they describe the relationships of the lifetimes of multiple references to each other without affecting the lifetimes. Just as functions can accept any type when the signature specifies a generic type parameter, functions can accept references with any lifetime by specifying a generic lifetime parameter.
+Анотації часу існування не змінюють як довго існує посилання. Натомість вони описують взаємозв'язок часів існування багатьох посилань між собою, не впливаючи на ці часи існування. Так само як функції можуть приймати будь-який тип, коли сигнатура визначає параметр узагальненого типу, функції можуть приймати посилання з будь-яким часом існування, якщо заданий узагальнений параметр часу існування.
 
 Lifetime annotations have a slightly unusual syntax: the names of lifetime parameters must start with an apostrophe (`'`) and are usually all lowercase and very short, like generic types. Most people use the name `'a` for the first lifetime annotation. We place lifetime parameter annotations after the `&` of a reference, using a space to separate the annotation from the reference’s type.
 
