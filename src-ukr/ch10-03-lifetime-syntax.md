@@ -85,9 +85,9 @@
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/output.txt}}
 ```
 
-The help text reveals that the return type needs a generic lifetime parameter on it because Rust can’t tell whether the reference being returned refers to `x` or `y`. Actually, we don’t know either, because the `if` block in the body of this function returns a reference to `x` and the `else` block returns a reference to `y`!
+Текст підказки показує, що тип, який повертається, потребує для себе вказаного узагальненого часу існування, оскільки Rust не може сказати, буде повернуте посилання `x` чи `y`. Насправді ми також цього не знаємо, оскільки блок `if` у тілі цієї функції повертає посилання на `x`, а блок `else` повертає посилання на `y`!
 
-When we’re defining this function, we don’t know the concrete values that will be passed into this function, so we don’t know whether the `if` case or the `else` case will execute. We also don’t know the concrete lifetimes of the references that will be passed in, so we can’t look at the scopes as we did in Listings 10-17 and 10-18 to determine whether the reference we return will always be valid. The borrow checker can’t determine this either, because it doesn’t know how the lifetimes of `x` and `y` relate to the lifetime of the return value. To fix this error, we’ll add generic lifetime parameters that define the relationship between the references so the borrow checker can perform its analysis.
+Коли ми визначаємо цю функцію, ми не знаємо конкретних значень, які будуть передані в цю функцію, тому ми не знаємо, спрацює випадок `if` чи `else`. Ми також не знаємо конкретного часу існування посилань, які будуть передані, тож ми не можемо подивитися на область видимості, як ми робили у Блоках коду 10-17 та 10-18, щоб визначити, чи посилання, яке ми повертаємо, буде завжди валідним. Borrow checker також не може визначити цього, оскільки він не знає як час існування `x` або `y` стосується часу існування значення, що повертається. Щоб виправити цю помилку, ми додамо узагальнені параметри часу існування, які визначають зв'язок між посиланнями, щоб borrow checker міг його проаналізувати.
 
 ### Lifetime Annotation Syntax
 
