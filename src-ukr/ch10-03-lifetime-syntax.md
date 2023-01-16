@@ -53,9 +53,9 @@
 
 Тепер, коли ви знаєте, де знаходяться часи існування посилань і як Rust аналізує часи існування, щоб гарантувати, що посилання завжди будуть валідними, розгляньмо узагальнені часи існування параметрів та значень, що повертаються, в контексті функцій.
 
-### Generic Lifetimes in Functions
+### Узагальнені часи існування у функціях
 
-We’ll write a function that returns the longer of two string slices. This function will take two string slices and return a single string slice. After we’ve implemented the `longest` function, the code in Listing 10-19 should print `The longest string is abcd`.
+Ми напишемо функцію, яка повертає довший з двох стрічкових слайсів. Ця функція прийматиме два стрічкові слайси і повертатиме один слайс. Після реалізації функції `longest`, код у Блоці коду 10-19 має вивести `The longest string is abcd`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -64,22 +64,22 @@ We’ll write a function that returns the longer of two string slices. This func
 ```
 
 
-<span class="caption">Listing 10-19: A `main` function that calls the `longest` function to find the longer of two string slices</span>
+<span class="caption">Блок коду 10-19: функція `main`, що викликає функцію `longest` щоб знайти довший з двох стрічкових слайсів</span>
 
-Note that we want the function to take string slices, which are references, rather than strings, because we don’t want the `longest` function to take ownership of its parameters. Refer to the [“String Slices as Parameters”]()<!-- ignore --> section in Chapter 4 for more discussion about why the parameters we use in Listing 10-19 are the ones we want.
+Зверніть увагу, що нам потрібно, щоб функція приймала рядки фрагментів, які є посиланнями, а не стрічки, тому що ми не хочемо, щоб функція `longest` брала володіння над своїми параметрами. Зверніться до підрозділу ["Стрічкові слайси як параметри"]()<!-- ignore --> Розділу 4 для детальнішого обговорення, чому ми хочемо використати саме такі параметри в Блоці коду 10-19.
 
-If we try to implement the `longest` function as shown in Listing 10-20, it won’t compile.
+Якщо ми спробуємо реалізувати функцію `longest` як показано у Блоці коду 10-20, вона не скомпілюється.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 10-20: An implementation of the `longest` function that returns the longer of two string slices but does not yet compile</span>
+<span class="caption">Блок коду 10-20: реалізація функції `longest`, що повертає довший з двох стрічкових слайсів, але ще не компілюється</span>
 
-Instead, we get the following error that talks about lifetimes:
+Натомість ми отримуємо наступну помилку, яка говорить про часи існування:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/output.txt}}
