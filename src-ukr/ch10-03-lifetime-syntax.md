@@ -105,22 +105,22 @@
 
 Сам по собі одна анотація часу існування не має великого значення. оскільки анотації мають повідомляти Rust, як узагальнені параметри часу існування багатьох посилань співвідносяться один з одним. Дослідімо, як анотації часу існування співвідносяться одна з одною в контексті функції `longest`.
 
-### Lifetime Annotations in Function Signatures
+### Анотації часу існування у сигнатурах функцій
 
-To use lifetime annotations in function signatures, we need to declare the generic *lifetime* parameters inside angle brackets between the function name and the parameter list, just as we did with generic *type* parameters.
+Щоб використовувати анотації часу існування в сигнатурах функцій, ми маємо проголосити узагальнений параметр *часу існування* в кутових дужках між назвою функції і списком параметрів, так, як це робиться з узагальненими параметрами *типу*.
 
-We want the signature to express the following constraint: the returned reference will be valid as long as both the parameters are valid. This is the relationship between lifetimes of the parameters and the return value. We’ll name the lifetime `'a` and then add it to each reference, as shown in Listing 10-21.
+Ми хочемо, щоб сигнатура виражала наступне обмеження: повернуте посилання буде валідним стільки, скільки обидва параметри будуть валідними. Це відношення між часом існування параметрів та значення, що повертається. Ми назвемо час існування `'a`, а тоді додамо його до кожного посилання, як показано в Блоці коду 10-21.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 10-21: The `longest` function definition specifying that all the references in the signature must have the same lifetime `'a`</span>
+<span class="caption">Блок коду 10-21: Визначення функції `longest` із зазначенням, що всі посилання у сигнатурі повинні мати однаковий час існування `'a`</span>
 
-This code should compile and produce the result we want when we use it with the `main` function in Listing 10-19.
+Цей код має компілюватися і створювати бажаний результат, коли ми використовуємо його у функції `main` у Блоці коду 10-19.
 
 The function signature now tells Rust that for some lifetime `'a`, the function takes two parameters, both of which are string slices that live at least as long as lifetime `'a`. The function signature also tells Rust that the string slice returned from the function will live at least as long as lifetime `'a`. In practice, it means that the lifetime of the reference returned by the `longest` function is the same as the smaller of the lifetimes of the values referred to by the function arguments. These relationships are what we want Rust to use when analyzing this code.
 
