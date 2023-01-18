@@ -126,20 +126,20 @@
 
 Пам'ятайте, що коли ми зазначаємо час існування параметрів на сигнатурі цієї функції, ми не змінюємо час існування жодного значення, які передаються або повертаються. Радше ми уточнюємо, що borrow checker повинен відкидати будь-які значення, які не відповідають цим обмеженням. Зверніть увагу, що функція `longest` не повинна точно знати, як довго `x` і `y` будуть існувати, лише те, що деяка область видимості може бути замінена на `'a` що задовольняє цій сигнатурі.
 
-При анотації часів існування у функції анотації зазначаються у сигнатурі функції, а не в її тілі. The lifetime annotations become part of the contract of the function, much like the types in the signature. Having function signatures contain the lifetime contract means the analysis the Rust compiler does can be simpler. If there’s a problem with the way a function is annotated or the way it is called, the compiler errors can point to the part of our code and the constraints more precisely. If, instead, the Rust compiler made more inferences about what we intended the relationships of the lifetimes to be, the compiler might only be able to point to a use of our code many steps away from the cause of the problem.
+При анотації часів існування у функції анотації зазначаються у сигнатурі функції, а не в її тілі. Анотації часу існування стають частиною контракту функції, так само, як типи у сигнатурі. Те, що сигнатури функцій містять контракт на час існування, означає, що аналіз, який робить компілятор Rust, буде простішим. Якщо є проблема з тим, як функція анотована або як її викликають, помилки компілятора можуть точніше вказувати на частину нашого коду та обмеження. Якщо натомість компілятор Rust робив більше припущень про те, якими ми хотіли б бачити відносини між часами існування, компілятор міг би вказувати лише на використання нашого коду за багато кроків від причини проблеми.
 
-When we pass concrete references to `longest`, the concrete lifetime that is substituted for `'a` is the part of the scope of `x` that overlaps with the scope of `y`. In other words, the generic lifetime `'a` will get the concrete lifetime that is equal to the smaller of the lifetimes of `x` and `y`. Because we’ve annotated the returned reference with the same lifetime parameter `'a`, the returned reference will also be valid for the length of the smaller of the lifetimes of `x` and `y`.
+Коли ми передаємо конкретні посилання до `longest`, конкретний час існування, що підставляється в `'a`, є частиною області видимості `x`, що перетинається з областю видимості `y`. Іншими словами, узагальнений час існування `'a` отримає конкретний час існування, що є рівним меншому з часів існування `x` та `y`. Оскільки ми анотували посилання, що повертається, тим самим параметром часу існування `'a`, посилання, що повертається, також буде валідним під час тривалості меншого з часів інсування `x` та `y`.
 
-Let’s look at how the lifetime annotations restrict the `longest` function by passing in references that have different concrete lifetimes. Listing 10-22 is a straightforward example.
+Подивімося, як анотації часу існування обмежують функцію `longest`, передаючи посилання, що мають різне конкретні часи існування. Блок коду 10-22 надає прямолінійний приклад.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-22/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 10-22: Using the `longest` function with references to `String` values that have different concrete lifetimes</span>
+<span class="caption">Блок коду 10-22: використання функції "longest" з посиланнями на значення "String", які мають різний конкретний час існування</span>
 
 In this example, `string1` is valid until the end of the outer scope, `string2` is valid until the end of the inner scope, and `result` references something that is valid until the end of the inner scope. Run this code, and you’ll see that the borrow checker approves; it will compile and print `The longest string
 is long string is long`.
