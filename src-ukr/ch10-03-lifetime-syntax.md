@@ -141,7 +141,7 @@
 
 <span class="caption">Блок коду 10-22: використання функції "longest" з посиланнями на значення "String", які мають різний конкретний час існування</span>
 
-In this example, `string1` is valid until the end of the outer scope, `string2` is valid until the end of the inner scope, and `result` references something that is valid until the end of the inner scope. Run this code, and you’ll see that the borrow checker approves; it will compile and print `The longest string
+У цьому прикладі `string1` буде валідним до кінця зовнішньої області видимості, `string2` до кінця внутрішньої області видимості, а `result` посилається на щось, що є валідним до кінця внутрішньої області видимості. Run this code, and you’ll see that the borrow checker approves; it will compile and print `The longest string
 is long string is long`.
 
 Next, let’s try an example that shows that the lifetime of the reference in `result` must be the smaller lifetime of the two arguments. We’ll move the declaration of the `result` variable outside the inner scope but leave the assignment of the value to the `result` variable inside the scope with `string2`. Then we’ll move the `println!` that uses `result` to outside the inner scope, after the inner scope has ended. The code in Listing 10-23 will not compile.
