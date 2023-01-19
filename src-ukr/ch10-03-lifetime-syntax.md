@@ -141,31 +141,31 @@
 
 <span class="caption">Блок коду 10-22: використання функції "longest" з посиланнями на значення "String", які мають різний конкретний час існування</span>
 
-У цьому прикладі `string1` буде валідним до кінця зовнішньої області видимості, `string2` до кінця внутрішньої області видимості, а `result` посилається на щось, що є валідним до кінця внутрішньої області видимості. Run this code, and you’ll see that the borrow checker approves; it will compile and print `The longest string
+У цьому прикладі `string1` буде валідним до кінця зовнішньої області видимості, `string2` до кінця внутрішньої області видимості, а `result` посилається на щось, що є валідним до кінця внутрішньої області видимості. Запустіть цей код, і ви побачите, що borrow checker його приймає; код скомпілюється і виведе `The longest string
 is long string is long`.
 
-Next, let’s try an example that shows that the lifetime of the reference in `result` must be the smaller lifetime of the two arguments. We’ll move the declaration of the `result` variable outside the inner scope but leave the assignment of the value to the `result` variable inside the scope with `string2`. Then we’ll move the `println!` that uses `result` to outside the inner scope, after the inner scope has ended. The code in Listing 10-23 will not compile.
+Далі розгляньмо приклад, який показує, що час існування посилання в `result` має бути меншим з тривалостей існування двох аргументів. Ми перемістимо оголошення змінної `result` за межі внутрішньої області видимості, але залишимо присвоєння значення змінній `result` усередині області видимості зі `string2`. Потім ми перемістимо `println!`, який використовує `result`, за межі внутрішньої області видимості, її після закінчення. Код в Блоці коду 10-23 не скомпілюється.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 10-23: Attempting to use `result` after `string2` has gone out of scope</span>
+<span class="caption">Блок коду 10-23: спроба використати `result` після виходу `string2` з області видимості</span>
 
-When we try to compile this code, we get this error:
+Якщо ми спробуємо скомпілювати цей код, то отримаємо таку помилку:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/output.txt}}
 ```
 
-The error shows that for `result` to be valid for the `println!` statement, `string2` would need to be valid until the end of the outer scope. Rust knows this because we annotated the lifetimes of the function parameters and return values using the same lifetime parameter `'a`.
+Помилка показує, що для того, що `result` був валідним для інструкції `println!`, `string2` має бути валідним до кінця зовнішньої області видимості. Rust знає це, бо ми анотували час існування параметрів функції та значення, що повертається, за допомогою того самого параметра часу існування `'a`.
 
-As humans, we can look at this code and see that `string1` is longer than `string2` and therefore `result` will contain a reference to `string1`. Because `string1` has not gone out of scope yet, a reference to `string1` will still be valid for the `println!` statement. However, the compiler can’t see that the reference is valid in this case. We’ve told Rust that the lifetime of the reference returned by the `longest` function is the same as the smaller of the lifetimes of the references passed in. Therefore, the borrow checker disallows the code in Listing 10-23 as possibly having an invalid reference.
+Як люди, ми можемо подивитися на цей код і побачити, що `string1` довша за `string2` і тому `result` міститиме посилання на `string1`. Оскільки `string1` ще не вийшла з області видимості, посилання на `string1` все ще буде валідним для інструкції `println!`. Однак, компілятор не може побачити, що посилання в цьому випадку валідне. Ми повідомили Rust, що час існування посилання, що повертається функцією `longest`, такий самий, як менший з часів існування переданих їй посилань. Тому borrow checker забороняє код у Блоці коду 10-23 як такий, що потенційно містить неправильне посилання.
 
-Try designing more experiments that vary the values and lifetimes of the references passed in to the `longest` function and how the returned reference is used. Make hypotheses about whether or not your experiments will pass the borrow checker before you compile; then check to see if you’re right!
+Спробуйте провести більше експериментів, які змінюють значення і часи існування посилань, переданих у функцію `longest`, а також використання посилання, що повертається. Робіть припущення про те, чи пройдуть ваші експерименти borrow checker до компіляції; потім перевірте, щоб побачити, чи маєте ви рацію!
 
 ### Thinking in Terms of Lifetimes
 
