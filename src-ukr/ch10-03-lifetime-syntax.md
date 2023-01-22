@@ -179,15 +179,15 @@ is long string is long`.
 
 Ми зазначили параметр часу існування `'a` для параметра `x` та типу, що повертається, але не для параметра `y`, оскільки час існування `у` у не має стосунку до часу існування `x` або значення, що повертається.
 
-When returning a reference from a function, the lifetime parameter for the return type needs to match the lifetime parameter for one of the parameters. If the reference returned does *not* refer to one of the parameters, it must refer to a value created within this function. However, this would be a dangling reference because the value will go out of scope at the end of the function. Consider this attempted implementation of the `longest` function that won’t compile:
+При поверненні посилання з функції, параметр часу існування для типу, що повертається, має збігатися з параметром часу існування для одного з параметрів. Якщо повернуте посилання *не* посилається на один з параметрів, воно повинне посилатись на значення, створене всередині цієї функції. Однак це буде висяче посилання, тому що значення вийде з області видимості в кінці функції. Розглянемо спробу реалізації функції `longest`, яка не компілюється:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/src/main.rs:here}}
 ```
 
-Here, even though we’ve specified a lifetime parameter `'a` for the return type, this implementation will fail to compile because the return value lifetime is not related to the lifetime of the parameters at all. Here is the error message we get:
+Тут, хоча ми й зазначили параметр часу існування `'a` для типу, що повертається, ця реалізація не буде скомпільованою, оскільки час існування значення, що повертається, взагалі не пов'язаний з часом існування параметрів. Here is the error message we get:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/output.txt}}
