@@ -167,17 +167,17 @@ is long string is long`.
 
 Спробуйте провести більше експериментів, які змінюють значення і часи існування посилань, переданих у функцію `longest`, а також використання посилання, що повертається. Робіть припущення про те, чи пройдуть ваші експерименти borrow checker до компіляції; потім перевірте, щоб побачити, чи маєте ви рацію!
 
-### Thinking in Terms of Lifetimes
+### Мислення в термінах часів існування
 
-The way in which you need to specify lifetime parameters depends on what your function is doing. For example, if we changed the implementation of the `longest` function to always return the first parameter rather than the longest string slice, we wouldn’t need to specify a lifetime on the `y` parameter. The following code will compile:
+Спосіб, яким треба позначати параметри часу існування, залежить від того, що саме робить ваша функція. Наприклад, якби ми змінили реалізацію функції `longest`, щоб та завжди повертала перший параметр замість найдовшої стрічки, то нам не потрібно було б вказувати час існування для параметра `y`. Цей код буде скомпілюється:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-08-only-one-reference-with-lifetime/src/main.rs:here}}
 ```
 
-We’ve specified a lifetime parameter `'a` for the parameter `x` and the return type, but not for the parameter `y`, because the lifetime of `y` does not have any relationship with the lifetime of `x` or the return value.
+Ми зазначили параметр часу існування `'a` для параметра `x` та типу, що повертається, але не для параметра `y`, оскільки час існування `у` у не має стосунку до часу існування `x` або значення, що повертається.
 
 When returning a reference from a function, the lifetime parameter for the return type needs to match the lifetime parameter for one of the parameters. If the reference returned does *not* refer to one of the parameters, it must refer to a value created within this function. However, this would be a dangling reference because the value will go out of scope at the end of the function. Consider this attempted implementation of the `longest` function that won’t compile:
 
