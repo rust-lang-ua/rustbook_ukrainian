@@ -187,15 +187,15 @@ is long string is long`.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/src/main.rs:here}}
 ```
 
-Тут, хоча ми й зазначили параметр часу існування `'a` для типу, що повертається, ця реалізація не буде скомпільованою, оскільки час існування значення, що повертається, взагалі не пов'язаний з часом існування параметрів. Here is the error message we get:
+Тут, хоча ми й зазначили параметр часу існування `'a` для типу, що повертається, ця реалізація не буде скомпільованою, оскільки час існування значення, що повертається, взагалі не пов'язаний з часом існування параметрів. Ось яке повідомлення про помилку ми отримаємо:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/output.txt}}
 ```
 
-The problem is that `result` goes out of scope and gets cleaned up at the end of the `longest` function. We’re also trying to return a reference to `result` from the function. There is no way we can specify lifetime parameters that would change the dangling reference, and Rust won’t let us create a dangling reference. In this case, the best fix would be to return an owned data type rather than a reference so the calling function is then responsible for cleaning up the value.
+Проблема в тому, що `result` виходить з області видимості й очищується в кінці функції `longest`. Ми також намагаємося повернути з функції посилання на `result`. Неможливо вказати параметри часу існування, які змінять висяче посилання, і Rust не дозволяє нам створити висяче посилання. У цьому випадку найкращим виправленням було б повернути тип, що володіє даними, замість посилання, щоб функція, яка викликала, була б відповідальною за очищення значення.
 
-Ultimately, lifetime syntax is about connecting the lifetimes of various parameters and return values of functions. Once they’re connected, Rust has enough information to allow memory-safe operations and disallow operations that would create dangling pointers or otherwise violate memory safety.
+Зрештою, синтаксис часу існування стосується зв'язування часів існування різних параметрів і значень, що повертаються з функцій. Коли вони пов'язуються, Rust має достатньо інформації, щоб дозволити безпечні операції з пам'яттю і забороняти операції, які створювали б висячі вказівники або іншим чином порушували безпеку пам’яті.
 
 ### Lifetime Annotations in Struct Definitions
 
