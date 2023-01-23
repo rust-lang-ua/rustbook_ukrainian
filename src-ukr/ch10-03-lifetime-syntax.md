@@ -212,7 +212,7 @@ is long string is long`.
 
 Ця структура має єдине поле `part`, що містить стрічковий слайс, що є посиланням. Як і для узагальнених типів даних, ми проголошуємо назву узагальненого параметру часу існування в кутових дужках після назви структури, щоб ми могли використати цей параметр часу існування у визначенні структури. Ця анотація означає, що екземпляр `ImportantExcerpt` не може існувати довше, ніж посилання, яке він містить у своєму полі `part`.
 
-Функція `main` тут створює екземпляр структури `ImportantExcerpt`, який містить посилання на перше речення `String`, якою володіє змінна `novel`. Дані в `novel` існують до створення екземпляра `ImportantExcerpt`. In addition, `novel` doesn’t go out of scope until after the `ImportantExcerpt` goes out of scope, so the reference in the `ImportantExcerpt` instance is valid.
+Функція `main` тут створює екземпляр структури `ImportantExcerpt`, який містить посилання на перше речення `String`, якою володіє змінна `novel`. Дані в `novel` існують до створення екземпляра `ImportantExcerpt`. Крім того, `novel` не виходить з області видимості, доки `ImportantExcerpt` не вийде з області видимості, тож посилання в екземплярі `ImportantExcerpt` є валідним.
 
 ### Lifetime Elision
 
