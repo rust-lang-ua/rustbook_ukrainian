@@ -197,22 +197,22 @@ is long string is long`.
 
 Зрештою, синтаксис часу існування стосується зв'язування часів існування різних параметрів і значень, що повертаються з функцій. Коли вони пов'язуються, Rust має достатньо інформації, щоб дозволити безпечні операції з пам'яттю і забороняти операції, які створювали б висячі вказівники або іншим чином порушували безпеку пам’яті.
 
-### Lifetime Annotations in Struct Definitions
+### Анотації часів існування у визначеннях структур
 
-So far, the structs we’ve defined all hold owned types. We can define structs to hold references, but in that case we would need to add a lifetime annotation on every reference in the struct’s definition. Listing 10-24 has a struct named `ImportantExcerpt` that holds a string slice.
+Досі всі визначені нами структури містили типи, що володіють даними. Ми можемо визначити структури, що міститимуть посилання, але в цьому разі ми маємо додати анотацію часу існування до кожного посилання у визначенні структури. Блок коду 10-24 демонструє структуру, що зветься `ImportantExcerpt`, що містить стрічковий слайс.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/src/main.rs}}
 ```
 
 
-<span class="caption">Listing 10-24: A struct that holds a reference, requiring a lifetime annotation</span>
+<span class="caption">Блок коду 10-24: структура, що містить посилання, яке потребує анотації часу існування</span>
 
-This struct has the single field `part` that holds a string slice, which is a reference. As with generic data types, we declare the name of the generic lifetime parameter inside angle brackets after the name of the struct so we can use the lifetime parameter in the body of the struct definition. This annotation means an instance of `ImportantExcerpt` can’t outlive the reference it holds in its `part` field.
+Ця структура має єдине поле `part`, що містить стрічковий слайс, що є посиланням. Як і для узагальнених типів даних, ми проголошуємо назву узагальненого параметру часу існування в кутових дужках після назви структури, щоб ми могли використати цей параметр часу існування у визначенні структури. Ця анотація означає, що екземпляр `ImportantExcerpt` не може існувати довше, ніж посилання, яке він містить у своєму полі `part`.
 
-The `main` function here creates an instance of the `ImportantExcerpt` struct that holds a reference to the first sentence of the `String` owned by the variable `novel`. The data in `novel` exists before the `ImportantExcerpt` instance is created. In addition, `novel` doesn’t go out of scope until after the `ImportantExcerpt` goes out of scope, so the reference in the `ImportantExcerpt` instance is valid.
+Функція `main` тут створює екземпляр структури `ImportantExcerpt`, який містить посилання на перше речення `String`, якою володіє змінна `novel`. Дані в `novel` існують до створення екземпляра `ImportantExcerpt`. In addition, `novel` doesn’t go out of scope until after the `ImportantExcerpt` goes out of scope, so the reference in the `ImportantExcerpt` instance is valid.
 
 ### Lifetime Elision
 
