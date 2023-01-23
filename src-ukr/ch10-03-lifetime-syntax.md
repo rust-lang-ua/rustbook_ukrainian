@@ -214,7 +214,7 @@ is long string is long`.
 
 Функція `main` тут створює екземпляр структури `ImportantExcerpt`, який містить посилання на перше речення `String`, якою володіє змінна `novel`. Дані в `novel` існують до створення екземпляра `ImportantExcerpt`. Крім того, `novel` не виходить з області видимості, доки `ImportantExcerpt` не вийде з області видимості, тож посилання в екземплярі `ImportantExcerpt` є валідним.
 
-### Lifetime Elision
+### Елізія часу існування
 
 You’ve learned that every reference has a lifetime and that you need to specify lifetime parameters for functions or structs that use references. However, in Chapter 4 we had a function in Listing 4-9, shown again in Listing 10-25, that compiled without lifetime annotations.
 
