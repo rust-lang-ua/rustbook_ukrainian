@@ -216,24 +216,24 @@ is long string is long`.
 
 ### Елізія часу існування
 
-You’ve learned that every reference has a lifetime and that you need to specify lifetime parameters for functions or structs that use references. However, in Chapter 4 we had a function in Listing 4-9, shown again in Listing 10-25, that compiled without lifetime annotations.
+Ви дізналися, що кожне посилання має час існування і ви маєте зазначити параметри часу існування для функцій та структур, які використовують посилання. Однак у Розділі 4 у нас була функція в Блоці коду 4-9, показана знову у Блоці коду 10-25, яка скомпілювалася без анотацій часу існування.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-25/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 10-25: A function we defined in Listing 4-9 that compiled without lifetime annotations, even though the parameter and return type are references</span>
+<span class="caption">Блок коду 10-25: функція, визначена в Блоці коду 4-9, яка компілюється без анотацій часу існування, хоча параметр і тип, що повертається є посиланнями</span>
 
-The reason this function compiles without lifetime annotations is historical: in early versions (pre-1.0) of Rust, this code wouldn’t have compiled because every reference needed an explicit lifetime. At that time, the function signature would have been written like this:
+Причина, чому ця функція компілюється без анотацій часу існування, є історичною: у ранніх версіях (до 1.0) Rust цей код не скомпілювався б тому, що кожне посилання потребувало явного часу існування. На той момент сигнатура функції була б записана так:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-After writing a lot of Rust code, the Rust team found that Rust programmers were entering the same lifetime annotations over and over in particular situations. These situations were predictable and followed a few deterministic patterns. The developers programmed these patterns into the compiler’s code so the borrow checker could infer the lifetimes in these situations and wouldn’t need explicit annotations.
+Після написання великої кількості коду на Rust, команда Rust виявила, що програмісти Rust вводять ті самі анотації часу існування знову і знову в конкретних випадках. Ці ситуації були передбачуваними та відповідали декільком визначеним шаблонів. The developers programmed these patterns into the compiler’s code so the borrow checker could infer the lifetimes in these situations and wouldn’t need explicit annotations.
 
 This piece of Rust history is relevant because it’s possible that more deterministic patterns will emerge and be added to the compiler. In the future, even fewer lifetime annotations might be required.
 
