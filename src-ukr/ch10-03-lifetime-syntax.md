@@ -237,7 +237,7 @@ fn first_word<'a>(s: &'a str) -> &'a str {
 
 Цей шматок історії Rust має значення, оскільки цілком можливо, що буде виявлено ще більше визначених шаблонів і будуть додані до компілятора. Можливо, у майбутньому буде потрібно ще менше анотацій часу існування.
 
-Шаблони, запрограмовані в аналіз посилань Rust, називаються *правилами елізії часів існування*. These aren’t rules for programmers to follow; they’re a set of particular cases that the compiler will consider, and if your code fits these cases, you don’t need to write the lifetimes explicitly.
+Шаблони, запрограмовані в аналіз посилань Rust, називаються *правилами елізії часів існування*. Це не правила для програмістів; вони є набором певних випадків, які розглядає компілятор, і якщо ваш код відповідає цим випадкам, вам не потрібно явно вказувати часи існування.
 
 The elision rules don’t provide full inference. If Rust deterministically applies the rules but there is still ambiguity as to what lifetimes the references have, the compiler won’t guess what the lifetime of the remaining references should be. Instead of guessing, the compiler will give you an error that you can resolve by adding the lifetime annotations.
 
