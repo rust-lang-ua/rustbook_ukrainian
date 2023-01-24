@@ -233,11 +233,11 @@ is long string is long`.
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-Після написання великої кількості коду на Rust, команда Rust виявила, що програмісти Rust вводять ті самі анотації часу існування знову і знову в конкретних випадках. Ці ситуації були передбачуваними та відповідали декільком визначеним шаблонів. The developers programmed these patterns into the compiler’s code so the borrow checker could infer the lifetimes in these situations and wouldn’t need explicit annotations.
+Після написання великої кількості коду на Rust, команда Rust виявила, що програмісти Rust вводять ті самі анотації часу існування знову і знову в конкретних випадках. Ці ситуації були передбачуваними та відповідали декільком визначеним шаблонів. Розробники запрограмували ці шаблони у код компілятора, щоб borrow checker міг вивести часи існування в цих ситуаціях і не потребував явних анотацій.
 
-This piece of Rust history is relevant because it’s possible that more deterministic patterns will emerge and be added to the compiler. In the future, even fewer lifetime annotations might be required.
+Цей шматок історії Rust має значення, оскільки цілком можливо, що буде виявлено ще більше визначених шаблонів і будуть додані до компілятора. Можливо, у майбутньому буде потрібно ще менше анотацій часу існування.
 
-The patterns programmed into Rust’s analysis of references are called the *lifetime elision rules*. These aren’t rules for programmers to follow; they’re a set of particular cases that the compiler will consider, and if your code fits these cases, you don’t need to write the lifetimes explicitly.
+Шаблони, запрограмовані в аналіз посилань Rust, називаються *правилами елізії часів існування*. These aren’t rules for programmers to follow; they’re a set of particular cases that the compiler will consider, and if your code fits these cases, you don’t need to write the lifetimes explicitly.
 
 The elision rules don’t provide full inference. If Rust deterministically applies the rules but there is still ambiguity as to what lifetimes the references have, the compiler won’t guess what the lifetime of the remaining references should be. Instead of guessing, the compiler will give you an error that you can resolve by adding the lifetime annotations.
 
