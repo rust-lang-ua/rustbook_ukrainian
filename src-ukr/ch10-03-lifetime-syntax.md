@@ -259,13 +259,13 @@ y: &'b i32)`; і так далі.
 fn first_word(s: &str) -> &str {
 ```
 
-Потім компілятор застосовує перше правило, яке визначає, що кожен параметр отримує свій власний час існування. We’ll call it `'a` as usual, so now the signature is this:
+Потім компілятор застосовує перше правило, яке визначає, що кожен параметр отримує свій власний час існування. Ми назвемо його `'a`, як зазвичай, тому тепер сигнатура є такою:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &str {
 ```
 
-The second rule applies because there is exactly one input lifetime. The second rule specifies that the lifetime of the one input parameter gets assigned to the output lifetime, so the signature is now this:
+Друге правило застосовується, бо тут є рівно один вхідний час існування. Друге правило каже, що час існування єдиного вхідного параметра призначається вихідному часу існування, тож сигнатура тепер така:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &'a str {
