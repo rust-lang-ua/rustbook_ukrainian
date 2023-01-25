@@ -271,25 +271,25 @@ fn first_word<'a>(s: &'a str) -> &str {
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-Now all the references in this function signature have lifetimes, and the compiler can continue its analysis without needing the programmer to annotate the lifetimes in this function signature.
+Тепер всі посилання в сигнатурі цієї функції мають часи існування, і компілятор може продовжити свій аналіз, не змушуючи програміста анотувати часи існування в сигнатурі цієї функції.
 
-Let’s look at another example, this time using the `longest` function that had no lifetime parameters when we started working with it in Listing 10-20:
+Розгляньмо інший приклад, цього разу з функцією `longest`, яка не мала параметрів часу існування, коли ми почали працювати з нею у Блоці коду 10-20:
 
 ```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
 ```
 
-Let’s apply the first rule: each parameter gets its own lifetime. This time we have two parameters instead of one, so we have two lifetimes:
+Застосуємо перше правило: кожен параметр отримує свій час існування. Цього разу ми маємо два параметри замість одного, тому ми маємо два часи існування:
 
 ```rust,ignore
 fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {
 ```
 
-You can see that the second rule doesn’t apply because there is more than one input lifetime. The third rule doesn’t apply either, because `longest` is a function rather than a method, so none of the parameters are `self`. After working through all three rules, we still haven’t figured out what the return type’s lifetime is. This is why we got an error trying to compile the code in Listing 10-20: the compiler worked through the lifetime elision rules but still couldn’t figure out all the lifetimes of the references in the signature.
+Як бачите, друге правило не застосовується, тому що є більш ніж один вхідний час існування. Третє правило також не застосовується, тому що `longest` є функцією, а не методом, тож жоден з параметрів не є `self`. Виконавши всі три правила, ми все ще не з'ясували час існування типу, що повертається. Саме тому ми отримали помилку при спробі скомпілювати код у Блоці коду 10-20: компілятор пропрацював правила елізії часів існування, але все ж не зміг з'ясувати всі часи існування посилань у сигнатурі.
 
-Because the third rule really only applies in method signatures, we’ll look at lifetimes in that context next to see why the third rule means we don’t have to annotate lifetimes in method signatures very often.
+Оскільки третє правило застосовується тільки в сигнатурі методів, далі ми подивимося на часи існування в цьому контексті, щоб зрозуміти, чому третє правило означає, що нам не дуже часто доводиться анотувати часи існування у сигнатурах методів.
 
-### Lifetime Annotations in Method Definitions
+### Анотації часів існування у визначеннях методів
 
 When we implement methods on a struct with lifetimes, we use the same syntax as that of generic type parameters shown in Listing 10-11. Where we declare and use the lifetime parameters depends on whether they’re related to the struct fields or the method parameters and return values.
 
