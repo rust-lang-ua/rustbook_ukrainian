@@ -245,21 +245,21 @@ fn first_word<'a>(s: &'a str) -> &'a str {
 
 Компілятор використовує три правила, щоб знайти час існування для посилань, коли немає явних анотацій. Перше правило застосовується до вхідних часів існування, а друге і третє правила до вихідного часу існування. Якщо компілятор досягає закінчуння трьох правил все ще є посилання, для яких він не може визначити часи існування, компілятор зупиниться з помилкою. Ці правила застосовуються до проголошень `fn`, а також до блоків `impl`.
 
-The first rule is that the compiler assigns a lifetime parameter to each parameter that’s a reference. In other words, a function with one parameter gets one lifetime parameter: `fn foo<'a>(x: &'a i32)`; a function with two parameters gets two separate lifetime parameters: `fn foo<'a, 'b>(x: &'a i32,
-y: &'b i32)`; and so on.
+Перше правило полягає в тому, що компілятор встановлює параметр часу існування для кожного параметра, що є посиланням. Іншими словами, функція з одним параметром отримує один параметр часу існування: `fn foo<'a>(x: &'a i32)`; функція з двома параметрами отримує два окремі параметри часу існування:`fn foo<'a, 'b>(x: &'a i32,
+y: &'b i32)`; і так далі.
 
-The second rule is that, if there is exactly one input lifetime parameter, that lifetime is assigned to all output lifetime parameters: `fn foo<'a>(x: &'a i32)
+Друге правило полягає в тому, що якщо існує рівно один вхідний параметр часу існування, цей час існування призначається на всі вихідні параметри часів існування: `fn foo<'a>(x: &'a i32)
 -> &'a i32`.
 
-The third rule is that, if there are multiple input lifetime parameters, but one of them is `&self` or `&mut self` because this is a method, the lifetime of `self` is assigned to all output lifetime parameters. This third rule makes methods much nicer to read and write because fewer symbols are necessary.
+Третє правило полягає в тому, що якщо є багато вхідних параметрів часу існування, але один з них є `&self` or `&mut self`, бо це метод, час існування `self` призначається усім вихідним параметрам часу існування. Це третє правило набагато полегшує читання і писання методів, бо потрібно менше символів.
 
-Let’s pretend we’re the compiler. We’ll apply these rules to figure out the lifetimes of the references in the signature of the `first_word` function in Listing 10-25. The signature starts without any lifetimes associated with the references:
+Зробімо вигляд, що ми компілятор. Ми застосуємо ці правила, щоб визначити часи існування посилань у сигнатурі функції `first_word` у Блоці коду 10-25. Сигнатура починається без жодних часів існування, пов'язаних із посиланнями:
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
 
-Then the compiler applies the first rule, which specifies that each parameter gets its own lifetime. We’ll call it `'a` as usual, so now the signature is this:
+Потім компілятор застосовує перше правило, яке визначає, що кожен параметр отримує свій власний час існування. We’ll call it `'a` as usual, so now the signature is this:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &str {
