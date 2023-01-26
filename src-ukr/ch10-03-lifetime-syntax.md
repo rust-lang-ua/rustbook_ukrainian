@@ -293,37 +293,37 @@ fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {
 
 Коли ми реалізовуємо методи для структур з часами існування, то використовуємо той самий синтаксис, що і параметри узагальненого типу, показані у Блоці коду 10-11. Де нам проголошувати і використовувати параметри часу існування, залежить від того, чи стосуються вони полів структури, чи параметрів методу і значення, що повертається.
 
-Lifetime names for struct fields always need to be declared after the `impl` keyword and then used after the struct’s name, because those lifetimes are part of the struct’s type.
+Назви часу існування полів структур завжди треба проголошувати після ключового слова `impl`, а потім використовувати після назви структури, тому що ці часи існування є частиною типу структури.
 
-In method signatures inside the `impl` block, references might be tied to the lifetime of references in the struct’s fields, or they might be independent. In addition, the lifetime elision rules often make it so that lifetime annotations aren’t necessary in method signatures. Let’s look at some examples using the struct named `ImportantExcerpt` that we defined in Listing 10-24.
+У сигнатурах методів всередині блоку `impl` посилання мають бути або прив'язані до часу існування посилань у полях структури, або ж мають бути незалежними. Крім того, правила елізії часів існування часто роблять анотації часів існування непотрібними у сигнатурах методів. Погляньмо на деякі приклади, використовуючи структуру з назвою `ImportantExcerpt`, яку ми визначили у Блоці коду 10-24.
 
-First, we’ll use a method named `level` whose only parameter is a reference to `self` and whose return value is an `i32`, which is not a reference to anything:
+Спершу, ми використовуємо метод з назвою `level`, єдиним параметром якого є посилання на `self`, а значення, що повертається є `i32`, що не є посиланням:
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:1st}}
 ```
 
-The lifetime parameter declaration after `impl` and its use after the type name are required, but we’re not required to annotate the lifetime of the reference to `self` because of the first elision rule.
+Декларація параметра часу існування після `impl` і його використання після назви типу є необхідними, але ми не маємо анотувати час існування посилання на `self` через перше правило елізії.
 
-Here is an example where the third lifetime elision rule applies:
+Ось приклад, де застосовується третє правило елізії часу існування:
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:3rd}}
 ```
 
-There are two input lifetimes, so Rust applies the first lifetime elision rule and gives both `&self` and `announcement` their own lifetimes. Then, because one of the parameters is `&self`, the return type gets the lifetime of `&self`, and all lifetimes have been accounted for.
+Тут є два вхідних часи існування, тож Rust застосовує перше правило елізії часів існування і дає обом `&self` та `announcement` власні часи існування. Тоді, оскільки один з параметрів є `&self`, тип, що повертається. отримує час існування `&self`, і всі часи існування було призначено.
 
-### The Static Lifetime
+### Статичний час існування
 
-One special lifetime we need to discuss is `'static`, which denotes that the affected reference *can* live for the entire duration of the program. All string literals have the `'static` lifetime, which we can annotate as follows:
+Ми маємо обговорити один особливий час існування - `'static`, що позначає, що посилання *може* існувати весь час роботи програми. Всі стрічкові літерали мають час існування `'static`, що ми можемо анотувати таким чином:
 
 ```rust
 let s: &'static str = "I have a static lifetime.";
 ```
 
-The text of this string is stored directly in the program’s binary, which is always available. Therefore, the lifetime of all string literals is `'static`.
+Текст цієї стрічки зберігається безпосередньо в двійковому файлі програми, який є завжди доступним. Таким чином, час життя усіх стрічкових літералів є `'static`.
 
-You might see suggestions to use the `'static` lifetime in error messages. But before specifying `'static` as the lifetime for a reference, think about whether the reference you have actually lives the entire lifetime of your program or not, and whether you want it to. Most of the time, an error message suggesting the `'static` lifetime results from attempting to create a dangling reference or a mismatch of the available lifetimes. In such cases, the solution is fixing those problems, not specifying the `'static` lifetime.
+Ви можете побачити пропозиції використовувати час існування `'static` у повідомленнях про помилки. Але перш ніж вказати часом існування посилання `'static`, подумайте, чи дійсно ваше посилання існує впродовж усієї роботи вашої програми чи ні, і чи хочете, щоб воно таким було. У більшості випадків повідомлення про помилку, що пропонує час існування `'static` є результатом спроби створити висяче посилання чи невідповідність наявних часів існування. У таких випадках рішенням є виправити ці проблеми, а не визначити час існування `'static`.
 
 ## Generic Type Parameters, Trait Bounds, and Lifetimes Together
 
