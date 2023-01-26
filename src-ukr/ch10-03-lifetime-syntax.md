@@ -325,21 +325,21 @@ let s: &'static str = "I have a static lifetime.";
 
 Ви можете побачити пропозиції використовувати час існування `'static` у повідомленнях про помилки. Але перш ніж вказати часом існування посилання `'static`, подумайте, чи дійсно ваше посилання існує впродовж усієї роботи вашої програми чи ні, і чи хочете, щоб воно таким було. У більшості випадків повідомлення про помилку, що пропонує час існування `'static` є результатом спроби створити висяче посилання чи невідповідність наявних часів існування. У таких випадках рішенням є виправити ці проблеми, а не визначити час існування `'static`.
 
-## Generic Type Parameters, Trait Bounds, and Lifetimes Together
+## Параметри узагальненого типу, обмеження трейтів і часи існування разом
 
-Let’s briefly look at the syntax of specifying generic type parameters, trait bounds, and lifetimes all in one function!
+Подивімося коротко на синтаксис визначення параметрів узагальненого типу, обмежень трейтів і часів існування разом в одній функції!
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-11-generics-traits-and-lifetimes/src/main.rs:here}}
 ```
 
-This is the `longest` function from Listing 10-21 that returns the longer of two string slices. But now it has an extra parameter named `ann` of the generic type `T`, which can be filled in by any type that implements the `Display` trait as specified by the `where` clause. This extra parameter will be printed using `{}`, which is why the `Display` trait bound is necessary. Because lifetimes are a type of generic, the declarations of the lifetime parameter `'a` and the generic type parameter `T` go in the same list inside the angle brackets after the function name.
+Це функція `longest` зі Блоку коду 10-21, яка повертає довший із двох стрічкових слайсів. Але тепер вона має додатковий параметр з назвою `ann` узагальненого типу `T`, який може бути заповнений будь-яким типом, який реалізує трейт `Display`, як зазначено в клаузі `where`. Цей додатковий параметр буде виведено за допомогою `{}`, то й робить необхідним обмеження трейту `Display`. Оскільки часи існування є узагальненням, проголошення параметра часу існування `'a` і параметру узагальненого типу `T` розміщуються в одному списку в кутових дужках після назви функції.
 
-## Summary
+## Підсумок
 
-We covered a lot in this chapter! Now that you know about generic type parameters, traits and trait bounds, and generic lifetime parameters, you’re ready to write code without repetition that works in many different situations. Generic type parameters let you apply the code to different types. Traits and trait bounds ensure that even though the types are generic, they’ll have the behavior the code needs. You learned how to use lifetime annotations to ensure that this flexible code won’t have any dangling references. And all of this analysis happens at compile time, which doesn’t affect runtime performance!
+Ми багато відкрили в цьому розділі! Тепер, коли ви знаєте про параметри узагальненого типу, трейти і трейтові обмеження, і узагальнені параметри часу існування, ви готові написати код без повторень, що працюватиме у багатьох різних ситуаціях. Параметри узагальнених типів дозволяють вам застосовувати один код для різних типів. Трейти та трейтові обмеження гарантують, що навіть якщо типи є узагальненими, вони матимуть поведінку, потрібну коду. Ви вивчили, як використовувати анотації часу існування, щоб убезпечити такий гнучкий код від висячих посилань. І відбувається весь цей аналіз під час компіляції, що не впливає на продуктивність під час виконання!
 
-Believe it or not, there is much more to learn on the topics we discussed in this chapter: Chapter 17 discusses trait objects, which are another way to use traits. There are also more complex scenarios involving lifetime annotations that you will only need in very advanced scenarios; for those, you should read the [Rust Reference][reference]. But next, you’ll learn how to write tests in Rust so you can make sure your code is working the way it should.
+Вірите ви чи ні, є ще багато чого, що можна дізнатися про обговорені в цьому розділі теми: Розділ 17 обговорює трейтові об'єкти, які є іншим способом використання трейтів. There are also more complex scenarios involving lifetime annotations that you will only need in very advanced scenarios; for those, you should read the [Rust Reference][reference]. But next, you’ll learn how to write tests in Rust so you can make sure your code is working the way it should.
 ch04-02-references-and-borrowing.html#references-and-borrowing ch04-03-slices.html#string-slices-as-parameters
 
 [reference]: ../reference/index.html
