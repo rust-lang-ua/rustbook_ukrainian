@@ -291,7 +291,7 @@ fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {
 
 ### Анотації часів існування у визначеннях методів
 
-When we implement methods on a struct with lifetimes, we use the same syntax as that of generic type parameters shown in Listing 10-11. Where we declare and use the lifetime parameters depends on whether they’re related to the struct fields or the method parameters and return values.
+Коли ми реалізовуємо методи для структур з часами існування, то використовуємо той самий синтаксис, що і параметри узагальненого типу, показані у Блоці коду 10-11. Де нам проголошувати і використовувати параметри часу існування, залежить від того, чи стосуються вони полів структури, чи параметрів методу і значення, що повертається.
 
 Lifetime names for struct fields always need to be declared after the `impl` keyword and then used after the struct’s name, because those lifetimes are part of the struct’s type.
 
