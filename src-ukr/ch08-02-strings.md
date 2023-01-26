@@ -1,4 +1,4 @@
-## Storing UTF-8 Encoded Text with Strings
+## Зберігання тексту у кодуванні UTF-8 в стрічках
 
 We talked about strings in Chapter 4, but we’ll look at them in more depth now. New Rustaceans commonly get stuck on strings for a combination of three reasons: Rust’s propensity for exposing possible errors, strings being a more complicated data structure than many programmers give them credit for, and UTF-8. These factors combine in a way that can seem difficult when you’re coming from other programming languages.
 
