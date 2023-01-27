@@ -173,32 +173,32 @@ You already know that `answer` will not be `З`, the first letter. When encoded 
 
 The answer, then, is that to avoid returning an unexpected value and causing bugs that might not be discovered immediately, Rust doesn’t compile this code at all and prevents misunderstandings early in the development process.
 
-#### Bytes and Scalar Values and Grapheme Clusters! Oh My!
+#### Байти, скалярні значення і кластери графем! Божечки!
 
-Another point about UTF-8 is that there are actually three relevant ways to look at strings from Rust’s perspective: as bytes, scalar values, and grapheme clusters (the closest thing to what we would call *letters*).
+Ще одна особливість UTF-8 полягає у тому, що насправді існує три способи поглянути на стрічки з точки зору Rust: як на байти, скалярні значення та графеми кластери (найближче до того, що ми називаємо *літерами*).
 
-If we look at the Hindi word “नमस्ते” written in the Devanagari script, it is stored as a vector of `u8` values that looks like this:
+Скажімо, слово мовою Гінді “नमस्ते”, записане письмом деванаґарі, зберігається як вектор значень `u8`, що виглядає ось так:
 
 ```text
 [224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164,
 224, 165, 135]
 ```
 
-That’s 18 bytes and is how computers ultimately store this data. If we look at them as Unicode scalar values, which are what Rust’s `char` type is, those bytes look like this:
+Це 18 байтів і так комп'ютери кінець-кінцем зберігають ці дані. Якщо ми подивимося на них як на скалярні значення Unicode, тобто те, чим є тип `char` у Rust, ці байти виглядають наступним чином:
 
 ```text
 ['न', 'म', 'स', '्', 'त', 'े']
 ```
 
-There are six `char` values here, but the fourth and sixth are not letters: they’re diacritics that don’t make sense on their own. Finally, if we look at them as grapheme clusters, we’d get what a person would call the four letters that make up the Hindi word:
+Тут є шість значень `char`, але четвертий і шостий — не літери: це діакритичні знаки, які самостійно не мають жодного сенсу. Нарешті, якщо ми подивимось на них як на кластери графем, то отримаємо те, що людина назвала б чотирма літерами, які складають слово на Гінді:
 
 ```text
 ["न", "म", "स्", "ते"]
 ```
 
-Rust provides different ways of interpreting the raw string data that computers store so that each program can choose the interpretation it needs, no matter what human language the data is in.
+Rust надає різні способи інтерпретації необроблених даних стрічок, збережених комп'ютером, щоб кожна програма могла обрати потрібну їй інтерпретацію, неважливо якою людською мовою є ці дані.
 
-A final reason Rust doesn’t allow us to index into a `String` to get a character is that indexing operations are expected to always take constant time (O(1)). But it isn’t possible to guarantee that performance with a `String`, because Rust would have to walk through the contents from the beginning to the index to determine how many valid characters there were.
+Останньою причиною, чому Rust не дозволяє нам індексувати `String` для отримання символу, є те, що очікується, що операція індексації завжди займає постійний час (O(1)). Але неможливо гарантувати таку продуктивність для `String`, тому що Rust повинен проглянути вміст з початку до індексу, щоб визначити, скільки там було валідних символів.
 
 ### Слайси зі стрічок
 
@@ -214,7 +214,7 @@ let s = &hello[0..4];
 
 Тут `s` буде `&str`, що містить перші 4 байти стрічки. Раніше ми згадували, що кожен з цих символів має 2 байта, а це означає, що `s` буде `Зд`.
 
-Якби ми спробували створити слай з частини байтів символа чимось на кшталт `&hello[0..1]`, то Rust запанікував би під час виконання, так само, якби ми задали неправильний індекс для доступу до вектора:
+Якби ми спробували створити слайс з частини байтів символу чимось на кшталт `&hello[0..1]`, то Rust запанікував би під час виконання, так само, якби ми задали неправильний індекс для доступу до вектора:
 
 ```console
 {{#include ../listings/ch08-common-collections/output-only-01-not-char-boundary/output.txt}}
@@ -224,7 +224,7 @@ let s = &hello[0..4];
 
 ### Методи для ітерації по стрічках
 
-Найкращий спосіб оперувати фрагментами стрічкок - це чітко визначити, потрібні вам символи чи байти. Для роботи з окремими значеннями символів Unicode використовуйте метод `chars`. Виклик `chars` для “Зд" розділяє і повертає два значення типу `char`, і ви можете ітерувати результатом для доступу до кожного елемента:
+Найкращий спосіб оперувати фрагментами стрічкок - це чітко визначити, потрібні вам символи чи байти. Для роботи з окремими скалярними значеннями Unicode використовуйте метод `chars`. Виклик `chars` для “Зд" розділяє і повертає два значення типу `char`, і ви можете ітерувати результатом для доступу до кожного елемента:
 
 ```rust
 for c in "Зд".chars() {
@@ -256,7 +256,7 @@ for b in "Зд".bytes() {
 180
 ```
 
-Але не забувайте, що припустимі значення кодів символів Unicode можуть бути складені з більш ніж 1 байту.
+Але не забувайте, що припустимі скалярні значення Unicode можуть бути складені з більш ніж 1 байту.
 
 Отримання кластерів графем зі стрічок, як у письмі деванагарі, є складним, тому ця функціональність не надається стандартною бібліотекою. На [crates.io](https://crates.io/) є відповідні крейти,<!-- ignore --> якщо ви потребуєте такого функціонала.
 
