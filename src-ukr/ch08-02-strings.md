@@ -260,10 +260,10 @@ But be sure to remember that valid Unicode scalar values may be made up of more 
 
 Getting grapheme clusters from strings as with the Devanagari script is complex, so this functionality is not provided by the standard library. Crates are available on [crates.io](https://crates.io/)<!-- ignore --> if this is the functionality you need.
 
-### Strings Are Not So Simple
+### Стрічки не такі прості
 
-To summarize, strings are complicated. Different programming languages make different choices about how to present this complexity to the programmer. Rust has chosen to make the correct handling of `String` data the default behavior for all Rust programs, which means programmers have to put more thought into handling UTF-8 data upfront. This trade-off exposes more of the complexity of strings than is apparent in other programming languages, but it prevents you from having to handle errors involving non-ASCII characters later in your development life cycle.
+Підсумуємо: стрічки є складними. Різні мови програмування роблять різні вибори стосовно того, як представити цю складність програмісту. Rust обрав коректну обробку даних у `String` поведінкою за замовчуванням для всіх програм Rust, що означає, що програмісти повинні краще продумувати заздалегідь обробку даних UTF-8. Цей компроміс розкриває більшу частину складності стрічок, ніж зазвичай в інших мовах програмування, але це убезпечує вас від помилок із символами поза межами ASCII пізніше у життєвому циклі розробки.
 
-The good news is that the standard library offers a lot of functionality built off the `String` and `&str` types to help handle these complex situations correctly. Be sure to check out the documentation for useful methods like `contains` for searching in a string and `replace` for substituting parts of a string with another string.
+Доброю новиною є те, що стандартна бібліотека пропонує велику кількість функціонала, побудованого на типах `String` і `&str`, щоб допомогти правильно впоратися з цими складними ситуаціями. Обов'язково перевірте документацію про корисні методи, такі як `contains` для пошуку в стрічці і `replace` на заміну частин стрічки на іншу стрічку.
 
-Let’s switch to something a bit less complex: hash maps!
+Перейдемо на щось менш складне: хеш-відображення!
