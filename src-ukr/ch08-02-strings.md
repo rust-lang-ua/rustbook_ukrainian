@@ -200,31 +200,31 @@ Rust provides different ways of interpreting the raw string data that computers 
 
 A final reason Rust doesn’t allow us to index into a `String` to get a character is that indexing operations are expected to always take constant time (O(1)). But it isn’t possible to guarantee that performance with a `String`, because Rust would have to walk through the contents from the beginning to the index to determine how many valid characters there were.
 
-### Slicing Strings
+### Слайси зі стрічок
 
-Indexing into a string is often a bad idea because it’s not clear what the return type of the string-indexing operation should be: a byte value, a character, a grapheme cluster, or a string slice. If you really need to use indices to create string slices, therefore, Rust asks you to be more specific.
+Індексація стрічки часто є поганою ідеєю, бо не зрозуміло, яке значення має повертати операція індексування: байт, символ, кластер графем чи стріковий слайс. Тому, якщо вам дійсно треба використати індекси для створення стрічкових слайсів, Rust просить вас бути більш конкретним.
 
-Rather than indexing using `[]` with a single number, you can use `[]` with a range to create a string slice containing particular bytes:
+Замість індексування за допомогою `[]` з одним числом, ви можете використовувати `[]` з діапазоном, щоб створити стрічковий слайс, що містить певні байти:
 
 ```rust
-let hello = "Здравствуйте";
+let hello = "Здрастуйте";
 
 let s = &hello[0..4];
 ```
 
-Here, `s` will be a `&str` that contains the first 4 bytes of the string. Earlier, we mentioned that each of these characters was 2 bytes, which means `s` will be `Зд`.
+Тут `s` буде `&str`, що містить перші 4 байти стрічки. Раніше ми згадували, що кожен з цих символів має 2 байта, а це означає, що `s` буде `Зд`.
 
-If we were to try to slice only part of a character’s bytes with something like `&hello[0..1]`, Rust would panic at runtime in the same way as if an invalid index were accessed in a vector:
+Якби ми спробували створити слай з частини байтів символа чимось на кшталт `&hello[0..1]`, то Rust запанікував би під час виконання, так само, якби ми задали неправильний індекс для доступу до вектора:
 
 ```console
 {{#include ../listings/ch08-common-collections/output-only-01-not-char-boundary/output.txt}}
 ```
 
-You should use ranges to create string slices with caution, because doing so can crash your program.
+Ви маєте використовувати діапазони для створення стрічкових слайсів з обережністю, тому що так може зламати програму.
 
 ### Методи для ітерації по стрічках
 
-Найкращий спосіб оперувати фрагментами стрічкок - це чітко визначити, потрібні вам символи чи байти. Для роботи з окремими значеннями символів Unicode використовуйте метод `chars`. Виклик `chars` для "3д" розділяє і повертає два значення типу `char`, і ви можете ітерувати результатом для доступу до кожного елемента:
+Найкращий спосіб оперувати фрагментами стрічкок - це чітко визначити, потрібні вам символи чи байти. Для роботи з окремими значеннями символів Unicode використовуйте метод `chars`. Виклик `chars` для “Зд" розділяє і повертає два значення типу `char`, і ви можете ітерувати результатом для доступу до кожного елемента:
 
 ```rust
 for c in "Зд".chars() {
