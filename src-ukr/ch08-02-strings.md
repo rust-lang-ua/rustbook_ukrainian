@@ -222,9 +222,9 @@ If we were to try to slice only part of a character’s bytes with something lik
 
 You should use ranges to create string slices with caution, because doing so can crash your program.
 
-### Methods for Iterating Over Strings
+### Методи для ітерації по стрічках
 
-The best way to operate on pieces of strings is to be explicit about whether you want characters or bytes. For individual Unicode scalar values, use the `chars` method. Calling `chars` on “Зд” separates out and returns two values of type `char`, and you can iterate over the result to access each element:
+Найкращий спосіб оперувати фрагментами стрічкок - це чітко визначити, потрібні вам символи чи байти. For individual Unicode scalar values, use the `chars` method. Calling `chars` on “Зд” separates out and returns two values of type `char`, and you can iterate over the result to access each element:
 
 ```rust
 for c in "Зд".chars() {
