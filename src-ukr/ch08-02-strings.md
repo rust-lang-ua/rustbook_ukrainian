@@ -224,7 +224,7 @@ You should use ranges to create string slices with caution, because doing so can
 
 ### Методи для ітерації по стрічках
 
-Найкращий спосіб оперувати фрагментами стрічкок - це чітко визначити, потрібні вам символи чи байти. For individual Unicode scalar values, use the `chars` method. Calling `chars` on “Зд” separates out and returns two values of type `char`, and you can iterate over the result to access each element:
+Найкращий спосіб оперувати фрагментами стрічкок - це чітко визначити, потрібні вам символи чи байти. Для роботи з окремими значеннями символів Unicode використовуйте метод `chars`. Виклик `chars` для "3д" розділяє і повертає два значення типу `char`, і ви можете ітерувати результатом для доступу до кожного елемента:
 
 ```rust
 for c in "Зд".chars() {
@@ -232,14 +232,14 @@ for c in "Зд".chars() {
 }
 ```
 
-This code will print the following:
+Цей код виводить на екран наступне:
 
 ```text
 З
 д
 ```
 
-Alternatively, the `bytes` method returns each raw byte, which might be appropriate for your domain:
+Альтернатива, метод `bytes` повертає кожен необроблений байт, що може бути більш придатним для вашої задачі:
 
 ```rust
 for b in "Зд".bytes() {
@@ -247,7 +247,7 @@ for b in "Зд".bytes() {
 }
 ```
 
-This code will print the four bytes that make up this string:
+Цей код виведе чотири байти, з яких складається ця стрічка:
 
 ```text
 208
@@ -256,9 +256,9 @@ This code will print the four bytes that make up this string:
 180
 ```
 
-But be sure to remember that valid Unicode scalar values may be made up of more than 1 byte.
+Але не забувайте, що припустимі значення кодів символів Unicode можуть бути складені з більш ніж 1 байту.
 
-Getting grapheme clusters from strings as with the Devanagari script is complex, so this functionality is not provided by the standard library. Crates are available on [crates.io](https://crates.io/)<!-- ignore --> if this is the functionality you need.
+Отримання кластерів графем зі стрічок, як у письмі деванагарі, є складним, тому ця функціональність не надається стандартною бібліотекою. На [crates.io](https://crates.io/) є відповідні крейти,<!-- ignore --> якщо ви потребуєте такого функціонала.
 
 ### Стрічки не такі прості
 
