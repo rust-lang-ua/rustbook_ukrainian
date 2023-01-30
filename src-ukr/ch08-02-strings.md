@@ -148,9 +148,9 @@ This code will result in the following error:
 
 The error and the note tell the story: Rust strings don’t support indexing. But why not? To answer that question, we need to discuss how Rust stores strings in memory.
 
-#### Internal Representation
+#### Внутрішнє представлення
 
-A `String` is a wrapper over a `Vec<u8>`. Let’s look at some of our properly encoded UTF-8 example strings from Listing 8-14. First, this one:
+`String` є обгорткою `Vec<u8>`. Подивімося на деякі правильно кодовані у UTF-8 зразки стрічки зі списку 8-14. Спершу, цей:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:spanish}}
