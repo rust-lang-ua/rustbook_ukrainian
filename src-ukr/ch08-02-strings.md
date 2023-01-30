@@ -1,55 +1,55 @@
 ## Зберігання тексту у кодуванні UTF-8 в стрічках
 
-We talked about strings in Chapter 4, but we’ll look at them in more depth now. New Rustaceans commonly get stuck on strings for a combination of three reasons: Rust’s propensity for exposing possible errors, strings being a more complicated data structure than many programmers give them credit for, and UTF-8. These factors combine in a way that can seem difficult when you’re coming from other programming languages.
+Ми говорили про стрічки в Розділі 4, але тепер ми розглянемо їх глибше. Нові растацеанці зазвичай застрягають на стрічках через поєднання трьох причин: схильність Rust до виявлення можливих помилок, стрічки є складнішою структурою даних, ніж вважають багато програмістів, та UTF-8. Ці фактори комбінуються таким чином, що може здатися вам складним, коли ви переходите з інших мов програмування.
 
-We discuss strings in the context of collections because strings are implemented as a collection of bytes, plus some methods to provide useful functionality when those bytes are interpreted as text. In this section, we’ll talk about the operations on `String` that every collection type has, such as creating, updating, and reading. We’ll also discuss the ways in which `String` is different from the other collections, namely how indexing into a `String` is complicated by the differences between how people and computers interpret `String` data.
+Ми обговорюємо стрічки в контексті колекцій, оскільки стрічки реалізовані як колекція байтів, плюс деякі методи для надання корисної функціональності, коли ці байти розглядаються як текст. У цьому підрозділі ми поговоримо про операції на `String`, які має кожен тип колекцій, такі як створення, змінна та читання. Ми також обговоримо, чим `String` відрізняється від інших колекцій, а саме чому індексування `String` ускладнене відмінністю між тим, як люди і комп'ютери розглядають дані у `String`.
 
-### What Is a String?
+### Що таке стрічка?
 
-We’ll first define what we mean by the term *string*. Rust has only one string type in the core language, which is the string slice `str` that is usually seen in its borrowed form `&str`. In Chapter 4, we talked about *string slices*, which are references to some UTF-8 encoded string data stored elsewhere. String literals, for example, are stored in the program’s binary and are therefore string slices.
+Спочатку ми визначимо те, що ми маємо на увазі під терміном *стрічка*. Rust має лише один стрічковий тип у ядрі мови, а саме стрічковий слайс `str`, який зазвичай буває у запозиченій формі `&str`. У Розділі 4 ми говорили про *стрічкові слайси*, які є посиланням на деякі дані, закодовані в UTF-8, які зберігаються деінде. Наприклад, стрічкові літерали зберігаються в двійковому файлі програми і, отже, є стрічковими слайсами.
 
-The `String` type, which is provided by Rust’s standard library rather than coded into the core language, is a growable, mutable, owned, UTF-8 encoded string type. When Rustaceans refer to “strings” in Rust, they might be referring to either the `String` or the string slice `&str` types, not just one of those types. Although this section is largely about `String`, both types are used heavily in Rust’s standard library, and both `String` and string slices are UTF-8 encoded.
+Тип `String`, який надається стандартною бібліотекою Rust, а не закодовано в ядро мови, може зростати, бути мутабельним, володіє своїми даними і кодований в UTF-8. Коли растцеанці посилається на "стрічки" в Rust, то можуть посилатись або на тип `String`, або на стрічковий слайс `&str`, а не лише один із цих типів. Хоча цей розділ багато в чому стосується `String`, обидва типи щедро використовуються в стандартній бібліотеці Rust, і як `String`, так і стрічкові слайси мають кодування UTF-8.
 
-### Creating a New String
+### Створення нової стрічки
 
-Many of the same operations available with `Vec<T>` are available with `String` as well, because `String` is actually implemented as a wrapper around a vector of bytes with some extra guarantees, restrictions, and capabilities. An example of a function that works the same way with `Vec<T>` and `String` is the `new` function to create an instance, shown in Listing 8-11.
+Багато операцій, доступних для `Vec<T>`, також доступні для `String`, тому що `String` фактично реалізований як обгортка навколо вектора байтів з деякими додатковими гарантіями, обмеженнями і можливостями. Приклад функції, яка працює однаково як і з `Vec<T>` і `String`, це функція `new`, що створює екземпляр, як показано в Блоці коду 8-11.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-11: Creating a new, empty `String`</span>
+<span class="caption">Блок коду 8-11: Створення нової порожньої `String`</span>
 
-This line creates a new empty string called `s`, which we can then load data into. Often, we’ll have some initial data that we want to start the string with. For that, we use the `to_string` method, which is available on any type that implements the `Display` trait, as string literals do. Listing 8-12 shows two examples.
+Цей рядок створює нову порожню стрічку, що називається `s`, в яку ми надалі можемо завантажити дані. Часто ми матимемо деякі початкові дані, які ми хочемо одразу розмістити в стрічці. Для цього ми використовуємо метод `to_string`, який доступний для будь-якого типу, що реалізує трейт `Display`, як, зокрема, стрічкові літерали. Блок коду 8-12 показує два приклади.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-12/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-12: Using the `to_string` method to create a `String` from a string literal</span>
+<span class="caption">Блок коду 8-12: використання методу `to_string` для створення `String` зі стрічкового літерала</span>
 
-This code creates a string containing `initial contents`.
+Цей код створює стрічку, що містить `початковий вміст`.
 
-We can also use the function `String::from` to create a `String` from a string literal. The code in Listing 8-13 is equivalent to the code from Listing 8-12 that uses `to_string`.
+Також ми можемо скористатися функцією `String::from`, щоб створити `String` зі стрічкового літерала. Код у Блоці коду 8-13 еквівалентний коду зі Блоку коду 8-12, який використовує `to_string`.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-13/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-13: Using the `String::from` function to create a `String` from a string literal</span>
+<span class="caption">Блок коду 8-13: використання функції `String::from` для створення `String` зі стрічкового літерала</span>
 
-Because strings are used for so many things, we can use many different generic APIs for strings, providing us with a lot of options. Some of them can seem redundant, but they all have their place! In this case, `String::from` and `to_string` do the same thing, so which you choose is a matter of style and readability.
+Оскільки стрічки використовуються для великої кількості речей, ми можемо використати багато різних узагальнених API для стрічок, що надають нам багато варіантів. Деякі з них можуть здатись надлишковими, але всі вони мають своє власне місце! У цьому випадку `String::from` і `to_string` роблять те саме, тому, що ви оберете є питанням стилю і читабельності.
 
-Remember that strings are UTF-8 encoded, so we can include any properly encoded data in them, as shown in Listing 8-14.
+Пам'ятайте, що стрічки мають кодування UTF-8, тож ми можемо включити у них будь-які правильно закодовані дані, як показано в Блоці коду 8-14.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-14: Storing greetings in different languages in strings</span>
+<span class="caption">Блок коду 8-14: збереження вітань різними мовами у стрічках</span>
 
 Усе це коректні значення `String`.
 
