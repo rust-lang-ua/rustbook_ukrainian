@@ -90,44 +90,44 @@ The `push` method takes a single character as a parameter and adds it to the `St
 
 As a result, `s` will contain `lol`.
 
-#### Concatenation with the `+` Operator or the `format!` Macro
+#### Конкатенація за допомогою оператора `+` і макроса `format!`
 
-Often, you’ll want to combine two existing strings. One way to do so is to use the `+` operator, as shown in Listing 8-18.
+Часто вам треба поєднати дві стрічки. Один зі способів зробити це - використати оператор `+`, як показано в Блоці коду 8-18.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-18/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-18: Using the `+` operator to combine two `String` values into a new `String` value</span>
+<span class="caption">Блок коду 8-18: використання оператора `+` для об'єднання двох значень `String` у нову `String`</span>
 
-The string `s3` will contain `Hello, world!`. The reason `s1` is no longer valid after the addition, and the reason we used a reference to `s2`, has to do with the signature of the method that’s called when we use the `+` operator. The `+` operator uses the `add` method, whose signature looks something like this:
+Стрічка `s3` міститиме `Hello, world!`. Причина, чому `s1` більше не дійсна після додавання, і причина, чому ми використовували посилання на `s2`, стосується сигнатури методу, викликаного, коли ми скористалися оператором `+`. Оператор `+` використовує метод `add`, сигнатура якого виглядає приблизно так:
 
 ```rust,ignore
 fn add(self, s: &str) -> String {
 ```
 
-In the standard library, you'll see `add` defined using generics and associated types. Here, we’ve substituted in concrete types, which is what happens when we call this method with `String` values. We’ll discuss generics in Chapter 10. This signature gives us the clues we need to understand the tricky bits of the `+` operator.
+У стандартній бібліотеці ви побачите `add`, визначений за допомогою узагальнених і асоційованих типів. Тут ми підставили конкретні типи, що й стається, коли ми викликаємо цей метод зі значеннями `String`. Узагальнені типи ми обговоримо у Розділі 10. Ця сигнатура дає нам підказки, потрібні для розуміння тонких місць оператора `+`.
 
-First, `s2` has an `&`, meaning that we’re adding a *reference* of the second string to the first string. This is because of the `s` parameter in the `add` function: we can only add a `&str` to a `String`; we can’t add two `String` values together. But wait—the type of `&s2` is `&String`, not `&str`, as specified in the second parameter to `add`. So why does Listing 8-18 compile?
+По-перше, `s2` має `&`, що означає, що ми додаємо *посилання* на другу стрічку до першої стрічки. Так зроблено через параметр `s` у функції `add`: ми можемо лише додати `&str` до `String`; ми не можемо скласти разом два значення `String`. Але чекайте — типом `&s2` є `&String`, а не `&str`, як зазначено в другому параметрі `add`. То чому ж Блок коду 8-18 компілюється?
 
-The reason we’re able to use `&s2` in the call to `add` is that the compiler can *coerce* the `&String` argument into a `&str`. When we call the `add` method, Rust uses a *deref coercion*, which here turns `&s2` into `&s2[..]`. We’ll discuss deref coercion in more depth in Chapter 15. Because `add` does not take ownership of the `s` parameter, `s2` will still be a valid `String` after this operation.
+Причина, з якої ми можемо використовувати `&s2` у виклику `add` полягає в тому, що компілятор може *привести* аргумент `&String` до `&str`. Коли ми викликаємо метод `add`, Rust використовує *приведення розіменування*, що тут перетворює `&s2` у `&s2[..]`. Ми обговоримо приведення розіменування глибше в Розділі 15. Оскільки `add` не перебирає володіння параметром `s`, `s2` все ще буде коректною `String` після цієї операції.
 
-Second, we can see in the signature that `add` takes ownership of `self`, because `self` does *not* have an `&`. This means `s1` in Listing 8-18 will be moved into the `add` call and will no longer be valid after that. So although `let s3 = s1 + &s2;` looks like it will copy both strings and create a new one, this statement actually takes ownership of `s1`, appends a copy of the contents of `s2`, and then returns ownership of the result. In other words, it looks like it’s making a lot of copies but isn’t; the implementation is more efficient than copying.
+По-друге, як ми бачимо в сигнатурі, `add` бере володіння над `self`, бо `self` *не* має `&`. Це означає, що `s1` у Блоці коду 8-18 буде перенесено у виклику `add` і після цього більше не буде дійсним. Таким чином, хоч `let s3 = s1 + &s2;` виглядає, ніби він копіює обидві стрічки і створює нову, ця інструкція насправді бере володіння `s1`, додає копію вмісту `s2`, а потім повертає володіння результатом. Іншими словами, він виглядає, ніби створює багато копій, але насправді ні; реалізація ефективніша за копіювання.
 
-If we need to concatenate multiple strings, the behavior of the `+` operator gets unwieldy:
+Якщо нам потрібно об'єднати декілька стрічок, поведінка оператора `+` стає громіздкою:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-01-concat-multiple-strings/src/main.rs:here}}
 ```
 
-At this point, `s` will be `tic-tac-toe`. With all of the `+` and `"` characters, it’s difficult to see what’s going on. For more complicated string combining, we can instead use the `format!` macro:
+У цьому місці `s` буде `tic-tac-toe`. За усіма цими символами `+` і `"` стає важко побачити, що відбувається. Для складнішого комбінування стрічок ми можемо замість цього скористатися макросом `format!`:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-02-format/src/main.rs:here}}
 ```
 
-This code also sets `s` to `tic-tac-toe`. The `format!` macro works like `println!`, but instead of printing the output to the screen, it returns a `String` with the contents. The version of the code using `format!` is much easier to read, and the code generated by the `format!` macro uses references so that this call doesn’t take ownership of any of its parameters.
+Цей код також надає `s` значення `tic-tac-toe`. Макрос `format!` працює подібно до `println!`, але замість виведення на екран, повертає `String` з відповідним вмістом. Версію коду, що використовує `format!`, значно простіше читати, і код, що згенеровано макросом `format!`, використовує посилання, тому цей виклик не перебирає володіння жодним зі своїх параметрів.
 
 ### Індексація стрічок
 
