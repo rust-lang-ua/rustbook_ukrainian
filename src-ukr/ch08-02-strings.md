@@ -51,44 +51,44 @@ Remember that strings are UTF-8 encoded, so we can include any properly encoded 
 
 <span class="caption">Listing 8-14: Storing greetings in different languages in strings</span>
 
-All of these are valid `String` values.
+Усе це коректні значення `String`.
 
-### Updating a String
+### Зміна стрічок
 
-A `String` can grow in size and its contents can change, just like the contents of a `Vec<T>`, if you push more data into it. In addition, you can conveniently use the `+` operator or the `format!` macro to concatenate `String` values.
+`String` може зростати і її вміст може змінюватися, як вміст `Vec<T>`, якщо ви додасте у неї ще дані. На додачу, ви можете для зручності використовувати оператор `+` чи макрос `format!` для конкатенації значень `String`.
 
-#### Appending to a String with `push_str` and `push`
+#### Додавання до String методами `push_str` і `push`
 
-We can grow a `String` by using the `push_str` method to append a string slice, as shown in Listing 8-15.
+Ми можемо збільшити `String` за допомогою методу `push_str`, додавши стрічковий слайс, як показано в Блоці коду 8-15.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-15/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-15: Appending a string slice to a `String` using the `push_str` method</span>
+<span class="caption">Блок коду 8-15: додавання стрічкового слайсу до `String` за допомогою методу `push_str`</span>
 
-After these two lines, `s` will contain `foobar`. The `push_str` method takes a string slice because we don’t necessarily want to take ownership of the parameter. For example, in the code in Listing 8-16, we want to be able to use `s2` after appending its contents to `s1`.
+Після цих двох рядків `s` міститиме `foobar`. Метод `push_str` приймає стрічковий слайс, бо ми не обов'язково хочемо приймати володіння параметром. Наприклад, у коді з Блоку коду 8-16, ми хочемо мати змогу використовувати `s2` після додавання його вмісту до `s1`.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-16/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-16: Using a string slice after appending its contents to a `String`</span>
+<span class="caption">Блок коду 8-16: використання стрічкового слайсу після додавання його вмісту до `String`</span>
 
-If the `push_str` method took ownership of `s2`, we wouldn’t be able to print its value on the last line. However, this code works as we’d expect!
+Якби метод `push_str` взяв володіння `s2`, ми б не змогли вивести його значення в останньому рядку. Але цей код працює, як ми очікуємо!
 
-The `push` method takes a single character as a parameter and adds it to the `String`. Listing 8-17 adds the letter “l” to a `String` using the `push` method.
+Метод `push` приймає параметром один символ і додає його до `String`. Блок коду 8-17 додає букву "l" до `String` за допомогою методу `push`.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-17/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-17: Adding one character to a `String` value using `push`</span>
+<span class="caption">Блок коду 8-17: Додавання одного символу до значення `String` за допомогою `push`</span>
 
-As a result, `s` will contain `lol`.
+У результаті, `s` міститиме `lol`.
 
 #### Конкатенація за допомогою оператора `+` і макроса `format!`
 
