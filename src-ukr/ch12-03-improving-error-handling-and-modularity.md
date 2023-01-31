@@ -142,7 +142,7 @@
 
 <span class="caption">Блок коду 12-9: Повертання `Result` з `Config::build`</span>
 
-Наша функція `build` тепер повертає `Result` з екземпляром `Config` у разі успіху і `&'static str` у разі помилки. Значення наших помилок завжди будуть стрічковими літералами з часом існування `'static`.
+Our `build` function returns a `Result` with a `Config` instance in the success case and a `&'static str` in the error case. Our error values will always be string literals that have the `'static` lifetime.
 
 Ми зробили дві зміни у тілі функції: замість виклику `panic!`, коли користувач не надав достатньо аргументів, ми тепер повертаємо значення `Err`, і ми обгорнули значення `Config`, що ми повертаємо, у `Ok`. Ці зміни узгоджують функцію з новою сигнатурою типу.
 
@@ -256,7 +256,7 @@ Rust каже нам, що наш код проігнорував значенн
 
 <span class="caption">Блок коду 12-13: Перенесення `Config` і `run` до *src/lib.rs*</span>
 
-Ми дещо вільно використали ключове слово `pub`: для `Config`, його полів і його методу `build`, а також для функції `run`. Тепер ми маємо бібліотечний крейт, що має публічний API, який ми можемо тестувати!
+We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its `build` method, and on the `run` function. We now have a library crate that has a public API we can test!
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the binary crate in *src/main.rs*, as shown in Listing 12-14.
 
