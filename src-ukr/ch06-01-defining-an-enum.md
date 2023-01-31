@@ -4,7 +4,7 @@
 
 Розгляньмо ситуацію, яку ми можемо захотіти виразити в коді, і побачимо, чому енуми корисні і краще за структури підходять для цієї ситуації. Нехай нам потрібно працювати із IP-адресами. Наразі використовується два стандарти IP-адрес, четверта та шоста версії. Оскільки це єдині можливі IP-адреси, які наша програма може зустріти, ми можемо *перелічити* (enumerate) усі можливі варіанти, звідси й назва для енумів.
 
-Будь-яка IP-адреса може бути або версії чотири, або версії шість, але не одночасно. Ця властивість IP-адрес робить енум відповідним засобом для вираження цієї ситуації, бо значення енума можуть бути лише одним із його варіантів. Адреси як четвертої, так і шостої версій засадничо є саме IP-адресами, і з ними можна працювати як з одним типом, коли код стосується ситуацій, де можуть використовуватися обидва види адрес.
+Будь-яка IP-адреса може бути або версії чотири, або версії шість, але не одночасно. That property of IP addresses makes the enum data structure appropriate because an enum value can only be one of its variants. Адреси як четвертої, так і шостої версій засадничо є саме IP-адресами, і з ними можна працювати як з одним типом, коли код стосується ситуацій, де можуть використовуватися обидва види адрес.
 
 Цю концепцію можна виразити, визначивши енум `IpAddrKind` і перерахувавши можливі види IP-адрес, `V4` та `V6`. Це зветься варіантами енума:
 
@@ -51,9 +51,9 @@
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-02-enum-with-data/src/main.rs:here}}
 ```
 
-Ми причепили дані безпосередньо до кожного варіанту енума, і тепер нема потреби в додатковій структурі. Тепер легше побачити ще одну деталь роботи енумів: назва кожного варіанту енума, визначеного нами, стає також функцією, що конструює екземпляр енума. Тобто `IpAddr::V4()` - це виклик функції, що приймає аргументом `String` і повертає екземпляр типу `IpAddr`. Ми автоматично отримуємо функцію-конструктор, визначену в результаті визначення енума.
+Ми причепили дані безпосередньо до кожного варіанту енума, і тепер нема потреби в додатковій структурі. Here, it’s also easier to see another detail of how enums work: the name of each enum variant that we define also becomes a function that constructs an instance of the enum. Тобто `IpAddr::V4()` - це виклик функції, що приймає аргументом `String` і повертає екземпляр типу `IpAddr`. Ми автоматично отримуємо функцію-конструктор, визначену в результаті визначення енума.
 
-Є ще одна перевага у використанні енума перед структурою: кожен варіант може мати різні типи та об'єм прив'язаних даних. IP-адреси четвертої версії завжди складаються з чотирьох числових компонентів зі значеннями між 0 та 255. Якби ми хотіли зберігати адреси `V4` як чотири значення `u8`, але все ще представляти `V6` як єдине значення типу `String`, то структурою ми б цього зробити не змогли. Натомість енуми легко впораються із цим:
+Є ще одна перевага у використанні енума перед структурою: кожен варіант може мати різні типи та об'єм прив'язаних даних. Version four IP addresses will always have four numeric components that will have values between 0 and 255. Якби ми хотіли зберігати адреси `V4` як чотири значення `u8`, але все ще представляти `V6` як єдине значення типу `String`, то структурою ми б цього зробити не змогли. Натомість енуми легко впораються із цим:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-03-variants-with-different-data/src/main.rs:here}}
@@ -92,7 +92,7 @@ Let’s look at another example of an enum in Listing 6-2: this one has a wide v
 Цей енум має чотири варіанти різних типів:
 
 * `Quit` ("вийти") не має пов'язаних даних.
-* `Move` ("перейти") має всередині анонімний struct.
+* `Move` has named fields, like a struct does.
 * `Write` ("написати") включає один `String`.
 * `ChangeColor` ("змінити колір") включає три значення `i32`.
 
@@ -102,7 +102,7 @@ Let’s look at another example of an enum in Listing 6-2: this one has a wide v
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-04-structs-similar-to-message-enum/src/main.rs:here}}
 ```
 
-But if we used the different structs, which each have their own type, we couldn’t as easily define a function to take any of these kinds of messages as we could with the `Message` enum defined in Listing 6-2, which is a single type.
+But if we used the different structs, each of which has its own type, we couldn’t as easily define a function to take any of these kinds of messages as we could with the `Message` enum defined in Listing 6-2, which is a single type.
 
 Енуми та структури мають ще одну спільну рису: як за допомогою `impl` ми можемо оголошувати методи на структурах, ми можемо так само їх оголошувати на енумах. Ось метод, що зветься `call`, який можна визначити на нашому енумі `Message`:
 
@@ -118,7 +118,7 @@ Let’s look at another enum in the standard library that is very common and use
 
 Цей підрозділ розглядає використання `Option`, ще одного енума, визначеного в стандартній бібліотеці. Тип `Option` кодує дуже поширену ситуацію, де значення може бути чи його може не бути.
 
-Наприклад, якщо ви запитуєте перший елемент зі списку, в якому щось є, ви отримаєте значення. Якщо ж ви запитаєте перший елемент порожнього списку, ви тримаєте нічого. Те, що ця концепція виражена в системі типів, означає, що компілятор може перевірити, що ви обробили всі можливі варіанти, які потребують обробки; цей функціонал запобігає вкрай поширеним в інших мовах програмування вадам.
+For example, if you request the first item in a non-empty list, you would get a value. If you request the first item in an empty list, you would get nothing. Те, що ця концепція виражена в системі типів, означає, що компілятор може перевірити, що ви обробили всі можливі варіанти, які потребують обробки; цей функціонал запобігає вкрай поширеним в інших мовах програмування вадам.
 
 Дизайн мови програмування часто оцінюють за тим, який функціонал у ній є; але функціонал, який свідомо уникли, також важливий. Rust не має такої особливості, як null, що є в багатьох інших мовах. *Null* - це значення, що означає відсутність значення. У мовах із null змінні завжди можуть бути в одному з двох станів: null і не-null.
 
@@ -142,7 +142,7 @@ enum Option<T> {
 
 Enum `Option<T>` настільки корисний, що він включений у прелюдію; вам не потрібно явно вводити його в область видимості програми. Його варіанти також введені у прелюдію: ви можете використовувати `Some` та `None` напряму без префіксу `Option::`. Утім `Option<T>` - це лише звичайний енум, а `Some(T)` та `None` - лише варіанти типу `Option<T>`.
 
-Запис `<T>` - особливість Rust, про яку ми ще не говорили. Це параметр узагальненого типу, і детальніше ми розглянемо узагальнення в Розділі 10. Поки що все, що вам слід знати - що `<T>` означає, що варіант `Some` енума `Option` може вміщати одне значення даних будь-якого типу, і що конкретний тип, підставлений на місце `T`, робить весь вираз `Option<T>` окремим типом. Ось деякі приклади використання значень `Option` для зберігання числових типів і стрічкових типів:
+Запис `<T>` - особливість Rust, про яку ми ще не говорили. Це параметр узагальненого типу, і детальніше ми розглянемо узагальнення в Розділі 10. For now, all you need to know is that `<T>` means that the `Some` variant of the `Option` enum can hold one piece of data of any type, and that each concrete type that gets used in place of `T` makes the overall `Option<T>` type a different type. Here are some examples of using `Option` values to hold number types and string types:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-06-option-examples/src/main.rs:here}}
@@ -150,15 +150,15 @@ Enum `Option<T>` настільки корисний, що він включен
 
 Тип `some_number` - `Option<i32>`. Типом `some_char` є `Option<char>`, тобто інший тип. Rust може вивести ці типи, бо ми вказали значення всередині варіанту `Some`. А для `absent_number` Rust вимагає, щоб ми анотували весь тип `Option`: компілятор не може вивести тип відповідного варіанту `Some`, що міститиме значення, за самим лише значенням `None`. Тут ми вказуємо Rust, що хочемо, аби `absent_number` мав тип `Option<i32>`.
 
-Коли у нас є значення `Some`, ми знаємо, що значення наявне, і значення зберігається в варіанті `Some`. Коли є значення `None`, у певному сенсі, це означає те саме, що й null: ми не маємо придатного значення. То чим же `Option<T>` кращий за значення null?
+Коли у нас є значення `Some`, ми знаємо, що значення наявне, і значення зберігається в варіанті `Some`. When we have a `None` value, in some sense it means the same thing as null: we don’t have a valid value. So why is having `Option<T>` any better than having null?
 
-Одним словом, оскільки `Option<T>` і `T` (де `T` може бути будь-яким типом) - різні типи, компілятор не дозволить нам використовувати значення `Option<T>` так, ніби ми маємо коректне значення. Наприклад, цей код не скомпілюється, бо він намагається додати `i8` до `Option<i8>`:
+Одним словом, оскільки `Option<T>` і `T` (де `T` може бути будь-яким типом) - різні типи, компілятор не дозволить нам використовувати значення `Option<T>` так, ніби ми маємо коректне значення. For example, this code won’t compile, because it’s trying to add an `i8` to an `Option<i8>`:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-07-cant-use-option-directly/src/main.rs:here}}
 ```
 
-Якщо ми запустимо цей код, ми дістанемо повідомлення про помилку на кшталт цього:
+If we run this code, we get an error message like this one:
 
 ```console
 {{#include ../listings/ch06-enums-and-pattern-matching/no-listing-07-cant-use-option-directly/output.txt}}
@@ -166,13 +166,13 @@ Enum `Option<T>` настільки корисний, що він включен
 
 Сильно! Насправді це повідомлення про помилку означає, що Rust не розуміє, як додати `i8` та `Option<i8>`, оскільки вони різних типів. Коли у нас у Rust є значення типу на кшталт `i8`, компілятор гарантує, що у нас завжди є коректне значення. Ми можемо діяти впевнено без потреби у перевірці на null перш ніж використовувати це значення. Тільки тоді, коли у нас є `Option<i8>` (або будь-який тип чи значення, з яким ми працюємо), ми маємо турбуватися про те, що, можливо, значення не буде, і компілятор переконається, що ми обробляємо цей випадок, перш ніж використовувати значення.
 
-Іншими словами, перед тим, як виконувати операції, які можна робити з `T`, треба перетворити значення `Option<T>` на `T`. В цілому це допомагає перехопити одну з найпоширеніших проблем із null - припущення, що щось не є null, коли насправді воно null.
+Іншими словами, перед тим, як виконувати операції, які можна робити з `T`, треба перетворити значення `Option<T>` на `T`. Generally, this helps catch one of the most common issues with null: assuming that something isn’t null when it actually is.
 
 Відсутність потреби турбуватися про некоректне припущення про не-null значення допомагає вам бути певнішим у власному коді. Щоб значення могло бути null, вам треба явно це вказати зробивши тип цього значення `Option<T>`. Потім, коли ви використовуєте це значення, від вас вимагається явно обробити випадок, коли це значення null. Всюди, де значення має тип, відмінний від `Option<T>`, ви *можете* безпечно припустити, що це значення не null. Це свідоме рішення при розробці Rust для обмеження передавання null і збільшення безпеки коду Rust.
 
-Але як же отримати значення `T` з варіанту `Some`, коли ви маєте значення типу `Option<T>`, щоб його використати? Енум `Option<T>` має велику кількість методів, зручних у різноманітних ситуаціях; ви можете подивитися їх у [ документації][docs]<!-- ignore -->. Ознайомлення з методами `Option<T>` буде вкрай корисним для вашого вивчення Rust.
+So how do you get the `T` value out of a `Some` variant when you have a value of type `Option<T>` so that you can use that value? The `Option<T>` enum has a large number of methods that are useful in a variety of situations; you can check them out in [its documentation][docs]<!-- ignore -->. Becoming familiar with the methods on `Option<T>` will be extremely useful in your journey with Rust.
 
-В цілому, щоб скористатися значенням `Option<T>`, ми хочемо мати код, що обробить обидва варіанти. Ми хочемо, щоб певний код виконувався лише для значень `Some(T)`, і цей код міг використовувати внутрішнє `T`. І ми хочемо, щоб інший код виконувався, коли ми маємо значення `None`, і цей код не має доступу до значення `T`. Вираз `match` - це конструкція управління, що саме це й робить, коли використовується з енумами: воно виконає різний код залежно від варіанту енума, і цей код може використовувати дані всередині відповідного значення.
+В цілому, щоб скористатися значенням `Option<T>`, ми хочемо мати код, що обробить обидва варіанти. Ми хочемо, щоб певний код виконувався лише для значень `Some(T)`, і цей код міг використовувати внутрішнє `T`. You want some other code to run only if you have a `None` value, and that code doesn’t have a `T` value available. The `match` expression is a control flow construct that does just this when used with enums: it will run different code depending on which variant of the enum it has, and that code can use the data inside the matching value.
 
 [IpAddr]: ../std/net/enum.IpAddr.html
 [option]: ../std/option/enum.Option.html
