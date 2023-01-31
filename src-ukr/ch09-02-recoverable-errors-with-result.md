@@ -2,7 +2,10 @@
 
 Більшість помилок не є достатньо серйозними, щоб вимагати повної зупинки виконання програми. Іноді, якщо функція не спрацьовує, то це можна досить просто пояснити й відреагувати певним чином. Наприклад, якщо ви намагаєтесь відкрити файл і ця операція зазнає невдачі, тому що такого файлу немає, то замість завершення процесу ви б захотіли створити такий файл.
 
-Нагадаємо з підрозділу [Керування потенційною невдачею за допомогою типу `Result`][handle_failure]<!-- ignore --> в розділі 2, що `Result` визначається як енум, що має два можливих значення `Ok` та `Err`, наступним чином:
+Recall from [“Handling Potential Failure with `Result`”][handle_failure]<!--
+ignore --> in Chapter 2 that the 
+
+`Result` enum is defined as having two variants, `Ok` and `Err`, as follows:
 
 ```rust
 enum Result<T, E> {
@@ -291,9 +294,9 @@ E>` більш підходящим способом.
 
 Коли функція `main` повертає `Result<(), E>`, виконання запиниться зі значенням `0`, якщо `main` поверне `Ok(())` і запиниться з ненульовим значенням, якщо `main` поверне значення `Err`. Виконувані файли, написані на C повертають цілі числа коли завершуються: програми які виконалися успішно повертають ціле число `0`, а програми що виконалися з помилкою повертають цілі числа, відмінні від `0`. Rust також повертає цілі числа з виконуваних файлів, щоб бути сумісним з такою домовленістю.
 
-Функція `main` може повертати довільний тип, який імплементує `std::process::Termination` трейт<!-- ignore -->, що містить метод `report`, який повертає `ExitCode`. Для більшого розуміння імплементації трейту `Termination` на власних типах рекомендуємо ознайомитися з документацією до стандартної бібліотеки.
+Функція `main` може повертати довільний тип, який імплементує `std::process::Termination` трейт<!-- ignore -->, which contains a function `report` that returns an `ExitCode`. Consult the standard library documentation for more information on implementing the `Termination` trait for your own types.
 
 Тепер, коли ми обговорили деталі виклику `panic!` й використанню `Result`, повернімось до теми, яким чином визначати, що з переліченого доцільно використовувати та в яких випадках.
 
-[handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type
+[handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-result
 [trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
