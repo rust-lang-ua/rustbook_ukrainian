@@ -1,6 +1,6 @@
 # Програмування гри - відгадайки
 
-Розпочнемо вивчення Rust зі спільної розробки проєкту! Цей розділ ознайомить вас із кількома поширеними концепціями Rust, демонструючи як вони використовуються у реальній програмі. Ви дізнаєтеся про `let`, `match`, методи, асоційовані функції, використання зовнішніх крейтів і навіть більше! Наступні розділи розкриють ці концепції детальніше. У цьому розділі ви займатиметеся основами.
+Розпочнемо вивчення Rust зі спільної розробки проєкту! Цей розділ ознайомить вас із кількома поширеними концепціями Rust, демонструючи як вони використовуються у реальній програмі. You’ll learn about `let`, `match`, methods, associated functions, external crates, and more! In the following chapters, we’ll explore these ideas in more detail. In this chapter, you’ll just practice the fundamentals.
 
 Ми розв'язуватимемо класичну задачу для програмістів-початківців: гру "відгадай число". Умови такі: програма генерує випадкове ціле число між 1 та 100. Потім пропонує гравцю ввести спробу відгадати. Після введення спроби вона скаже, чи число більше або менше за загадане. Якщо відгадано правильно, гра виведе привітання і припинить роботу.
 
@@ -22,7 +22,8 @@ cd listings/ch02-guessing-game-tutorial
 rm -rf no-listing-01-cargo-new
 cargo new no-listing-01-cargo-new --name guessing_game
 cd no-listing-01-cargo-new
-cargo run
+cargo run > output.txt 2>&1
+cd ../../..
 -->
 
 <span class="filename">Файл: Cargo.toml</span>
@@ -62,13 +63,13 @@ The `run` command comes in handy when you need to rapidly iterate on a project, 
 
 <span class="caption">Listing 2-1: Code that gets a guess from the user and prints it</span>
 
-Цей код містить багато інформації, тому розбиратимемо його рядок за рядком. Щоб отримати, що ввів користувач, і вивести результат, нам треба ввести бібліотеку введення/виведення `io` в область видимості. Бібліотека `io` входить до стандартної бібліотеки, що зветься `std`:
+Цей код містить багато інформації, тому розбиратимемо його рядок за рядком. Щоб отримати, що ввів користувач, і вивести результат, нам треба ввести бібліотеку введення/виведення `io` в область видимості. The `io` library comes from the standard library, known as `std`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
-За замовчуванням Rust має набір елементів, визначених у стандартній бібліотеці, що їх він вводить до області видимості будь-якої програми. Цей набір зветься *прелюдією*, і ви можете побачити все, що в ній міститься, [в документації стандартної бібліотеки][prelude].
+By default, Rust has a set of items defined in the standard library that it brings into the scope of every program. This set is called the *prelude*, and you can see everything in it [in the standard library documentation][prelude].
 
 Якщо типу, який ви хочете використати, нема у прелюдії, вам доведеться явно вносити цей тип у область видимості за допомогою інструкції `use`. Використання бібліотеки `std::io` надає вам ряд корисних особливостей, включно з можливістю користувацького вводу.
 
@@ -78,7 +79,7 @@ As you saw in Chapter 1, the `main` function is the entry point into the program
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
 ```
 
-The `fn` syntax declares a new function, the parentheses, `()`, indicate there are no parameters, and the curly bracket, `{`, starts the body of the function.
+The `fn` syntax declares a new function; the parentheses, `()`, indicate there are no parameters; and the curly bracket, `{`, starts the body of the function.
 
 As you also learned in Chapter 1, `println!` is a macro that prints a string to the screen:
 
@@ -102,7 +103,7 @@ This code is printing a prompt stating what the game is and requesting input fro
 let apples = 5;
 ```
 
-Цей рядок створює нову змінну з назвою `apples` і зв'язує її зі значенням 5. У Rust змінні є немутабельними за замовчанням, тобто щойно ми надамо змінній значення, воно не зміниться. Детально ця концепція обговорюється в підрозділі ["Змінні та мутабельність"][variables-and-mutability]<!-- ignore -->
+Цей рядок створює нову змінну з назвою `apples` і зв'язує її зі значенням 5. In Rust, variables are immutable by default, meaning once we give the variable a value, the value won’t change. Детально ця концепція обговорюється в підрозділі ["Змінні та мутабельність"][variables-and-mutability]<!-- ignore -->
 Розділу 3. Щоб зробити змінну мутабельною, слід додати `mut` перед її іменем:
 
 ```rust,ignore
@@ -113,9 +114,9 @@ let mut bananas = 5; // мутабельна
 > Примітка: синтаксична конструкція `//` починає коментар, що продовжується до кінця рядка. Rust ігнорує весь вміст коментаря. Про коментарі детальніше йдеться в [Розділі 3][comments]<!-- ignore -->.
 
 Повернімося до нашої ігрової програми - відгадайки. Тепер ви знаєте, що `let 
-mut guess` створить мутабельну змінну на ім'я `guess`. Знак рівності (`=`) каже Rust, що тепер ми хочемо зв'язати щось зі змінною. З правого боку знаку рівності знаходиться значення, з яким зв'язується `guess`, а саме результат виклику `String::new`, функції, що повертає новий екземпляр стрічки `String`. [`String`][string]<!-- ignore --> `String` - це тип стрічки, що надається стандартною бібліотекою; це кодовані в UTF-8 шматки тексту, які можна нарощувати.
+mut guess` створить мутабельну змінну на ім'я `guess`. Знак рівності (`=`) каже Rust, що тепер ми хочемо зв'язати щось зі змінною. On the right of the equal sign is the value that `guess` is bound to, which is the result of calling `String::new`, a function that returns a new instance of a `String`. [`String`][string]<!-- ignore --> `String` - це тип стрічки, що надається стандартною бібліотекою; це кодовані в UTF-8 шматки тексту, які можна нарощувати.
 
-Синаксична конструкція `::` в рядку `` ::new` ``позначає, що `new` - це асоційована функція типу `String`. *Асоційована функція* є реалізованою для типу, в цьому випадку `String`. Ця функція `new` створює нову, порожню `String`. Функція `new` зустрінеться вам у багатьох типах, оскільки це звичайна назва функції, що створює нове значення певного виду.
+Синаксична конструкція `::` в рядку `` ::new` ``позначає, що `new` - це асоційована функція типу `String`. *Асоційована функція* є реалізованою для типу, в цьому випадку `String`. Ця функція `new` створює нову, порожню `String`. You’ll find a `new` function on many types because it’s a common name for a function that makes a new value of some kind.
 
 В цілому: рядок `let mut guess = String::new();` створив мутабельну змінну, що зараз зв'язана з новим, порожнім екземпляром `String`. Хух!
 
@@ -127,39 +128,42 @@ mut guess` створить мутабельну змінну на ім'я `gues
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
-Якби ми не імпортували бібліотеку `io` за допомогою `use std::io` на початку програми, ми могли б використати цю функцію, написавши цей виклик як `std::io::stdin`. Функциія `stdin` повертає екземпляр [`std::io::Stdin`][iostdin]<!-- ignore -->; цей тип являє собою дескриптор (handle) стандартного потоку введення термінала.
+If we hadn’t imported the `io` library with `use std::io;` at the beginning of the program, we could still use the function by writing this function call as `std::io::stdin`. Функциія `stdin` повертає екземпляр [`std::io::Stdin`][iostdin]<!-- ignore -->; цей тип являє собою дескриптор (handle) стандартного потоку введення термінала.
 
 Далі рядок `.read_line(&mut guess)` викликає метод [`read_line`][read_line]<!--
 ignore --> дескриптора стандартного введення, щоб отримати, що ввів користувач. Ми також передаємо 
 
 `&mut guess` аргументом до `read_line`, щоб повідомити йому, до якої стрічки зберегти введення користувача. Повне завдання `read_line` - взяти те, що користувач набрав у стандартний потік введення і додати до стрічки (не перезаписавши її вміст), тому ми передаємо стрічку як аргумент. Стрічка-аргумент має бути мутабельною, щоб метод міг змінити її вміст.
 
-`&` позначає, що цей аргумент - *посилання*, що дає вам можливість надати кільком частинам вашого коду доступ до одного фрагменту даних без кількаразового копіювання цих даних у пам'яті. Посилання - складна тема, але одна з основних переваг Rust полягає в безпеці та легкості використання посилань. Для завершення цієї програми вам не знадобляться особливо детальні знання про посилання. Поки що все, що вам треба знати - що посилання, як і зміні, типово є немутабельними. Тому необхідно писати`&mut guess`, а не просто`&guess`, щоб зробити його мутабельним. (Розділ 4 пояснить посилання ретельніше.)
+`&` позначає, що цей аргумент - *посилання*, що дає вам можливість надати кільком частинам вашого коду доступ до одного фрагменту даних без кількаразового копіювання цих даних у пам'яті. Посилання - складна тема, але одна з основних переваг Rust полягає в безпеці та легкості використання посилань. Для завершення цієї програми вам не знадобляться особливо детальні знання про посилання. For now, all you need to know is that, like variables, references are immutable by default. Тому необхідно писати`&mut guess`, а не просто`&guess`, щоб зробити його мутабельним. (Розділ 4 пояснить посилання ретельніше.)
 
-### Керування потенційною невдачею за допомогою типу `Result`
+<!-- Old heading. Do not remove or links may break. -->
+<a id="handling-potential-failure-with-the-result-type"></a>
 
-Ми ще не закінчили розбиратися із цим рядком коду. Хоча це один рядок тексту, це лише перша частина єдиного логічного рядка коду. Наступна частина - це ось цей метод:
+### Handling Potential Failure with `Result`
+
+We’re still working on this line of code. We’re now discussing a third line of text, but note that it’s still part of a single logical line of code. The next part is this method:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
 ```
 
-Ми могли написати цей код ось так:
+We could have written this code as:
 
 ```rust,ignore
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
-Однак один довгий рядок важко читати, тому краще його розділити. Коли ви викликаєте метод за допомогою синтаксичної конструкції `.method_name()` часто має сенс розпочати новий рядок і додати відступи, щоб розділити довгі рядки. Тепер розглянемо, що цей рядок робить.
+However, one long line is difficult to read, so it’s best to divide it. It’s often wise to introduce a newline and other whitespace to help break up long lines when you call a method with the `.method_name()` syntax. Now let’s discuss what this line does.
 
-Як уже було сказано, `read_line` додає те, що ввів користувач, у стрічку, яку ми передали як аргумент, але також повертає значення `Result`. [`Result`][result]<!--
-ignore --> Тип `Result` - це 
+As mentioned earlier, `read_line` puts whatever the user enters into the string we pass to it, but it also returns a `Result` value. [`Result`][result]<!--
+ignore --> is an 
 
-[*перелік (enumeration)*][enums]<!-- ignore -->, який часто звуть просто *енум*, і цей тип може перебувати в одному з кількох можливих станів. Кожен такий стан зветься *варіантом*.
+[*enumeration*][enums]<!-- ignore -->, often called an *enum*, which is a type that can be in one of multiple possible states. We call each possible state a *variant*.
 
-Розділ 6 розповість про енуми детальніше. Призначення типів `Result` - представлення інформації для обробки помилок.
+[Chapter 6][enums]<!-- ignore --> will cover enums in more detail. The purpose of these `Result` types is to encode error-handling information.
 
-`Result` має варіанти `Ok` та `Err`. Варіант `Ok` показує, що операція була вдалою, і всередині варіанту `Ok` знаходиться успішно згенероване значення. Варіант `Err` позначає невдачу, і містить інформацію, як і чому операція була невдалою.
+`Result`’s variants are `Ok` and `Err`. Варіант `Ok` показує, що операція була вдалою, і всередині варіанту `Ok` знаходиться успішно згенероване значення. Варіант `Err` позначає невдачу, і містить інформацію, як і чому операція була невдалою.
 
 Значення типу `Result`, як і значення будь-якого іншого типу, мають визначені для них методи. Екземпляр `Result` має доступний для виклику [метод `expect`][expect]<!-- ignore -->
 . Якщо цей екземпляр `Result` має значення `Err`, то `expect` викличе аварійне завершення програми та виведе повідомлення, яке ви передали до `expect` параметром. Якщо метод `read_line` поверне `Err`, це, швидше за все, станеться внаслідок помилки, яка станеться в операційній системі. Якщо цей екземпляр `Result` має значення `Ok`, `expect` візьме повернуте значення, яке знаходиться в `Ok`, і поверне тільки це значення, щоб ним можна було скористатися. В цьому випадку це значення - кількість байтів, введених користувачем до стандартного потоку.
@@ -172,26 +176,26 @@ ignore --> Тип `Result` - це
 
 Якщо ми не викличемо `expect`, програма скомпілюється, проте ми отримаємо попередження:
 
-Правильний спосіб пригнітити попередження - власне, обробити помилку, але оскільки ми в цьому випадку просто хочемо, щоб програма аварійно завершилася, якщо виникне проблема, то можемо скористатися `expect`. Ви дізнаєтеся про те, як відновити роботу програми при помилці, у [Розділі 9][recover]<!-- ignore -->.
+The right way to suppress the warning is to actually write error-handling code, but in our case we just want to crash this program when a problem occurs, so we can use `expect`. Ви дізнаєтеся про те, як відновити роботу програми при помилці, у [Розділі 9][recover]<!-- ignore -->.
 
 ### Вивід значень за допомогою заповнювачів `println!`
 
-Rust warns that you haven’t used the `Result` value returned from `read_line`, indicating that the program hasn’t handled a possible error.
+Якщо не враховувати завершувальної фігурної дужки, лишився лише один рядок, який ми ще не обговорили:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
 ```
 
-Цей рядок виводить стрічку, в якій ми зберегли те, що ввів користувач. Фігурні дужки `{}` - це заповнювач: можна уявити, що `{}` - клешні маленького краба, що тримає значення на місці. Ви можете вивести більше одного значення за допомогою фігурних дужок: перший набір фігурних дужок стає першим значенням після форматної стрічки, другий набір - другим значенням і так далі. Виведення багатьох значень за один виклик `println!` виглядатиме так:
+Цей рядок виводить стрічку, в якій ми зберегли те, що ввів користувач. Фігурні дужки `{}` - це заповнювач: можна уявити, що `{}` - клешні маленького краба, що тримає значення на місці. When printing the value of a variable, the variable name can go inside the curly brackets. When printing the result of evaluating an expression, place empty curly brackets in the format string, then follow the format string with a comma-separated list of expressions to print in each empty curly bracket placeholder in the same order. Printing a variable and the result of an expression in one call to `println!` would look like this:
 
 ```rust
 let x = 5;
 let y = 10;
 
-println!("x = {} і y = {}", x, y);
+println!("x = {x} and y + 2 = {}", y + 2);
 ```
 
-Цей код виведе `x = 5 і y = 10`.
+This code would print `x = 5 and y + 2 = 12`.
 
 ### Тестування першої частини
 
@@ -222,9 +226,9 @@ You guessed: 6
 
 ### Генерація випадкового числа
 
-Пам'ятайте, що крейт є набором файлів вихідного коду Rust. Проєкт, що ми збираємо - це *двійковий крейт*, який є виконуваним. Крейт `rand` - це *бібліотечний крейт*, і він містить код, призначений для використання в інших програмах, та не може бути запущеним самостійно.
+Пам'ятайте, що крейт є набором файлів вихідного коду Rust. Проєкт, що ми збираємо - це *двійковий крейт*, який є виконуваним. The `rand` crate is a *library crate*, which contains code that is intended to be used in other programs and can’t be executed on its own.
 
-Використання зовнішніх крейтів - найсильніший бік Cargo. Перед тим, як писати код, що використовує `rand`, ми маємо змінити файл *Cargo.toml*, додавши туди крейт `rand` як залежність. Відкрийте цей файл і додайте такий рядок унизу, під заголовком секції `[dependencies]`, яку для вас створив Cargo. Переконайтеся, що зазначили `rand` точно так, як тут, із цим номером версії, інакше приклади коду з цього розділу можуть не запрацювати.
+Використання зовнішніх крейтів - найсильніший бік Cargo. Перед тим, як писати код, що використовує `rand`, ми маємо змінити файл *Cargo.toml*, додавши туди крейт `rand` як залежність. Open that file now and add the following line to the bottom, beneath the `[dependencies]` section header that Cargo created for you. Be sure to specify `rand` exactly as we have here, with this version number, or the code examples in this tutorial may not work:
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -235,33 +239,38 @@ You guessed: 6
 <span class="filename">Файл: Cargo.toml</span>
 
 ```toml
-{{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:8:}}
 ```
 
-У файлі *Cargo.toml* все, що йде після заголовку секції, належить до цієї секції - до початку нової секції. У секції `[dependencies]` ви повідомляєте Cargo, від яких зовнішніх крейтів залежить ваш проєкт і які версії цих крейтів вам потрібні. У цьому випадку, ми зазначаємо крейт `rand` зі семантичним версіюванням `0.8.3`. Cargo розуміє [Семантичне версіювання][semver]<!-- ignore --> (яке іноді звуть *SemVer*), що є стандартом для запису номерів версій. Запис `0.8.3` насправді є скороченням для `^0.8.3`, що означає будь-яку версію, не меншу за `0.8.3`, але меншу за `0.9.0`.
+У файлі *Cargo.toml* все, що йде після заголовку секції, належить до цієї секції - до початку нової секції. У секції `[dependencies]` ви повідомляєте Cargo, від яких зовнішніх крейтів залежить ваш проєкт і які версії цих крейтів вам потрібні. In this case, we specify the `rand` crate with the semantic version specifier `0.8.5`. Cargo розуміє [Семантичне версіювання][semver]<!-- ignore --> (яке іноді звуть *SemVer*), що є стандартом для запису номерів версій. The specifier `0.8.5` is actually shorthand for `^0.8.5`, which means any version that is at least 0.8.5 but below 0.9.0.
 
-Cargo вважає ці версії з сумісними з публічним API з версією `0.8.3`, і ця специфікація гарантує, що ви отримаєте останній патч реліз, який все ще буде скомпільований з кодом у цьому розділі. У версій `0.9.0` і більших не гарантується збереження API, яке використовується подальшими прикладами.
+Cargo considers these versions to have public APIs compatible with version 0.8.5, and this specification ensures you’ll get the latest patch release that will still compile with the code in this chapter. Any version 0.9.0 or greater is not guaranteed to have the same API as what the following examples use.
 
 Тепер, не змінюючи коду, побудуємо проєкт, як показано в Блоці коду 2-2.
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
+rm Cargo.lock
 cargo clean
 cargo build -->
 
 ```console
 $ cargo build
     Updating crates.io index
-  Downloaded rand v0.5.5
-  Downloaded libc v0.2.62
-  Downloaded rand_core v0.2.2
-  Downloaded rand_core v0.3.1
-  Downloaded rand_core v0.4.2
-   Compiling rand_core v0.4.2
-   Compiling libc v0.2.62
-   Compiling rand_core v0.3.1
-   Compiling rand_core v0.2.2
-   Compiling rand v0.5.5
+  Downloaded rand v0.8.5
+  Downloaded libc v0.2.127
+  Downloaded getrandom v0.2.7
+  Downloaded cfg-if v1.0.0
+  Downloaded ppv-lite86 v0.2.16
+  Downloaded rand_chacha v0.3.1
+  Downloaded rand_core v0.6.3
+   Compiling libc v0.2.127
+   Compiling getrandom v0.2.7
+   Compiling cfg-if v1.0.0
+   Compiling ppv-lite86 v0.2.16
+   Compiling rand_core v0.6.3
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.5
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
@@ -269,7 +278,7 @@ $ cargo build
 
 <span class="caption">Listing 2-2: The output from running `cargo build` after adding the rand crate as a dependency</span>
 
-Now, without changing any of the code, let’s build the project, as shown in Listing 2-2.
+You may see different version numbers (but they will all be compatible with the code, thanks to SemVer!) and different lines (depending on the operating system), and the lines may be in a different order.
 
 Тепер, коли ми маємо зовнішню залежність, Cargo витягає останні версії всього, що нам треба, з *реєстру*, тобто копії даних з [Crates.io][cratesio]. На crates.io в екосистемі Rust люди викладають свої проєкти Rust з відкритим кодом, щоб ними могли скористатися інші.
 
@@ -277,7 +286,7 @@ Now, without changing any of the code, let’s build the project, as shown in Li
 
 Якщо ви знову запустите `cargo build`, не зробивши жодних змін, ви не отримаєте жодної відповіді окрім рядка `Finished`. Cargo знає, що він вже завантажив і скомпілював залежності, а ви не змінили нічого, що б їх стосувалося, у файлі *Cargo.toml*. Cargo також знає, що ви не змінили нічого у коді, тому він не буде його перекомпільовувати. Оскільки роботи у Cargo немає, він просто завершується.
 
-Якщо ви відкриєте файл *src/main.rs*, зробите тривіальну зміну, збережете і знову зберете, то побачите тільки два рядки виводу:
+If you open the *src/main.rs* file, make a trivial change, and then save it and build again, you’ll only see two lines of output:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -290,17 +299,17 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
-Ці рядки показують, що Cargo оновив збірку тільки вашою дрібною правкою до файлу *src/main.rs*. Залежності не змінилися, і Cargo знає, що може заново використати те, що він вже завантажив і скомпілював.
+These lines show that Cargo only updates the build with your tiny change to the *src/main.rs* file. Залежності не змінилися, і Cargo знає, що може заново використати те, що він вже завантажив і скомпілював.
 
 #### Файл *Cargo.lock* гарантує відтворюваність збірки
 
-Cargo має механізм, що гарантує однаковість збірки того самого артефакту кожного разу, коли ви чи хтось інший збирає ваш код: Cargo використає тільки ті версії залежностей, які ви зазначили, доки ви не вкажете інші. Наприклад, якщо наступного тижня вийде `rand` версії `0.8.4`, що міститиме важливе виправлення помилки, але також міститиме регресію, що зламає ваш код. Щоб упоратися з цим, при першому запуску `cargo build` Rust створює файл *Cargo.lock*, що відтепер розміщується у теці *guessing_game*.
+Cargo має механізм, що гарантує однаковість збірки того самого артефакту кожного разу, коли ви чи хтось інший збирає ваш код: Cargo використає тільки ті версії залежностей, які ви зазначили, доки ви не вкажете інші. For example, say that next week version 0.8.6 of the `rand` crate comes out, and that version contains an important bug fix, but it also contains a regression that will break your code. Щоб упоратися з цим, при першому запуску `cargo build` Rust створює файл *Cargo.lock*, що відтепер розміщується у теці *guessing_game*.
 
-Коли ви збираєте проєкт вперше, Cargo визначає всі версії залежностей, що відповідають критерію, і записує їх до файлу *Cargo.lock*. Коли ви пізніше збиратимете проєкт, Cargo побачить, що файл *Cargo.lock* існує, і використає версії, зазначені там, а не буде наново робити всю роботу з визначення версій. Це дозволяє автоматично робити відтворювану збірку. Іншими словами, ваш проєкт залишиться на версії `0.8.3`, доки ви самі не захочете оновити її, завдяки файлу *Cargo.lock*. Оскільки файл *Cargo.lock* важливий для відтворюваної збірки, він часто додається до контролю початкового коду разом із рештою коду в проєкті.
+When you build a project for the first time, Cargo figures out all the versions of the dependencies that fit the criteria and then writes them to the *Cargo.lock* file. When you build your project in the future, Cargo will see that the *Cargo.lock* file exists and will use the versions specified there rather than doing all the work of figuring out versions again. Це дозволяє автоматично робити відтворювану збірку. In other words, your project will remain at 0.8.5 until you explicitly upgrade, thanks to the *Cargo.lock* file. Because the *Cargo.lock* file is important for reproducible builds, it’s often checked into source control with the rest of the code in your project.
 
 #### Оновлення крейта для отримання нової версії
 
-Коли ж ви *хочете* оновити крейт, Cargo надає іншу команду, `update`, яка ігнорує файл *Cargo.lock* і визначає всі останні версії, що відповідають специфікаціям у *Cargo.toml*. Cargo запише ці версії до файлу *Cargo.lock*. Але за замовчанням Cargo шукатиме тільки версії, більші за `0.8.3` і менші `0.9.0`. Якщо крейт `rand` вийшов у двох нових версіях, `0.8.4` та `0.9.0`, ви побачите таке, запустивши `cargo update`:
+Коли ж ви *хочете* оновити крейт, Cargo надає іншу команду, `update`, яка ігнорує файл *Cargo.lock* і визначає всі останні версії, що відповідають специфікаціям у *Cargo.toml*. Cargo запише ці версії до файлу *Cargo.lock*. Otherwise, by default, Cargo will only look for versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has released the two new versions 0.8.6 and 0.9.0, you would see the following if you ran `cargo update`:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -311,10 +320,10 @@ as a guide to creating the hypothetical output shown here -->
 ```console
 $ cargo update
     Updating crates.io index
-    Updating rand v0.5.5 -> v0.5.6
+    Updating rand v0.8.5 -> v0.8.6
 ```
 
-Cargo проігнорує реліз `0.9.0`. Також можна звернути увагу на зміну у файлі *Cargo.lock* - версія крейта `rand`, яку ви використовуєте, тепер `0.8.4`. Якщо вам потрібен `rand` версії `0.9.0` чи будь-якої версії у гілці `0.9.x`, вам доведеться оновити файл *Cargo.toml*, щоб він мав такий рядок:
+Cargo ignores the 0.9.0 release. At this point, you would also notice a change in your *Cargo.lock* file noting that the version of the `rand` crate you are now using is 0.8.6. To use `rand` version 0.9.0 or any version in the 0.9.*x* series, you’d have to update the *Cargo.toml* file to look like this instead:
 
 ```toml
 [dependencies]
@@ -323,7 +332,7 @@ rand = "0.9.0"
 
 Наступного разу, коли ви запустите `cargo build`, Cargo оновить реєстр доступних крейтів і заново перечитає вимоги до `rand` відповідно до вказаної вами нової версії.
 
-Можна ще багато розповісти про [Cargo][doccargo]<!-- ignore --> і [його екосистему][doccratesio]<!-- ignore --> , яка обговорюється у Розділі 14, але поки що цього знати достатньо. Cargo робить використання бібліотек дуже простим, що дозволяє растацеанцям писати менші проєкти, зібрані з кількох пакетів.
+Можна ще багато розповісти про [Cargo][doccargo]<!-- ignore --> і [його екосистему][doccratesio]<!-- ignore -->, which we’ll discuss in Chapter 14, but for now, that’s all you need to know. Cargo робить використання бібліотек дуже простим, що дозволяє растацеанцям писати менші проєкти, зібрані з кількох пакетів.
 
 ### Генерація випадкового числа
 
@@ -338,12 +347,12 @@ rand = "0.9.0"
 
 <span class="caption">Listing 2-3: Adding code to generate a random number</span>
 
-Спершу ми додаємо рядок `use rand::Rng`. Трейт `Rng` визначає методи, які реалізує генератор випадкових чисел, і цей трейт має бути в області видимості, щоб ми могли скористатися цими методами. Розділ 10 розповість про трейти детальніше.
+First we add the line `use rand::Rng;`. Трейт `Rng` визначає методи, які реалізує генератор випадкових чисел, і цей трейт має бути в області видимості, щоб ми могли скористатися цими методами. Розділ 10 розповість про трейти детальніше.
 
-Далі ми додаємо всередині ще два рядки. У першому рядку ми викликаємо функцію `rand::thread_rng`, що дає нам генератор випадкових чисел, яким ми користуватимемся: він прив'язаний до потоку виконання, а його початкове значення задане операційною системою. Потім ми викликаємо метод генератора випадкових чисел `gen_range`. Цей метод визначається трейтом `Rng`, який ми внесли до області видимості інструкцією `
-use range::Rng`. Метод `gen_range` приймає параметрами два числа і генерує випадкове число в діапазоні між ними. Вираз для діапазону, що ми його тут застосували, має форму `початок..=кінець` і включає нижню і верхню межі, тому треба вказувати `1..=100`, щоб отримати число між 1 та 100.
+Далі ми додаємо всередині ще два рядки. In the first line, we call the `rand::thread_rng` function that gives us the particular random number generator we’re going to use: one that is local to the current thread of execution and is seeded by the operating system. Потім ми викликаємо метод генератора випадкових чисел `gen_range`. This method is defined by the `Rng` trait that we brought into scope with the `use rand::Rng;` statement. Метод `gen_range` приймає параметрами два числа і генерує випадкове число в діапазоні між ними. Вираз для діапазону, що ми його тут застосували, має форму `початок..=кінець` і включає нижню і верхню межі, тому треба вказувати `1..=100`, щоб отримати число між 1 та 100.
 
-> Примітка: Ви, звісно, не можете одразу знати, які трейти використати і які методи та функції викликати з крейта, тому кожен крейт має документацію з інструкцією до використання. Ще одна корисна можливість Cargo полягає в тому, що команда `cargo doc --open` збере на вашому комп'ютері документацію, надану всіма залежностями, і відкриє її у вашому переглядачі. Якщо вам цікавий інший функціонал, скажімо, крейту `rand`, запустіть `cargo doc --open` і клацніть `rand` на боковій панелі ліворуч.
+> Примітка: Ви, звісно, не можете одразу знати, які трейти використати і які методи та функції викликати з крейта, тому кожен крейт має документацію з інструкцією до використання. Another neat feature of Cargo is that running the `cargo doc
+  --open` command will build documentation provided by all your dependencies locally and open it in your browser. Якщо вам цікавий інший функціонал, скажімо, крейту `rand`, запустіть `cargo doc --open` і клацніть `rand` на боковій панелі ліворуч.
 
 Другий рядок, який ми додали до коду, виводить таємне число. Це корисно, поки ми розробляємо програму, щоб можна було перевірити її роботу, але ми видалимо його у фінальній версії. Буде не дуже цікаво, якщо програма виводитиме відповідь одразу по запуску!
 
@@ -382,7 +391,7 @@ You guessed: 5
 
 ## Порівняння здогадки з таємним числом
 
-Тепер, коли ми маємо введене користувачем і випадкове числа, ми можемо їх порівняти. Цей крок показано в Блоці коду 2-4. Зверніть увагу, що цей код ще не компілюється, як ми зараз пояснимо.
+Тепер, коли ми маємо введене користувачем і випадкове числа, ми можемо їх порівняти. Цей крок показано в Блоці коду 2-4. Note that this code won’t compile just yet, as we will explain.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -395,14 +404,21 @@ You guessed: 5
 
 Спершу ми додали ще одну інструкцію `use`, яка вводить тип `std::cmp::Ordering` зі стандартної бібліотеки в область видимості. Тип `Ordering` ("впорядкування") - це ще один енум, що має варіанти: `Less` ("менше"), `Greater` ("більше"), and `Equal` ("дорівнює"). Це три можливі результати порівняння двох значень.
 
-Потім ми додали в кінець коду п'ять нових рядків, в яких використали тип `Ordering`. Метод `cmp` порівнює два значення і може бути викликаний для всього, що можна порівнювати. Він приймає параметром посилання на те, що ви хочете порівнювати; тут він порівнює `guess` із `secret_number`. Потім він повертає варіант енуму `Ordering`, який ми внесли у область видимості за допомогою інструкції `use`. Ми скористалися виразом [`match`][match]<!-- ignore --> , щоб визначити, що робити далі залежно від варіанту `Ordering`, що його повернув виклик `cmp` зі значеннями `guess` та `secret_number`.
+Потім ми додали в кінець коду п'ять нових рядків, в яких використали тип `Ordering`. Метод `cmp` порівнює два значення і може бути викликаний для всього, що можна порівнювати. It takes a reference to whatever you want to compare with: here it’s comparing `guess` to `secret_number`. Потім він повертає варіант енуму `Ordering`, який ми внесли у область видимості за допомогою інструкції `use`. Ми скористалися виразом [`match`][match]<!-- ignore --> , щоб визначити, що робити далі залежно від варіанту `Ordering`, що його повернув виклик `cmp` зі значеннями `guess` та `secret_number`.
 
-Вираз `match` складається з *рукавів*. Рукав складається зі *шаблона* (<0>pattern</0>) для порівняння та коду, який буде виконано, якщо значення, передане виразу `match`, відповідає шаблону цього рукава. Rust бере значення, передане `match`, і по черзі перевіряє шаблони рукавів. Шаблони та конструкція `match` - потужні засоби Rust, які дозволяють вам виражати різноманітні ситуації, які можуть трапитися вам при програмуванні, і допомагають переконатися, що ви обробили їх усіх. Детально ці можливості будуть розглянуті в Розділах 6 і 18, відповідно.
+Вираз `match` складається з *рукавів*. Рукав складається зі *шаблона* (<0>pattern</0>) для порівняння та коду, який буде виконано, якщо значення, передане виразу `match`, відповідає шаблону цього рукава. Rust бере значення, передане `match`, і по черзі перевіряє шаблони рукавів. Patterns and the `match` construct are powerful Rust features: they let you express a variety of situations your code might encounter and they make sure you handle them all. Детально ці можливості будуть розглянуті в Розділах 6 і 18, відповідно.
 
 Розберімо крок за кроком цей приклад з виразом `match`. Нехай користувач увів 50, а випадково згенероване цього разу таємне число -
-38. Коли код порівнює 50 і 38, метод `cmp` поверне `Ordering::Greater`, бо 50 більше за 38. Вираз `match` отримує значення `Ordering::Greater` і починає перевіряти шаблони кожного рукава. Він перевіряє шаблон першого рукава, `Ordering::Less`, і бачить, що значення `Ordering::Greater` не відповідає `Ordering::Less`, тому пропускає рукав і переходить до наступного рукава. Шаблон наступного рукава, `Ordering::Greater`, *відповідає* `Ordering::Greater`! Код цього рукава буде виконано і виведе на екран `Too big!`. Вираз `match` завершується після першого вдалого порівняння, тому останній рукав в цьому випадку не буде перевірено.
+38.
+
+When the code compares 50 to 38, the `cmp` method will return `Ordering::Greater` because 50 is greater than 38. Вираз `match` отримує значення `Ordering::Greater` і починає перевіряти шаблони кожного рукава. Він перевіряє шаблон першого рукава, `Ordering::Less`, і бачить, що значення `Ordering::Greater` не відповідає `Ordering::Less`, тому пропускає рукав і переходить до наступного рукава. Шаблон наступного рукава, `Ordering::Greater`, *відповідає* `Ordering::Greater`! Код цього рукава буде виконано і виведе на екран `Too big!`. Вираз `match` завершується після першого вдалого порівняння, тому останній рукав в цьому випадку не буде перевірено.
 
 Але Блок коду 2-4 все ще не компілюється. Спробуймо його скомпілювати:
+
+<!--
+The error numbers in this output should be that of the code **WITHOUT** the
+anchor or snip comments
+-->
 
 ```console
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/output.txt}}
@@ -410,7 +426,7 @@ You guessed: 5
 
 Суть цієї помилки в тому, що тут є *невідповідні типи*. Rust має сильну, статичну систему типів. Разом із тим, він має систему виведення типів. Коли ми писали `let mut guess = String::new()`, Rust зміг вивести, що `guess` має бути типу `String` і не просив нас написати тип. `secret_number`, з іншого боку, числового типу. Кілька числових типів Rust можуть мати значення між 1 та 100: `i32`, знакове 32-бітне число; `u32`, беззнакове 32-бітне число; `i64`, знакове 64-бітне число і кілька інших. Як не вказати іншого, Rust за замовчанням обере `i32`, і це й буде типом `secret_number`, якщо ви не додасте інформацію про тип деінде, щоб змусити Rust вивести інший числовий тип. Причина ж цієї помилки полягає в тому, що Rust не може порівнювати стрічку і числовий тип.
 
-Зрештою, ми хочемо перетворити стрічку `String`, яку програма прочитала з клавіатури, в числовий тип, щоб можна було порівняти його як число зі таємним числом. Це можна зробити, додавши ще один рядок до функції `main`:
+Зрештою, ми хочемо перетворити стрічку `String`, яку програма прочитала з клавіатури, в числовий тип, щоб можна було порівняти його як число зі таємним числом. We do so by adding this line to the `main` function body:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -424,20 +440,19 @@ You guessed: 5
 let guess: u32 = guess.trim().parse().expect("Please type a number!");
 ```
 
-Ми створили змінну з назвою `guess`. Але чекайте, в програмі вже ніби існує змінна з назвою `guess`? Так, але Rust дозволяє *затінити* попереднє значення `guess` новим. Затінення дозволяє нам наново використати ім'я змінної `guess`, щоб не довелося створювати дві окремі змінні на кшталт `guess_str` і `guess`. Розділ 3 детальніше розповідає про затінення, а поки що знайте, що ця особливість часто використовується, коли нам треба перетворити значення з одного типу в інший.
+Ми створили змінну з назвою `guess`. Але чекайте, в програмі вже ніби існує змінна з назвою `guess`? It does, but helpfully Rust allows us to shadow the previous value of `guess` with a new one. *Shadowing* lets us reuse the `guess` variable name rather than forcing us to create two unique variables, such as `guess_str` and `guess`, for example. We’ll cover this in more detail in [Chapter 3][shadowing]<!-- ignore -->, but for now, know that this feature is often used when you want to convert a value from one type to another type.
 
 Ми зв'язали нову змінну з виразом `guess.trim().parse()`. `guess` у цьому виразі стосується першої змінної `guess`, у якій міститься стрічка, введена користувачем. Метод `trim`, застосований до екземпляра `String`, видалить всі пробільні символи на початку і в кінці, що треба зробити, аби порівняти стрічку з `u32`, який містить виключно числові дані. Користувач має натиснути на <span class="keystroke">enter</span>, щоб спрацював метод `read_line` і данні були введені, але це додає символ нового рядка до стрічки. Наприклад, якщо користувач набере <span class="keystroke">5</span> і натисне <span
-class="keystroke">enter</span>, `guess` буде виглядати як `5\n`. `\n` позначає символ нового рядка. (У Windows натискання <span
-class="keystroke">enter</span> створює символи повернення каретки та нового рядка, `\r\n`). Метод `trim` видалить `\n` чи `\r\n`, і залишиться просто `5`.
+class="keystroke">enter</span>, `guess` буде виглядати як `5\n`. The `\n` represents “newline.” (On Windows, pressing <span
+class="keystroke">enter</span> results in a carriage return and a newline, `\r\n`.) Метод `trim` видалить `\n` чи `\r\n`, і залишиться просто `5`.
 
-[Метод `parse` для стрічок][parse]<!-- ignore --> перетворює стрічку на інший тип. Тут ми застосовуємо його для перетворення стрічки в число. Ми маємо повідомити Rust, який саме числовий тип нам потрібен, за допомогою `let guess: u32`. Двокрапка (`:`) після `guess` каже Rust, що ми анотуємо тип змінної. У Rust є кілька вбудованих числових типів; `u32`, що ви бачите тут є беззнаковим 32-бітним цілим. Це непоганий вибір для невеликих додатних чисел. Про інші числові типи ви дізнаєтеся у Розділі 3. На додачу, саме анотація `u32` в цьому прикладі та порівняння із `secret_number` означає, що Rust виведе, що `secret_number` теж має бути `u32`. І тепер порівнюватимуться два значення одного типу!
+The [`parse` method on strings][parse]<!-- ignore --> перетворює стрічку на інший тип. Тут ми застосовуємо його для перетворення стрічки в число. Ми маємо повідомити Rust, який саме числовий тип нам потрібен, за допомогою `let guess: u32`. Двокрапка (`:`) після `guess` каже Rust, що ми анотуємо тип змінної. У Rust є кілька вбудованих числових типів; `u32`, що ви бачите тут є беззнаковим 32-бітним цілим. Це непоганий вибір для невеликих додатних чисел. You’ll learn about other number types in [Chapter 3][integers]<!-- ignore -->.
 
-Метод `parse` буде працювати тільки з символами, які можна логічно перетворити на числа, і тому легко може викликати помилки. Якщо, наприклад, стрічка містить `A👍%`, її неможливо буде перетворити на число. Оскільки метод `parse` може завершитися невдачею, він повертає `Result`, майже так само, як і метод `read_line` (про який ми вже говорили раніше в підрозділі ["Керування потенційною невдачею за допомогою типу `Result`"](#handling-potential-failure-with-the-result-type)<!-- ignore
--->). Ми обробимо цей 
+Additionally, the `u32` annotation in this example program and the comparison with `secret_number` means Rust will infer that `secret_number` should be a `u32` as well. So now the comparison will be between two values of the same type!
 
-`Result` так само - за допомогою методу `expect`. Якщо `parse` поверне варіант `Err`, бо він не зміг створити число зі стрічки, виклик `expect` аварійно припинить гру і виведе повідомлення, яке ми йому надали. Якщо `parse` вдало створив число зі стрічки, він поверне варіант `Ok`, а `expect` поверне потрібне нам число зі значення `Ok`.
+Метод `parse` буде працювати тільки з символами, які можна логічно перетворити на числа, і тому легко може викликати помилки. Якщо, наприклад, стрічка містить `A👍%`, її неможливо буде перетворити на число. Because it might fail, the `parse` method returns a `Result` type, much as the `read_line` method does (discussed earlier in [“Handling Potential Failure with `Result`”](#handling-potential-failure-with-result)<!-- ignore-->). We’ll treat this `Result` the same way by using the `expect` method again. If `parse` returns an `Err` `Result` variant because it couldn’t create a number from the string, the `expect` call will crash the game and print the message we give it. If `parse` can successfully convert the string to a number, it will return the `Ok` variant of `Result`, and `expect` will return the number that we want from the `Ok` value.
 
-А тепер запустімо програму!
+Let’s run the program now:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/
@@ -511,7 +526,7 @@ thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidD
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-Введення `quit` ("вийти") дійсно призводить до виходу з гри, але так само спрацює будь-що, що не є числом. А все ж таки, це щонайменше не найкращий спосіб. Ми хочемо, щоб гра сама зупинялася, коли ми відгадали число.
+Typing `quit` will quit the game, but as you’ll notice, so will entering any other non-number input. This is suboptimal, to say the least; we want the game to also stop when the correct number is guessed.
 
 ### Вихід після вдалої здогадки
 
@@ -540,7 +555,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 Ми замінили виклик `expect` на вираз `match`, щоб перейти від аварійного завершення програми до обробки помилки. Згадаймо, що метод `parse` повертає тип `Result`, а `Result` - це енум, що має варіанти `Ok` та `Err`. Ми використовуємо тут вираз `match`, так само як робили з `Ordering`, що його повертає метод `cmp`.
 
-Якщо `parse` зможе вдало перетворити стрічку на число, він поверне значення `Ok`, що міститиме результат - число. Це значення `Ok` буде відповідати зразку першого рукава, і весь вираз `match` поверне значення `num`, яке `parse` обчислив і поклав всередину значення `Ok`. Це число потрапить саме туди, куди нам треба - в нову змінну `guess`, яку ми створюємо.
+If `parse` is able to successfully turn the string into a number, it will return an `Ok` value that contains the resultant number. Це значення `Ok` буде відповідати зразку першого рукава, і весь вираз `match` поверне значення `num`, яке `parse` обчислив і поклав всередину значення `Ok`. Це число потрапить саме туди, куди нам треба - в нову змінну `guess`, яку ми створюємо.
 
 Якщо `parse` *не* зможе перетворити стрічку на число, він поверне значення `Err`, що міститиме більше інформації про помилку. Значення `Err` не відповідає шаблону `Ok(num)` у першому рукаві `match`, але відповідає шаблону `Err(_)` у другому. Підкреслення `_` перехопить будь-яке значення; в цьому випадку, ми кажемо, що вираз має відповідати будь-якому `Err`, незалежно від інформації, що міститься у ньому. Тож програма виконає код другого рукава, `continue`, який каже програмі перейти на наступну ітерацію циклу `loop` і знову запитати наступну спробу. Таким чином, програма ігнорує всі помилки, які можуть зустрітися `parse`!
 
@@ -588,9 +603,9 @@ You win!
 
 <span class="caption">Блок коду 2-6: Повний код гри "відгадай число!"</span>
 
-## Підсумок
-
 Отже, ви зуміли вдало зібрати гру "відгадай число". Вітаємо!
+
+## Підсумок
 
 Цей проєкт був вступом до багатьох концепцій мови Rust через практику: `let`, `match`, функції, використання зовнішніх крейтів та інших. У кількох наступних розділах ми детальніше розберемо ці концепції. Розділ 3 розповідає про концепції, які є у більшості мов програмування, такі як змінні, типи даних, функції і показує, як ними користуватися в Rust. Розділ 4 досліджує володіння, концепцію мови Rust, що є найбільш відмінною від інших мов. Розділ 5 обговорює синтаксис структур і методів, а Розділ 6 детально розкриває, як працюють енуми.
 
@@ -602,6 +617,7 @@ You win!
 [read_line]: ../std/io/struct.Stdin.html#method.read_line
 [result]: ../std/result/enum.Result.html
 [enums]: ch06-00-enums.html
+[enums]: ch06-00-enums.html
 [expect]: ../std/result/enum.Result.html#method.expect
 [recover]: ch09-02-recoverable-errors-with-result.html
 [randcrate]: https://crates.io/crates/rand
@@ -610,4 +626,6 @@ You win!
 [doccargo]: http://doc.crates.io
 [doccratesio]: http://doc.crates.io/crates-io.html
 [match]: ch06-02-match.html
+[shadowing]: ch03-01-variables-and-mutability.html#shadowing
 [parse]: ../std/primitive.str.html#method.parse
+[integers]: ch03-02-data-types.html#integer-types
