@@ -111,14 +111,15 @@ fn main() {
 Запуск `cargo clippy` на цьому проєкті призводить до помилки:
 
 ```text
-error: approximate value of `f{32, 64}::consts::PI` found. Consider using it directly
+error: approximate value of `f{32, 64}::consts::PI` found
  --> src/main.rs:2:13
   |
 2 |     let x = 3.1415;
   |             ^^^^^^
   |
-  = note: #[deny(clippy::approx_constant)] on by default
-  = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
+  = note: `#[deny(clippy::approx_constant)]` on by default
+  = help: consider using the constant directly
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
 Ця помилка повідомляє, що Rust вже має більш точну константу `Пі` і що ваша програма буде коректнішою, якщо ви скористаєтеся цією константою. Тоді ви зміните свій код, щоб використовувати константу `Пі`. Наступний код не призводить до помилок або попереджень від Clippy:
@@ -142,7 +143,8 @@ ignore -->, що є специфікацією для IDE і мов програ
 
 `rust-analyzer`, наприклад [the Rust analyzer plug-in for Visual Studio Code][vscode].
 
-Відвідайте [домашню сторінку][rust-analyzer] проєкту `rust-analyzer`, щоб отримати інструкцію для встановлення, тоді встановіть підтримку мовного сервера у вашому конкретному IDE. Ваше IDE набуде можливостей, таких, як автодоповнення, перехід до визначення і вбудовані помилки.
+Відвідайте [домашню сторінку проєкту][rust-analyzer] `Rust-analyzer` на<!-- ignore -->
+для інструкцій з установки, потім встановіть підтримку мовного сервера у вашому IDE. Ваше IDE набуде можливостей, таких, як автодоповнення, перехід до визначення і вбудовані помилки.
 
 [rustfmt]: https://github.com/rust-lang/rustfmt
 
