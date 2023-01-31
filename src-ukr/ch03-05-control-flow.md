@@ -1,6 +1,6 @@
 ## Управління потоком виконання
 
-Здатність виконувати чи ні певний код залежно від того, чи умова істинна, чи повторити певний код кілька разів, доки умова істинна - базові будівельні елементи коду у більшості мов програмування. Найпоширеніші конструкції, що дозволяють вам управляти потоком виконання коду на Rust є вирази `if` та цикли.
+The ability to run some code depending on whether a condition is `true` and to run some code repeatedly while a condition is `true` are basic building blocks in most programming languages. The most common constructs that let you control the flow of execution of Rust code are `if` expressions and loops.
 
 ### Вирази `if`
 
@@ -14,10 +14,10 @@
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/src/main.rs}}
 ```
 
-Всі вирази `if` починаються з ключового слова `if`, за яким іде умова. В цьому випадку умова перевіряє, має чи ні змінна `number` значення, менше за 5. Ми розміщуємо блок коду, який виконається виконати, якщо умова істинна, одразу після умови в фігурних дужках. Блоки коду, прив'язані до умов у виразах `if`, іноді звуть *рукавами*, так само як рукави у виразах `match`, що ми обговорювали у підрозділі [Порівняння здогадки з таємним числом]()<!--
+Всі вирази `if` починаються з ключового слова `if`, за яким іде умова. В цьому випадку умова перевіряє, має чи ні змінна `number` значення, менше за 5. We place the block of code to execute if the condition is `true` immediately after the condition inside curly brackets. Блоки коду, прив'язані до умов у виразах `if`, іноді звуть *рукавами*, так само як рукави у виразах `match`, що ми обговорювали у підрозділі [Порівняння здогадки з таємним числом]()<!--
 ignore --> Розділу 2.
 
-Також можна додати необов'язковий вираз `else`, як ми зробили тут, щоб надати програмі альтернативний блок коду для виконання, якщо умова виявиться хибною. Якщо ви не надасте виразу `else`, а умова буде хибною, програма просто пропустить блок `if` і перейде до наступного фрагмента коду.
+Optionally, we can also include an `else` expression, which we chose to do here, to give the program an alternative block of code to execute should the condition evaluate to `false`. If you don’t provide an `else` expression and the condition is `false`, the program will just skip the `if` block and move on to the next bit of code.
 
 Спробуйте запустити цей код; ви маєте побачити, що він виведе таке:
 
@@ -77,7 +77,7 @@ The `if` condition evaluates to a value of `3` this time, and Rust throws an err
 {{#include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/output.txt}}
 ```
 
-Коли ця програма виконується, вона перевіряє по черзі кожен вираз `if` і виконує перший блок, для якого умова справджується. Зверніть увагу, що, хоча 6 і ділиться на 2, ми не бачимо повідомлення `number is divisible by 2`, так само як і `number is not divisible by 4, 3 чи 2` з блоку `else` - бо Rust виконає тільки той блок, в якого першого буде істинна умова, а знайшовши його, не перевіряє всю решту умов.
+When this program executes, it checks each `if` expression in turn and executes the first body for which the condition evaluates to `true`. Note that even though 6 is divisible by 2, we don’t see the output `number is divisible by 2`, nor do we see the `number is not divisible by 4, 3, or 2` text from the `else` block. That’s because Rust only executes the block for the first `true` condition, and once it finds one, it doesn’t even check the rest.
 
 Забагато виразів `else if` можуть захарастити ваш код, тому, якщо вам треба більш ніж одна така конструкція, цілком можливо, що знадобиться рефакторизувати ваш код. У Розділі 6 описана потужна конструкція мови Rust для розгалуження, що зветься `match`, для таких випадків.
 
@@ -118,7 +118,7 @@ Because `if` is an expression, we can use it on the right side of a `let` statem
 
 ### Повторення коду за допомогою циклів
 
-Часто трапляється, що блок коду треба виконати більше одного разу. Для цього Rust надає декілька *циклів*. Цикл виконує весь код тіла циклу до кінця, після чого починає спочатку. Для експериментів з циклами зробімо новий проєкт під назвою *loops*.
+Часто трапляється, що блок коду треба виконати більше одного разу. Для цього Rust надає декілька *циклів*. Цикл виконує весь код тіла циклу до кінця, після чого починає спочатку. To experiment with loops, let’s make a new project called *loops*.
 
 У Rust є три види циклів: `loop`, `while` та `for`. Спробуємо кожен з них.
 
@@ -134,7 +134,7 @@ As an example, change the *src/main.rs* file in your *loops* directory to look l
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-loop/src/main.rs}}
 ```
 
-Якщо запустити цю програму, ми побачимо, що `again!` виводиться неперервно раз у раз, доки ми не зупинимо програму вручну. Більшість терміналів підтримують клавіатурне скорочення <span class="keystroke">ctrl+c</span>, яке зупиняє програму, що застрягла у нескінченому циклі. Спробуйте:
+Якщо запустити цю програму, ми побачимо, що `again!` виводиться неперервно раз у раз, доки ми не зупинимо програму вручну. Most terminals support the keyboard shortcut <span class="keystroke">ctrl-c</span> to interrupt a program that is stuck in a continual loop. Спробуйте:
 
 
 <!-- manual-regeneration
@@ -155,7 +155,8 @@ again!
 ^Cagain!
 ```
 
-Символ `^C` позначає, де ви натиснули <span class="keystroke">ctrl-c</span>. Слово `again!` може вивестися після `^C` чи ні, залежно від того, в який саме момент виконання коду був надісланий сигнал зупинки.
+The symbol `^C` represents where you pressed <span
+class="keystroke">ctrl-c</span>. You may or may not see the word `again!` printed after the `^C`, depending on where the code was in the loop when it received the interrupt signal.
 
 На щастя, Rust надає також інший, більш надійний спосіб перервати цикл за допомогою коду. Ви можете розмістити в циклі ключове слово `break`, щоб сказати програмі, коли припинити виконувати цикл. Згадайте, що ми вже його використовували у грі "Відгадай число" в підрозділі ["Вихід після вдалої здогадки"]()<!-- ignore
 --> Розділу 2, щоб вийти з програми, коли користувач вигравав у грі, відгадавши правильне число.
@@ -170,11 +171,11 @@ We also used `continue` in the guessing game, which in a loop tells the program 
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-33-return-value-from-loop/src/main.rs}}
 ```
 
-Перед циклом ми проголошуємо змінну `counter` і ініціалізуємо її в `0`. Потім ми проголошуємо змінну `result`, що отримає значення, повернуте з циклу. На кожній ітерації циклу, ми додаємо `1` до змінної `counter`, а потім перевіряємо, чи дорівнює counter `10`. Коли так, ми використовуємо ключове слово `break` зі значенням `counter * 2`. Після циклу ми ставимо крапку з комою, щоб завершити інструкцію, що присвоює значення змінній `result`. Наприкінці, ми виводимо значення `result`, у цьому випадку 20.
+Перед циклом ми проголошуємо змінну `counter` і ініціалізуємо її в `0`. Потім ми проголошуємо змінну `result`, що отримає значення, повернуте з циклу. On every iteration of the loop, we add `1` to the `counter` variable, and then check whether the `counter` is equal to `10`. Коли так, ми використовуємо ключове слово `break` зі значенням `counter * 2`. Після циклу ми ставимо крапку з комою, щоб завершити інструкцію, що присвоює значення змінній `result`. Finally, we print the value in `result`, which in this case is `20`.
 
 #### Мітки циклів для розрізнення між декількома циклами
 
-Якщо у вас є цикли, вкладені в інші цикли, `break` і `continue` стосуються найглибшого циклу в точці, де вони застосовані. Ви можете за потреби вказати *мітку циклу* на циклі, що можна потім використати в інструкціях `break` та `continue`, щоб вказати, що ці ключові слова стосуються циклу з міткою, а не найглибшого циклу. Позначки циклу починаються з одинарної лапки. Ось приклад із двома вкладеними циклами:
+Якщо у вас є цикли, вкладені в інші цикли, `break` і `continue` стосуються найглибшого циклу в точці, де вони застосовані. You can optionally specify a *loop label* on a loop that you can then use with `break` or `continue` to specify that those keywords apply to the labeled loop instead of the innermost loop. Loop labels must begin with a single quote. Ось приклад із двома вкладеними циклами:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
@@ -188,7 +189,7 @@ We also used `continue` in the guessing game, which in a loop tells the program 
 
 #### Умовні цикли за допомогою `while`
 
-Програмі часто потрібно обчислювати умову в циклі. Доки умова істинна, цикл виконується. Коли умова припиняє бути істинною, можна викликати `break`, щоб зупинити цикл. Такий цикл можна реалізувати за допомогою комбінації `loop`, `if`, `else` та `break`; якщо бажаєте, можете спробувати зробити це зараз. Утім, цей шаблон настільки поширений, що Rust має вбудовану конструкцію для цього, що зветься циклом `while`. У Блоці коду 3-3 ми використовуємо `while`, щоб повторити програму тричі, зменшуючи кожного разу відлік, і потім, після циклу, вивести повідомлення і завершитися.
+Програмі часто потрібно обчислювати умову в циклі. While the condition is `true`, the loop runs. When the condition ceases to be `true`, the program calls `break`, stopping the loop. Такий цикл можна реалізувати за допомогою комбінації `loop`, `if`, `else` та `break`; якщо бажаєте, можете спробувати зробити це зараз. Утім, цей шаблон настільки поширений, що Rust має вбудовану конструкцію для цього, що зветься циклом `while`. У Блоці коду 3-3 ми використовуємо `while`, щоб повторити програму тричі, зменшуючи кожного разу відлік, і потім, після циклу, вивести повідомлення і завершитися.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -199,7 +200,7 @@ We also used `continue` in the guessing game, which in a loop tells the program 
 
 <span class="caption">Listing 3-3: Using a `while` loop to run code while a condition holds true</span>
 
-Ця конструкція мови усуває складні вкладені конструкції, які були б потрібні, якби ви використовували `loop`, `if`, `else` та `break`, і вона зрозуміліша. Поки умова істинна, код виконується; в іншому разі, виходить з циклу.
+Ця конструкція мови усуває складні вкладені конструкції, які були б потрібні, якби ви використовували `loop`, `if`, `else` та `break`, і вона зрозуміліша. While a condition evaluates to `true`, the code runs; otherwise, it exits the loop.
 
 #### Цикл по колекції за допомогою `for`
 
@@ -214,7 +215,7 @@ We also used `continue` in the guessing game, which in a loop tells the program 
 
 <span class="caption">Listing 3-4: Looping through each element of a collection using a `while` loop</span>
 
-Тут код перелічує всі елементи в масиві. Він починає з індексу `0`, а потім повторює, доки не досягне останнього індексу масиву (тобто коли `index < 5` вже не буде істинним). Виконання цього коду виведе всі елементи масиву:
+Тут код перелічує всі елементи в масиві. It starts at index `0`, and then loops until it reaches the final index in the array (that is, when `index < 5` is no longer `true`). Running this code will print every element in the array:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/listing-03-04/output.txt}}
@@ -222,7 +223,7 @@ We also used `continue` in the guessing game, which in a loop tells the program 
 
 Всі п'ять значень з масиву з'являються в терміналі, як і очікувалося. Хоча `index` досягне значення `5`, виконання циклу припиняється до спроби отримати шосте значення з масиву.
 
-Але такий підхід вразливий до помилок; ми можемо викликати паніку в програмі некоректним індексом чи умовою продовження. Скажімо, якщо ви зміните визначення масиву `a` так, щоб він мав чотири елементи, і забудете змінити умову на `while index < 4`, це код викличе паніку. Також він повільний, оскільки компілятор додає код для перевірки коректності індексу кожного елементу на кожній ітерації циклу.
+However, this approach is error prone; we could cause the program to panic if the index value or test condition is incorrect. For example, if you changed the definition of the `a` array to have four elements but forgot to update the condition to `while index < 4`, the code would panic. Також він повільний, оскільки компілятор додає код для перевірки коректності індексу кожного елементу на кожній ітерації циклу.
 
 Як стислішу альтернативу можна використати цикл `for`, який виконує код для кожного елементу колекції. Цикл `for` виглядає так, як показано в Блоці коду 3-5.
 
@@ -253,10 +254,10 @@ Here’s what the countdown would look like using a `for` loop and another metho
 
 ## Підсумок
 
-Нарешті закінчили! Це був величенький розділ: ви вивчили змінні, скалярні та складені типи даних, функції, коментарі, вирази `if`, та ще цикли! Якщо ви хочете повправлятися з концепціями, обговореними у цьому розділі, спробуйте написати програми, що роблять таке:
+Нарешті закінчили! This was a sizable chapter: you learned about variables, scalar and compound data types, functions, comments, `if` expressions, and loops! To practice with the concepts discussed in this chapter, try building programs to do the following:
 
 * Конвертує температуру між шкалами Фаренгейта та Цельсія.
-* Обчислює n-е число Фібоначчі.
+* Generate the *n*th Fibonacci number.
 * Print the lyrics to the Christmas carol “The Twelve Days of Christmas,” taking advantage of the repetition in the song.
 
 When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t* commonly exist in other programming languages: ownership. ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess
