@@ -58,7 +58,7 @@ This code succeeds in figuring out the area of the rectangle by calling the `are
 
 <span class="caption">Блок коду 5-10: визначення структури `Rectangle`</span>
 
-Тут ми визначили структуру і назвали її `Rectangle`. Всередині фігурних дужок ми визначили поля `width` та `height`, обидва типу `u32`. Далі в `main` ми створюємо конкретний екземпляр `Rectangle` з шириною 30 і висотою 50.
+Тут ми визначили структуру і назвали її `Rectangle`. Всередині фігурних дужок ми визначили поля `width` та `height`, обидва типу `u32`. Then, in `main`, we created a particular instance of `Rectangle` that has a width of `30` and a height of `50`.
 
 Наша функція `area` тепер має визначення з одним параметром, який ми назвали `rectangle`, тип якого - немутабельне позичення екземпляра структури `Rectangle`. Як ми вже казали в Розділі 4, ми можемо позичити структуру замість перебирати володіння ним. Таким чином `main` зберігає володіння і може продовжувати використовувати `rect1`, тому ми застосовуємо `&` у сигнатурі функції та при її виклику.
 
@@ -83,7 +83,7 @@ This code succeeds in figuring out the area of the rectangle by calling the `are
 {{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:3}}
 ```
 
-Макрос `println!` може виконувати багато різних видів форматувань, і за замовчанням фігурні дужки кажуть `println!` використати форматування, відоме як `Display`: вивести те, що призначене для читання кінцевим споживачем. Примітивні типи, з яким ми досі стикалися, реалізують `Display` за замовчанням, оскільки є лише один спосіб, яким можна показати `1` чи якийсь інший примітивний тип користувачу. Але зі структурами вже не настільки очевидно, як `println!` має форматувати вивід, оскільки є багато можливостей виведення: потрібні коми чи ні? Чи треба виводити фігурні дужки? Чи всі поля слід показувати? Через цю невизначеність, Rust не намагається відгадати, чого ми хочемо, і структури не мають підготовленої реалізації `Display`, яку можна було б використати у `println!` за допомогою заовнювача `{}`.
+Макрос `println!` може виконувати багато різних видів форматувань, і за замовчанням фігурні дужки кажуть `println!` використати форматування, відоме як `Display`: вивести те, що призначене для читання кінцевим споживачем. The primitive types we’ve seen so far implement `Display` by default because there’s only one way you’d want to show a `1` or any other primitive type to a user. Але зі структурами вже не настільки очевидно, як `println!` має форматувати вивід, оскільки є багато можливостей виведення: потрібні коми чи ні? Чи треба виводити фігурні дужки? Чи всі поля слід показувати? Через цю невизначеність, Rust не намагається відгадати, чого ми хочемо, і структури не мають підготовленої реалізації `Display`, яку можна було б використати у `println!` за допомогою заовнювача `{}`.
 
 Якщо ми подивимося помилки далі, то знайдемо цю корисну примітку:
 
@@ -122,15 +122,15 @@ Now when we run the program, we won’t get any errors, and we’ll see the foll
 {{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/output.txt}}
 ```
 
-Чудово! Це не найкрасивіший вивід, але він показує значення всіх полів цього екземпляру, що точно допоможе при зневадженні. Коли у нас будуть більші структури, корисно мати зручніший для читання вивід; в цих випадках, ми можемо використати `{:#?}` замість `{:?}` у стрічці `println!`. Якщо скористатися стилем `{:#?}` у цьому прикладі, вивід виглядатиме так:
+Чудово! Це не найкрасивіший вивід, але він показує значення всіх полів цього екземпляру, що точно допоможе при зневадженні. Коли у нас будуть більші структури, корисно мати зручніший для читання вивід; в цих випадках, ми можемо використати `{:#?}` замість `{:?}` у стрічці `println!`. In this example, using the `{:#?}` style will output the following:
 
 ```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-02-pretty-debug/output.txt}}
 ```
 
-Інший спосіб вивести значення у форматі `Debug` - скористатися [макросом `dbg!`][dbg]<!-- ignore -->, який перебирає володіння виразом (на відміну від `println!`, що приймає посилання), виводить файл і номер рядка, де був у вашому коді викликаний макрос `dbg!` і обчислене значення виразу, і повертає володіння значенням.
+Інший спосіб вивести значення у форматі `Debug` - скористатися [макросом `dbg!`][dbg]<!-- ignore -->, which takes ownership of an expression (as opposed to `println!`, which takes a reference), prints the file and line number of where that `dbg!` macro call occurs in your code along with the resultant value of that expression, and returns ownership of the value.
 
-> Примітка: виклик макроса `dbg!` виводить до стандартного потоку помилок у консолі (`stderr`), на відміну від `println!`, що виводить до стандартного потоку виводу консолі (`stdout`). Ми по говоримо більше про `stderr` і `stdout` у підрозділі ["Написання повідомлень про помилки до Стандартного потоку помилок замість стандартного вихідного потоку" Розділу 12][err]<!-- ignore -->.
+> Note: Calling the `dbg!` macro prints to the standard error console stream (`stderr`), as opposed to `println!`, which prints to the standard output console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in the [“Writing Error Messages to Standard Error Instead of Standard Output” section in Chapter 12][err]<!-- ignore -->.
 
 Here’s an example where we’re interested in the value that gets assigned to the `width` field, as well as the value of the whole struct in `rect1`:
 
@@ -144,14 +144,14 @@ Here’s an example where we’re interested in the value that gets assigned to 
 {{#include ../listings/ch05-using-structs-to-structure-related-data/no-listing-05-dbg-macro/output.txt}}
 ```
 
-Ми можемо побачити, що перший фрагмент виведений з рядка 10 *src/main. s*, де ми відстежуємо вираз `30 * scale`, і його обчислене значення 60 (реалізація форматування `Debug` для цілих чисел виводить самі їхні значення). Виклик `dbg!` у рядку 14 *src/main. s* виводить значення `&rect1`, яке дорівнює структурі `Rectangle`. Виведення використовує покращене форматування `Debug` для типу `Rectangle`. Макрос `dbg!` може бути дійсно корисним, коли ви намагаєтеся розібратися, що робить ваш код!
+We can see the first bit of output came from *src/main.rs* line 10 where we’re debugging the expression `30 * scale`, and its resultant value is `60` (the `Debug` formatting implemented for integers is to print only their value). Виклик `dbg!` у рядку 14 *src/main. s* виводить значення `&rect1`, яке дорівнює структурі `Rectangle`. Виведення використовує покращене форматування `Debug` для типу `Rectangle`. Макрос `dbg!` може бути дійсно корисним, коли ви намагаєтеся розібратися, що робить ваш код!
 
 На додачу до трейту `Debug`, Rust надає нам ряд трейтів, що можна використовувати з атрибутом `derive`, які можуть додати корисну поведінку до наших власних типів. Ці трейти та їхня поведінка перераховані в [Додатку C][app-c]<!--
 ignore -->. Ми розглянемо, як реалізувати ці трейти з кастомізованою поведінкою і як створювати свої власні трейти в Розділі 10. Також існує багато атрибутів, відмінних від 
 
 `derive`; для отримання додаткової інформації дивіться [розділ "Атрибути" Довідника Rust][attributes].
 
-Функція `area` дуже конкретна: вона розраховує лише площу прямокутників. Було б корисно прив'язати цю поведінку до нашої структури `Rectangle`, оскільки вона не буде працювати з жодним іншим типом. Подивімося, як ми можемо продовжувати рефакторизовувати цей код, перетворивши функцію `area` на *метод* `area`, визначений на нашому типі `Rectangle`.
+Функція `area` дуже конкретна: вона розраховує лише площу прямокутників. It would be helpful to tie this behavior more closely to our `Rectangle` struct because it won’t work with any other type. Let’s look at how we can continue to refactor this code by turning the `area` function into an `area` *method* defined on our `Rectangle` type.
 
 [the-tuple-type]: ch03-02-data-types.html#the-tuple-type
 [app-c]: appendix-03-derivable-traits.md
