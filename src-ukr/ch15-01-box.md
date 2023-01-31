@@ -115,7 +115,7 @@ after doing automatic regeneration, look at listings/ch15-smart-pointers/listing
 help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List` representable
   |
 2 |     Cons(i32, Box<List>),
-  |               ^^^^    ^
+  |               ++++    +
 ```
 
 In this suggestion, “indirection” means that instead of storing a value directly, we should change the data structure to store the value indirectly by storing a pointer to the value instead.
