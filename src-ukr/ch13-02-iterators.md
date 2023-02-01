@@ -78,7 +78,7 @@ pub trait Iterator {
 
 *Адаптери ітераторів* - це методи, визначені для трейта `Iterator`, які не поглинають ітератор. Натомість вони створюють інші ітератори, змінюючи певний аспект оригінального ітератора.
 
-Listing 13-14 shows an example of calling the iterator adaptor method `map`, which takes a closure to call on each item as the items are iterated through. Метод `map` повертає новий ітератор, який виробляє модифіковані елементи. Замикання створює новий ітератор, у якому кожен елемент вектора буде збільшено на 1:
+Блок коду 13-14 показує приклад виклику метода-адаптора ітератора `map`, який приймає замикання, яке викличе для кожного елементу під час ітерації. Метод `map` повертає новий ітератор, який виробляє модифіковані елементи. Замикання створює новий ітератор, у якому кожен елемент вектора буде збільшено на 1:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -116,11 +116,11 @@ Listing 13-14 shows an example of calling the iterator adaptor method `map`, whi
 
 ### Використання замикань, що захоплюють своє середовище
 
-Many iterator adapters take closures as arguments, and commonly the closures we’ll specify as arguments to iterator adapters will be closures that capture their environment.
+Багато адаптерів ітераторів приймають аргументами замикання, і зазвичай замикання, які ми вказуємо аргументами до адаптерів ітераторів будуть замиканнями, що захоплюють своє середовище.
 
-For this example, we’ll use the `filter` method that takes a closure. The closure gets an item from the iterator and returns a `bool`. If the closure returns `true`, the value will be included in the iteration produced by `filter`. If the closure returns `false`, the value won’t be included.
+Для цього прикладу ми скористаємося методом `filter`, що приймає замикання. Замикання отримає елемент з ітератора і повертає `bool`. Якщо замикання повертає `true`, значення буде включено в ітерації, вироблені `filter`. Якщо замикання повертає `false`, значення не буде включено.
 
-In Listing 13-16, we use `filter` with a closure that captures the `shoe_size` variable from its environment to iterate over a collection of `Shoe` struct instances. It will return only shoes that are the specified size.
+У Блоці коду 13-16 ми використовуємо `filter` із замиканням, яке захоплює змінну `shoe_size` зі свого середовища для ітерування по колекції екземплярів структур `Shoe`. Воно поверне лише взуття зазначеного розміру.
 
 <span class="filename">Файл: src/lib.rs</span>
 
@@ -131,10 +131,10 @@ In Listing 13-16, we use `filter` with a closure that captures the `shoe_size` v
 
 <span class="caption">Блок коду 13-16: використання методу `filter` із замиканням, що захоплює `shoe_size`</span>
 
-The `shoes_in_size` function takes ownership of a vector of shoes and a shoe size as parameters. It returns a vector containing only shoes of the specified size.
+Функція `shoes_in_size` приймає володіння вектором взуття і розмір взуття. Вона повертає вектор, що містить лише взуття зазначеного розміру.
 
-In the body of `shoes_in_size`, we call `into_iter` to create an iterator that takes ownership of the vector. Then we call `filter` to adapt that iterator into a new iterator that only contains elements for which the closure returns `true`.
+У тілі `shoes_in_size` ми викликаємо `into_iter` для створення ітератора, що приймає володіння вектором. Тоді ми викликаємо `filter`, щоб адаптувати ітератор у новий ітератор, що містить лише елементи, для яких замикання повертає `true`.
 
-The closure captures the `shoe_size` parameter from the environment and compares the value with each shoe’s size, keeping only shoes of the size specified. Finally, calling `collect` gathers the values returned by the adapted iterator into a vector that’s returned by the function.
+Замикання захоплює параметр `shoe_size` із середовища і порівнює значення із розміром кожної пари взуття, лишаючи тільки взуття зазначеного розміру. Нарешті, виклик `collect` збирає значення, повернуті адаптованим ітератором, у вектор, який функція повертає.
 
-The test shows that when we call `shoes_in_size`, we get back only shoes that have the same size as the value we specified.
+Тест показує, що коли ми викликаємо `shoes_in_size`, ми отримуємо назад лише взуття, яке має розмір, що дорівнює вказаному значенню.
