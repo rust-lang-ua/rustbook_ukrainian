@@ -8,7 +8,7 @@
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the `: u32` type annotation shown in the preceding code, Rust will display the following error, which means the compiler needs more information from us to know which type we want to use:
+Якщо ми не додамо анотацію типу `: u32`, показану у попередньому коді, Rust видасть наступну помилку, яка означає, що компілятору потрібно більше інформації від нас, щоб дізнатися, який тип ми хочемо використати:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/output-only-01-no-type-annotations/output.txt}}
@@ -22,7 +22,7 @@ If we don’t add the `: u32` type annotation shown in the preceding code, Rust 
 
 #### Цілі типи
 
-*Ціле* - це число без дробової частини. Ви використали один цілий тип у Розділі 2, а саме `u32`. This type declaration indicates that the value it’s associated with should be an unsigned integer (signed integer types start with `i` instead of `u`) that takes up 32 bits of space. Таблиця 3-1 показує вбудовані цілі типи в Rust. Ми можемо скористатися будь-яким з них для оголошення типу цілого числа.
+*Ціле* - це число без дробової частини. Ви використали один цілий тип у Розділі 2, а саме `u32`. Проголошення цього типу означає, що асоційоване з ним значення має бути беззнаковим цілим (знакові цілі типи починаються на `i`, на відміну від беззнакових `u`), що займає 32 біти пам'яті. Таблиця 3-1 показує вбудовані цілі типи в Rust. Ми можемо скористатися будь-яким з них для оголошення типу цілого числа.
 
 <span class="caption">Таблиця 3-1: Цілі типи в Rust</span>
 
@@ -58,13 +58,13 @@ Additionally, the `isize` and `usize` types depend on the architecture of the co
 
 > ##### Переповнення цілого числа
 > 
-> Скажімо, що у вас є змінна типу `u8`, що може мати значення між 0 та 255. If you try to change the variable to a value outside that range, such as 256, *integer overflow* will occur, which can result in one of two behaviors. When you’re compiling in debug mode, Rust includes checks for integer overflow that cause your program to *panic* at runtime if this behavior occurs. Rust uses the term *panicking* when a program exits with an error; we’ll discuss panics in more depth in the [“Unrecoverable Errors with `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> Розділу 9.
+> Скажімо, що у вас є змінна типу `u8`, що може мати значення між 0 та 255. Якщо ви спробуєте змінити її значення на те, що виходить за межі цього діапазону, скажімо 256, стається  *переповнення*, що призводить однієї з двох поведінок. Коли ви компілюєте програму в режимі дебагу, Rust додає перевірки на переповнення, які призведуть до *паніки* під час роботи програми, якщо воно станеться. Rust використовує термін *паніка*, коли програма завершується із помилкою; ми обговоримо паніку детальніше у підрозділі [“Невідновлювані помилки за допомогою `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> Розділу 9.
 > 
 > Коли ж ви компілюєте в режимі релізу за допомогою прапорця  `--release`, Rust *не* додає перевірок на переповнення, що спричинили б паніку. Натомість якщо виникає переповнення, Rust *загортає з доповненням до двох* це число. Якщо коротко, значення, більші за максимальне значення, що вміщується в тип, "загортаються" до мінімального значення, що вміщується в тип. У випадку з `u8`, значення 256 стає 0, 257 стає 1 і так далі. Програма не панікуватиме, але змінна матиме значення, що, мабуть, не відповідає вашим очікуванням. Не варто розраховувати на загортання при переповненні як на коректну поведінку, це помилка.
 > 
-> To explicitly handle the possibility of overflow, you can use these families of methods provided by the standard library for primitive numeric types:
+> Щоб явно обробити можливість переповнення, ви можете використати такі групи методів, наданих стандартною бібліотекою для примітивних числових типів:
 > 
-> * Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
+> * Якщо вам потрібне саме загортання, використовуйте методи `wrapping_*`, наприклад `wrapping_add`.
 > * Return the `None` value if there is overflow with the `checked_*` methods.
 > * Return the value and a boolean indicating whether there was overflow with the `overflowing_*` methods.
 > * Saturate at the value’s minimum or maximum values with the `saturating_*` methods.
