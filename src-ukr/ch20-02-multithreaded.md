@@ -264,7 +264,7 @@ If you’re up for a challenge, try implementing these changes on your own befor
 
 Почнімо з створення каналу в `ThreadPool::new` та утримання відправника у екземплярі `ThreadPool`, як показано у Блоці коду 20-16. Структура `Job` наразі не містить нічого, але буде типом елементів, що їх ми відправляємо каналом.
 
-<span class="filename">Ім'я файлу: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-16/src/lib.rs:here}}
