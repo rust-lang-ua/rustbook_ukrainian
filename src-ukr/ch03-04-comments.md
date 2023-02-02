@@ -32,7 +32,7 @@ But you’ll more often see them used in this format, with the comment on a sepa
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
 ```
 
-Rust also has another kind of comment, documentation comments, which we’ll discuss in the [“Publishing a Crate to Crates.io”][publishing]<!-- ignore -->
-section of Chapter 14.
+Rust також має інший вид коментарів, документаційні коментарі, які ми обговоримо в підрозділі ["Публікація крейта на Crates.io"][publishing]<!-- ignore -->
+Розділу 14.
 
 [publishing]: ch14-02-publishing-to-crates-io.html
