@@ -8,7 +8,7 @@
 
 > ### Запис у командному рядку
 > 
-> У цьому розділі та надалі в книжці ми використовуватимемо команди термінала. Рядки, що треба вводити в термінал, починаються з `$`. Не треба вводити сам  символ `$`; це запрошення командного рядка, що лише позначає початок команди. Рядки, що не починаються з `$` зазвичай показують те, що виводить попередня команда. Additionally, PowerShell-specific examples will use `>` rather than `$`.
+> У цьому розділі та надалі в книжці ми використовуватимемо команди термінала. Рядки, що треба вводити в термінал, починаються з `$`. Не треба вводити сам  символ `$`; це запрошення командного рядка, що лише позначає початок команди. Рядки, що не починаються з `$` зазвичай показують те, що виводить попередня команда. Приклади, специфічні для PowerShell, будуть починатися на `>` замість `$`.
 
 ### Встановлення `rustup` на Linux або macOs
 
@@ -38,53 +38,53 @@ $ xcode-select --install
 
 На Windows, перейдіть до [https://www.rust-lang.org/tools/install][install] і дотримуйтеся вказаних там інструкцій для встановлення Rust. У певний момент встановлення ви отримаєте повідомлення, що вам також знадобляться інструменти збірки MSVC для Visual Studio 2013 чи пізнішої.
 
-To acquire the build tools, you’ll need to install [Visual Studio 2022][visualstudio]. When asked which workloads to install, include:
+Щоб отримати інструменти збірки, вам потрібно встановити [Visual Studio 2022][visualstudio]. На питання, які робочі завантаження потрібно встановити, вкажіть:
 
 * “Desktop Development with C++”
 * SDK для Windows 10 чи 11
 * The English language pack component, along with any other language pack of your choosing
 
-The rest of this book uses commands that work in both *cmd.exe* and PowerShell. If there are specific differences, we’ll explain which to use.
+Надалі книжка використовує команди, які працюють як у *cmd.exe*, так і в PowerShell. Якщо будуть відмінності, ми пояснимо, що робити.
 
 ### Вирішення проблем
 
-To check whether you have Rust installed correctly, open a shell and enter this line:
+Щоб перевірити, чи правильно встановлено Rust, відкрийте оболонку і введіть рядок:
 
 ```console
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date for the latest stable version that has been released, in the following format:
+Ви маєте побачити номер версії, хеш коміту і дату коміту останньої стабільної версії, яку було випущено, в наступному форматі:
 
 ```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-If you see this information, you have installed Rust successfully! If you don’t see this information, check that Rust is in your `%PATH%` system variable as follows.
+Якщо ви це бачите, Rust було успішно встановлено! Якщо ви не бачите цю інформацію, перевірте, чи є Rust у системній змінній `%PATH%`.
 
-In Windows CMD, use:
+У Windows CMD наберіть:
 
 ```console
 > echo %PATH%
 ```
 
-In PowerShell, use:
+У PowerShell наберіть:
 
 ```powershell
 > echo $env:Path
 ```
 
-In Linux and macOS, use:
+У Linux і macOS наберіть:
 
 ```console
 $ echo $PATH
 ```
 
-If that’s all correct and Rust still isn’t working, there are a number of places you can get help. Find out how to get in touch with other Rustaceans (a silly nickname we call ourselves) on [the community page][community].
+Якщо все правильно і Rust все ще не працює, можна звернутися по допомогу у кілька місць. Дізнайтеся, як зв'язатися з іншими растацеанцями (так ми себе називаємо, від англ. crustacean - "ракоподібний") на [сторінці спільноти][community].
 
 ### Оновлення та видалення
 
-Once Rust is installed via `rustup`, updating to a newly released version is easy. From your shell, run the following update script:
+Після встановлення Rust за допомогою `rustup` легко можна оновитися до нової версії після її виходу. З командної оболонки запустіть такий сценарій оновлення:
 
 ```console
 $ rustup update
@@ -98,7 +98,7 @@ $ rustup self uninstall
 
 ### Локальна документація
 
-The installation of Rust also includes a local copy of the documentation so that you can read it offline. Run `rustup doc` to open the local documentation in your browser.
+Установлений Rust також включає локальну копію документації, тож ви можете читати її в офлайні. Запустіть `rustup doc`, щоб відкрити локальну документацію у веббраузері.
 
 Any time a type or function is provided by the standard library and you’re not sure what it does or how to use it, use the application programming interface (API) documentation to find out!
 
