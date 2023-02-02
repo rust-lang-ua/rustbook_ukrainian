@@ -20,7 +20,7 @@
 {{#include ../listings/ch03-common-programming-concepts/no-listing-16-functions/output.txt}}
 ```
 
-Рядки виконуються в порядку, в якому вони знаходяться в функції `main`. First the “Hello, world!” message prints, and then `another_function` is called and its message is printed.
+Рядки виконуються в порядку, в якому вони знаходяться в функції `main`. Спершу виводиться повідомлення “Hello, world!”, а потім викликається `another_function` і виводить своє повідомлення.
 
 ### Параметри
 
@@ -66,10 +66,10 @@ Because we called the function with `5` as the value for `value` and `'h'` as th
 
 Тіла функцій складаються з послідовності інструкцій, яка може закінчуватися виразом. Поки що ми функції, які ми згадували, не мали виразу наприкінці, але вирази були частиною інструкцій. Оскільки Rust є мовою, що ґрунтується на виразах, важливо розуміти цю відмінність. Інші мови не мають таких відмінностей, тому роздивімося, що таке інструкції та вирази і як різниця між ними впливає на тіла функцій.
 
-* **Statements** are instructions that perform some action and do not return a value.
-* **Expressions** evaluate to a resultant value. Let’s look at some examples.
+* **Інструкції** (<0>statement</0>) - це команди, що виконують певну дію і не повертають значення.
+* **Вирази** (<0>expression</0>) обчислюються, в результаті даючи певне значення. Розгляньмо приклади.
 
-We’ve actually already used statements and expressions. Creating a variable and assigning a value to it with the `let` keyword is a statement. In Listing 3-1, `let y = 6;` is a statement.
+Власне, ми вже використовували інструкції та вирази. Створення змінної та приписування їй значення за допомогою ключового слова `let` є інструкцією. У Блоці коду 3-1 `let y = 6;` є інструкцією.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -79,9 +79,9 @@ We’ve actually already used statements and expressions. Creating a variable an
 
 <span class="caption">Блок коду 3-1. Проголошення функції `main`, що містить одну інструкцію</span>
 
-Function definitions are also statements; the entire preceding example is a statement in itself.
+Визначення функцій також є інструкціями; весь попередній приклад як такий є інструкцією.
 
-Statements do not return values. Therefore, you can’t assign a `let` statement to another variable, as the following code tries to do; you’ll get an error:
+Інструкції не повертають значень. Таким чином, не можна присвоїти інструкцію `let` іншій змінній, як ми намагаємося в наступному коді; ви отримаєте помилку:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -89,15 +89,15 @@ Statements do not return values. Therefore, you can’t assign a `let` statement
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/src/main.rs}}
 ```
 
-When you run this program, the error you’ll get looks like this:
+При спробі запустити цю програму, ви отримаєте повідомлення про помилку:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/output.txt}}
 ```
 
-The `let y = 6` statement does not return a value, so there isn’t anything for `x` to bind to. This is different from what happens in other languages, such as C and Ruby, where the assignment returns the value of the assignment. In those languages, you can write `x = y = 6` and have both `x` and `y` have the value `6`; that is not the case in Rust.
+Інструкція `let y = 6` не повертає значення, тому немає нічого, з чим можна було б зв'язати `x`. Це відрізняється від інших мов, таких як C чи Ruby, де присвоєння повертає значення, яке воно присвоїло. У тих мовах можна написати `x = y = 6` і обидві змінні `x` та `y` набудуть значення `6`; у Rust так робити не можна.
 
-Expressions evaluate to a value and make up most of the rest of the code that you’ll write in Rust. Consider a math operation, such as `5 + 6`, which is an expression that evaluates to the value `11`. Expressions can be part of statements: in Listing 3-1, the `6` in the statement `let y = 6;` is an expression that evaluates to the value `6`. Calling a function is an expression. Calling a macro is an expression. A new scope block created with curly brackets is an expression, for example:
+Вирази обчислюються у певне значення і складають більшу частину коду, який ви писатимете на Rust. Розгляньмо просту математичну операцію, таку, як `5 + 6`, яка є виразом, що обчислюється у значення `11`. Вирази можуть бути частинами інструкцій: у Блоці коду 3-1 в інструкції `let y = 6;`, `6` - це вираз, що обчислюється у значення `6`. Виразами також є виклик функції чи макросу; блок, що створює нову область видимості за допомогою фігурних дужок - це також вираз, наприклад:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -105,7 +105,7 @@ Expressions evaluate to a value and make up most of the rest of the code that yo
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-20-blocks-are-expressions/src/main.rs}}
 ```
 
-This expression:
+Цей вираз:
 
 ```rust,ignore
 {
@@ -114,11 +114,11 @@ This expression:
 }
 ```
 
-is a block that, in this case, evaluates to `4`. That value gets bound to `y` as part of the `let` statement. Note that the `x + 1` line doesn’t have a semicolon at the end, which is unlike most of the lines you’ve seen so far. Вирази не мають завершувальної крапки з комою. Якщо ви додасте крапку з комою в кінець виразу, ви зробите його інструкцією, яка не повертає значення. Пам'ятайте це, коли вивчатимете далі значення, які повертають функції та вирази.
+є блоком, який, в цьому випадку, обчислюється у `4`. Це значення прив'язується до `y`, як частина інструкції `let`. Зверніть увагу, що `x + 1` не має крапки з комою наприкінці, на відміну від більшості рядків, які нам поки що траплялися. Вирази не мають завершувальної крапки з комою. Якщо ви додасте крапку з комою в кінець виразу, ви зробите його інструкцією, яка не повертає значення. Пам'ятайте це, коли вивчатимете далі значення, які повертають функції та вирази.
 
 ### Функції, що повертають значення
 
-Функції можуть повертати значення в код, що їх викликав. Цим значенням ми не даємо власних імен, але маємо проголосити їхній тип після стрілочки (`->`). У Rust значення, що його повертає функція - це те саме, що значення останнього виразу в блоці - тілі функції. You can return early from a function by using the `return` keyword and specifying a value, but most functions return the last expression implicitly. Here’s an example of a function that returns a value:
+Функції можуть повертати значення в код, що їх викликав. Цим значенням ми не даємо власних імен, але маємо проголосити їхній тип після стрілочки (`->`). У Rust значення, що його повертає функція - це те саме, що значення останнього виразу в блоці - тілі функції. Ви можете також вийти з функції раніше за допомогою ключового слова `return` і вказання значення, але більшість функцій неявно повертають значення останнього виразу. Ось приклад функції, що повертає значення:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -126,7 +126,7 @@ is a block that, in this case, evaluates to `4`. That value gets bound to `y` as
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/src/main.rs}}
 ```
 
-There are no function calls, macros, or even `let` statements in the `five` function—just the number `5` by itself. І це абсолютно коректна функція в Rust. Зверніть увагу, що тут зазначено тип значення, яке функція повертає `-> i32`. Спробуймо запустити цей код; вивід має виглядати так:
+У функції `five` немає викликів інших функцій, макросів чи навіть інструкцій `let` - саме тільки число `5`. І це абсолютно коректна функція в Rust. Зверніть увагу, що тут зазначено тип значення, яке функція повертає `-> i32`. Спробуймо запустити цей код; вивід має виглядати так:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/output.txt}}
@@ -162,4 +162,4 @@ let x = 5;
 {{#include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/output.txt}}
 ```
 
-The main error message, `mismatched types`, reveals the core issue with this code. The definition of the function `plus_one` says that it will return an `i32`, but statements don’t evaluate to a value, which is expressed by `()`, the unit type. Therefore, nothing is returned, which contradicts the function definition and results in an error. In this output, Rust provides a message to possibly help rectify this issue: it suggests removing the semicolon, which would fix the error.
+Основне повідомлення про помилку `mismatched types` (“невідповідні типи”) розкриває основну проблему цього коду. Визначення функції `plus_one` каже, що вона має повернути `i32`, але інструкції не обчислюються в значення, що позначається як `()`, одиничний тип. Таким чином, нічого не повертається, що суперечить визначенню функції й призводить до помилки. У цьому виведенні Rust повідомляє про можливість виправити цю проблему: він радить прибрати крапку з комою, що дійсно виправить помилку.
