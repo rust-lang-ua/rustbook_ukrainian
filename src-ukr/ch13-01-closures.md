@@ -149,15 +149,15 @@ We spawn a new thread, giving the thread a closure to run as an argument. The cl
 
 ### Переміщення захоплених значень із замикань і трейти `Fn`
 
-Once a closure has captured a reference or captured ownership of a value from the environment where the closure is defined (thus affecting what, if anything, is moved *into* the closure), the code in the body of the closure defines what happens to the references or values when the closure is evaluated later (thus affecting what, if anything, is moved *out of* the closure). A closure body can do any of the following: move a captured value out of the closure, mutate the captured value, neither move nor mutate the value, or capture nothing from the environment to begin with.
+Коли замикання захопило посилання чи володіння значенням у місці, де це замикання визначене (таким чином впливаючи на те, що було переміщено *в* замикання), код у тілі замикання визначає, що відбувається з посиланнями або значеннями, коли пізніше замикання обчислюється (тим самим впливаючи на те, що буде переміщено *із* замикання). Тіло замикання може робити одне з: перемістити захоплене значення із замикання, змінити захоплене значення, не перемішати ані змінювати значення, чи взагалі нічого не захоплювати з середовища.
 
-Те, як замикання захоплює і обробляє значення з середовища, впливає на те, які трейти реалізовує замикання, а трейти - спосіб функціям і структурам зазначити, які види замикань вони можуть використовувати. Closures will automatically implement one, two, or all three of these `Fn` traits, in an additive fashion, depending on how the closure’s body handles the values:
+Те, як замикання захоплює і обробляє значення з середовища, впливає на те, які трейти реалізовує замикання, а трейти - спосіб функціям і структурам зазначити, які види замикань вони можуть використовувати. Замикання автоматично реалізують один, два чи всі три ці трейти `Fn` із накопиченням, залежно від того, як тіло замикання поводиться зі значеннями:
 
-1. `FnOnce` applies to closures that can be called once. All closures implement at least this trait, because all closures can be called. A closure that moves captured values out of its body will only implement `FnOnce` and none of the other `Fn` traits, because it can only be called once.
+1. `FnOnce` застосовується до замикань, які можна викликати один раз. Усі замикання реалізовують щонайменше цей трейт, бо всі замикання можна викликати. Замикання, що переміщує захоплені значення зі свого тіла можуть реалізовувати лише `FnOnce` і жодного іншого з трейтів `Fn`, бо їх можна викликати лише один раз.
 2. `FnMut` застосовується до замикань, які не переміщують захоплені значення зі свого тіла, але можуть їх змінювати. Ці замикання можуть бути викликані більше ніж один раз.
 3. `Fn` застосовується до замикань, що не переміщують захоплені значення зі свого тіла і їх не змінюють, а також до замикань, що нічого не захоплюють із середовища. Ці замикання можуть бути викликані більше одного разу без змін середовища, що важливо у таких випадках, як одночасний виклик замикання багато разів.
 
-Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that we used in Listing 13-1:
+Погляньмо на визначення методу `unwrap_or_else` для `Option<T>`, який ми використовували в Блоці Коду 13-1:
 
 ```rust,ignore
 impl<T> Option<T> {
