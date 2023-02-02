@@ -1,8 +1,8 @@
 ## Hello, World!
 
-Now that you’ve installed Rust, it’s time to write your first Rust program. It’s traditional when learning a new language to write a little program that prints the text `Hello, world!` to the screen, so we’ll do the same here!
+Після встановлення Rust настав час написати першу програму цією мовою. Давно стало традицією при вивченні нової мови програмування писати маленьку програму, що виводить на екран текст `Hello, world!`, і ми не будемо відступати від цієї традиції.
 
-> Примітка: ця книжка передбачає базове знайомство із командним рядком. Rust як така не висуває особливих вимог до редакторів, інструментів і розміщення коду, тому якщо вам зручніше використовувати інтегроване середовище розробки (IDE) замість командного рядка, можете користуватися вашим улюбленим IDE. Багато сучасних IDE певною мірою підтримують Rust; зверніться до документації IDE, щоб дізнатися більше. Останнім часом команда Rust зосередилася на підтримці IDE за допомогою `rust-analyzer`. Перегляньте [Додаток D][devtools],<!-- ignore --> for more details.
+> Примітка: ця книжка передбачає базове знайомство із командним рядком. Rust як така не висуває особливих вимог до редакторів, інструментів і розміщення коду, тому якщо вам зручніше використовувати інтегроване середовище розробки (IDE) замість командного рядка, можете користуватися вашим улюбленим IDE. Багато сучасних IDE певною мірою підтримують Rust; зверніться до документації IDE, щоб дізнатися більше. Останнім часом команда Rust зосередилася на підтримці IDE за допомогою `rust-analyzer`. Перегляньте [Додаток D][devtools],<!-- ignore --> для більш докладної інформації.
 
 ### Створення теки проєкту
 
@@ -78,7 +78,7 @@ fn main() {
 
 Тіло функції обгорнуто у `{}`. Rust вимагає фігурних дужок навколо тіл усіх функцій. Вважається хорошим стилем розміщувати початкову дужку на тому ж рядку, що й проголошення функції, з відступом в один пробіл.
 
-> Примітка: якщо ви бажаєте використовувати стандартний стиль у проєктах Rust, можете скористатися інструментом для автоматичного форматування, що зветься `rustfmt`, для форматування коду в цьому стилі (більше у `rustfmt` з [Додатку D][devtools]<!-- ignore -->). The Rust team has included this tool with the standard Rust distribution, as `rustc` is, so it should already be installed on your computer!
+> Примітка: якщо ви бажаєте використовувати стандартний стиль у проєктах Rust, можете скористатися інструментом для автоматичного форматування, що зветься `rustfmt`, для форматування коду в цьому стилі (більше у `rustfmt` з [Додатку D][devtools]<!-- ignore -->). Команда Rust додала цей інструмент до стандартного набору програм Rust, на кшталт `rustc`, тобто він уже має бути встановленим на вашому комп'ютері!
 
 Тіло функції `main` містить такий код:
 
@@ -90,7 +90,7 @@ fn main() {
 
 По-перше, у Rust заведено робити відступи в чотири пробіли, а не табуляцію.
 
-По-друге, `println!` викликає макрос Rust. Якби він викликав функцію, то це виглядало б як `println` (без `!`). Ми поговоримо про макроси в Rust детальніше в Розділі 19. For now, you just need to know that using a `!` means that you’re calling a macro instead of a normal function and that macros don’t always follow the same rules as functions.
+По-друге, `println!` викликає макрос Rust. Якби він викликав функцію, то це виглядало б як `println` (без `!`). Ми поговоримо про макроси в Rust детальніше в Розділі 19. Поки що вам достатньо знати, що коли ви бачите `!`, це означає, що ви викликаєте макрос, а не звичайну функцію, і що макроси не завжди дотримуються тих самих правил, що функції.
 
 По-третє, ви бачите стрічку `Hello, world!`. Ми передаємо цю стрічку як аргумент до `println!`, і вона виводиться на екран.
 
@@ -100,7 +100,7 @@ fn main() {
 
 You’ve just run a newly created program, so let’s examine each step in the process.
 
-Before running a Rust program, you must compile it using the Rust compiler by entering the `rustc` command and passing it the name of your source file, like this:
+Перед запуском програми Rust необхідно її скомпілювати за допомогою компілятора Rust, набравши команду `rustc` і передавши їй ім'я вихідного файлу, отак:
 
 ```console
 $ rustc main.rs
@@ -108,14 +108,14 @@ $ rustc main.rs
 
 Якщо ви маєте досвід роботи з C чи C++, ви можете помітити, що це схоже на `gcc` чи `clang`. Після вдалої компіляції Rust створює двійковий виконуваний файл.
 
-On Linux, macOS, and PowerShell on Windows, you can see the executable by entering the `ls` command in your shell:
+На Linux, macOs чи PowerShell на Windows можна побачити цей файл, ввівши команду `ls` у командній оболонці:
 
 ```console
 $ ls
 main  main.rs
 ```
 
-On Linux and macOS, you’ll see two files. With PowerShell on Windows, you’ll see the same three files that you would see using CMD. With CMD on Windows, you would enter the following:
+На Linux і macOs ви побачите два файли. У PowerShell на Windows ви побачите ті ж три файли, що й за допомогою CMD. У CMD на Windows ви побачите таке:
 
 ```cmd
 > dir r /B %= опція /B означає показувати лише імена файлів =%
