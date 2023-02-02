@@ -1,4 +1,4 @@
-# Участь у проекті перекладу
+# Участь у проєкті перекладу
 
 Переклад здійснюється на [Crowdin](https://crowdin.com/project/rustukrainian/uk).
 
