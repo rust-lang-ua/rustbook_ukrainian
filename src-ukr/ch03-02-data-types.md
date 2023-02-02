@@ -35,12 +35,12 @@ let guess: u32 = "42".parse().expect("Not a number!");
 | 128 бітів               | `i128`   | `u128`      |
 | Залежно від архітектури | `isize`  | `usize`     |
 
-Кожен цілий тип є знаковим чи беззнаковим і має явно зазначений розмір. *Знаковий* і *беззнаковий* стосується того, чи може число бути від'ємним — іншими словами, чи має число знак (знакове) чи воно буде лише додатним і, відтак, може бути представлене без знаку (беззнакове). Це як запис чисел на папері: якщо знак має значення, число записується зі знаком плюс чи знаком мінус; але, якщо можна вважати, що число буде додатним, воно записується без знаку. Signed numbers are stored using [two’s complement][twos-complement]<!-- ignore
+Кожен цілий тип є знаковим чи беззнаковим і має явно зазначений розмір. *Знаковий* і *беззнаковий* стосується того, чи може число бути від'ємним — іншими словами, чи має число знак (знакове) чи воно буде лише додатним і, відтак, може бути представлене без знаку (беззнакове). Це як запис чисел на папері: якщо знак має значення, число записується зі знаком плюс чи знаком мінус; але, якщо можна вважати, що число буде додатним, воно записується без знаку. Знакові числа зберігаються у [доповняльному коді][twos-complement]<!-- ignore
 --> .
 
 Кожен знаковий цілий тип може зберігати числа від -(2<sup>n - 1</sup>) до 2<sup>n - 1</sup> - 1 включно, де *n* - кількість біт, які він використовує. Так, `i8` може зберігати числа від -(2<sup>7</sup>) до 2<sup>7</sup> - 1, тобто від -128 до 127. Беззнакові цілі типи зберігають числа від 0 до 2<sup>n</sup> - 1, так, `u8` може зберігати числа від 0 до 2<sup>8</sup> - 1, тобто від 0 до 255.
 
-Additionally, the `isize` and `usize` types depend on the architecture of the computer your program is running on, which is denoted in the table as “arch”: 64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit architecture.
+На додачу, типи `isize` та `usize` залежать від архітектури комп'ютера, на якому працює ваша програма: 64 біти, якщо це 64-бітна архітектура, чи 32 біти, якщо 32-бітна.
 
 Ви можете писати цілі літерали в будь-якій формі, вказаній у Таблиці 3-2. Зверніть увагу, що числові літерали, які можуть бути різних типів, дозволяють використовувати суфікс типу на кшталт `57u8`, для визначення типу. Числові літерали також можуть використовувати `_` як роздільник для поліпшення читання, як-от `1_000`, що позначає те саме значення, що й запис `1000`.
 
@@ -65,13 +65,13 @@ Additionally, the `isize` and `usize` types depend on the architecture of the co
 > Щоб явно обробити можливість переповнення, ви можете використати такі групи методів, наданих стандартною бібліотекою для примітивних числових типів:
 > 
 > * Якщо вам потрібне саме загортання, використовуйте методи `wrapping_*`, наприклад `wrapping_add`.
-> * Return the `None` value if there is overflow with the `checked_*` methods.
-> * Return the value and a boolean indicating whether there was overflow with the `overflowing_*` methods.
-> * Saturate at the value’s minimum or maximum values with the `saturating_*` methods.
+> * Якщо вам потрібне значення `None` при переповненні, використовуйте методи `checked_*`.
+> * Для виявлення переповнення методи `overflowing_*` повертають значення і булеве значення, що показує, чи сталося переповнення.
+> * Якщо вам потрібне насичення до мінімального чи максимального значення, використовуйте методи `saturating_*`.
 
 #### Числа з рухомою комою
 
-Також Rust має два примітивні типи для *чисел з рухомою комою*, тобто чисел з десятковою комою. Числа з рухомою комою в Rust - це `f32` та `f64`, які мають розмір у 32 біти та 64 біти відповідно. The default type is `f64` because on modern CPUs, it’s roughly the same speed as `f32` but is capable of more precision. Усі числа з рухомою комою знакові.
+Також Rust має два примітивні типи для *чисел з рухомою комою*, тобто чисел з десятковою комою. Числа з рухомою комою в Rust - це `f32` та `f64`, які мають розмір у 32 біти та 64 біти відповідно. Тип за замовчанням - `f64`, оскільки на сучасних процесорах його швидкість приблизно така ж сама, як і в `f32`, але він має вищу точність. Усі числа з рухомою комою знакові.
 
 Ось приклад, що демонструє числа з рухомою комою у дії:
 
@@ -85,7 +85,7 @@ Additionally, the `isize` and `usize` types depend on the architecture of the co
 
 #### Числові операції
 
-Rust supports the basic mathematical operations you’d expect for all the number types: addition, subtraction, multiplication, division, and remainder. Integer division truncates toward zero to the nearest integer. Наступний код демонструє, як використовувати числові операції в інструкції `let`:
+Rust підтримує звичайні математичні операції, які ви очікуєте для будь-яких типів чисел: додавання, віднімання, множення, ділення й остача. Цілочисельне ділення округлює результат униз до найближчого цілого. Наступний код демонструє, як використовувати числові операції в інструкції `let`:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -93,7 +93,7 @@ Rust supports the basic mathematical operations you’d expect for all the numbe
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-07-numeric-operations/src/main.rs}}
 ```
 
-Кожен вираз використовує математичний оператор і обчислює значення, яке прив'язується до змінної. [Appendix B][appendix_b]<!-- ignore --> contains a list of all operators that Rust provides.
+Кожен вираз використовує математичний оператор і обчислює значення, яке прив'язується до змінної. [Додаток B][appendix_b]<!-- ignore --> містить список усіх операторів, які використовуються в мові Rust.
 
 #### Булівський тип
 
@@ -105,11 +105,11 @@ Rust supports the basic mathematical operations you’d expect for all the numbe
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-08-boolean/src/main.rs}}
 ```
 
-Основний спосіб використання булівських значень - умовні вирази, такі, як вираз `if`. We’ll cover how `if` expressions work in Rust in the [“Control Flow”][control-flow]<!-- ignore --> .
+Основний спосіб використання булівських значень - умовні вирази, такі, як вираз `if`. Ми розкажемо, як працюють вирази `if`, у підрозділі [Потік виконання][control-flow]<!-- ignore --> .
 
 #### Символьний тип
 
-Тип`` `char `` в Rust є найпростішим алфавітним типом. Here are some examples of declaring `char` values:
+Тип`` `char `` в Rust є найпростішим алфавітним типом. Ось кілька прикладів проголошення значень `char`:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -117,7 +117,7 @@ Rust supports the basic mathematical operations you’d expect for all the numbe
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-09-char/src/main.rs}}
 ```
 
-Зверніть увагу, що літерали `char` позначаються одинарними лапками, на відміну від стрічкових літералів, які послуговуються подвійними. Тип `char` в Rust має чотири байти і представляє cкалярне значення в Юнікоді, тобто може представляти значно більше, ніж просто ASCII. Літери з наголосами, китайські, японські і корейські символи, смайлики і пробіли нульової ширини є коректними значеннями для `char` у Rust. Скалярні значення Юнікода можуть бути в діапазоні від `U+0000` до `U+D7FF` і `U+E000` до `U+10FFFF` включно. Однак "символ" насправді не є концепцією Юнікода, тому ваше інтуїтивне уявлення про те, що таке "символ" може не зовсім відповідати тому, чим є `char` у Rust. We’ll discuss this topic in detail in [“Storing UTF-8 Encoded Text with Strings”][strings]<!-- ignore --> Розділу 8.
+Зверніть увагу, що літерали `char` позначаються одинарними лапками, на відміну від стрічкових літералів, які послуговуються подвійними. Тип `char` в Rust має чотири байти і представляє cкалярне значення в Юнікоді, тобто може представляти значно більше, ніж просто ASCII. Літери з наголосами, китайські, японські і корейські символи, смайлики і пробіли нульової ширини є коректними значеннями для `char` у Rust. Скалярні значення Юнікода можуть бути в діапазоні від `U+0000` до `U+D7FF` і `U+E000` до `U+10FFFF` включно. Однак "символ" насправді не є концепцією Юнікода, тому ваше інтуїтивне уявлення про те, що таке "символ" може не зовсім відповідати тому, чим є `char` у Rust. Цю тему ми детальніше обговоримо в підрозділі ["Зберігання тексту, кодованого в UTF-8, у стрічках"][strings]<!-- ignore --> Розділу 8.
 
 ### Складені типи
 
@@ -125,7 +125,7 @@ Rust supports the basic mathematical operations you’d expect for all the numbe
 
 #### Тип кортеж
 
-A *tuple* is a general way of grouping together a number of values with a variety of types into one compound type. Tuples have a fixed length: once declared, they cannot grow or shrink in size.
+*Кортеж* (tuple) - основний спосіб збирати до купи ряд значень різних типів у один складений тип. Кортежі мають фіксовану довжину: один раз проголошені, вони не можуть зростати чи скорочуватися.
 
 Кортеж утворюється списком значень, розділених комами, в дужках. Кожна позиція в кортежі має тип, і типи різних значень у кортежі не обов'язково мають збігатися. Ми додали необов'язкову анотацію типу у цьому прикладі:
 
@@ -135,7 +135,7 @@ A *tuple* is a general way of grouping together a number of values with a variet
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-10-tuples/src/main.rs}}
 ```
 
-The variable `tup` binds to the entire tuple because a tuple is considered a single compound element. Щоб отримати окремі значення з кортежу, можна скористатися зіставлянням з шаблоном, щоб деструктуризувати значення кортежу, на кшталт цього:
+Змінна `tup` зв'язується з усім кортежем, оскільки кортеж розглядається як єдиний складений елемент. Щоб отримати окремі значення з кортежу, можна скористатися зіставлянням з шаблоном, щоб деструктуризувати значення кортежу, на кшталт цього:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -143,7 +143,7 @@ The variable `tup` binds to the entire tuple because a tuple is considered a sin
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-11-destructuring-tuples/src/main.rs}}
 ```
 
-Ця програма спершу створює кортеж і зв'язує його зі змінною `tup`. Далі вона використовує шаблон з `let`, щоб перетворити `tup` на три окремі змінні: `x`, `y` і `z`. This is called *destructuring* because it breaks the single tuple into three parts. І врешті програма виводить значення `y`, тобто `6.4`.
+Ця програма спершу створює кортеж і зв'язує його зі змінною `tup`. Далі вона використовує шаблон з `let`, щоб перетворити `tup` на три окремі змінні: `x`, `y` і `z`. Це зветься *деструктуризацією*, бо розбирає єдиний кортеж на три частини. І врешті програма виводить значення `y`, тобто `6.4`.
 
 Ми також можемо отримати доступ до елементу кортежу напряму за допомогою точки (`.`), за якою іде індекс значення, яке нам треба отримати. Наприклад:
 
@@ -161,7 +161,7 @@ The variable `tup` binds to the entire tuple because a tuple is considered a sin
 
 Інший спосіб організувати колекцію з багатьох значень - це *масив*. На відміну від кортежу, всі елементи масиву мусять мати один тип. На відміну від масивів у деяких інших мовах, масиви в Rust мають фіксовану довжину.
 
-We write the values in an array as a comma-separated list inside square brackets:
+Значення в масиві записуються як список, розділений комами, в квадратних дужках:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -169,7 +169,7 @@ We write the values in an array as a comma-separated list inside square brackets
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-13-arrays/src/main.rs}}
 ```
 
-Arrays are useful when you want your data allocated on the stack rather than the heap (we will discuss the stack and the heap more in [Chapter 4][stack-and-heap]<!-- ignore -->), чи коли ви хочете бути певним, що завжди маєте фіксовану кількість елементів. Втім, масиви не такі гнучкі, як вектори. A *vector* is a similar collection type provided by the standard library that *is* allowed to grow or shrink in size. If you’re unsure whether to use an array or a vector, chances are you should use a vector. [Chapter 8][vectors]<!-- ignore --> розповідає про вектори детальніше.
+Масиви корисні, коли дані мають бути розмішені в стеку, а не в купі (детальніше про це йдеться у [Розділі 4][stack-and-heap]<!-- ignore -->), чи коли ви хочете бути певним, що завжди маєте фіксовану кількість елементів. Втім, масиви не такі гнучкі, як вектори. *Вектор* - це схожий тип-колекція, наданий стандартною бібліотекою, який *може* зростати і скорочуватися. Якщо ви не певні, використовувати вам масив чи вектор, швидше за все варто використати вектор. [Розділ 8][vectors]<!-- ignore --> розповідає про вектори детальніше.
 
 Разом із тим, масиви корисніші, коли ви знаєте, що кількість елементів не треба буде змінювати. Наприклад, коли ви використовуєте імена місяців у програмі, швидше за все ви використаєте масив, а не вектор, бо ви знаєте, що він завжди складатиметься з 12 елементів:
 
@@ -178,7 +178,7 @@ let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-You write an array’s type using square brackets with the type of each element, a semicolon, and then the number of elements in the array, like so:
+Тип масиву записується за допомогою квадратних дужок з типом кожного елементу, крапки з комою і числом елементів масиву, ось так:
 
 ```rust
 let a: [i32; 5] = [1, 2, 3, 4, 5];
@@ -186,7 +186,7 @@ let a: [i32; 5] = [1, 2, 3, 4, 5];
 
 Тут `i32` є типом кожного елементу. Після крапки з комою, число `5` позначає, що масив містить п'ять елементів.
 
-You can also initialize an array to contain the same value for each element by specifying the initial value, followed by a semicolon, and then the length of the array in square brackets, as shown here:
+Ви також можете ініціалізувати масив однаковими значеннями для кожного елементу, вказавши початкове значення, потім крапку з комою і довжину масиву у квадратних дужках, як показано тут:
 
 ```rust
 let a = [3; 5];
@@ -204,7 +204,7 @@ let a = [3; 5];
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-14-array-indexing/src/main.rs}}
 ```
 
-In this example, the variable named `first` will get the value `1` because that is the value at index `[0]` in the array. The variable named `second` will get the value `2` from index `[1]` in the array.
+У цьому прикладі, змінна, що зветься `first`, отримає значення `1`, бо це значення в масиві за індексом `[0]`. Змінна, що зветься `second`, отримає значення `2` за індексом `[1]` у масиві.
 
 ##### Некоректний доступ до елементів масиву
 
@@ -216,7 +216,7 @@ In this example, the variable named `first` will get the value `1` because that 
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 
-Цей код успішно компілюється. If you run this code using `cargo run` and enter `0`, `1`, `2`, `3`, or `4`, the program will print out the corresponding value at that index in the array. If you instead enter a number past the end of the array, such as `10`, you’ll see output like this:
+Цей код успішно компілюється. Якщо ви запустите цей код за допомогою `cargo run` і введете `0`, `1`, `2,`, ``, або `4`, програма виведе на екран відповідне значення з цього індексу в масиві. Якщо ж ви натомість введете число за кінцем масиву, таке як `10`, програма виведе таке:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access
