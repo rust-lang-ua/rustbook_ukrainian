@@ -114,11 +114,11 @@ This expression:
 }
 ```
 
-is a block that, in this case, evaluates to `4`. That value gets bound to `y` as part of the `let` statement. Note that the `x + 1` line doesn’t have a semicolon at the end, which is unlike most of the lines you’ve seen so far. Expressions do not include ending semicolons. If you add a semicolon to the end of an expression, you turn it into a statement, and it will then not return a value. Keep this in mind as you explore function return values and expressions next.
+is a block that, in this case, evaluates to `4`. That value gets bound to `y` as part of the `let` statement. Note that the `x + 1` line doesn’t have a semicolon at the end, which is unlike most of the lines you’ve seen so far. Вирази не мають завершувальної крапки з комою. Якщо ви додасте крапку з комою в кінець виразу, ви зробите його інструкцією, яка не повертає значення. Пам'ятайте це, коли вивчатимете далі значення, які повертають функції та вирази.
 
 ### Функції, що повертають значення
 
-Functions can return values to the code that calls them. We don’t name return values, but we must declare their type after an arrow (`->`). In Rust, the return value of the function is synonymous with the value of the final expression in the block of the body of a function. You can return early from a function by using the `return` keyword and specifying a value, but most functions return the last expression implicitly. Here’s an example of a function that returns a value:
+Функції можуть повертати значення в код, що їх викликав. Цим значенням ми не даємо власних імен, але маємо проголосити їхній тип після стрілочки (`->`). У Rust значення, що його повертає функція - це те саме, що значення останнього виразу в блоці - тілі функції. You can return early from a function by using the `return` keyword and specifying a value, but most functions return the last expression implicitly. Here’s an example of a function that returns a value:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -126,21 +126,21 @@ Functions can return values to the code that calls them. We don’t name return 
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/src/main.rs}}
 ```
 
-There are no function calls, macros, or even `let` statements in the `five` function—just the number `5` by itself. That’s a perfectly valid function in Rust. Note that the function’s return type is specified too, as `-> i32`. Try running this code; the output should look like this:
+There are no function calls, macros, or even `let` statements in the `five` function—just the number `5` by itself. І це абсолютно коректна функція в Rust. Зверніть увагу, що тут зазначено тип значення, яке функція повертає `-> i32`. Спробуймо запустити цей код; вивід має виглядати так:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/output.txt}}
 ```
 
-The `5` in `five` is the function’s return value, which is why the return type is `i32`. Let’s examine this in more detail. There are two important bits: first, the line `let x = five();` shows that we’re using the return value of a function to initialize a variable. Because the function `five` returns a `5`, that line is the same as the following:
+`5` у `five` є значенням, яке повертає функція, і тому тип, який повертає функція - `i32`. Розгляньмо це детальніше. Є два важливі моменти: по-перше, рядок `let x = five();` показує, що ми використовуємо значення, яке повернула функція, для ініціалізації змінної. Оскільки функція `five` повертає `5`, цей рядок робить те саме, що й такий:
 
 ```rust
 let x = 5;
 ```
 
-Second, the `five` function has no parameters and defines the type of the return value, but the body of the function is a lonely `5` with no semicolon because it’s an expression whose value we want to return.
+По-друге, функція `п'ять` не має параметрів і визначає тип значення, що повертає, але тіло функції -- самотнє `5` без крапки з комою -- це вираз, значення якого ми хочемо повернути.
 
-Let’s look at another example:
+Подивімося інший приклад:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -148,7 +148,7 @@ Let’s look at another example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-22-function-parameter-and-return/src/main.rs}}
 ```
 
-Running this code will print `The value of x is: 6`. But if we place a semicolon at the end of the line containing `x + 1`, changing it from an expression to a statement, we’ll get an error:
+Якщо виконати цей код, він виведе `The value of x is: 6`. Але якщо ми поставимо крапку з комою в кінець рядка `x + 1`, щоб він став не виразом, а інструкцією, ми дістанемо помилку:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -156,7 +156,7 @@ Running this code will print `The value of x is: 6`. But if we place a semicolon
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/src/main.rs}}
 ```
 
-Compiling this code produces an error, as follows:
+Компіляція цього коду призводить до такої помилки:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/output.txt}}
