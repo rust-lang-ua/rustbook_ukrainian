@@ -181,7 +181,7 @@ class="keystroke">ctrl-c</span>. Слово `again!` може вивестися
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
 ```
 
-Зовнішній цикл має позначку `'counting_up`, і він лічить від 0 до 2. Внутрішній цикл без позначки лічить навпаки від 10 до 9. Перший `break`, без указання мітки, виходить лише з внутрішнього циклу. Інструкція `break 'counting_up;` вийде з зовнішнього циклу. Цей код виведе:
+Зовнішній цикл має мітку `'counting_up`, і він лічить від 0 до 2. Внутрішній цикл без мітки лічить навпаки від 10 до 9. Перший `break`, без указання мітки, виходить лише з внутрішнього циклу. Інструкція `break 'counting_up;` вийде з зовнішнього циклу. Цей код виведе:
 
 ```console
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/output.txt}}
@@ -189,7 +189,7 @@ class="keystroke">ctrl-c</span>. Слово `again!` може вивестися
 
 #### Умовні цикли за допомогою `while`
 
-Програмі часто потрібно обчислювати умову в циклі. While the condition is `true`, the loop runs. When the condition ceases to be `true`, the program calls `break`, stopping the loop. Такий цикл можна реалізувати за допомогою комбінації `loop`, `if`, `else` та `break`; якщо бажаєте, можете спробувати зробити це зараз. Утім, цей шаблон настільки поширений, що Rust має вбудовану конструкцію для цього, що зветься циклом `while`. У Блоці коду 3-3 ми використовуємо `while`, щоб повторити програму тричі, зменшуючи кожного разу відлік, і потім, після циклу, вивести повідомлення і завершитися.
+Програмі часто потрібно обчислювати умову в циклі. Доки умова `true`, цикл виконується. Коли умова припиняє бути `true`, програма викликає `break`, щоб зупинити цикл. Подібну поведінку можна реалізувати за допомогою комбінації `loop`, `if`, `else` та `break`; якщо бажаєте, можете спробувати зробити це зараз. Утім, цей шаблон настільки поширений, що Rust має вбудовану конструкцію для цього, що зветься циклом `while`. У Блоці коду 3-3 ми використовуємо `while`, щоб повторити програму тричі, зменшуючи кожного разу відлік, і потім, після циклу, вивести повідомлення і завершитися.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -198,9 +198,9 @@ class="keystroke">ctrl-c</span>. Слово `again!` може вивестися
 ```
 
 
-<span class="caption">Listing 3-3: Using a `while` loop to run code while a condition holds true</span>
+<span class="caption">Блок коду 3-3: використання циклу `while` для виконання коду, поки умова лишається істинною</span>
 
-Ця конструкція мови усуває складні вкладені конструкції, які були б потрібні, якби ви використовували `loop`, `if`, `else` та `break`, і вона зрозуміліша. While a condition evaluates to `true`, the code runs; otherwise, it exits the loop.
+Ця конструкція мови усуває складні вкладені конструкції, які були б потрібні, якби ви використовували `loop`, `if`, `else` та `break`, і вона зрозуміліша. Поки умова `true`, код виконується; в іншому разі, виходить з циклу.
 
 #### Цикл по колекції за допомогою `for`
 
@@ -213,9 +213,9 @@ class="keystroke">ctrl-c</span>. Слово `again!` може вивестися
 ```
 
 
-<span class="caption">Listing 3-4: Looping through each element of a collection using a `while` loop</span>
+<span class="caption">Блок коду 3-4: перебір елементів колекції за допомогою циклу `while`</span>
 
-Тут код перелічує всі елементи в масиві. It starts at index `0`, and then loops until it reaches the final index in the array (that is, when `index < 5` is no longer `true`). Running this code will print every element in the array:
+Тут код перелічує всі елементи в масиві. Він починає з індексу `0`, а потім повторює, доки не досягне останнього індексу масиву (тобто коли `index < 5` вже не буде `true`). Виконання цього коду виведе всі елементи масиву:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/listing-03-04/output.txt}}
@@ -223,7 +223,7 @@ class="keystroke">ctrl-c</span>. Слово `again!` може вивестися
 
 Всі п'ять значень з масиву з'являються в терміналі, як і очікувалося. Хоча `index` досягне значення `5`, виконання циклу припиняється до спроби отримати шосте значення з масиву.
 
-However, this approach is error prone; we could cause the program to panic if the index value or test condition is incorrect. For example, if you changed the definition of the `a` array to have four elements but forgot to update the condition to `while index < 4`, the code would panic. Також він повільний, оскільки компілятор додає код для перевірки коректності індексу кожного елементу на кожній ітерації циклу.
+Але такий підхід вразливий до помилок; ми можемо викликати паніку в програмі некоректним індексом чи умовою продовження. Скажімо, якщо ви зміните визначення масиву `a` так, щоб він мав чотири елементи, і забудете змінити умову на `while index < 4`, це код викличе паніку. Також він повільний, оскільки компілятор додає код для перевірки коректності індексу кожного елементу на кожній ітерації циклу.
 
 Як стислішу альтернативу можна використати цикл `for`, який виконує код для кожного елементу колекції. Цикл `for` виглядає так, як показано в Блоці коду 3-5.
 
@@ -238,11 +238,11 @@ However, this approach is error prone; we could cause the program to panic if th
 
 Запустивши цей код, ми побачимо такий самий вивід, як і в Блоці коду 3-4. Що важливіше, ми збільшили безпеку коду та усунули можливість помилок - тепер неможливо, що код перейде за кінець масиву чи завершиться зарано, пропустивши кілька значень.
 
-Using the `for` loop, you wouldn’t need to remember to change any other code if you changed the number of values in the array, as you would with the method used in Listing 3-4.
+При використанні циклу `for` вам не треба пам'ятати, що треба змінити якийсь інший код, якщо ви змінили кількість значень у масиві, як це потрібно за методу, застосованого в Блоці коду 3-4.
 
 Безпечність і лаконічність циклів `for` робить їх найпоширенішою конструкцією циклів у Rust. Навіть у ситуаціях, де треба виконати певний код визначену кількість разів, як у прикладі відліком в циклі `while` з Блоку коду 3-3, більшість растацеанців скористаються циклом `for`. Для цього треба буде скористатися типом `Range` ("діапазон"), який надається стандартною бібліотекою і генерує послідовно всі числа, починаючи з одного і закінчуючись перед іншим.
 
-Here’s what the countdown would look like using a `for` loop and another method we’ve not yet talked about, `rev`, to reverse the range:
+Ось як виглядає відлік, що використовує цикл `for` і ще один метод, про який ми ще не говорили, `rev`, для обернення діапазону:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -254,11 +254,11 @@ Here’s what the countdown would look like using a `for` loop and another metho
 
 ## Підсумок
 
-Нарешті закінчили! This was a sizable chapter: you learned about variables, scalar and compound data types, functions, comments, `if` expressions, and loops! To practice with the concepts discussed in this chapter, try building programs to do the following:
+Нарешті закінчили! Це був величенький розділ: ви вивчили змінні, скалярні та складені типи даних, функції, коментарі, вирази `if`, та ще цикли! Якщо ви хочете повправлятися з концепціями, обговореними у цьому розділі, спробуйте написати програми, що роблять таке:
 
 * Конвертує температуру між шкалами Фаренгейта та Цельсія.
-* Generate the *n*th Fibonacci number.
-* Print the lyrics to the Christmas carol “The Twelve Days of Christmas,” taking advantage of the repetition in the song.
+* Обчислює *n*-е число Фібоначчі.
+* Виводить слова англійської різдвяної пісні "Дванадцять днів Різдва" з використанням повторень у пісні (якщо хочете - можете спробувати вивести казку "Ріпка").
 
-When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t* commonly exist in other programming languages: ownership. ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess
+Коли будете готові продовжувати, ми поговоримо про концепцію мови Rust, якої *немає* серед поширених в інших мовах програмування - володіння.
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess
