@@ -1,6 +1,6 @@
 ## Управління потоком виконання
 
-The ability to run some code depending on whether a condition is `true` and to run some code repeatedly while a condition is `true` are basic building blocks in most programming languages. The most common constructs that let you control the flow of execution of Rust code are `if` expressions and loops.
+Здатність виконувати чи ні певний код залежно від того, чи умова істинна (`true`), чи повторити певний код кілька разів, доки умова `true` - базові будівельні елементи коду у більшості мов програмування. Найпоширеніші конструкції, що дозволяють вам управляти потоком виконання коду на Rust є вирази `if` та цикли.
 
 ### Вирази `if`
 
@@ -14,10 +14,10 @@ The ability to run some code depending on whether a condition is `true` and to r
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/src/main.rs}}
 ```
 
-Всі вирази `if` починаються з ключового слова `if`, за яким іде умова. В цьому випадку умова перевіряє, має чи ні змінна `number` значення, менше за 5. We place the block of code to execute if the condition is `true` immediately after the condition inside curly brackets. Блоки коду, прив'язані до умов у виразах `if`, іноді звуть *рукавами*, так само як рукави у виразах `match`, що ми обговорювали у підрозділі [Порівняння здогадки з таємним числом]()<!--
+Всі вирази `if` починаються з ключового слова `if`, за яким іде умова. В цьому випадку умова перевіряє, має чи ні змінна `number` значення, менше за 5. Ми розміщуємо блок коду, який треба виконати, якщо умова `true`, одразу після умови в фігурних дужках. Блоки коду, прив'язані до умов у виразах `if`, іноді звуть *рукавами*, так само як рукави у виразах `match`, що ми обговорювали у підрозділі [Порівняння здогадки з таємним числом]()<!--
 ignore --> Розділу 2.
 
-Optionally, we can also include an `else` expression, which we chose to do here, to give the program an alternative block of code to execute should the condition evaluate to `false`. If you don’t provide an `else` expression and the condition is `false`, the program will just skip the `if` block and move on to the next bit of code.
+Також можна додати необов'язковий вираз `else`, як ми зробили тут, щоб надати програмі альтернативний блок коду для виконання, якщо умова виявиться `false`. Якщо ви не надасте виразу `else`, а умова буде `false`, програма просто пропустить блок `if` і перейде до наступного фрагмента коду.
 
 Спробуйте запустити цей код; ви маєте побачити, що він виведе таке:
 
@@ -25,7 +25,7 @@ Optionally, we can also include an `else` expression, which we chose to do here,
 {{#include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/output.txt}}
 ```
 
-Let’s try changing the value of `number` to a value that makes the condition `false` to see what happens:
+Спробуймо змінити значення `number` на таке, що зробить умову `хибною`, і подивитися, що станеться:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/src/main.rs:here}}
@@ -45,7 +45,7 @@ Let’s try changing the value of `number` to a value that makes the condition `
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/src/main.rs}}
 ```
 
-The `if` condition evaluates to a value of `3` this time, and Rust throws an error:
+Умова у виразі `if` обчислюється тепер у значення `3`, і Rust повідомляє про помилку:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/output.txt}}
@@ -77,7 +77,7 @@ The `if` condition evaluates to a value of `3` this time, and Rust throws an err
 {{#include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/output.txt}}
 ```
 
-When this program executes, it checks each `if` expression in turn and executes the first body for which the condition evaluates to `true`. Note that even though 6 is divisible by 2, we don’t see the output `number is divisible by 2`, nor do we see the `number is not divisible by 4, 3, or 2` text from the `else` block. That’s because Rust only executes the block for the first `true` condition, and once it finds one, it doesn’t even check the rest.
+Коли ця програма виконується, вона перевіряє по черзі кожен вираз `if` і виконує перший блок, для якого умова справджується. Зверніть увагу, що, хоча 6 і ділиться на 2, ми не бачимо повідомлення `number is divisible by 2`, так само як не бачимо і `number is not divisible by 4, 3 чи 2` з блоку `else` - бо Rust виконає тільки той блок, в якого першого умова буде `true`, а знайшовши його, не перевіряє всю решту умов.
 
 Забагато виразів `else if` можуть захарастити ваш код, тому, якщо вам треба більш ніж одна така конструкція, цілком можливо, що знадобиться рефакторизувати ваш код. У Розділі 6 описана потужна конструкція мови Rust для розгалуження, що зветься `match`, для таких випадків.
 
@@ -118,15 +118,15 @@ Because `if` is an expression, we can use it on the right side of a `let` statem
 
 ### Повторення коду за допомогою циклів
 
-Часто трапляється, що блок коду треба виконати більше одного разу. Для цього Rust надає декілька *циклів*. Цикл виконує весь код тіла циклу до кінця, після чого починає спочатку. To experiment with loops, let’s make a new project called *loops*.
+Часто трапляється, що блок коду треба виконати більше одного разу. Для цього Rust надає декілька *циклів*. Цикл виконує весь код тіла циклу до кінця, після чого починає спочатку. Для експериментів з циклами зробімо новий проєкт під назвою *loops*.
 
 У Rust є три види циклів: `loop`, `while` та `for`. Спробуємо кожен з них.
 
 #### Повторення коду за допомогою `loop`
 
-The `loop` keyword tells Rust to execute a block of code over and over again forever or until you explicitly tell it to stop.
+Ключове слово `loop` каже Rust виконувати блок коду знову і знову без кінця або ж доки не буде прямо сказано зупинитися.
 
-As an example, change the *src/main.rs* file in your *loops* directory to look like this:
+Наприклад, змініть вміст файлу *src/main.rs* в теці *loops*, щоб він виглядав так:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -134,7 +134,7 @@ As an example, change the *src/main.rs* file in your *loops* directory to look l
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-loop/src/main.rs}}
 ```
 
-Якщо запустити цю програму, ми побачимо, що `again!` виводиться неперервно раз у раз, доки ми не зупинимо програму вручну. Most terminals support the keyboard shortcut <span class="keystroke">ctrl-c</span> to interrupt a program that is stuck in a continual loop. Спробуйте:
+Якщо запустити цю програму, ми побачимо, що `again!` виводиться неперервно раз у раз, доки ми не зупинимо програму вручну. Більшість терміналів підтримують клавіатурне скорочення <span class="keystroke">ctrl+c</span>, яке зупиняє програму, що застрягла у нескінченому циклі. Спробуйте:
 
 
 <!-- manual-regeneration
@@ -155,13 +155,13 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <span
-class="keystroke">ctrl-c</span>. You may or may not see the word `again!` printed after the `^C`, depending on where the code was in the loop when it received the interrupt signal.
+Символ `^C` позначає, де ви натиснули <span
+class="keystroke">ctrl-c</span>. Слово `again!` може вивестися після `^C` чи ні, залежно від того, в який саме момент виконання коду був надісланий сигнал зупинки.
 
 На щастя, Rust надає також інший, більш надійний спосіб перервати цикл за допомогою коду. Ви можете розмістити в циклі ключове слово `break`, щоб сказати програмі, коли припинити виконувати цикл. Згадайте, що ми вже його використовували у грі "Відгадай число" в підрозділі ["Вихід після вдалої здогадки"]()<!-- ignore
 --> Розділу 2, щоб вийти з програми, коли користувач вигравав у грі, відгадавши правильне число.
 
-We also used `continue` in the guessing game, which in a loop tells the program to skip over any remaining code in this iteration of the loop and go to the next iteration.
+Ми також використовували у цій грі `continue`, який у циклі каже програмі пропустити будь-який код, що лишився в цій ітерації циклу і перейти до наступної ітерації.
 
 #### Повернення значень з циклів
 
@@ -171,11 +171,11 @@ We also used `continue` in the guessing game, which in a loop tells the program 
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-33-return-value-from-loop/src/main.rs}}
 ```
 
-Перед циклом ми проголошуємо змінну `counter` і ініціалізуємо її в `0`. Потім ми проголошуємо змінну `result`, що отримає значення, повернуте з циклу. On every iteration of the loop, we add `1` to the `counter` variable, and then check whether the `counter` is equal to `10`. Коли так, ми використовуємо ключове слово `break` зі значенням `counter * 2`. Після циклу ми ставимо крапку з комою, щоб завершити інструкцію, що присвоює значення змінній `result`. Finally, we print the value in `result`, which in this case is `20`.
+Перед циклом ми проголошуємо змінну `counter` і ініціалізуємо її в `0`. Потім ми проголошуємо змінну `result`, що отримає значення, повернуте з циклу. На кожній ітерації циклу ми додаємо `1` до змінної `counter`, а потім перевіряємо, чи дорівнює `counter` `10`. Коли так, ми використовуємо ключове слово `break` зі значенням `counter * 2`. Після циклу ми ставимо крапку з комою, щоб завершити інструкцію, що присвоює значення змінній `result`. Наприкінці ми виводимо значення `result`, у цьому випадку `20`.
 
 #### Мітки циклів для розрізнення між декількома циклами
 
-Якщо у вас є цикли, вкладені в інші цикли, `break` і `continue` стосуються найглибшого циклу в точці, де вони застосовані. You can optionally specify a *loop label* on a loop that you can then use with `break` or `continue` to specify that those keywords apply to the labeled loop instead of the innermost loop. Loop labels must begin with a single quote. Ось приклад із двома вкладеними циклами:
+Якщо у вас є цикли, вкладені в інші цикли, `break` і `continue` стосуються найглибшого циклу в точці, де вони застосовані. Ви можете за потреби вказати на циклі *мітку циклу*, що її можна потім використати в інструкціях `break` та `continue`, щоб вказати, що ці ключові слова стосуються циклу з міткою, а не найглибшого циклу. Мітки циклу починаються з одинарної лапки. Ось приклад із двома вкладеними циклами:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
