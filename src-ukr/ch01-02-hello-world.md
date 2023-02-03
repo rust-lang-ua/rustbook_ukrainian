@@ -8,7 +8,7 @@
 
 Для початку, створіть теку для розміщення вашого коду мовою Rust. Для Rust немає значення, де розміщено ваш код, але для вправ і проєктів у цій книжці ми рекомендуємо зробити теку *projects* у вашій домашній теці і тримати всі проєкти там.
 
-Open a terminal and enter the following commands to make a *projects* directory and a directory for the “Hello, world!” project within the *projects* directory.
+Запустіть термінал і введіть такі команди, щоб створити теку *projects* та теку для проєкту “Hello, world!” усередині теки *projects*.
 
 У Linux, macOS та PowerShell на Windows, введіть це:
 
@@ -98,7 +98,7 @@ fn main() {
 
 ### Компіляція і запуск - окремі кроки
 
-You’ve just run a newly created program, so let’s examine each step in the process.
+Ви щойно запустили новостворену програму, тож дослідимо кожен крок у цьому процесі.
 
 Перед запуском програми Rust необхідно її скомпілювати за допомогою компілятора Rust, набравши команду `rustc` і передавши їй ім'я вихідного файлу, отак:
 
