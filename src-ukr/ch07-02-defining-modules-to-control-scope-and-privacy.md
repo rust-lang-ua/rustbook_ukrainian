@@ -14,7 +14,7 @@
   - У файлі *src/garden.rs*
   - У файлі *src/garden/mod.rs*
 - **Оголошення підмодулів**: Ви можете оголошувати підмодулі в будь якому файлі, не лише в корені крейту. Наприклад, ви можете оголосити `mod vegetables;` в *src/garden.rs*. Компілятор шукатиме код підмодуля в теці з іменем батьківського модуля в наступних місцях:
-  - Inline, directly following `mod vegetables`, within curly brackets instead of the semicolon
+  - Локально в цьому файлі, одразу після `mod vegetables`, всередині фігурних дужок замість крапки з комою
   - У файлі *src/garden/vegetables.rs*
   - У файлі *src/garden/vegetables/mod.rs*
 - **Шляхи до коду в модулях**: Після того як модуль став частиною вашого крейту, ви можете звертатися до його коду з будь-якого місця даного крейту за допомогою шляху до коду, якщо дозволяють правила приватності. Наприклад, тип `Asparagus` в модулі garden vegetables буде знайдений за шляхом `crate::garden::vegetables::Asparagus`.
@@ -42,9 +42,9 @@ backyard
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/main.rs}}
 ```
 
-The `pub mod garden;` line tells the compiler to include the code it finds in *src/garden.rs*, which is:
+Рядок `pub mod garden;` каже компілятору підключити код, який знайдений в *src/garden.rs*:
 
-<span class="filename">Filename: src/garden.rs</span>
+<span class="filename">Файл: src/garden.rs</span>
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden.rs}}
@@ -75,7 +75,7 @@ The `pub mod garden;` line tells the compiler to include the code it finds in *s
 ```
 
 
-<span class="caption">Listing 7-1: A `front_of_house` module containing other modules that then contain functions</span>
+<span class="caption">Listing 7-1: Модуль `front_of_house`, що містить інші модулі, які в свою чергу містять функції</span>
 
 Ми визначаємо модуль за допомогою ключового слова `mod`, після якого йде назва модуля (в даному випадку `front_of_house`). Тіло модуля розміщається всередині фігурних дужок. Модулі можуть містити інші модулі, як в нашому випадку це зроблено з модулями `hosting` та `serving`. Також в модулях можуть знаходитися визначення інших елементів, таких як структури, переліки, константи, трейти, і - як у Лістингу 7-1 - функції.
 
@@ -98,7 +98,7 @@ crate
 ```
 
 
-<span class="caption">Listing 7-2: The module tree for the code in Listing 7-1</span>
+<span class="caption">Лістинг 7-2: Дерево модулів для коду в Лістингу 7-1</span>
 
 Це дерево показує, як одні модулі вкладені в інші. Наприклад, `hosting`вкладений в `front_of_house`. Дерево також показує, що деякі модулі є *братами (siblings)* один для одного, що означає, що вони визначені в одному модулі. `hosting` та `serving` є братами, визначеними всередині `front_of_house`. Якщо модуль A міститься всередині модуля B, ми кажемо, що модуль A є **нащадком (child)** модуля B і що модуль B є *батьком (parent)* модуля A. Зверніть увагу, що батьком усього дерева модулів є неявний модуль з назвою `crate`.</p>
 
