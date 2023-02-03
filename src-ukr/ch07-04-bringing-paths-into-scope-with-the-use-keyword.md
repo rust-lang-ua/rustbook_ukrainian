@@ -1,8 +1,8 @@
 ## Підключення шляхів до області видимості за допомогою ключового слова `use`
 
-Необхідність переписувати шляхи для виклику функцій може здатися незручною та повторюваною. В Лістингу 7-7 незалежно від того, чи ми вказували абсолютний чи відносний шлях до функції `add_to_waitlist`, для того щоб її викликати ми кожного разу мали також вказувати `front_of_house` та `hosting`. На щастя, існує спосіб спростити цей процес: достатньо один раз створити ярлик (shortcut) для шляху за допомогою ключового слова `use` і потім використовувати коротке імʼя будь-де в області видимості.
+Необхідність переписувати шляхи для виклику функцій може здатися незручною та повторюваною. У Блоці коду 7-7 незалежно від того, чи ми вказували абсолютний чи відносний шлях до функції `add_to_waitlist`, для того, щоб її викликати, ми кожного разу мали також вказувати `front_of_house` та `hosting`. На щастя, існує спосіб спростити цей процес: достатньо один раз створити ярлик (shortcut) для шляху за допомогою ключового слова `use` і потім використовувати коротке імʼя будь-де в області видимості.
 
-In Listing 7-11, we bring the `crate::front_of_house::hosting` module into the scope of the `eat_at_restaurant` function so we only have to specify `hosting::add_to_waitlist` to call the `add_to_waitlist` function in `eat_at_restaurant`.
+У Блоці коду 7-11 ми підключаємо модуль `crate::front_of_house::hosting` до області видимості функції `eat_at_restaurant`, отже нам лишається лише вказати `hosting::add_to_waitlist` для виклику функції `add_to_waitlist` всередині `eat_at_restaurant`.
 
 <span class="filename">Файл: src/lib.rs</span>
 
@@ -26,7 +26,7 @@ In Listing 7-11, we bring the `crate::front_of_house::hosting` module into the s
 
 <span class="caption">Listing 7-12: A `use` statement only applies in the scope it’s in</span>
 
-The compiler error shows that the shortcut no longer applies within the `customer` module:
+Помилка компілятора показує, що даний ярлик більше не дійсний в модулі `customer`:
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-12/output.txt}}
@@ -36,8 +36,7 @@ The compiler error shows that the shortcut no longer applies within the `custome
 
 ### Створення ідіоматичних шляхів `use`
 
-In Listing 7-11, you might have wondered why we specified `use
-crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in `eat_at_restaurant` rather than specifying the `use` path all the way out to the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
+У Блоці коду 7-11 у вас могло виникнути питання, чому ми вказали `use crate::front_of_house::hosting` і потім викликали `hosting::add_to_waitlist` в `eat_at_restaurant` замість вказання в `use` повного шляху до функції `add_to_waitlist` для отримання того самого результату, що й у Блоці коду 7-13.
 
 <span class="filename">Файл: src/lib.rs</span>
 
@@ -46,11 +45,11 @@ crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in `e
 ```
 
 
-<span class="caption">Listing 7-13: Bringing the `add_to_waitlist` function into scope with `use`, which is unidiomatic</span>
+<span class="caption">Блок коду 7-13: Додання функції `add_to_waitlist` до області видимості за допомогою `use`, що не є ідіоматичним способом</span>
 
-Хоча Лістинги 7-11 та 7-13 і виконують одну й ту саму задачу, Лістинг 7-11 є ідіоматичним способом додавання функції до області видимості за допомогою `use`. Щоб додати батьківський модуль функції до області видимості з `use` треба його вказати при виклику функції. Вказання батьківського модуля при виклику функції явно показує, що функція не оголошена локально, але разом з тим це зводить до мінімуму необхідність повторень повного шляху. З коду в Лістингу 7-13 не ясно, де саме визначено `add_to_waitlist`.
+Хоча Блоки коду 7-11 та 7-13 і виконують одну й ту саму задачу, Блок коду 7-11 є ідіоматичним способом додавання функції до області видимості за допомогою `use`. Щоб додати батьківський модуль функції до області видимості з `use` треба його вказати при виклику функції. Вказання батьківського модуля при виклику функції явно показує, що функція не оголошена локально, але разом з тим це зводить до мінімуму необхідність повторень повного шляху. З коду в Блоці коду 7-13 не ясно, де саме визначено `add_to_waitlist`.
 
-З іншого боку при додаванні структур, переліків та інших елементів за допомогою `use`, вказання повного шляху є ідіоматичним. Лістинг 7-14 демонструє ідіоматичний спосіб для додавання стандартної структури з бібліотеки `HashMap`\` до області видимості бінарного крейту.
+З іншого боку при додаванні структур, переліків та інших елементів за допомогою `use`, вказання повного шляху є ідіоматичним. Блок коду 7-14 демонструє ідіоматичний спосіб для додавання стандартної структури з бібліотеки `HashMap`\` до області видимості бінарного крейту.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -61,7 +60,7 @@ crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in `e
 
 <span class="caption">Listing 7-14: Bringing `HashMap` into scope in an idiomatic way</span>
 
-There’s no strong reason behind this idiom: it’s just the convention that has emerged, and folks have gotten used to reading and writing Rust code this way.
+За цією ідіомою немає якоїсь вагомої причини: це просто згода серед програмістів на Rust, які звикли писати і читати код саме таким чином.
 
 Винятком з цієї ідіоми є випадок, коли треба підключити два елементи з однаковими іменами до області видимості з оператором `use`, оскільки Rust не дозволяє зробити це. Лістинг 7-15 демонструє як підключити до області видимості два типи `Result`, що мають однакове імʼя, але різні батьківські модулі, та як до них звертатися.
 
@@ -72,7 +71,7 @@ There’s no strong reason behind this idiom: it’s just the convention that ha
 ```
 
 
-<span class="caption">Listing 7-15: Bringing two types with the same name into the same scope requires using their parent modules.</span>
+<span class="caption">Блок коду 7-15: Підключення до області видимості двох типів з одним імʼям вимагає вказання їх батьківських модулів.</span>
 
 Як ви можете бачити, використання батьківських модулів розрізняє дви типа `Result`. Якщо б натомість ми вказали `use std::fmt::Result` та `use std::io::Result`, ми б мали два типи `Result` в одній області видимості та Rust не знав би, який з них ми маємо на увазі, пишучи `Result`.
 
@@ -89,7 +88,7 @@ There’s no strong reason behind this idiom: it’s just the convention that ha
 
 <span class="caption">Блок коду 7-16: Перейменування типу при його додаванні до області видимості з ключовим словом `as`</span>
 
-У другому операторі `use`ми вказали нове імʼя `IoResult`для типу ``std::io::Result`, що не конфліктуватиме з типом `Result` з `std::fmt`, що ми ойго також додали до області видимості. Підходи з лістингів 7-15 та 7-16 вважаються ідіоматичними. Отже, вибір за вами!
+У другому операторі `use`ми вказали нове імʼя `IoResult`для типу ``std::io::Result`, що не конфліктуватиме з типом `Result` з `std::fmt`, що ми ойго також додали до області видимості. Підходи з Блоків коду 7-15 та 7-16 вважаються ідіоматичними. Отже, вибір за вами!
 
 ### Реекспорт імен із `pub use`
 
@@ -135,7 +134,7 @@ Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the `rand`
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
 ```
 
-Members of the Rust community have made many packages available at [crates.io](https://crates.io/), and pulling any of them into your package involves these same steps: listing them in your package’s *Cargo.toml* file and using `use` to bring items from their crates into scope.
+Члени Rust спільноти зробили доступними багато пакетів, які доступні на [crates.io](https://crates.io/), і додання будь-якого з них до вашого пакету вимагає тих самих кроків: вказання їх у файлі *Cargo.toml* вашого пакету та використання `use` для додання елементів з їх крейтів до області видимості.
 
 Зверніть увагу, що стандартна бібліотека `std` є також крейтом, щщо є зовнішнім по відношенню до нашого пакету. Оскільки стандартна бібліотека поставляється в комплекті з мовою Rust, нам не портібно змінювати *Cargo.toml* для додання `std`. Але нам потрібно вказати її за допомогою `use` для того щоб додати її елементи до області видимості нашого пакету. Наприклад, для `HashMap` ми б використовували такий рядок:
 
@@ -166,7 +165,7 @@ This is an absolute path starting with `std`, the name of the standard library c
 
 <span class="caption">Блок коду 7-18: Вказання вкладених шляхів для додання до області видимості елементів з однаковими префіксами</span>
 
-In bigger programs, bringing many items into scope from the same crate or module using nested paths can reduce the number of separate `use` statements needed by a lot!
+У більших програмах додання багатьох елементів до області видимості з одного крейту або модулю за допомогою вкладених шляхів може значно скоротити кількість необхідних використань `use`!
 
 Ми можемо використовувати вкладені шляхи будь-якого рівня вкладеності, що є корисним при комбінуванні двох виразів `use`, що мають спільну частину шляху. Наприклад, Блок коду 7-19 демонструє два оператори `use`: один додає до області видимості `std::io` і один, що додає `std::io::Write`.
 
@@ -177,9 +176,9 @@ In bigger programs, bringing many items into scope from the same crate or module
 ```
 
 
-<span class="caption">Listing 7-19: Two `use` statements where one is a subpath of the other</span>
+<span class="caption">Блок коду 7-19: Два оператори `use`, де один є частиною іншого</span>
 
-Спільною частиною цих двох шляхів є `std::io`, і це ж є повним шляхом першого. Для обʼєднання цих двох шляхів в один оператор `use` ми можемо використати ключове слово `self` у вкладеному шляху, як показано в Лістингу 7-20.
+Спільною частиною цих двох шляхів є `std::io`, і це ж є повним шляхом першого. Для обʼєднання цих двох шляхів в один оператор `use` ми можемо використати ключове слово `self` у вкладеному шляху, як показано в Блоці коду 7-20.
 
 <span class="filename">Файл: src/lib.rs</span>
 
@@ -188,13 +187,13 @@ In bigger programs, bringing many items into scope from the same crate or module
 ```
 
 
-<span class="caption">Listing 7-20: Combining the paths in Listing 7-19 into one `use` statement</span>
+<span class="caption">Блок коду 7-20: Комбінування шляхів з Блока коду 7-19 в одному операторі `use`</span>
 
 Цей рядок додає `std::io` та `std::io::Write` до області видимості.
 
 ### Глобальний оператор (*)
 
-If we want to bring *all* public items defined in a path into scope, we can specify that path followed by the `*` glob operator:
+Якщо ми хочемо додати до області видимості *всі* публічні елементи, визначені за певним шляхом, ми можемо вказати шлях, за яким йтиме глобальний оператор `*`:
 
 ```rust
 use std::collections::*;
