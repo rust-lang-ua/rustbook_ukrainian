@@ -12,7 +12,7 @@
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
-Збережіть і запустіть програму за допомогою `cargo run`. You should receive an error message regarding an immutability error, as shown in this output:
+Збережіть і запустіть програму за допомогою `cargo run`. Ви маєте отримати повідомлення про помилку щодо помилки немутабельності, як показано на цьому виведенні:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/output.txt}}
