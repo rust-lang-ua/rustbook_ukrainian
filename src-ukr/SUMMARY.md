@@ -42,7 +42,7 @@
     - [Підключення шляхів до області видимості за допомогою ключового слова `use`](ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
     - [Розподіл модулів на різні файли](ch07-05-separating-modules-into-different-files.md)
 
-- [Common Collections](ch08-00-common-collections.md)
+- [Звичайні колекції](ch08-00-common-collections.md)
     - [Vectors](ch08-01-vectors.md)
     - [Strings](ch08-02-strings.md)
     - [Hash Maps](ch08-03-hash-maps.md)
@@ -70,7 +70,7 @@
     - [Робота зі Змінними Середовища](ch12-05-working-with-environment-variables.md)
     - [Написання Повідомлень Про Помилки в Standard Error Замість Стандартного Виводу](ch12-06-writing-to-stderr-instead-of-stdout.md)
 
-## Thinking in Rust
+## Мислення в стилі Rust
 
 - [Функціональні можливості мови: Ітератори та Замикання](ch13-00-functional-features.md)
     - [Замикання: Анонімні Функції що Захоплюють Своє Середовище](ch13-01-closures.md)
@@ -82,7 +82,7 @@
     - [Налаштування Збірок з Release Профілями](ch14-01-release-profiles.md)
     - [Публікація Крейта на Crates.io](ch14-02-publishing-to-crates-io.md)
     - [Робочі Області Cargo](ch14-03-cargo-workspaces.md)
-    - [Installing Binaries from Crates.io with `cargo install`](ch14-04-installing-binaries.md)
+    - [Встановлення Двійкових Файлів з `cargo install`](ch14-04-installing-binaries.md)
     - [Розширення Cargo із Користувацькими Командами](ch14-05-extending-cargo.md)
 
 - [Розумні вказівники](ch15-00-smart-pointers.md)
@@ -104,7 +104,7 @@
     - [Trait Objects for Using Values of Different Types](ch17-02-trait-objects.md)
     - [Object-Oriented Design Pattern Implementations](ch17-03-oo-design-patterns.md)
 
-## Advanced Topics
+## Розширені питання
 
 - [Шаблони та Зіставлення Шаблонів](ch18-00-patterns.md)
     - [All the Places Patterns May be Used](ch18-01-all-the-places-for-patterns.md)
@@ -126,7 +126,7 @@
 - [Додатки](appendix-00.md)
     - [A - Ключові слова](appendix-01-keywords.md)
     - [B - оператори та символи](appendix-02-operators.md)
-    - [C - Derivable Traits](appendix-03-derivable-traits.md)
+    - [С - Вивідні трейти](appendix-03-derivable-traits.md)
     - [D - Macros](appendix-04-useful-development-tools.md)
     - [E - Translations](appendix-05-editions.md)
     - [F - Newest Features](appendix-06-translation.md)
