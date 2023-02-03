@@ -64,7 +64,7 @@ purposes. -->
 ```
 
 
-<span class="caption">Listing 9-13: A `Guess` type that will only continue with values between 1 and 100</span>
+<span class="caption">Блок коду 9-13: Тип `Guess`, який буде створювати екземпляри тільки для значень від 1 до 100</span>
 
 Спочатку ми визначимо структуру з ім'ям `Guess`, яка має поле з іменем `value` типу `i32`. Ось де буде збережено число.
 
