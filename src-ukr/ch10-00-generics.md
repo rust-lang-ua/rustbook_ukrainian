@@ -23,7 +23,7 @@ We begin with the short program in Listing 10-1 that finds the largest number in
 ```
 
 
-<span class="caption">Listing 10-1: Finding the largest number in a list of numbers</span>
+<span class="caption">Блок коду 10-1: Пошук найбільшого числа у списку</span>
 
 Ми зберігаємо список цілих чисел у змінній `number_list` і присвоєму змінній `largest` посилання на перше число у списку. Тоді ми проходимося по всіх числах у списку, і якщо поточне число більше за те, яке зберігається у `largest`, то ми замінємо посилання у цій змінній. Проте якщо поточне число менше або рівне поки що найбільшому числу, змінна зберігає своє значення і наш код продовжує з наступного числа у списку. Після того як ми пройшлися по всіх числах у списку, `largest` має містити значення найбільшого числа. У цьому випадку це 100.
 
@@ -36,7 +36,7 @@ We begin with the short program in Listing 10-1 that finds the largest number in
 ```
 
 
-<span class="caption">Listing 10-2: Code to find the largest number in *two* lists of numbers</span>
+<span class="caption">Блок коду 10-2: Програма, яка знаходить найбільше число у *двох* списках</span>
 
 Хоча цей код працює, дублювання коду виснажливе і збільшує ризик помилок. Також потрібно не забути оновити код у двох місцях, якщо ми хочемо внести будь-які зміни.
 
