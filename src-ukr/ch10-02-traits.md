@@ -19,7 +19,7 @@ For example, let’s say we have multiple structs that hold various kinds and am
 ```
 
 
-<span class="caption">Listing 10-12: A `Summary` trait that consists of the behavior provided by a `summarize` method</span>
+<span class="caption">Блок коду 10-12: Визначення трейту `Summary`, що містить поведінку, надану методом `summarize`</span>
 
 Тут ми визначаємо трейт, використовуючи ключове слово `trait`, а потім його назву, якою є `Summary` в цьому випадку. Ми також визначили цей трейт як `pub`, щоб крейти, які залежать від цього крейту, також могли використовувати цей трейт, як ми побачимо в декількох прикладах. Всередині фігурних дужок визначаються сигнатури методів, які описують поведінку типів, які реалізують цей трейт. У цьому випадку поведінка визначається тільки однією сигнатурою методу: `fn summarize(&self) -> String`.
 
@@ -58,7 +58,7 @@ A trait can have multiple methods in its body: the method signatures are listed 
 
 Іноді корисно мати поведінку за замовчуванням для деяких чи всіх методів трейту замість того, щоб вимагати реалізації всіх методів у кожному типі, що реалізує цей трейт. Потім, коли ми реалізуємо трейт для певного типу, можна зберегти чи перевизначити поведінку кожного методу за замовчуванням вже всередині типів.
 
-In Listing 10-14 we specify a default string for the `summarize` method of the `Summary` trait instead of only defining the method signature, as we did in Listing 10-12.
+В Блоці коду 10-14 показано, як вказати стрічку за замовчуванням для методу `summarize` з трейту `Summary` замість визначення тільки сигнатури методу, як ми робили в Блоці коду 10-12.
 
 <span class="filename">Файл: src/lib.rs</span>
 
