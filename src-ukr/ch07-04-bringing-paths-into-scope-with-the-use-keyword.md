@@ -87,7 +87,7 @@ There’s no strong reason behind this idiom: it’s just the convention that ha
 ```
 
 
-<span class="caption">Listing 7-16: Renaming a type when it’s brought into scope with the `as` keyword</span>
+<span class="caption">Блок коду 7-16: Перейменування типу при його додаванні до області видимості з ключовим словом `as`</span>
 
 У другому операторі `use`ми вказали нове імʼя `IoResult`для типу ``std::io::Result`, що не конфліктуватиме з типом `Result` з `std::fmt`, що ми ойго також додали до області видимості. Підходи з лістингів 7-15 та 7-16 вважаються ідіоматичними. Отже, вибір за вами!
 
@@ -95,7 +95,7 @@ There’s no strong reason behind this idiom: it’s just the convention that ha
 
 При внесенні імені до області видимості із ключовим словом `use`, імʼя, доступне в новій області видимості, є приватним. Аби код міг посилатися на це імʼя так, ніби воно визначене в його області видимості, ми можемо комбінувати `pub` та `use`. Ця техніка називається *re-exporting*. тому що ми не лише додаємо елемент до області видимості, а ще й робимо його доступним для підключення в інші області видимості.
 
-Listing 7-17 shows the code in Listing 7-11 with `use` in the root module changed to `pub use`.
+Блок коду 7-17 показує код з Блока коду 7-11, в якому `use` в кореневому модулі замінено на `pub use`.
 
 <span class="filename">Файл: src/lib.rs</span>
 
@@ -104,7 +104,7 @@ Listing 7-17 shows the code in Listing 7-11 with `use` in the root module change
 ```
 
 
-<span class="caption">Listing 7-17: Making a name available for any code to use from a new scope with `pub use`</span>
+<span class="caption">Блок коду 7-17: Робимо назву доступною для використання будь-яким кодом з нової області видимості за допомогою `pub use`</span>
 
 До цієї заміни зовнішній код повинен був викликати функцію `add_to_waitlist`, використовуючи шлях `restaurant::front_of_house::hosting::add_to_waitlist()`. Тепер, коли використання `pub
 use` дозволило реекспортувати модуль `hosting` з кореневого модуля, зовнішній код може натомість використовувати шлях `restaurant::hosting::add_to_waitlist()`.
@@ -147,7 +147,7 @@ This is an absolute path starting with `std`, the name of the standard library c
 
 ### Використаня вкладенних шляхів для зменшення величезних переліків `use`
 
-Якщо нам треба використовувати багато елементів, визначених в тому самому крейті або модулі, вказання кожного з них на окремому рядку займає багато вертикального простору в файлах. Наприклад, ці два оголошення `use` ми використовували у грі вгадування чисел в Лістингу 2-4 для додання до області видимості елементів з `std`:
+Якщо нам треба використовувати багато елементів, визначених в тому самому крейті або модулі, вказання кожного з них на окремому рядку займає багато вертикального простору в файлах. Наприклад, ці два оголошення `use` ми використовували у грі вгадування чисел в Блоці коду 2-4 для додавання до області видимості елементів з `std`:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -164,11 +164,11 @@ This is an absolute path starting with `std`, the name of the standard library c
 ```
 
 
-<span class="caption">Listing 7-18: Specifying a nested path to bring multiple items with the same prefix into scope</span>
+<span class="caption">Блок коду 7-18: Вказання вкладених шляхів для додання до області видимості елементів з однаковими префіксами</span>
 
 In bigger programs, bringing many items into scope from the same crate or module using nested paths can reduce the number of separate `use` statements needed by a lot!
 
-Ми можемо використовувати вкладені шляхи будь-якого рівня вкладеності, що є корисним при комбінуванні двох виразів `use`, що мають спільну частину шляху. Наприклад, Лістинг 7-19 демонструє два оператора `use`: один додає до області видимості `std::io` і один, що додає `std::io::Write`.
+Ми можемо використовувати вкладені шляхи будь-якого рівня вкладеності, що є корисним при комбінуванні двох виразів `use`, що мають спільну частину шляху. Наприклад, Блок коду 7-19 демонструє два оператори `use`: один додає до області видимості `std::io` і один, що додає `std::io::Write`.
 
 <span class="filename">Файл: src/lib.rs</span>
 
