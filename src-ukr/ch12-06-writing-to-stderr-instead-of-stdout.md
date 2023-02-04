@@ -35,24 +35,24 @@ Problem parsing arguments: not enough arguments
 ```
 
 
-<span class="caption">Listing 12-24: Writing error messages to standard error instead of standard output using `eprintln!`</span>
+<span class="caption">Блок коду 12-24: Запис повідомлень про помилки до стандартного помилкового виводу, замість стандартного, за допомогою `eprintln!`</span>
 
-Let’s now run the program again in the same way, without any arguments and redirecting standard output with `>`:
+Тепер запустимо програму ще раз таким же чином, без будь-яких аргументів і перенаправивши стандартний вивід за допомогою `>`:
 
 ```console
 $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-Now we see the error onscreen and *output.txt* contains nothing, which is the behavior we expect of command line programs.
+Тепер ми бачимо помилку на екрані і *output.txt* нічого не містить, і саме такої поведінки ми очікуємо від програм командного рядка.
 
-Let’s run the program again with arguments that don’t cause an error but still redirect standard output to a file, like so:
+Запустімо програму ще раз з аргументами, які не викликають помилки, але все ж таки перенаправивши стандартний вивід у файл, ось так:
 
 ```console
 $ cargo run -- to poem.txt > output.txt
 ```
 
-We won’t see any output to the terminal, and *output.txt* will contain our results:
+Ми не побачимо жодного виводу в терміналі та *output.txt* буде містити наші результати:
 
 <span class="filename">Файл: output.txt</span>
 
@@ -61,10 +61,10 @@ Are you nobody, too?
 How dreary to be somebody!
 ```
 
-This demonstrates that we’re now using standard output for successful output and standard error for error output as appropriate.
+Це демонструє, що тепер ми використовуємо стандартний вивід для успішного виводу і стандартну помилку для виводу помилок у відповідних випадках.
 
 ## Підсумок
 
 В цьому розділі ми пригадали деякі основні концепти, які ви вивчили раніше та розглянули як виконувати базові I/O операції в Rust. Використовуючи аргументи командного рядка, файли, змінні середовища та макрос `eprintln!` для виведення помилок в консолі, тепер ви готові написати застосунок для командного рядка. Поєднавши це з концептами з попередніх розділів, ваш код буде добре організованим, ефективно збирати дані в відповідні структури даних, вдало обробляти помилки та буде добре перевіреним.
 
-Next, we’ll explore some Rust features that were influenced by functional languages: closures and iterators.
+Далі ми детальніше розглянемо деякі функції Rust, на які вплинули функціональні мови: замикання та ітератори.
