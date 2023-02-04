@@ -133,7 +133,7 @@
 
 Блок коду 12-9 показує зміни до функції, що тепер зветься `Config::build`, які ми маємо зробити, щоб значення, що повертається з неї, було типу `Result`, і відповідне тіло функції. Зверніть увагу, що цей код не скомпілюється, доки ми не змінимо також і `main`, що ми робимо в наступному блоці коду.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-09/src/main.rs:here}}
