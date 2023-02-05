@@ -2,11 +2,11 @@
 
 *автори Steve Klabnik та Carol Nichols, за допомогою спільноти Rust*
 
-У цій версії тексту припускається, що ви використовуєте Rust 1.65 (випущено 03 листопада 2022 року) або пізніший. Див. розділ [«Встановлення» глави 1][install]<!-- ignore -->
+У цій версії тексту припускається, що ви використовуєте Rust 1.65 (випущено 03 листопада 2022 року) або пізніший. Див. розділ [«Встановлення» Розділу 1][install],<!-- ignore -->
 щоб встановити або оновити Rust.
 
-The HTML format is available online at [https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/) and offline with installations of Rust made with `rustup`; run `rustup docs
---book` to open.
+Книжка англійською у форматі HTML доступна онлайн за адресою [https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/) і офлайн з встановленим Rust за допомогою `rustup`; запустіть `rustup docs
+--book`, щоб відкрити.
 
 Several community [translations][] are also available.
 
