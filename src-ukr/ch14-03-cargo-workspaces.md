@@ -19,7 +19,7 @@ $ cd add
 {{#include ../listings/ch14-more-about-cargo/no-listing-01-workspace-with-adder-crate/add/Cargo.toml}}
 ```
 
-Next, we’ll create the `adder` binary crate by running `cargo new` within the *add* directory:
+Далі, ми створимо двійковий крейт `adder` запустивши `cargo new` всередині каталогу *add*:
 
 
 <!-- manual-regeneration
@@ -105,7 +105,7 @@ $ cargo new add_one --lib
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:6:7}}
 ```
 
-Cargo doesn’t assume that crates in a workspace will depend on each other, so we need to be explicit about the dependency relationships.
+Cargo не припускає, що крейти в робочій області будуть залежати одне від одного, тому нам потрібно чітко визначити відносини залежностей.
 
 Далі, використаємо функцію `add_one` (з крейту `add_one`) в крейті `adder`. Відкрийте файл *adder/src/main.rs* і додайте рядок `use` зверху, щоб внести новий бібліотечний крейт `add_one` в область видимості. Потім змініть функцію `main` та викличте функцію `add_one`, як показано в Блоці Коду 14-7.
 
@@ -116,9 +116,9 @@ Cargo doesn’t assume that crates in a workspace will depend on each other, so 
 ```
 
 
-<span class="caption">Listing 14-7: Using the `add_one` library crate from the `adder` crate</span>
+<span class="caption">Блок Коду 14-7: Використання бібліотечного крейту `add_one` з крейту `adder`</span>
 
-Let’s build the workspace by running `cargo build` in the top-level *add* directory!
+Зберемо робочу область викликавши `cargo build` на верхньому рівні каталогу *add*!
 
 
 <!-- manual-regeneration
@@ -134,7 +134,7 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 0.68s
 ```
 
-To run the binary crate from the *add* directory, we can specify which package in the workspace we want to run by using the `-p` argument and the package name with `cargo run`:
+Щоб запустити двійковий крейт із каталогу *add*, нам потрібно вказати, який пакет в робочій області ми хочемо запускати використовуючи аргумент `-p` та назвою пакета в `cargo run`:
 
 
 <!-- manual-regeneration
@@ -222,7 +222,7 @@ error[E0432]: unresolved import `rand`
 
 #### Додавання Тесту до Робочої Області
 
-For another enhancement, let’s add a test of the `add_one::add_one` function within the `add_one` crate:
+Для ще одного покращення, додамо тест функції `add_one::add_one` всередині крейту `add_one`:
 
 <span class="filename">Файл: add_one/src/lib.rs</span>
 
@@ -293,7 +293,7 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-This output shows `cargo test` only ran the tests for the `add_one` crate and didn’t run the `adder` crate tests.
+Цей вивід показує, що `cargo test` запустив лише тести за крейту `add_one` та не запускав тести крейту `adder`.
 
 Якщо ви опублікували крейти в робочій області до [crates.io](https://crates.io/), то кожен крейт в робочій області потрібно буде публікувати окремо. Як із `cargo test`, ми можемо публікувати певний крейт із нашої робочої області використовуючи позначку `-p` та вказуючи назву крейту, який ми хочемо опублікувати.
 
