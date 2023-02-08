@@ -99,7 +99,7 @@ Rust має корисний метод для керування ітераці
 ```
 
 
-<span class="caption">Listing 12-18: Adding functionality to see whether the line contains the string in `query`</span>
+<span class="caption">Блок коду 12-18: Додавання перевірки наявності `query` в рядку</span>
 
 Ми зараз створюємо функціонал. Щоб він компілювався, нам потрібно повертати значення з вмісту функції, як ми вказали в її сигнатурі.
 
@@ -150,7 +150,7 @@ Rust має корисний метод для керування ітераці
 {{#include ../listings/ch12-an-io-project/output-only-03-multiple-matches/output.txt}}
 ```
 
-And finally, let’s make sure that we don’t get any lines when we search for a word that isn’t anywhere in the poem, such as “monomorphization”:
+І, нарешті, переконаймось, що ми не отримуємо жодних рядків, коли ми шукаємо слово, якого немає ніде в поемі, наприклад, "monomorphization":
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-04-no-matches/output.txt}}
