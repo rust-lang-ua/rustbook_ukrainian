@@ -8,4 +8,4 @@
 * Встановлення з [crates.io](https://crates.io/)<!-- ignore -->
 * Розширення Cargo, використовуючи користувацькі команди
 
-Cargo can do even more than the functionality we cover in this chapter, so for a full explanation of all its features, see [its documentation](https://doc.rust-lang.org/cargo/).
+Cargo може робити набагато більше ніж функціонал, який ми охопили в цьому розділі. Для отримання повного пояснення його функціоналу дивіться [документацію](https://doc.rust-lang.org/cargo/).
