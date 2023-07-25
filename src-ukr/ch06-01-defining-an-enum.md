@@ -1,4 +1,4 @@
-## Визначення enum-а
+## Визначення Енума
 
 Якщо структури надають спосіб групування пов'язаних полів і даних, як `Rectangle` з його `width` і `height`, то енуми дають вам спосіб виразити значення, що є одним з можливого набору значень. Скажімо, ми хочемо сказати, що `Rectangle` є однією з можливих фігур, які також включають `Circle`(круг) і `Triangle`(трикутник). Для цього Rust надає нам можливість закодувати ці варіанти у енум.
 
@@ -14,7 +14,7 @@
 
 `IpAddrKind` тепер є користувацьким типом даних, яким ми можемо користуватися деінде в нашому коді.
 
-### Значення енума
+### Значення Енума
 
 Ми можемо створити екземпляри обох варіантів `IpAddrKind` таким чином:
 
@@ -41,7 +41,7 @@
 ```
 
 
-<span class="caption">Listing 6-1: Storing the data and `IpAddrKind` variant of an IP address using a `struct`</span>
+<span class="caption">Блок коду 6-1: зберігання даних і варіанту `IpAddrKind` IP-адреси за допомогою `struct`</span>
 
 Тут ми визначили структуру `IpAddr`, що має два поля: `kind` (вид) типу `IpAddrKind` (щойно визначений нами енум) та `address` типу `String`. Ми маємо два екземпляри цієї структури. Перший, `home`, має значення `IpAddrKind::V4` в полі `kind` і прив'язані дані адреси `127.0.0.1`. Другий екземпляр, `loopback`, має значенням поля `kind` інший варіант `IpAddrKind` - `V6`, і має прив'язану адресу `::1`. Ми використали структуру, щоб пов'язати значення `kind` та `address` разом, таким чином варіант тепер прив'язаний до значення.
 
@@ -87,7 +87,7 @@ Let’s look at another example of an enum in Listing 6-2: this one has a wide v
 ```
 
 
-<span class="caption">Listing 6-2: A `Message` enum whose variants each store different amounts and types of values</span>
+<span class="caption">Блок коду 6-2: Енум `Message` (повідомлення), варіанти якого містять різну кількість та типи значень</span>
 
 Цей енум має чотири варіанти різних типів:
 
@@ -114,7 +114,7 @@ Let’s look at another example of an enum in Listing 6-2: this one has a wide v
 
 Let’s look at another enum in the standard library that is very common and useful: `Option`.
 
-### Енум `Option` і його переваги над null-значеннями
+### Енум `Option` і Його Переваги над Null-Значеннями
 
 Цей підрозділ розглядає використання `Option`, ще одного енума, визначеного в стандартній бібліотеці. Тип `Option` кодує дуже поширену ситуацію, де значення може бути чи його може не бути.
 
