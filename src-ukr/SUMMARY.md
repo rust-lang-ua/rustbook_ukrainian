@@ -1,13 +1,13 @@
 # Мова програмування Rust
 
-[The Rust Programming Language](title-page.md) [Foreword](foreword.md) [Introduction](ch00-00-introduction.md)
+[Мова програмування Rust](title-page.md) [Передмова](foreword.md) [Вступ](ch00-00-introduction.md)
 
 ## Розпочинаємо
 
 - [Початок](ch01-00-getting-started.md)
     - [Встановлення](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
-    - [Hello, Cargo!](ch01-03-hello-cargo.md)
+    - [Привіт, Cargo!](ch01-03-hello-cargo.md)
 
 - [Програмування гри - відгадайки](ch02-00-guessing-game-tutorial.md)
 
@@ -38,14 +38,14 @@
 - [Керування проєктами, що зростають, за допомогою пакетів, крейтів та модулів](ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)
     - [Пакети та крейти](ch07-01-packages-and-crates.md)
     - [Визначення модулів для управління областями видимості та приватністю](ch07-02-defining-modules-to-control-scope-and-privacy.md)
-    - [Referring to Names in Different Modules](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
+    - [Шлях для доступу до елементів у дереві модулів](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
     - [Підключення шляхів до області видимості за допомогою ключового слова `use`](ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
     - [Розподіл модулів на різні файли](ch07-05-separating-modules-into-different-files.md)
 
-- [Common Collections](ch08-00-common-collections.md)
-    - [Vectors](ch08-01-vectors.md)
-    - [Strings](ch08-02-strings.md)
-    - [Hash Maps](ch08-03-hash-maps.md)
+- [Звичайні колекції](ch08-00-common-collections.md)
+    - [Зберігання списків значень у векторах](ch08-01-vectors.md)
+    - [Зберігання тексту у кодуванні UTF-8 у стрічках](ch08-02-strings.md)
+    - [Зберігання Ключів і Пов'язаних Значень В Хеш-Мапах](ch08-03-hash-maps.md)
 
 - [Обробка помилок](ch09-00-error-handling.md)
     - [Невідновні Помилки із `panic!`](ch09-01-unrecoverable-errors-with-panic.md)
@@ -70,7 +70,7 @@
     - [Робота зі Змінними Середовища](ch12-05-working-with-environment-variables.md)
     - [Написання Повідомлень Про Помилки в Standard Error Замість Стандартного Виводу](ch12-06-writing-to-stderr-instead-of-stdout.md)
 
-## Thinking in Rust
+## Мислення в стилі Rust
 
 - [Функціональні можливості мови: Ітератори та Замикання](ch13-00-functional-features.md)
     - [Замикання: Анонімні Функції що Захоплюють Своє Середовище](ch13-01-closures.md)
@@ -82,7 +82,7 @@
     - [Налаштування Збірок з Release Профілями](ch14-01-release-profiles.md)
     - [Публікація Крейта на Crates.io](ch14-02-publishing-to-crates-io.md)
     - [Робочі Області Cargo](ch14-03-cargo-workspaces.md)
-    - [Installing Binaries from Crates.io with `cargo install`](ch14-04-installing-binaries.md)
+    - [Встановлення Двійкових Файлів з `cargo install`](ch14-04-installing-binaries.md)
     - [Розширення Cargo із Користувацькими Командами](ch14-05-extending-cargo.md)
 
 - [Розумні вказівники](ch15-00-smart-pointers.md)
@@ -94,29 +94,29 @@
     - [Цикли посилань можуть призвести до витоку пам'яті](ch15-06-reference-cycles.md)
 
 - [Конкурентність без страху](ch16-00-concurrency.md)
-    - [Threads](ch16-01-threads.md)
-    - [Message Passing](ch16-02-message-passing.md)
-    - [Shared State](ch16-03-shared-state.md)
-    - [Extensible Concurrency: `Sync` and `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
+    - [Використання потоків для одночасного запуску коду](ch16-01-threads.md)
+    - [Використання обміну повідомленнями для передачі даних між потоками](ch16-02-message-passing.md)
+    - [Паралелізм із спільним станом](ch16-03-shared-state.md)
+    - [Розширювана конкурентність із трейтами `Sync` і `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
-- [Is Rust an Object-Oriented Programming Language?](ch17-00-oop.md)
-    - [What Does Object-Oriented Mean?](ch17-01-what-is-oo.md)
-    - [Trait Objects for Using Values of Different Types](ch17-02-trait-objects.md)
-    - [Object-Oriented Design Pattern Implementations](ch17-03-oo-design-patterns.md)
+- [Особливості Об'єктоорієнтованого Програмування в Rust](ch17-00-oop.md)
+    - [Характеристики Об'єктоорієнтованих Мов](ch17-01-what-is-oo.md)
+    - [Використання трейтових об'єктів, які допускають значення різних типів](ch17-02-trait-objects.md)
+    - [Реалізація Об'єктоорієнтованого Шаблону Проєктування](ch17-03-oo-design-patterns.md)
 
-## Advanced Topics
+## Розширені питання
 
 - [Шаблони та Зіставлення Шаблонів](ch18-00-patterns.md)
-    - [All the Places Patterns May be Used](ch18-01-all-the-places-for-patterns.md)
+    - [Усі Місця Можливого Використання Шаблонів](ch18-01-all-the-places-for-patterns.md)
     - [Спростовуваність: Чи Може Шаблон Бути Невідповідним](ch18-02-refutability.md)
-    - [All the Pattern Syntax](ch18-03-pattern-syntax.md)
+    - [Синтаксис Шаблонів](ch18-03-pattern-syntax.md)
 
 - [Просунутий функціонал](ch19-00-advanced-features.md)
     - [Небезпечний Rust](ch19-01-unsafe-rust.md)
     - [Поглиблено про трейти](ch19-03-advanced-traits.md)
     - [Поглиблено про типи](ch19-04-advanced-types.md)
     - [Поглиблено про функції та замикання](ch19-05-advanced-functions-and-closures.md)
-    - [Advanced Functions & Closures](ch19-06-macros.md)
+    - [Макроси](ch19-06-macros.md)
 
 - [Останній проєкт: збірка багатопотокового вебсервера](ch20-00-final-project-a-web-server.md)
     - [Збірка однопотокового вебсервера](ch20-01-single-threaded.md)
@@ -124,10 +124,10 @@
     - [Плавне вимикання і очищення](ch20-03-graceful-shutdown-and-cleanup.md)
 
 - [Додатки](appendix-00.md)
-    - [A - Ключові слова](appendix-01-keywords.md)
+    - [A - ключові слова](appendix-01-keywords.md)
     - [B - оператори та символи](appendix-02-operators.md)
-    - [C - Derivable Traits](appendix-03-derivable-traits.md)
-    - [D - Macros](appendix-04-useful-development-tools.md)
-    - [E - Translations](appendix-05-editions.md)
-    - [F - Newest Features](appendix-06-translation.md)
-    - [Додаток G - як робиться Rust і "щонічний Rust"](appendix-07-nightly-rust.md)
+    - [С - вивідні трейти](appendix-03-derivable-traits.md)
+    - [D - корисні інструменти розробки](appendix-04-useful-development-tools.md)
+    - [E - видання](appendix-05-editions.md)
+    - [F - переклади цієї книжки](appendix-06-translation.md)
+    - [G - як робиться Rust і "щонічний Rust"](appendix-07-nightly-rust.md)

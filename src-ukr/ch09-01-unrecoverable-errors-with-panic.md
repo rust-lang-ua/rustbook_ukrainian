@@ -1,4 +1,4 @@
-## Невідновні Помилки із `panic!`
+## Невідновлювані Помилки з `panic!`
 
 Іноді погані речі трапляються у вашому коді з якими ви нічого не можете зробити. У цих випадках Rust має макрос `panic!`. Є два практичних способи викликати паніку: зробивши дію, яка призведе до паніки (наприклад отримати доступ до елемента масиву за його межами) або явно викликавши макрос `panic!`. В обох випадках ми викличемо паніку в нашій програмі. За замовчуванням, ці паніки виведуть в консолі повідомлення про помилку, розгорнуть та очистять стек та закриють програму. За допомогою змінної середовища ви також можете скерувати Rust показати стек викликів, коли виникне паніка, щоб полегшити відстеження її джерела.
 
@@ -69,21 +69,21 @@ $ RUST_BACKTRACE=1 cargo run
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', src/main.rs:4:5
 stack backtrace:
    0: rust_begin_unwind
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/std/src/panicking.rs:483
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/std/src/panicking.rs:584:5
    1: core::panicking::panic_fmt
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/panicking.rs:85
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/core/src/panicking.rs:142:14
    2: core::panicking::panic_bounds_check
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/panicking.rs:62
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/core/src/panicking.rs:84:5
    3: <usize as core::slice::index::SliceIndex<[T]>>::index
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/slice/index.rs:255
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/core/src/slice/index.rs:242:10
    4: core::slice::index::<impl core::ops::index::Index<I> for [T]>::index
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/slice/index.rs:15
-   5: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/alloc/src/vec.rs:1982
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/core/src/slice/index.rs:18:9
+   5: <alloc::vec::Vec<T,A> as core::ops::index::Index<I>>::index
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/alloc/src/vec/mod.rs:2591:9
    6: panic::main
-             at ./src/main.rs:4
+             at ./src/main.rs:4:5
    7: core::ops::function::FnOnce::call_once
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/ops/function.rs:227
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/core/src/ops/function.rs:248:5
 note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
 ```
 
