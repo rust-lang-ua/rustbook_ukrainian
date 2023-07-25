@@ -1,13 +1,13 @@
-# Common Collections
+# Звичайні Колекції
 
-Rust’s standard library includes a number of very useful data structures called *collections*. Most other data types represent one specific value, but collections can contain multiple values. Unlike the built-in array and tuple types, the data these collections point to is stored on the heap, which means the amount of data does not need to be known at compile time and can grow or shrink as the program runs. Each kind of collection has different capabilities and costs, and choosing an appropriate one for your current situation is a skill you’ll develop over time. In this chapter, we’ll discuss three collections that are used very often in Rust programs:
+Стандартна бібліотека Rust містить декілька дуже корисних структур даних, що звуться *колекції*. Більшість інших типів даних представляють одне певне значення, але колекції можуть містити багато значень. На відміну від вбудованих типів масив і кортеж, дані, на які вказують ці колекції, зберігаються на купі, тобто кількість даних не має бути обов'язково відомою під час компіляції і може збільшуватися або скорочуватися під час виконання програми. Кожен вид колекції має різні можливості і недоліки, і вибір відповідної колекції для поточної ситуації - це вміння, що ви розвиваєте з часом. У цьому розділі ми обговоримо три колекції, які дуже часто використовуються в програмах Rust:
 
-* A *vector* allows you to store a variable number of values next to each other.
-* A *string* is a collection of characters. We’ve mentioned the `String` type previously, but in this chapter we’ll talk about it in depth.
-* A *hash map* allows you to associate a value with a particular key. It’s a particular implementation of the more general data structure called a *map*.
+* *Вектор* дозволяє зберігати змінну кількість значень поруч одне з одним.
+* *Стрічка* є колекцією символів. Ми вже згадували тип `String`, але в цьому розділі ми поговоримо про нього глибше.
+* *Хеш-мапа* дозволяє пов’язати значення з певним ключем. Це конкретна реалізація більш загальної структури даних, що називається *відображенням* (<0>map</0>).
 
-To learn about the other kinds of collections provided by the standard library, see [the documentation][collections].
+Щоб дізнатися про інші види колекцій стандартної бібліотеки зверніться до [документації][collections].
 
-We’ll discuss how to create and update vectors, strings, and hash maps, as well as what makes each special.
+Ми обговоримо, як створювати та оновлювати вектори, стрічки, хеш-мапи, а також те, що робить їх особливими.
 
 [collections]: ../std/collections/index.html

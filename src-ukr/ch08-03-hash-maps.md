@@ -1,136 +1,136 @@
-## Storing Keys with Associated Values in Hash Maps
+## Зберігання Ключів з Асоційованими Значеннями у Хеш-Мапах
 
-The last of our common collections is the *hash map*. The type `HashMap<K, V>` stores a mapping of keys of type `K` to values of type `V` using a *hashing function*, which determines how it places these keys and values into memory. Many programming languages support this kind of data structure, but they often use a different name, such as hash, map, object, hash table, dictionary, or associative array, just to name a few.
+Остання з поширених колекцій - це *хеш-мапа*. Тип `HashMap<K, V>` зберігає відображення ключів типу `K` на значення типу `V`, використовуючи *функцію хешування*, яка визначає, як розмістити ці ключі та значення у пам'яті. Багато мов програмування підтримують таку структуру даних, але часто використовують іншу назву, таку як хеш, відображення, хеш-таблиця, словник або асоціативний масив, це тільки декілька назв.
 
-Hash maps are useful when you want to look up data not by using an index, as you can with vectors, but by using a key that can be of any type. For example, in a game, you could keep track of each team’s score in a hash map in which each key is a team’s name and the values are each team’s score. Given a team name, you can retrieve its score.
+Хеш-мапи корисні, коли ви хочете шукати дані не за індексом, як у векторах, а за допомогою ключа довільного типу. Наприклад, у грі ви можете відстежувати результат кожної команди за допомогою хеш-мапи, в якій кожен ключ - це назва команди, а значення - її рахунок. Маючи назву команди, ви можете отримати її рахунок.
 
-We’ll go over the basic API of hash maps in this section, but many more goodies are hiding in the functions defined on `HashMap<K, V>` by the standard library. As always, check the standard library documentation for more information.
+У цьому розділі ми розглянемо базовий API хеш-мап, але у функціях, визначених на `HashMap<K, V>` стандартною бібліотекою, ховається ще багато цікавого. Як завжди, зверніться до документації стандартної бібліотеки для додаткової інформації.
 
-### Creating a New Hash Map
+### Створення Нової Хеш-Мапи
 
-One way to create an empty hash map is using `new` and adding elements with `insert`. In Listing 8-20, we’re keeping track of the scores of two teams whose names are *Blue* and *Yellow*. The Blue team starts with 10 points, and the Yellow team starts with 50.
+Один зі способів створення порожньої хеш-мапи є використання `new` і додавання елементів за допомогою `insert`. У Блоці коду 8-20 ми відстежуємо рахунки двох команд, що називаються *Синя* та *Жовта*. Синя команда починає з 10 очками, а Жовта - з 50.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-20/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-20: Creating a new hash map and inserting some keys and values</span>
+<span class="caption">Блок коду 8-20: Створення нової хеш-мапи і вставлення деяких ключів та значень</span>
 
-Note that we need to first `use` the `HashMap` from the collections portion of the standard library. Of our three common collections, this one is the least often used, so it’s not included in the features brought into scope automatically in the prelude. Hash maps also have less support from the standard library; there’s no built-in macro to construct them, for example.
+Зверніть увагу, що нам, по-перше, треба зробити `use` для `HashMap` з розділу колекцій стандартної бібліотеки. З трьох наших загальних колекцій ця використовується найрідше, тож вона не включена до функціонала, який автоматично додається до області видимості у прелюдії. Хеш-мапи також мають меншу підтримку від стандартної бібліотеки; наприклад, немає вбудованого макросу для їх побудови.
 
-Just like vectors, hash maps store their data on the heap. This `HashMap` has keys of type `String` and values of type `i32`. Like vectors, hash maps are homogeneous: all of the keys must have the same type as each other, and all of the values must have the same type.
+Так само як і вектори, хеш-мапи зберігають свої дані у купі. Цей `HashMap` має ключі типу `String` і значення типу `i32`. Як і вектори, хеш-мапи є однорідними: усі ключі мають бути одного типу, і всі значення мають бути одного типу.
 
-### Accessing Values in a Hash Map
+### Доступ до Значень Хеш-Мапи
 
-We can get a value out of the hash map by providing its key to the `get` method, as shown in Listing 8-21.
+Ми можемо отримати значення з хеш-мапи, надавши її ключ методу `get`, як показано у Блоці коду 8-21.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-21: Accessing the score for the Blue team stored in the hash map</span>
+<span class="caption">Блок коду 8-21: Доступ до рахунку Синьої команди, що зберігається у хеш-мапі</span>
 
-Here, `score` will have the value that’s associated with the Blue team, and the result will be `10`. The `get` method returns an `Option<&V>`; if there’s no value for that key in the hash map, `get` will return `None`. This program handles the `Option` by calling `unwrap_or` to set `score` to zero if `scores` doesn't have an entry for the key.
+Тут `score` буде мати значення, пов'язане з Синьою командою, і результат буде `10`. Метод `get` повертає `Option<&V>`; якщо у хеш-мапі для цього ключа немає відповідного значення, `get` поверне `None`. Ця програма обробляє `Option` викликом `copied`, отримуючи `Option<i32>`, а не `Option<&i32>`, а тоді `unwrap_or`, щоб встановити `score` у нуль, якщо `scores` не має запису для цього ключа.
 
-We can iterate over each key/value pair in a hash map in a similar manner as we do with vectors, using a `for` loop:
+Ми можемо ітерувати по кожній парі ключ/значення в хеш-мапі подібно до того, як ми це робимо з векторами, використовуючи цикл `for`:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-03-iterate-over-hashmap/src/main.rs:here}}
 ```
 
-This code will print each pair in an arbitrary order:
+Цей код виведе в консолі кожну пару в довільному порядку:
 
 ```text
 Yellow: 50
 Blue: 10
 ```
 
-### Hash Maps and Ownership
+### Хеш-Мапи та Володіння
 
-For types that implement the `Copy` trait, like `i32`, the values are copied into the hash map. For owned values like `String`, the values will be moved and the hash map will be the owner of those values, as demonstrated in Listing 8-22.
+Для типів, що реалізують трейт `Copy`, таких як `i32`, значення копіюються у хеш-мапу. Для значень, які мають володіння, таких як `String`, значення будуть переміщені і хешмапа буде володіти цими значеннями, як це показано у Блоці коду 8-22.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-22/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-22: Showing that keys and values are owned by the hash map once they’re inserted</span>
+<span class="caption">Блок коду 8-22: Демонстрація, що хеш-мапа володіє ключем та значенням після їх вставлення</span>
 
-We aren’t able to use the variables `field_name` and `field_value` after they’ve been moved into the hash map with the call to `insert`.
+Ми не можемо використовувати змінні `field_name` і `field_value` після того, як вони були переміщені до хеш-мапи за допомогою виклику `insert`.
 
-If we insert references to values into the hash map, the values won’t be moved into the hash map. The values that the references point to must be valid for at least as long as the hash map is valid. We’ll talk more about these issues in the [“Validating References with Lifetimes”]()<!-- ignore --> section in Chapter 10.
+Якщо ми вставляємо посилання на значення до хешмапи, ці значення не будуть переміщені до хешмапи. Значення, на які вказують посилання, мають бути коректними щонайменше стільки ж, скільки існує хешмапа. Ми поговоримо про це докладніше у підрозділі ["Перевірка коректності посилань за допомогою часів існування"]()<!-- ignore --> Розділу 10.
 
-### Updating a Hash Map
+### Оновлення Хеш-Мапи
 
-Although the number of key and value pairs is growable, each unique key can only have one value associated with it at a time (but not vice versa: for example, both the Blue team and the Yellow team could have value 10 stored in the `scores` hash map).
+Хоча кількість пар ключів і значень зростає, кожен унікальний ключ може мати тільки одне значення, пов’язане з ним, в кожен момент (але не навпаки: наприклад, команда Синя і Жовта могли мати значення 10, збережене в хешмапі `scores`).
 
-When you want to change the data in a hash map, you have to decide how to handle the case when a key already has a value assigned. You could replace the old value with the new value, completely disregarding the old value. You could keep the old value and ignore the new value, only adding the new value if the key *doesn’t* already have a value. Or you could combine the old value and the new value. Let’s look at how to do each of these!
+Коли ви хочете змінити дані в хешмапі, вам необхідно вирішити, як обробляти випадок, коли ключ уже має присвоєне значення. Ви можете замінити старе значення на нове значення, повністю проігнорувавши старе значення. Ви можете зберегти старе значення і проігнорувати нове значення, і лише коли ключ *не має* значення, додавати нове. Або ж ви можете поєднати старе значення і нове значення. Подивімося, як зробити кожен варіант!
 
-#### Overwriting a Value
+#### Перезапис Значення
 
-If we insert a key and a value into a hash map and then insert that same key with a different value, the value associated with that key will be replaced. Even though the code in Listing 8-23 calls `insert` twice, the hash map will only contain one key/value pair because we’re inserting the value for the Blue team’s key both times.
+Якщо ми вставляємо ключ і значення до хешмапи і тоді вставляємо той самий ключ із іншим значенням, то значення, асоційоване з цим ключем, буде замінено. Попри те, що код у Блоці коду 8-23 викликає `insert` двічі, хешмапа міститиме лише одну пару ключ/значення, оскільки ми обидва рази вставляємо значення для ключа Синьої команди.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-23: Replacing a value stored with a particular key</span>
+<span class="caption">Блок коду 8-23: заміна значення, збереженого з певним ключем</span>
 
-This code will print `{"Blue": 25}`. The original value of `10` has been overwritten.
+Цей код виведе `{"Blue": 25}`. Початкове значення `10` було перезаписане.
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="only-inserting-a-value-if-the-key-has-no-value"></a>
 
-#### Adding a Key and Value Only If a Key Isn’t Present
+#### Додавання Ключа та Значення Тільки якщо Ключ Відсутній
 
-It’s common to check whether a particular key already exists in the hash map with a value then take the following actions: if the key does exist in the hash map, the existing value should remain the way it is. If the key doesn’t exist, insert it and a value for it.
+Доволі поширено перевіряти, чи певний ключ уже присутній у хешмапі зі значенням, а тоді якщо ключ існує, то наявне значення має залишатися таким, яким воно є. Якщо ж ключ відсутній, вставити його і значення для нього.
 
-Hash maps have a special API for this called `entry` that takes the key you want to check as a parameter. The return value of the `entry` method is an enum called `Entry` that represents a value that might or might not exist. Let’s say we want to check whether the key for the Yellow team has a value associated with it. If it doesn’t, we want to insert the value 50, and the same for the Blue team. Using the `entry` API, the code looks like Listing 8-24.
+Хешмапи мають спеціальне API для цього, що зветься `entry`, яке приймає параметром ключ, який ви хочете перевірити. Значення, що повертається з методу `entry` - це енум, що зветься `Entry`, який представляє значення, що може існувати або не існувати. Скажімо, ми хочемо перевірити, чи ключ для Жовтої команди має пов'язане з ним значення. Як ні, ми хочемо вставити значення 50, і те саме для Синьої команди. За допомогою API `entry`, код стає схожим на Блок коду 8-24.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-24: Using the `entry` method to only insert if the key does not already have a value</span>
+<span class="caption">Блок коду 8-24: використання методу `entry` для вставляння лише якщо ключ ще не має відповідного значення</span>
 
-The `or_insert` method on `Entry` is defined to return a mutable reference to the value for the corresponding `Entry` key if that key exists, and if not, inserts the parameter as the new value for this key and returns a mutable reference to the new value. This technique is much cleaner than writing the logic ourselves and, in addition, plays more nicely with the borrow checker.
+Метод `or_insert` для `Entry` за визначенням повертає мутабельне посилання на відповідний ключ `Entry`, якщо ключ існує, а як ні, то вставляє параметр як нове значення для цього ключа і повертає мутабельне посилання на нове значення. Ця техніка набагато чистіша, ніж написання логіки самостійно і ще, крім того, краще працює з borrow checker.
 
-Running the code in Listing 8-24 will print `{"Yellow": 50, "Blue": 10}`. The first call to `entry` will insert the key for the Yellow team with the value 50 because the Yellow team doesn’t have a value already. The second call to `entry` will not change the hash map because the Blue team already has the value 10.
+Запуск коду у Блоці коду 8-24 надрукує `{"Yellow": 50, "Blue": 10}`. Перший виклик `entry` вставить ключ для Жовтої команди зі значенням 50, бо Жовта команда ще не має свого значення. Другий виклик `entry` не змінить хешмапу, бо Синя команда вже має значення 10.
 
-#### Updating a Value Based on the Old Value
+#### Оновлення Значення на Основі Старого Значення
 
-Another common use case for hash maps is to look up a key’s value and then update it based on the old value. For instance, Listing 8-25 shows code that counts how many times each word appears in some text. We use a hash map with the words as keys and increment the value to keep track of how many times we’ve seen that word. If it’s the first time we’ve seen a word, we’ll first insert the value 0.
+Інший поширений сценарій використання хешмап - пошук значення ключа і оновлення його на основі старого значення. Наприклад, Блок коду 8-25 показує код, який підраховує, скільки разів кожне слово з'являється в певному тексті. Ми використовуємо хешмапу з ключами - словами і збільшуємо значення, щоб відстежувати, скільки разів ми бачили це слово. Якщо ми зустрічаємо слово уперше, то спершу вставляємо значення 0.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 8-25: Counting occurrences of words using a hash map that stores words and counts</span>
+<span class="caption">Блок коду 8-25: підрахунок кількості слів за допомогою хешмапи слів, що зберігає слова і кількість</span>
 
-This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see the same key/value pairs printed in a different order: recall from the [“Accessing Values in a Hash Map”][access]<!-- ignore --> section that iterating over a hash map happens in an arbitrary order.
+Цей код виведе `{"world": 2, "hello": 1, "wonderful": 1}`. Ви можете побачити ті ж пари ключів/значень, виведені в іншому порядку: згадайте з підрозділу ["Доступ до значень у хешмапі"][access]<!-- ignore --> , що ітерування по хешмапі відбувається у довільному порядку.
 
-The `split_whitespace` method returns an iterator over sub-slices, separated by whitespace, of the value in `text`. The `or_insert` method returns a mutable reference (`&mut V`) to the value for the specified key. Here we store that mutable reference in the `count` variable, so in order to assign to that value, we must first dereference `count` using the asterisk (`*`). The mutable reference goes out of scope at the end of the `for` loop, so all of these changes are safe and allowed by the borrowing rules.
+Метод `split_whitespace` повертає ітератор по підслайсах, розділених пробілами, значення у `text`. Метод `or_insert` повертає мутабельне посилання (`&mut V`) на значення для вказаного ключа. Тут ми зберігаємо це мутабельне посилання у змінній `count`, тож для того, щоб присвоїти цьому значенню, нам необхідно спочатку розіменувати `count` за допомогою зірочки (`*`). Мутабельне посилання виходить з області видимості в кінці циклу `for`, тож всі ці зміни є безпечними та дозволеними правилами позичання.
 
-### Hashing Functions
+### Функції Хешування
 
-By default, `HashMap` uses a hashing function called *SipHash* that can provide resistance to Denial of Service (DoS) attacks involving hash tables[^siphash]<!-- ignore -->. This is not the fastest hashing algorithm available, but the trade-off for better security that comes with the drop in performance is worth it. If you profile your code and find that the default hash function is too slow for your purposes, you can switch to another function by specifying a different hasher. A *hasher* is a type that implements the `BuildHasher` trait. We’ll talk about traits and how to implement them in Chapter 10. You don’t necessarily have to implement your own hasher from scratch; [crates.io](https://crates.io/)<!-- ignore --> has libraries shared by other Rust users that provide hashers implementing many common hashing algorithms.
+За замовчуванням, `HashMap` використовує функцію хешування під назвою *SipHash*, яка забезпечує стійкість до атак на відмову в обслуговуванні (Denial of Service, DoS) з використанням хеш-таблиць [^siphash]<!-- ignore -->. Це не найшвидший з доступних алгоритмів хешування, але покращення безпеки, отримане з падінням продуктивності, того варте. Якщо ви профілюєте свій код і виявите, що функція хешування за замовчуванням є надто повільною для ваших потреб, ви можете перейти на іншу функцію, вказавши інший хешер. *Хешер* - це тип, який реалізує трейт `BuildHasher`. Ми поговоримо про трейти і як їх реалізовувати у Розділі 10. Вам не обов'язково потрібно реалізувати власний хеш з нуля; [crates.io](https://crates.io/)<!-- ignore --> містить бібліотеки, надані іншими користувачами Rust, що забезпечують реалізацію багатьох поширених алгоритмів хешування.
 
-## Summary
+## Підсумок
 
-Vectors, strings, and hash maps will provide a large amount of functionality necessary in programs when you need to store, access, and modify data. Here are some exercises you should now be equipped to solve:
+Вектори, стрічки та хешмапи забезпечать значну частину функціональності, необхідної для програм під час зберігання, доступу і зміни даних. Ось деякі вправи, які ви вже маєте бути в змозі виконати:
 
-* Given a list of integers, use a vector and return the median (when sorted, the value in the middle position) and mode (the value that occurs most often; a hash map will be helpful here) of the list.
-* Convert strings to pig latin. The first consonant of each word is moved to the end of the word and “ay” is added, so “first” becomes “irst-fay.” Words that start with a vowel have “hay” added to the end instead (“apple” becomes “apple-hay”). Keep in mind the details about UTF-8 encoding!
-* Using a hash map and vectors, create a text interface to allow a user to add employee names to a department in a company. For example, “Add Sally to Engineering” or “Add Amir to Sales.” Then let the user retrieve a list of all people in a department or all people in the company by department, sorted alphabetically.
+* Дано список цілих чисел; використайте вектор і поверніть медіану (значення посередині після сортування) та моду (значення, яке зустрічається найчастіше; тут стане в пригоді хешмапа) цього списку.
+* Перетворіть рядки на "поросячу латину". Перший приголосний кожного слова переноситься в кінець слова і додається "ay", так що "first" стає "irst-fay." До слів, що починаються на голосну, натомість додається в кінці “hay” (“apple” стає “apple-hay”). Не забувайте, що використовується кодування UTF-8!
+* За допомогою хешмапи і векторів створіть текстовий інтерфейс, що дозволить користувачеві додати імена співробітників у відділ компанії. Наприклад, “Add Sally to Engineering” чи “Add Amir to Sales.” Тоді дайте користувачеві можливість отримати список усіх людей у відділі чи всіх людей у компанії по відділах, відсортованих за алфавітом.
 
-The standard library API documentation describes methods that vectors, strings, and hash maps have that will be helpful for these exercises!
+Документація API стандартної бібліотеки описує методи, які мають вектори, стрічки і хешпами, які будуть корисними для цих вправ!
 
-We’re getting into more complex programs in which operations can fail, so, it’s a perfect time to discuss error handling. We’ll do that next!
+Ми переходимо до складніших програм, у яких операції можуть зазнавати невдачу, тому зараз ідеальний час для обговорення обробки помилок. Цим ми й займемося!
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 
 [^siphash]: [https://en.wikipedia.org/wiki/SipHash](https://en.wikipedia.org/wiki/SipHash)

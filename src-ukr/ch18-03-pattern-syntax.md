@@ -1,6 +1,6 @@
 ## Синтаксис Шаблонів
 
-In this section, we gather all the syntax valid in patterns and discuss why and when you might want to use each one.
+У цьому розділі ми збираємо всі синтаксичні конструкції, що використовуються в шаблонах, і обговорюємо, чому і коли ви можете захотіти використовувати кожну з них.
 
 ### Зіставлення з Літералами
 
@@ -12,7 +12,7 @@ In this section, we gather all the syntax valid in patterns and discuss why and 
 
 Цей код виведе в консолі `one`, оскільки значення в `x` дорівнює 1. Цей синтаксис корисний, коли ви хочете, щоб ваш код виконував дію, якщо він отримує певне значення.
 
-### Зіставлення з Найменованими Змінними
+### Зіставлення з Іменованими Змінними
 
 Іменовані змінні - це незаперечні шаблони, які відповідають будь-якому значенню, і ми багато разів використовували їх у книзі. Однак, існує ускладнення при використанні іменованих змінних у виразах `match`. Оскільки `match` починає нову область видимості, змінні, оголошені як частина шаблону всередині виразу `match`, будуть затінювати змінні з тією ж назвою за межами конструкції `match`, як і у випадку з усіма змінними. У Блоці Коду 18-11 оголошується змінна з назвою `x` зі значенням `Some(5)` та змінна `y` зі значенням `10`. Потім ми створюємо вираз `match` над значенням `x`. Подивіться на шаблони в рукавах match і `println!` наприкінці, і перед тим, як запускати цей код або читати далі, спробуйте з'ясувати, що виведе код в консолі.
 
@@ -23,7 +23,7 @@ In this section, we gather all the syntax valid in patterns and discuss why and 
 ```
 
 
-<span class="caption">Listing 18-11: A `match` expression with an arm that introduces a shadowed variable `y`</span>
+<span class="caption">Блок Коду 18-11: Вираз `match` з рукавом, що вводить затінену змінну `y`</span>
 
 Розглянемо, що відбувається при виконанні виразу `match`. Шаблон у першому рукаві порівняння не збігається із заданим значенням `x`, тому код продовжується.
 
@@ -56,7 +56,7 @@ ignore --> .
 
 Якщо `x` дорівнює 1, 2, 3, 4, або 5, то буде обрана перша гілка виразу match. Цей синтаксис більш зручний для зіставлення декількох значень ніж використання оператора `|` для вираження тої самої ідеї; якщо ми використовували б `|`, нам було б потрібно вказати `1 | 2 | 3 | 4 | 5`. Вказання діапазону набагато коротше, особливо якщо ми хочемо зіставляти, скажімо, будь-яке число між 1 та 1,000!
 
-The compiler checks that the range isn’t empty at compile time, and because the only types for which Rust can tell if a range is empty or not are `char` and numeric values, ranges are only allowed with numeric or `char` values.
+Компілятор перевіряє, що діапазон не порожній під час компіляції, і оскільки єдиними типами, для яких Rust може сказати, чи є діапазон порожнім чи ні, є `char` та числові значення, діапазони дозволяють лише числові або `char` значення.
 
 Ось приклад використання діапазонів значень `char`:
 
@@ -66,13 +66,13 @@ The compiler checks that the range isn’t empty at compile time, and because th
 
 Rust може визначити, що `'c'` в першому діапазоні шаблона та виведе в консоль `early ASCII letter`.
 
-### Деструктуризація для Розбору Значень на Частини
+### Деструктурування для Розбору Значень на Частини
 
 Ми також використовуємо шаблони для деструктуризації структур, енумів та кортежів для використання різних частин їх значень. Розглянемо покроково кожне значення.
 
-#### Деструктуризація Структур
+#### Деструктурування Структур
 
-Listing 18-12 shows a `Point` struct with two fields, `x` and `y`, that we can break apart using a pattern with a `let` statement.
+У Блоці Коду 18-12 показана структура `Point` з двома полями `x` і `y`, яку ми можемо розбити на частини за допомогою шаблону з інструкцією `let`.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -81,7 +81,7 @@ Listing 18-12 shows a `Point` struct with two fields, `x` and `y`, that we can b
 ```
 
 
-<span class="caption">Listing 18-12: Destructuring a struct’s fields into separate variables</span>
+<span class="caption">Блок Коду 18-12: Деструктуризація полів структури в окремі змінні</span>
 
 В цьому коді створюються змінні `a` та `b`, які відповідають значенням полів `x` та `y` структури `p`. Цей приклад показує, що назви змінних у шаблоні не обов'язково повинні збігатися з назвами полів структури. Однак, зазвичай назви змінних збігаються з назвами полів, щоб полегшити запам'ятовування того, які змінні походять з яких полів. Через таке поширене використання, а також через те, що запис `let Point { x: x, y: y } = p;` містить багато повторень, Rust має скорочення для шаблонів, які відповідають полям struct: вам потрібно лише перерахувати назву поля struct, і змінні, створені на основі шаблону, матимуть ті ж самі назви. Блок Коду 18-13 працює так само як і Блок Коду 18-12, але змінні, що створюються в шаблоні `let`, є `x` і `y` замість `a` і `b`.
 
@@ -92,13 +92,13 @@ Listing 18-12 shows a `Point` struct with two fields, `x` and `y`, that we can b
 ```
 
 
-<span class="caption">Listing 18-13: Destructuring struct fields using struct field shorthand</span>
+<span class="caption">Блок коду 18-13: Деструктуризація полів структури за допомогою скорочення</span>
 
 Цей код створить змінні `x` та `y`, які відповідають полям `x` та`y` змінної `p`. В результаті змінні `x` та `y` містять значення зі структури `p`.
 
 Ми також можемо деструктурувати за допомогою буквених значень як частини шаблону struct замість того, щоб створювати змінні для всіх полів. Це дозволяє нам перевіряти деякі з полів на наявність певних значень, створюючи змінні для деструктуризації інших полів.
 
-In Listing 18-14, we have a `match` expression that separates `Point` values into three cases: points that lie directly on the `x` axis (which is true when `y = 0`), on the `y` axis (`x = 0`), or neither.
+У Блоці Коду 18-14 ми маємо вираз `match`, який розділяє значення `Point` на три випадки: точки, які лежать безпосередньо на осі `x` (що вірно, коли `y = 0`), на осі `y` (`x = 0`), або не лежать ні на одній з них.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -107,17 +107,17 @@ In Listing 18-14, we have a `match` expression that separates `Point` values int
 ```
 
 
-<span class="caption">Listing 18-14: Destructuring and matching literal values in one pattern</span>
+<span class="caption">Блок Коду 18-14: Деструктуризація та зіставлення буквених значень в одному шаблоні</span>
 
 Перший рукав буде відповідати будь-якій точці, що лежить на осі `x`, вказуючи, що поле `y` збігається, якщо його значення збігається з `0`. Шаблон все ще створює змінну `x`, яку ми можемо використовувати в коді для цього рукава.
 
 Аналогічно, другий рукав зіставляє будь-яку точку на осі `y`, вказуючи, що поле `x` збігається, якщо його значення дорівнює `0`, і створює змінну `y` для значення поля `y`. Третій рукав не визначає ніяких літералів, тому воно відповідає будь-якій іншій `Point` і створює змінні для полів `x` і `y`.
 
-In this example, the value `p` matches the second arm by virtue of `x` containing a 0, so this code will print `On the y axis at 7`.
+У цьому прикладі значення `p` збігається з другим рукавом, оскільки `x` містить 0, тому цей код виведе в консолі `On the y axis at 7`.
 
-Remember that a `match` expression stops checking arms once it has found the first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis and the `y` axis, this code would only print `On the x axis at 0`.
+Пам'ятайте, що вираз `match` припиняє перевірку рукавів після того, як знайде перший збіг, тому навіть якщо `Point { x: 0, y: 0}` знаходиться як на осі `x`, так і на осі `y`, цей код виведе в консолі `On the x axis at 0`.
 
-#### Деструктуризація Енумів
+#### Деструктурування Енумів
 
 У цій книзі ми вже деструктурували енуми (наприклад, в Блоці Коду 6-5 Розділу 6), але ми ще окремо не обговорювали, що шаблон деструктурування енума повинен відповідати тому, як визначаються збережені в енумі дані. Як приклад, у Блоці Коду 18-15 ми використовуємо енум `Message` з Блоку Коду 6-2 і пишемо `match` з шаблонами, які деструктуруватимуть кожне внутрішнє значення.
 
@@ -128,7 +128,7 @@ Remember that a `match` expression stops checking arms once it has found the fir
 ```
 
 
-<span class="caption">Listing 18-15: Destructuring enum variants that hold different kinds of values</span>
+<span class="caption">Блок Коду 18-15: Деструктурування варіантів енума, що містять різні види значень</span>
 
 Цей код виведе в консолі `Change the color to red 0, green 160, and blue 255`. Спробуйте змінити значення `msg`, щоб побачити виконання коду з інших рукавів.
 
@@ -138,7 +138,7 @@ Remember that a `match` expression stops checking arms once it has found the fir
 
 Шаблони кортежо-подібних варіантів енума, таких як `Message::Write`, що містить кортеж з одним елементом, і `Message::ChangeColor`, що містить кортеж з трьома елементами подібні до шаблону, який ми вказуємо для зіставлення кортежів. Кількість змінних у шаблоні повинна відповідати кількості елементів у варіанті, який ми порівнюємо.
 
-#### Деструктуризація Вкладених Структур та Енумів
+#### Деструктурування Вкладених Структур та Енумів
 
 Дотепер всі наші приклади стосувалися зіставлення структур або енумів глибиною в один рівень, але зіставлення може працювати і на вкладених елементах! Наприклад, ми можемо переробити код у Блоці Коду 18-15 для додавання підтримки RGB та HSV кольорів у повідомленні `ChangeColor`, як показано у Блоці Коду 18-16.
 
@@ -150,7 +150,7 @@ Remember that a `match` expression stops checking arms once it has found the fir
 
 Шаблон першого рукава у виразі `match` відповідає варіанту енуму `Message::ChangeColor`, який містить варіант `Color::Rgb`; потім шаблон зв'язується з трьома внутрішніми значеннями `i32`. Шаблон другого рукава також відповідає варіанту енуму `Message::ChangeColor`, але внутрішній енум замість цього збігається з `Color::Hsv`. Ми можемо вказувати такі складні умови в одному виразі `match`, навіть якщо залучені два енуми.
 
-#### Деструктуризація Структур та Кортежів
+#### Деструктурування Структур та Кортежів
 
 Ми можемо змішувати, зіставляти та вкладати деструктуризуючі шаблони і складнішими способами. В наступному прикладі показано складна деструктуризація, де ми вкладаємо структури та кортежі в кортеж та деструктуризуємо все примітивні значення:
 
@@ -158,17 +158,17 @@ Remember that a `match` expression stops checking arms once it has found the fir
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-05-destructuring-structs-and-tuples/src/main.rs:here}}
 ```
 
-This code lets us break complex types into their component parts so we can use the values we’re interested in separately.
+Цей код дозволяє нам розбивати складні типи на складові частини, щоб ми могли окремо використовувати потрібні нам значення.
 
-Destructuring with patterns is a convenient way to use pieces of values, such as the value from each field in a struct, separately from each other.
+Деструктуризація за допомогою шаблонів є зручним способом використання фрагментів значень, таких як значення з кожного поля в структурі, окремо один від одного.
 
-### Ігнорування Значень Шаблона
+### Ігнорування Значень Шаблону
 
-You’ve seen that it’s sometimes useful to ignore values in a pattern, such as in the last arm of a `match`, to get a catchall that doesn’t actually do anything but does account for all remaining possible values. There are a few ways to ignore entire values or parts of values in a pattern: using the `_` pattern (which you’ve seen), using the `_` pattern within another pattern, using a name that starts with an underscore, or using `..` to ignore remaining parts of a value. Розглянемо, як і навіщо використовувати кожен з цих шаблонів.
+Ви бачили, що іноді корисно ігнорувати значення в шаблоні, наприклад в останньому рукаві `match`, щоб отримати загальний шаблон, який не робить деструктуризації, але враховує всі можливі значення, що залишилися. Існує декілька способів ігнорувати цілі значення або частини значень у шаблоні: використання шаблону `_` (який ви вже бачили), використання шаблону `_` всередині іншого шаблону, використання імені, яке починається з символу підкреслення, або використання `..` для ігнорування решти частини значення. Розглянемо, як і навіщо використовувати кожен з цих шаблонів.
 
-#### Ігнорування цілого значення з _ `_`
+#### Ігнорування Всього Значення з `_`
 
-Ми використали символ підкреслення як шаблон підстановки, який буде відповідати будь-якому значенню, але не прив'язуватиметься до нього. This is especially useful as the last arm in a `match` expression, but we can also use it in any pattern, including function parameters, as shown in Listing 18-17.
+Ми використали символ підкреслення як загальний шаблон, який буде відповідати будь-якому значенню, але не прив'язуватиметься до нього. Це особливо корисно як останній рукав виразу `match`, але ми також можемо використовувати його в будь-якому шаблоні, включно з параметрами функцій, як показано в Блоці Коду 18-17.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -178,26 +178,26 @@ You’ve seen that it’s sometimes useful to ignore values in a pattern, such a
 
 <span class="caption">Блок Коду 18-17: Використання `_` в сигнатурі функції</span>
 
-This code will completely ignore the value `3` passed as the first argument, and will print `This code only uses the y parameter: 4`.
+Цей код повністю проігнорує значення `3`, передане першим аргументом, і виведе `Даний код використовує тільки y параметр: 4`.
 
-In most cases when you no longer need a particular function parameter, you would change the signature so it doesn’t include the unused parameter. Ignoring a function parameter can be especially useful in cases when, for example, you're implementing a trait when you need a certain type signature but the function body in your implementation doesn’t need one of the parameters. You then avoid getting a compiler warning about unused function parameters, as you would if you used a name instead.
+У більшості випадків, коли вам більше не потрібен певний параметр функції, ви змінили б підпис так, щоб він не включав невикористаний параметр. Ігнорування параметру функції може бути особливо корисним у випадках, коли, наприклад, ви реалізуєте трейт і вам потрібна сигнатура певного типу, але тіло функції у вашій реалізації не потребує жодного з параметрів. Ви тоді уникаєте попередження компілятора про невикористані параметри функції, яке було б у випадку використання назви.
 
-#### Ignoring Parts of a Value with a Nested `_`
+#### Ігнорування Частин Значення з Вкладеним `_`
 
-We can also use `_` inside another pattern to ignore just part of a value, for example, when we want to test for only part of a value but have no use for the other parts in the corresponding code we want to run. Listing 18-18 shows code responsible for managing a setting’s value. The business requirements are that the user should not be allowed to overwrite an existing customization of a setting but can unset the setting and give it a value if it is currently unset.
+Ми також можемо використовувати `_` всередині іншого шаблону, щоб ігнорувати тільки частину значення, наприклад, коли ми хочемо перевірити тільки частину значення, але не використовуємо інші частини у відповідному коді, який ми хочемо виконати. У Блоці Коду 18-18 наведено код що відповідає за керування значенням налаштувань. Бізнес-вимоги полягають в тому, що користувачеві не повинно бути дозволено перезаписувати існуюче задане налаштування, але користувач може скасувати налаштування та надати йому значення, якщо воно наразі не задане.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-18/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 18-18: Using an underscore within patterns that match `Some` variants when we don’t need to use the value inside the `Some`</span>
+<span class="caption">Блок Коду 18-18: Використання підкреслення всередині шаблонів, які відповідають варіантам `Some`, коли нам не потрібно використовувати значення всередині `Some` варіанту</span>
 
-This code will print `Can't overwrite an existing customized value` and then `setting is Some(5)`. In the first match arm, we don’t need to match on or use the values inside either `Some` variant, but we do need to test for the case when `setting_value` and `new_setting_value` are the `Some` variant. In that case, we print the reason for not changing `setting_value`, and it doesn’t get changed.
+Цей код виведе `Неможливо перезаписати існуюче користувацьке значення`, а потім `налаштування це Some(5)`. У першому рукаві match нам не потрібно зіставляти або використовувати значення всередині будь-якого з варіантів `Some`, але нам потрібно перевірити випадок, коли `setting_value` і `new_setting_value` є варіантом `Some`. У цьому випадку ми виводимо причину незмінності `setting_value`, і воно не зміниться.
 
-In all other cases (if either `setting_value` or `new_setting_value` are `None`) expressed by the `_` pattern in the second arm, we want to allow `new_setting_value` to become `setting_value`.
+У всіх інших випадках (якщо або `setting_value`, або `new_setting_value` є `None`), виражених шаблоном `_` у другому плечі, ми хочемо дозволити `new_setting_value` стати `setting_value`.
 
-We can also use underscores in multiple places within one pattern to ignore particular values. Listing 18-19 shows an example of ignoring the second and fourth values in a tuple of five items.
+Ми також можемо використовувати підкреслення в декількох місцях в межах одного шаблону, щоб ігнорувати певні значення. У Блоку Коду 18-19 наведено приклад ігнорування другого та четвертого значень у кортежі з п'яти елементів.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-19/src/main.rs:here}}
@@ -205,11 +205,11 @@ We can also use underscores in multiple places within one pattern to ignore part
 
 <span class="caption">Блок Коду 18-19: Ігнорування кількох частин кортежу</span>
 
-This code will print `Some numbers: 2, 8, 32`, and the values 4 and 16 will be ignored.
+Цей код виведе `Деякі числа: 2, 8, 32`, а значення 4 та 16 будуть проігноровані.
 
-#### Ignoring an Unused Variable by Starting Its Name with `_`
+#### Ігнорування Невикористаної Змінної, Починаючи Її Назву з `_`
 
-If you create a variable but don’t use it anywhere, Rust will usually issue a warning because an unused variable could be a bug. However, sometimes it’s useful to be able to create a variable you won’t use yet, such as when you’re prototyping or just starting a project. In this situation, you can tell Rust not to warn you about the unused variable by starting the name of the variable with an underscore. In Listing 18-20, we create two unused variables, but when we compile this code, we should only get a warning about one of them.
+Якщо ви створюєте змінну, але ніде її не використовуєте, Rust зазвичай попередить про це, оскільки невикористана змінна може бути помилкою. Однак, іноді буває корисно мати можливість створити змінну, яку ви поки що не будете використовувати, наприклад, коли ви створюєте прототип або тільки починаєте проєкт. У цій ситуації ви можете заборонити Rust попереджати вас про невикористану змінну, почавши назву змінної з символу підкреслення. У Боку Коду 18-20 ми створюємо дві невикористовувані змінні, але при компіляції цього коду ми повинні отримати попередження лише про одну з них.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -218,44 +218,44 @@ If you create a variable but don’t use it anywhere, Rust will usually issue a 
 ```
 
 
-<span class="caption">Listing 18-20: Starting a variable name with an underscore to avoid getting unused variable warnings</span>
+<span class="caption">Блок Коду 18-20: Початок назви змінної з символу підкреслення, щоб уникнути попередження про невикористані змінні</span>
 
-Here we get a warning about not using the variable `y`, but we don’t get a warning about not using `_x`.
+Тут ми отримуємо попередження про невикористання змінної `y`, але не отримуємо попередження про невикористання `_x`.
 
-Note that there is a subtle difference between using only `_` and using a name that starts with an underscore. The syntax `_x` still binds the value to the variable, whereas `_` doesn’t bind at all. To show a case where this distinction matters, Listing 18-21 will provide us with an error.
+Зверніть увагу, що існує тонка різниця між використанням тільки `_` і використанням імені яке починається з підкреслення. Синтаксис `_x` все ще прив'язує значення до змінної тоді як `_` не прив'язує взагалі. Щоб показати випадок, коли ця відмінність має значення, в Блоці Коду 18-21 ми наведемо помилку.
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-21/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 18-21: An unused variable starting with an underscore still binds the value, which might take ownership of the value</span>
+<span class="caption">Блок Коду 18-21: Невикористана змінна, що починається з підкреслення все ще прив'язує значення, що може отримати над ним володіння</span>
 
-We’ll receive an error because the `s` value will still be moved into `_s`, which prevents us from using `s` again. However, using the underscore by itself doesn’t ever bind to the value. Listing 18-22 will compile without any errors because `s` doesn’t get moved into `_`.
+Ми отримаємо помилку, тому що значення `s` однаково буде переміщено в `_s`, що не дозволить нам використовувати `s` знову. Однак, використання символу підкреслення самого по собі ніколи не призведе до прив'язки до значення. Блок Коду 18-22 скомпілюється без помилок тому що `s` не переміщується в `_`.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-22/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 18-22: Using an underscore does not bind the value</span>
+<span class="caption">Блок Коду 18-22: Використання символу підкреслення не прив'язує значення</span>
 
 Цей код працює, оскільки ми ніколи та ні до чого не прив'язували `s`; воно не зміщене.
 
-#### Ігнорування Інших Частин Значення з `..`
+#### Ігнорування Решти Частин Значення з `..`
 
-With values that have many parts, we can use the `..` syntax to use specific parts and ignore the rest, avoiding the need to list underscores for each ignored value. The `..` pattern ignores any parts of a value that we haven’t explicitly matched in the rest of the pattern. In Listing 18-23, we have a `Point` struct that holds a coordinate in three-dimensional space. In the `match` expression, we want to operate only on the `x` coordinate and ignore the values in the `y` and `z` fields.
+Для значень, які мають багато частин, ми можемо використовувати синтаксис `..`, щоб використовувати певні частини та ігнорувати решту, уникаючи необхідності підкреслення кожного ігнорованого значення. Шаблон `..` ігнорує будь-які частини значення, які ми не зіставили явно в інших частинах шаблону. У Блоці Коду 18-23 ми маємо структуру `Point`, яка зберігає координату в тривимірному просторі. У виразі `match` ми хочемо оперувати тільки координатою `x` і ігнорувати значення в полях `y` та `z`.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-23/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 18-23: Ignoring all fields of a `Point` except for `x` by using `..`</span>
+<span class="caption">Блок Коду 18-23: Ігнорування всіх полів `Point` крім для `x` з використанням `..`</span>
 
-We list the `x` value and then just include the `..` pattern. This is quicker than having to list `y: _` and `z: _`, particularly when we’re working with structs that have lots of fields in situations where only one or two fields are relevant.
+Ми перераховуємо значення `x`, а потім просто додаємо шаблон `..`. Це швидше. ніж перераховувати `y: _` і `z: _`, особливо коли ми працюємо зі структурами, які мають багато полів, в ситуаціях, коли тільки одне або два поля є релевантними.
 
-The syntax `..` will expand to as many values as it needs to be. Listing 18-24 shows how to use `..` with a tuple.
+Синтаксис `..` буде поширюватися на стільки значень, скільки потрібно. У Блоці Коду 18-24 показано, як використовувати `..` з кортежем.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -264,11 +264,11 @@ The syntax `..` will expand to as many values as it needs to be. Listing 18-24 s
 ```
 
 
-<span class="caption">Listing 18-24: Matching only the first and last values in a tuple and ignoring all other values</span>
+<span class="caption">Блок Коду 18-24: Порівняння тільки першого та останнього значень кортежу та ігнорування усіх інших значень</span>
 
-In this code, the first and last value are matched with `first` and `last`. `..` буде зіставлятися та ігнорувати зі всім посередині.
+У цьому коді першому та останньому значенню відповідають `first` та `last`. `..` буде зіставлятися та ігнорувати зі всім посередині.
 
-However, using `..` must be unambiguous. If it is unclear which values are intended for matching and which should be ignored, Rust will give us an error. Listing 18-25 shows an example of using `..` ambiguously, so it will not compile.
+Однак використання `..` має бути однозначним. Якщо незрозуміло, які значення призначені для зіставлення, а які слід ігнорувати, Rust видасть помилку. У Блоці Коду 18-25 наведено приклад неоднозначного використання `..`, тому він не буде компілюватися.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -277,7 +277,7 @@ However, using `..` must be unambiguous. If it is unclear which values are inten
 ```
 
 
-<span class="caption">Listing 18-25: An attempt to use `..` in an ambiguous way</span>
+<span class="caption">Блок Коду 18-25: Спроба використання `..` неоднозначним способом</span>
 
 Якщо ми скомпілюємо цей приклад, ми отримаємо цю помилку:
 
@@ -285,13 +285,13 @@ However, using `..` must be unambiguous. If it is unclear which values are inten
 {{#include ../listings/ch18-patterns-and-matching/listing-18-25/output.txt}}
 ```
 
-It’s impossible for Rust to determine how many values in the tuple to ignore before matching a value with `second` and then how many further values to ignore thereafter. This code could mean that we want to ignore `2`, bind `second` to `4`, and then ignore `8`, `16`, and `32`; or that we want to ignore `2` and `4`, bind `second` to `8`, and then ignore `16` and `32`; and so forth. The variable name `second` doesn’t mean anything special to Rust, so we get a compiler error because using `..` in two places like this is ambiguous.
+Rust не може визначити, скільки значень у кортежі слід ігнорувати, перш ніж знайти значення з `second`, а потім скільки наступних значень слід ігнорувати після цього. Цей код може означати, що ми хочемо ігнорувати `2`, пов'язати `second` з `4`, а потім ігнорувати `8`, `16` та `32`; або що ми хочемо ігнорувати `2` і `4`, зв'язати `second` з `8`, а потім ігнорувати `16` і `32`; тощо. Назва змінної `second` нічого особливого для Rust не означає, тому ми отримуємо помилку компілятора, тому що використання `..` в двох таких місцях є неоднозначним.
 
 ### Додаткові Умови з Запобіжниками Зіставлення
 
-A *match guard* is an additional `if` condition, specified after the pattern in a `match` arm, that must also match for that arm to be chosen. Match guards are useful for expressing more complex ideas than a pattern alone allows.
+*Запобіжник match* є додатковою умовою `if`, зазначеною після шаблону в рукаві `match`, яка також повинна збігатися для того, щоб цей рукав було обрано. Запобіжники match корисні для вираження складніших ідей, ніж дозволяє один тільки шаблон.
 
-The condition can use variables created in the pattern. Listing 18-26 shows a `match` where the first arm has the pattern `Some(x)` and also has a match guard of `if x % 2 == 0` (which will be true if the number is even).
+В умові можуть використовуватись змінні, створені в шаблоні. У Блоці Коду 18-26 показано `match`, де перший рукав має шаблон `Some(x)`, а також має запобіжник match `if x % 2 == 0` (що буде істинним, якщо число парне).
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-26/src/main.rs:here}}
@@ -299,13 +299,13 @@ The condition can use variables created in the pattern. Listing 18-26 shows a `m
 
 <span class="caption">Блок Коду 18-26: Додавання запобіжника зіставлення до шаблона</span>
 
-Цей приклад виведе в консолі `The number 4 is even`. When `num` is compared to the pattern in the first arm, it matches, because `Some(4)` matches `Some(x)`. Then the match guard checks whether the remainder of dividing `x` by 2 is equal to 0, and because it is, the first arm is selected.
+Цей приклад виведе в консолі `The number 4 is even`. Коли `num` порівнюється з у першому рукаві, вони збігаються, оскільки `Some(4)` збігається з `Some(x)`. Потім запобіжник match перевіряє, чи залишок від ділення `x` на 2 дорівнює 0, і якщо це так, то вибирається перший рукав.
 
-If `num` had been `Some(5)` instead, the match guard in the first arm would have been false because the remainder of 5 divided by 2 is 1, which is not equal to 0. Rust would then go to the second arm, which would match because the second arm doesn’t have a match guard and therefore matches any `Some` variant.
+Якби замість `num` було `Some(5)`, то запобіжник match у першому рукаві був би хибним, оскільки остача від ділення 5 на 2 дорівнює 1, що не дорівнює 0. Rust потім перейде до другого рукава, який збігатиметься, тому що другий рукав не має запобіжника match і тому збігається з будь-яким варіантом `Some`.
 
-There is no way to express the `if x % 2 == 0` condition within a pattern, so the match guard gives us the ability to express this logic. The downside of this additional expressiveness is that the compiler doesn't try to check for exhaustiveness when match guard expressions are involved.
+Немає можливості виразити умову `if x % 2 == 0` в шаблоні, тому запобіжник дає можливість виразити цю логіку. Недоліком цієї додаткової виразності є те, що компілятор не намагатиметься перевіряти на вичерпність, коли задіяні вирази запобіжнику match.
 
-In Listing 18-11, we mentioned that we could use match guards to solve our pattern-shadowing problem. Recall that we created a new variable inside the pattern in the `match` expression instead of using the variable outside the `match`. That new variable meant we couldn’t test against the value of the outer variable. Listing 18-27 shows how we can use a match guard to fix this problem.
+У Блоці Коду 18-11 ми згадували, що могли б використовувати запобіжники match для вирішення нашої проблему тінізації шаблонів. Нагадаємо, що ми створили нову змінну всередині шаблону у виразі `match` замість того, щоб використовувати змінну за межами `match`. Ця нова змінна означала, що ми не могли перевіряти значення зовнішньої змінної. У Блоці Коду 18-27 показано, як ми можемо використовувати запобіжник match, щоб розв'язати цю проблему.
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -314,22 +314,22 @@ In Listing 18-11, we mentioned that we could use match guards to solve our patte
 ```
 
 
-<span class="caption">Listing 18-27: Using a match guard to test for equality with an outer variable</span>
+<span class="caption">Блок Коду 18-27: Використання запобіжника match для перевірки рівності із зовнішньою змінною</span>
 
-Цей код виведе в консолі `Default case, x = Some(5)`. The pattern in the second match arm doesn’t introduce a new variable `y` that would shadow the outer `y`, meaning we can use the outer `y` in the match guard. Instead of specifying the pattern as `Some(y)`, which would have shadowed the outer `y`, we specify `Some(n)`. This creates a new variable `n` that doesn’t shadow anything because there is no `n` variable outside the `match`.
+Цей код виведе в консолі `Default case, x = Some(5)`. Шаблон у другому рукаві збігу не вводить нову змінну `y`, яка б затінювала зовнішню `y`, що означає, що ми можемо використовувати зовнішню `y` у запобіжнику match. Замість того, щоб вказати шаблон як `Some(y)`, що затінило б зовнішнє `y`, ми вказуємо `Some(n)`. Це створює нову змінну `n`, яка нічого не затінює, оскільки немає змінної `n` за межами `match`.
 
-Запобіжник зіставлення `if n == y` не є шаблоном і тому не вводить нових змінних. This `y` *is* the outer `y` rather than a new shadowed `y`, and we can look for a value that has the same value as the outer `y` by comparing `n` to `y`.
+Запобіжник match `if n == y` не є шаблоном і тому не вводить нових змінних. Цей `y` *дорівнює* зовнішньому `y`, а не новому затіненому `y`, і ми можемо шукати значення, яке має те саме значення, що й зовнішнє `y`, порівнюючи `n` з `y`.
 
-You can also use the *or* operator `|` in a match guard to specify multiple patterns; the match guard condition will apply to all the patterns. Listing 18-28 shows the precedence when combining a pattern that uses `|` with a match guard. The important part of this example is that the `if y` match guard applies to `4`, `5`, *and* `6`, even though it might look like `if y` only applies to `6`.
+Ви також можете використовувати *or* оператор `|` в запобіжнику match для вказування декількох шаблонів; умова запобіжнику match буде застосовуватися до всіх шаблонів. У Блоці Коду 18-28 показано черговість при об'єднанні шаблону, який використовує `|` з запобіжником match. Важливою частиною цього прикладу є те, що запобіжник match `if y` застосовується до `4`, `5`, *та* `6`, хоча це може виглядати як `if y` тільки застосовується лише до `6`.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-28/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 18-28: Combining multiple patterns with a match guard</span>
+<span class="caption">Блок Коду 18-28: Об'єднання декількох шаблонів за допомогою запобіжнику match</span>
 
-The match condition states that the arm only matches if the value of `x` is equal to `4`, `5`, or `6` *and* if `y` is `true`. When this code runs, the pattern of the first arm matches because `x` is `4`, but the match guard `if y` is false, so the first arm is not chosen. The code moves on to the second arm, which does match, and this program prints `no`. The reason is that the `if` condition applies to the whole pattern `4 | 5 | 6`, not only to the last value `6`. In other words, the precedence of a match guard in relation to a pattern behaves like this:
+Умова match вказує, що рукав збігається, тільки якщо значення `x` дорівнює `4`, `5` або `6` *та* якщо `y` дорівнює `true`. При виконанні цього коду шаблон першого рукава збігається, оскільки `x` дорівнює `4`, але запобіжник збігу `if y` є хибним, тому перший рукав не обирається. Код переходить на другий рукав, який збігається, і ця програма виводить в консолі `no`. Причина в тому, що умова `if` застосовується до всього шаблону `4 | 5 | 6`, а не тільки до останнього значення `6`. Іншими словами, черговість запобіжнику match відносно шаблону наступна:
 
 ```text
 (4 | 5 | 6) if y => ...
@@ -341,30 +341,30 @@ The match condition states that the arm only matches if the value of `x` is equa
 4 | 5 | (6 if y) => ...
 ```
 
-After running the code, the precedence behavior is evident: if the match guard were applied only to the final value in the list of values specified using the `|` operator, the arm would have matched and the program would have printed `yes`.
+Після виконання коду, поведінка пріоритету очевидна: якби запобіжник match був застосований тільки до кінцевого значення в списку значень, заданих з допомогою оператора `|`, то рукав збігся б і програма вивела б `yes`.
 
-### `@` Bindings
+### `@` Зв'язування
 
-The *at* operator `@` lets us create a variable that holds a value at the same time as we’re testing that value for a pattern match. In Listing 18-29, we want to test that a `Message::Hello` `id` field is within the range `3..=7`. We also want to bind the value to the variable `id_variable` so we can use it in the code associated with the arm. We could name this variable `id`, the same as the field, but for this example we’ll use a different name.
+`@`, що вимовляється "оператор *at*", дозволяє нам створити змінну, яка містить значення, у той час, коли ми перевіряємо значення на відповідність шаблону. У Блоці коду 18-29 ми хочемо перевірити, що поле `id` у `Message::Hello` є в межах `3..=7`. Ми також хочемо зв'язати значення зі змінною `id_variable`, щоб ми могли використати її у коді рукава. Ми могли назвати цю змінну `id`, так само як і поле, але для цього прикладу ми використаємо іншу назву.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-29/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 18-29: Using `@` to bind to a value in a pattern while also testing it</span>
+<span class="caption">Блок коду 18-29: використання `@` для зв'язування зі значенням у шаблоні і водночас перевірки</span>
 
-Цей приклад виведе в консолі `Found an id in range: 5`. By specifying `id_variable
-@` before the range `3..=7`, we’re capturing whatever value matched the range while also testing that the value matched the range pattern.
+Цей приклад виведе в консолі `Found an id in range: 5`. Зазначивши `id_variable
+@` перед інтервалом `3..=7` ми захоплюємо будь-яке значення, що відповідає інтервалу, перевіряючи при цьому, що значення відповідає шаблону.
 
-In the second arm, where we only have a range specified in the pattern, the code associated with the arm doesn’t have a variable that contains the actual value of the `id` field. The `id` field’s value could have been 10, 11, or 12, but the code that goes with that pattern doesn’t know which it is. The pattern code isn’t able to use the value from the `id` field, because we haven’t saved the `id` value in a variable.
+У другому рукаві, де є лише інтервал, зазначений у шаблоні, код, асоційований з цим рукавом, не має змінної, яка містила б фактичне значення поля `id`. Значення поля `id` могло б бути 10, 11, або 12, але код, що йде з цим шаблоном, не знає, яким воно є. Код шаблону нездатний використати значення поля `id`, оскільки ми не зберегли значення `id` у змінній.
 
-In the last arm, where we’ve specified a variable without a range, we do have the value available to use in the arm’s code in a variable named `id`. The reason is that we’ve used the struct field shorthand syntax. But we haven’t applied any test to the value in the `id` field in this arm, as we did with the first two arms: any value would match this pattern.
+В останньому рукаві, де ми вказали змінну без інтервалу, ми маємо значення, доступне для використання в коді рукава, в змінній з назвою `id`. Це тому, що ми скористалися скороченим синтаксисом поля структури. Але ми не застосували жодної перевірки для поля `id` у цьому рукаві, як робили у двох перших рукавах: будь-яке значення відповідає цьому шаблону.
 
-Using `@` lets us test a value and save it in a variable within one pattern.
+Використання `@` дозволяє нам перевірити значення і зберегти його в змінній в одному шаблоні.
 
 ## Підсумок
 
-Шаблони в Rust дуже корисні для визначення різниці між різновидами даних. When used in `match` expressions, Rust ensures your patterns cover every possible value, or your program won’t compile. Patterns in `let` statements and function parameters make those constructs more useful, enabling the destructuring of values into smaller parts at the same time as assigning to variables. We can create simple or complex patterns to suit our needs.
+Шаблони в Rust дуже корисні для розрізнення між різновидами даних. При використанні у виразах `match` Rust гарантує, що ваші шаблони покривають усі можливі значення, бо інакше ваша програма не скомпілюється. Шаблони в інструкціях `let` і параметрах функцій роблять ці конструкції кориснішими, дозволяючи деструктуризацію значень на менші частини одночасно з що присвоєнням їх змінним. Ми можемо створювати прості або складні шаблони відповідно до наших потреб.
 
-Next, for the penultimate chapter of the book, we’ll look at some advanced aspects of a variety of Rust’s features.
+Далі, у передостанньому розділі книжки ми подивимося на деякі розширені аспекти низки функціоналів Rust.

@@ -1,4 +1,4 @@
-## Читання файлу
+## Читання Файлу
 
 Тепер додамо функціональність для читання файлу, заданого параметром `file_path`. Для початку нам знадобиться файл для тестування, і ми скористаємося файлом із невеликим текстом у кілька рядків із повторенням слів. Блок коду 12-3 містить вірш Емілі Дікінсон, що добре підійде для цього! Створіть файл *poem.txt* у кореневому рівні вашого проєкту, і введіть вірш "Я ніхто! А ти хто?"
 
@@ -9,26 +9,26 @@
 ```
 
 
-<span class="caption">Listing 12-3: A poem by Emily Dickinson makes a good test case</span>
+<span class="caption">Роздрук 12-3: Вірш Емілі Дікінсон вдало підходить для тестування</span>
 
-With the text in place, edit *src/main.rs* and add code to read the file, as shown in Listing 12-4.
+Підготувавши текст, відредагуйте *src/main.rs* і додайте код для читання файлу, як вказано у Блоці коду 12-4.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 12-4: Reading the contents of the file specified by the second argument</span>
+<span class="caption">Блок коду 12-4: Читання вмісту файлу, вказаного другим параметром</span>
 
-First, we bring in a relevant part of the standard library with a `use` statement: we need `std::fs` to handle files.
+Спершу, ми вводимо в область видимості відповідну частину стандартної бібліотеки за допомогою інструкції `use`: для обробки файлів потрібен `std::fs`.
 
-In `main`, the new statement `fs::read_to_string` takes the `file_path`, opens that file, and returns a `std::io::Result<String>` of the file’s contents.
+У `main` нова інструкція `fs::read_to_string` бере `file_path`, відкриває цей файл і повертає `std::io::Result<String>` з його вмістом.
 
-After that, we again add a temporary `println!` statement that prints the value of `contents` after the file is read, so we can check that the program is working so far.
+По тому знову додаємо тимчасову інструкцію `println!`, що видрукує значення `contents` після читання файлу, щоб ми змогли перевірити, як програма працює.
 
-Let’s run this code with any string as the first command line argument (because we haven’t implemented the searching part yet) and the *poem.txt* file as the second argument:
+Запустімо цей код з будь-якою стрічкою першим параметром командного рядка (бо ми ще не додали частину для пошуку) і *poem.txt* другим параметром:
 
 ```console
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/output.txt}}

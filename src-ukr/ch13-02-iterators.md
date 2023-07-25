@@ -1,32 +1,32 @@
-## Обробка послідовностей елементів за допомогою ітераторів
+## Обробка Послідовностей Елементів з Ітераторами
 
-Шаблон ітератора дозволяє вам виконати певну задачу з послідовністю елементів по черзі. An iterator is responsible for the logic of iterating over each item and determining when the sequence has finished. When you use iterators, you don’t have to reimplement that logic yourself.
+Шаблон ітератора дозволяє вам виконати певну задачу з послідовністю елементів по черзі. Ітератор відповідає за логіку ітерації по елементах і визначення, коли послідовність закінчується. Коли ви користуєтесь ітераторами, вам не треба самостійно реалізовувати цю логіку.
 
-In Rust, iterators are *lazy*, meaning they have no effect until you call methods that consume the iterator to use it up. For example, the code in Listing 13-10 creates an iterator over the items in the vector `v1` by calling the `iter` method defined on `Vec<T>`. This code by itself doesn’t do anything useful.
+У Rust ітератори є *лінивими*, тобто вони нічого не роблять до того моменту, коли ви викличете метод, що поглине ітератор і використає його. Наприклад, код у Блоці коду 13-10 створює ітератор по елементах вектора `v1`, викликавши метод `iter`, визначений для `Vec<T>`. Цей код як такий не робить нічого корисного.
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-10: Creating an iterator</span>
+<span class="caption">Блок коду 13-10: створення ітератора</span>
 
-The iterator is stored in the `v1_iter` variable. Once we’ve created an iterator, we can use it in a variety of ways. In Listing 3-5 in Chapter 3, we iterated over an array using a `for` loop to execute some code on each of its items. Under the hood this implicitly created and then consumed an iterator, but we glossed over how exactly that works until now.
+Ітератор зберігається у змінній `v1_iter`. Після того, як ми створили ітератор, ми можемо використовувати його у різні способи. У Блоці коду 3-5 з Розділу 3 ми ітерували по масиву за допомогою циклу `for`, щоб виконати певний код на кожному елементі. Під капотом тут неявно був створений і поглинутий ітератор, але до цього часу ми не звертали уваги на те, як саме це працює.
 
-In the example in Listing 13-11, we separate the creation of the iterator from the use of the iterator in the `for` loop. When the `for` loop is called using the iterator in `v1_iter`, each element in the iterator is used in one iteration of the loop, which prints out each value.
+У прикладі з Блоку коду 13-11 ми відокремлюємо створення ітератора від його використання в циклі `for`. Коли цикл `for` викликають з ітератором у `v1_iter`, кожен елемент у ітераторі використовується одній ітерації циклу, який виводить кожне значення.
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-11: Using an iterator in a `for` loop</span>
+<span class="caption">Блок коду 13-11: використання ітератора у циклі `for`</span>
 
-In languages that don’t have iterators provided by their standard libraries, you would likely write this same functionality by starting a variable at index 0, using that variable to index into the vector to get a value, and incrementing the variable value in a loop until it reached the total number of items in the vector.
+У мовах, які не мають у своїх стандартних бібліотеках ітераторів, ви, ймовірно, опишете такий функціонал, почавши зі змінної для індексу 0, використовуючи цю змінну для індексування вектора, щоб отримати значення, та збільшуючи значення змінної в циклі, поки вона не досягне загальної кількості елементів у векторі.
 
-Iterators handle all that logic for you, cutting down on repetitive code you could potentially mess up. Iterators give you more flexibility to use the same logic with many different kinds of sequences, not just data structures you can index into, like vectors. Let’s examine how iterators do that.
+Ітератори обробляють всю цю логіку за вас, скорочуючи код, який ви потенційно можете зіпсувати. Ітератори дають вам більше гнучкості для використання тієї ж логіки з різними типами послідовностей, а не лише структурами даних, які ви можете індексувати, такими як вектори. Розгляньмо, як ітератори це роблять.
 
-### The `Iterator` Trait and the `next` Method
+### Трейт `Iterator` і Метод `next`
 
-All iterators implement a trait named `Iterator` that is defined in the standard library. The definition of the trait looks like this:
+Усі ітератори реалізують трейт, що зветься `Iterator`, визначений у стандартній бібліотеці. Визначення цього трейту виглядає ось так:
 
 ```rust
 pub trait Iterator {
@@ -34,105 +34,107 @@ pub trait Iterator {
 
     fn next(&mut self) -> Option<Self::Item>;
 
-    // methods with default implementations elided
+    // методи зі стандартною реалізацією пропущені
 }
 ```
 
-Notice this definition uses some new syntax: `type Item` and `Self::Item`, which are defining an *associated type* with this trait. We’ll talk about associated types in depth in Chapter 19. For now, all you need to know is that this code says implementing the `Iterator` trait requires that you also define an `Item` type, and this `Item` type is used in the return type of the `next` method. In other words, the `Item` type will be the type returned from the iterator.
+Зверніть увагу, що це визначення використовує новий синтаксис: `type Item` і `Self::Item`, які визначають *асоційований тип* цього трейта. Ми глибше поговоримо про асоційовані типи у Розділі 19. Поки що, все, що вам слід знати - це те, що цей код каже, що реалізація трейту `Iterator` також вимагає, щоб ви визначили тип `Item`, і цей тип `Item` використовується як тип, що повертається методом `next`. Іншими словами, тип `Item` буде типом, повернутим з ітератора.
 
-The `Iterator` trait only requires implementors to define one method: the `next` method, which returns one item of the iterator at a time wrapped in `Some` and, when iteration is over, returns `None`.
+Трейт `Iterator` потребує від того, хто його реалізовує, визначення лише одного методу: методу `next`, який повертає за раз один елемент ітератора, обгорнутий у `Some` і, коли ітерація закінчиться, повертає `None`.
 
-We can call the `next` method on iterators directly; Listing 13-12 demonstrates what values are returned from repeated calls to `next` on the iterator created from the vector.
+Ми можемо викликати метод `next` для ітераторів безпосередньо; Блок коду 13-12 демонструє, які значення повертаються повторюваними викликами `next` для ітератора, створеного з вектора.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-12/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Listing 13-12: Calling the `next` method on an iterator</span>
+<span class="caption">Блок коду 13-12: виклик методу `next` для ітератора</span>
 
-Note that we needed to make `v1_iter` mutable: calling the `next` method on an iterator changes internal state that the iterator uses to keep track of where it is in the sequence. In other words, this code *consumes*, or uses up, the iterator. Each call to `next` eats up an item from the iterator. We didn’t need to make `v1_iter` mutable when we used a `for` loop because the loop took ownership of `v1_iter` and made it mutable behind the scenes.
+Зверніть увагу, що нам потрібно зробити `v1_iter` мутабельним: виклик методу `next` для ітератора змінює його внутрішній стан, який використовується для відстеження, де він знаходиться в послідовності. Іншими словами, цей код *поглинає*, чи використовує, ітератор. Кожен виклик `next` з'їдає елемент з ітератора. Нам не треба було робити `v1_iter` мутабельним, коли ми використали його в циклі `for`, бо цикл взяв володіння `v1_iter` і зробив його мутабельним за лаштунками.
 
-Also note that the values we get from the calls to `next` are immutable references to the values in the vector. The `iter` method produces an iterator over immutable references. If we want to create an iterator that takes ownership of `v1` and returns owned values, we can call `into_iter` instead of `iter`. Similarly, if we want to iterate over mutable references, we can call `iter_mut` instead of `iter`.
+Також зверніть увагу, що значення, які ми отримуємо від викликів `next`, є немутабельними посиланнями на значення у векторі. Метод `iter` створює ітератор по незмінних посиланнях. Якщо ми хочемо створити ітератор, який приймає володіння `v1` і повертає значення, що належать нам, ми можемо викликати `into_iter` замість `iter`. Аналогічно, якщо ми хочемо ітерувати по мутабельних посиланнях, ми можемо викликати `iter_mut` замість `iter`.
 
-### Methods that Consume the Iterator
+### Методи, що Поглинають Ітератор
 
-The `Iterator` trait has a number of different methods with default implementations provided by the standard library; you can find out about these methods by looking in the standard library API documentation for the `Iterator` trait. Some of these methods call the `next` method in their definition, which is why you’re required to implement the `next` method when implementing the `Iterator` trait.
+Трейт `Iterator` має ряд різних методів з реалізаціями по замовчуванню що надаються стандартною бібліотекою; ви можете дізнатися про ці методи в стандартній документації API для трейта `Iterator`. Деякі з цих методів викликають у своєму визначенні метод `next`, чому і необхідно визначити метод `next` при реалізації трейта `Iterator`.
 
-Methods that call `next` are called *consuming adaptors*, because calling them uses up the iterator. One example is the `sum` method, which takes ownership of the iterator and iterates through the items by repeatedly calling `next`, thus consuming the iterator. As it iterates through, it adds each item to a running total and returns the total when iteration is complete. Listing 13-13 has a test illustrating a use of the `sum` method:
+Методи, що викликають `next`, звуться *поглинаючими адапторами*, бо їх виклик використовує ітератор. Один із прикладів - це метод `sum`, який бере володіння ітератором і ітерує по елементах, раз за разом викликаючи `next`, таким чином поглинаючи ітератор. Під час ітерації він додає кожен елемент до поточної загальної суми і повертає загальну суму, коли ітерація завершена. Блок коду 13-13 має тест, що ілюструє використання методу `sum`:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-13/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Listing 13-13: Calling the `sum` method to get the total of all items in the iterator</span>
+<span class="caption">Блок коду 13-13: виклик методу `sum` для отримання загальної суми усіх елементів ітератора</span>
 
-We aren’t allowed to use `v1_iter` after the call to `sum` because `sum` takes ownership of the iterator we call it on.
+Нам не дозволено використовувати `v1_iter` після виклику `sum`, оскільки `sum` перебирає володіння ітератором, на якому його викликано.
 
-### Methods that Produce Other Iterators
+### Методи, що Створюють Інші Ітератори
 
-*Iterator adaptors* are methods defined on the `Iterator` trait that don’t consume the iterator. Instead, they produce different iterators by changing some aspect of the original iterator.
+*Адаптери ітераторів* - це методи, визначені для трейта `Iterator`, які не поглинають ітератор. Натомість вони створюють інші ітератори, змінюючи певний аспект оригінального ітератора.
 
-Listing 13-17 shows an example of calling the iterator adaptor method `map`, which takes a closure to call on each item as the items are iterated through. The `map` method returns a new iterator that produces the modified items. The closure here creates a new iterator in which each item from the vector will be incremented by 1:
+Блок коду 13-14 показує приклад виклику метода-адаптора ітератора `map`, який приймає замикання, яке викличе для кожного елементу під час ітерації. Метод `map` повертає новий ітератор, який виробляє модифіковані елементи. Замикання створює новий ітератор, у якому кожен елемент вектора буде збільшено на 1:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,not_desired_behavior
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-14/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 13-14: Calling the iterator adaptor `map` to create a new iterator</span>
+<span class="caption">Блок коду 13-14: Виклик адаптора `map` для створення нового ітератора</span>
 
-However, this code produces a warning:
+Однак, цей код видає попередження:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-14/output.txt}}
 ```
 
-The code in Listing 13-14 doesn’t do anything; the closure we’ve specified never gets called. The warning reminds us why: iterator adaptors are lazy, and we need to consume the iterator here.
+Код у Блоці коду 13-14 нічого не робить; замикання, яке ми вказали, ніколи не було викликано. Попередження нагадує нам, чому: адаптори ітераторів ліниві, і нам потрібно поглинути ітератор.
 
-To fix this warning and consume the iterator, we’ll use the `collect` method, which we used in Chapter 12 with `env::args` in Listing 12-1. This method consumes the iterator and collects the resulting values into a collection data type.
+Щоб виправити це попередження і поглинути ітератор, ми використаємо метод `collect`, який ми використовували у Розділі 12 із `env::args` у Блоці коду 12-1. Цей метод поглинає ітератор і збирає отримані в результаті значення в колекцію.
 
-In Listing 13-15, we collect the results of iterating over the iterator that’s returned from the call to `map` into a vector. This vector will end up containing each item from the original vector incremented by 1.
+У Блоці коду 13-15 ми зібрали результати ітерування по ітератору, повернутому викликом `map`, у вектор. Цей вектор в результаті міститиме всі елементи оригінального вектора, збільшені на 1.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-15/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 13-15: Calling the `map` method to create a new iterator and then calling the `collect` method to consume the new iterator and create a vector</span>
+<span class="caption">Блок коду 13-15: виклик методу `map` для створення нового ітератора і виклик методу `collect` для поглинання цього нового ітератора і створення вектора</span>
 
-Because `map` takes a closure, we can specify any operation we want to perform on each item. This is a great example of how closures let you customize some behavior while reusing the iteration behavior that the `Iterator` trait provides.
+Оскільки `map` приймає замикання, ми можемо вказати будь-яку операцію, яку хочемо виконати з кожним елементом. Це чудовий приклад того, як замикання дозволяють вам встановити певну поведінку, використовуючи поведінку ітерацій, надану трейтом `Iterator`.
 
-You can chain multiple calls to iterator adaptors to perform complex actions in a readable way. But because all iterators are lazy, you have to call one of the consuming adaptor methods to get results from calls to iterator adaptors.
+Ви можете з'єднати багато викликів адаптерів ітераторів для виконання складних дій, щоб це було читабельно. Але оскільки всі ітератори є ледачими, ви маєте викликати один з методів, що поглинають адаптер, щоб отримати результати викликів адаптерів ітераторів.
 
-### Using Closures that Capture Their Environment
+### Використання Замикань, що Захоплюють Своє Середовище
 
-Many iterator adapters take closures as arguments, and commonly the closures we’ll specify as arguments to iterator adapters will be closures that capture their environment. For this example, we’ll use the `filter` method that takes a closure. The closure gets an item from the iterator and returns a Boolean. If the closure returns `true`, the value will be included in the iteration produced by `filter`. If the closure returns `false`, the value won’t be included.
+Багато адаптерів ітераторів приймають аргументами замикання, і зазвичай замикання, які ми вказуємо аргументами до адаптерів ітераторів будуть замиканнями, що захоплюють своє середовище.
 
-In Listing 13-16, we use `filter` with a closure that captures the `shoe_size` variable from its environment to iterate over a collection of `Shoe` struct instances. It will return only shoes that are the specified size.
+Для цього прикладу ми скористаємося методом `filter`, що приймає замикання. Замикання отримає елемент з ітератора і повертає `bool`. Якщо замикання повертає `true`, значення буде включено в ітерації, вироблені `filter`. Якщо замикання повертає `false`, значення не буде включено.
 
-<span class="filename">Filename: src/lib.rs</span>
+У Блоці коду 13-16 ми використовуємо `filter` із замиканням, яке захоплює змінну `shoe_size` зі свого середовища для ітерування по колекції екземплярів структур `Shoe`. Воно поверне лише взуття зазначеного розміру.
+
+<span class="filename">Файл: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-16/src/lib.rs}}
 ```
 
 
-<span class="caption">Listing 13-16: Using the `filter` method with a closure that captures `shoe_size`</span>
+<span class="caption">Блок коду 13-16: використання методу `filter` із замиканням, що захоплює `shoe_size`</span>
 
-The `shoes_in_size` function takes ownership of a vector of shoes and a shoe size as parameters. It returns a vector containing only shoes of the specified size.
+Функція `shoes_in_size` приймає володіння вектором взуття і розмір взуття. Вона повертає вектор, що містить лише взуття зазначеного розміру.
 
-In the body of `shoes_in_size`, we call `into_iter` to create an iterator that takes ownership of the vector. Then we call `filter` to adapt that iterator into a new iterator that only contains elements for which the closure returns `true`.
+У тілі `shoes_in_size` ми викликаємо `into_iter` для створення ітератора, що приймає володіння вектором. Тоді ми викликаємо `filter`, щоб адаптувати ітератор у новий ітератор, що містить лише елементи, для яких замикання повертає `true`.
 
-The closure captures the `shoe_size` parameter from the environment and compares the value with each shoe’s size, keeping only shoes of the size specified. Finally, calling `collect` gathers the values returned by the adapted iterator into a vector that’s returned by the function.
+Замикання захоплює параметр `shoe_size` із середовища і порівнює значення із розміром кожної пари взуття, лишаючи тільки взуття зазначеного розміру. Нарешті, виклик `collect` збирає значення, повернуті адаптованим ітератором, у вектор, який функція повертає.
 
-The test shows that when we call `shoes_in_size`, we get back only shoes that have the same size as the value we specified.
+Тест показує, що коли ми викликаємо `shoes_in_size`, ми отримуємо назад лише взуття, яке має розмір, що дорівнює вказаному значенню.

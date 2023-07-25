@@ -48,4 +48,4 @@ opt-level = 1
 
 Цей код перевизначає налаштування за замовчуванням `0`. Тепер, коли ми запустимо `cargo build`, Cargo буде використовувати за замовчуванням профіль `dev` плюс наше налаштування `opt-level`. Оскільки ви встановили `opt-level` на `1`, Cargo буде застосовувати більше оптимізацій за замовчуванням, але не настільки багато, як в режимі випуску.
 
-For the full list of configuration options and defaults for each profile, see [Cargo’s documentation](https://doc.rust-lang.org/cargo/reference/profiles.html).
+Для повного списку опцій конфігурації та параметрів кожного профілю за замовчуванням дивіться [Документацію Cargo](https://doc.rust-lang.org/cargo/reference/profiles.html).

@@ -24,7 +24,7 @@
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
 ```
 
-But you’ll more often see them used in this format, with the comment on a separate line above the code it’s annotating:
+Та частіше ви бачитимете їх у форматі, де коментар знаходиться в окремому рядку перед кодом, якого він стосується:
 
 <span class="filename">Файл: src/main.rs</span>
 
@@ -32,4 +32,7 @@ But you’ll more often see them used in this format, with the comment on a sepa
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
 ```
 
-Rust also has another kind of comment, documentation comments, which we’ll discuss in the “Publishing a Crate to Crates.io” section of Chapter 14.
+Rust також має інший вид коментарів, документаційні коментарі, які ми обговоримо в підрозділі ["Публікація крейта на Crates.io"][publishing]<!-- ignore -->
+Розділу 14.
+
+[publishing]: ch14-02-publishing-to-crates-io.html

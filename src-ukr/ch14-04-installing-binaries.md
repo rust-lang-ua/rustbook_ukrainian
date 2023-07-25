@@ -16,14 +16,14 @@ cargo install something you don't have, copy relevant output below
 ```console
 $ cargo install ripgrep
     Updating crates.io index
-  Downloaded ripgrep v11.0.2
+  Downloaded ripgrep v13.0.0
   Downloaded 1 crate (243.3 KB) in 0.88s
-  Installing ripgrep v11.0.2
+  Installing ripgrep v13.0.0
 --snip--
-   Compiling ripgrep v11.0.2
+   Compiling ripgrep v13.0.0
     Finished release [optimized + debuginfo] target(s) in 3m 10s
   Installing ~/.cargo/bin/rg
-   Installed package `ripgrep v11.0.2` (executable `rg`)
+   Installed package `ripgrep v13.0.0` (executable `rg`)
 ```
 
 Передостанній рядок виводу показує розташування і назву встановленого двійкового файлу, який у випадку `ripgrep` має назву `rg`. Допоки у вашому `$PATH` є каталог встановлення, як говорилося раніше, ви зможете запускати `rg --help` та починати використовувати швидший, іржавіший інструмент для пошуку файлів!
