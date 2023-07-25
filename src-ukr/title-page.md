@@ -1,19 +1,19 @@
-# Мова Програмування Rust
+# The Rust Programming Language
 
-*автори Steve Klabnik та Carol Nichols, за допомогою спільноти Rust*
+*by Steve Klabnik and Carol Nichols, with contributions from the Rust Community*
 
-У цій версії тексту припускається, що ви використовуєте Rust 1.65 (випущено 03 листопада 2022 року) або пізніший. Див. розділ [«Встановлення» Розділу 1][install],<!-- ignore -->
-щоб встановити або оновити Rust.
+This version of the text assumes you’re using Rust 1.65 (released 2022-11-03) or later. See the [“Installation” section of Chapter 1][install]<!-- ignore -->
+to install or update Rust.
 
-Книжка англійською у форматі HTML доступна онлайн за адресою [https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/) і офлайн з встановленим Rust за допомогою `rustup`; запустіть `rustup docs
---book`, щоб відкрити.
+The HTML format is available online at [https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/) and offline with installations of Rust made with `rustup`; run `rustup docs
+--book` to open.
 
-Також є декілька створених спільнотою [перекладів][].
+Several community [translations][] are also available.
 
-Цей текст англійською доступний в [паперовому форматі та електронних книжках No Starch Press][nsprust].
+This text is available in [paperback and ebook format from No Starch Press][nsprust].
 
-> **🚨 Хочете більш інтерактивного навчального досвіду? Спробуйте іншу версію книжки Rust, що включає: завдання, підсвічування, візуалізації і більше**: <https://rust-book.cs.brown.edu>
+> **🚨 Want a more interactive learning experience? Try out a different version of the Rust Book, featuring: quizzes, highlighting, visualizations, and more**: <https://rust-book.cs.brown.edu>
 
 [install]: ch01-01-installation.html
 [nsprust]: https://nostarch.com/rust-programming-language-2nd-edition
-[перекладів]: appendix-06-translation.html
+[translations]: appendix-06-translation.html

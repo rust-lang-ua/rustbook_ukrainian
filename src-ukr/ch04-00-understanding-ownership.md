@@ -1,3 +1,3 @@
-# Розуміння Володіння
+# Understanding Ownership
 
-Володіння є найунікальнішою особливістю мови Rust, що має глибокий вплив на решту мови. Воно дозволяє Rust гарантувати безпечну роботу з пам'яттю без потреби у збирачі сміття, і тому важливо розуміти, як володіння працює. У цьому розділі ми поговоримо про володіння і декілька пов'язаних особливостей: позичання, слайси, і як Rust розташовує дані в пам'яті.
+Ownership is Rust’s most unique feature and has deep implications for the rest of the language. It enables Rust to make memory safety guarantees without needing a garbage collector, so it’s important to understand how ownership works. In this chapter, we’ll talk about ownership as well as several related features: borrowing, slices, and how Rust lays data out in memory.

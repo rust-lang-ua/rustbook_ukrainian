@@ -1,5 +1,5 @@
-# Використання Структур для Групування Пов'язаних Даних
+# Using Structs to Structure Related Data
 
-*struct*, або *структура* - це спеціальний тип даних, що дозволяє вам збирати в одну сутність зі спільною назвою декілька пов'язаних значень, що складають значущу групу. Якщо ви знайомі з якоюсь об'єктноорієнтованою мовою, *struct* - це як атрибути даних об’єкта. У цьому розділі ми порівняємо і покажемо різницю між кортежами та структурами, щоб було на що спертися у навчанні й продемонструємо, коли структури є кращим засобом для об'єднання даних.
+A *struct*, or *structure*, is a custom data type that lets you package together and name multiple related values that make up a meaningful group. If you’re familiar with an object-oriented language, a *struct* is like an object’s data attributes. In this chapter, we’ll compare and contrast tuples with structs to build on what you already know and demonstrate when structs are a better way to group data.
 
-Ми продемонструємо, як визначати і створювати структури. Ми обговоримо, як визначати асоційовані функції, особливо вид асоційованих функцій, що зветься *методами*, для визначення поведінки, пов’язаної із типом структури. Структури та енуми (про які йдеться в Розділі 6) є будівельними блоками для створення нових типів у вашій програмі, які дозволяють по повній скористатись перевіркою типів часу компіляції Rust.
+We’ll demonstrate how to define and instantiate structs. We’ll discuss how to define associated functions, especially the kind of associated functions called *methods*, to specify behavior associated with a struct type. Structs and enums (discussed in Chapter 6) are the building blocks for creating new types in your program’s domain to take full advantage of Rust’s compile-time type checking.

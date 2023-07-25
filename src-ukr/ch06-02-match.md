@@ -1,40 +1,40 @@
 <!-- Old heading. Do not remove or links may break. -->
 <a id="the-match-control-flow-operator"></a>
 
-## Конструкція Потоку Виконання `match`
+## The `match` Control Flow Construct
 
-Rust має вкрай потужну конструкцію управління, що зветься `match`, яка дозволяє нам порівнювати значення із кількома шаблонами та потім виконати код, виходячи з того, який шаблон відповідає цьому значенню. Шаблони можуть складатися з літералів, імен змінних, символів узагальнення і багатьох інших речей; [Розділ 18][ch18-00-patterns]<!-- ignore --> розповідає про всі різні види шаблонів і що вони роблять. Потужність `match` походить від виразності шаблонів і того факту, що компілятор перевіряє, щоб усі можливі ситуації були оброблені.
+Rust has an extremely powerful control flow construct called `match` that allows you to compare a value against a series of patterns and then execute code based on which pattern matches. Patterns can be made up of literal values, variable names, wildcards, and many other things; [Chapter 18][ch18-00-patterns]<!-- ignore --> covers all the different kinds of patterns and what they do. The power of `match` comes from the expressiveness of the patterns and the fact that the compiler confirms that all possible cases are handled.
 
-Вираз `match` можна уявити собі як сортувальну машину для монет: монети ковзають жолобом з отворами різних розмірів, і кожна монета падає крізь перший отвір, в який вона проходить. Так само значення проходить крізь кожен шаблон в `match`, і на першому шаблоні, якому воно відповідає, значення "провалюється" в пов'язаний блок коду, де може бути використане при його виконанні.
+Think of a `match` expression as being like a coin-sorting machine: coins slide down a track with variously sized holes along it, and each coin falls through the first hole it encounters that it fits into. In the same way, values go through each pattern in a `match`, and at the first pattern the value “fits,” the value falls into the associated code block to be used during execution.
 
-Оскільки ми згадали монети, використаємо їх як приклад використання `match`! Ми можемо написати функцію, що приймає невідому монету США і, так само як і лічильна машина, визначає, яка це монета і повертає її значення в центах, як показано в Блоці коду 6-3.
+Speaking of coins, let’s use them as an example using `match`! We can write a function that takes an unknown US coin and, in a similar way as the counting machine, determines which coin it is and returns its value in cents, as shown in Listing 6-3.
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-03/src/main.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 6-3: Енум і вираз `match` із варіантами енума як шаблонами</span>
+<span class="caption">Listing 6-3: An enum and a `match` expression that has the variants of the enum as its patterns</span>
 
-Розберімо `match` у функції `value_in_cents`. По-перше, ми пишемо ключове слово `match`, за яким іде вираз, у цьому випадку - значення `coin`. Це дуже схоже на вираз, що використовується в `if`, але є велика відмінність: в `if` вираз має повертати булеве значення, а тут значення може бути будь-якого типу. Тип `coin` у цьому прикладі - енум `Coin`, який ми визначили у першому рядку.
+Let’s break down the `match` in the `value_in_cents` function. First we list the `match` keyword followed by an expression, which in this case is the value `coin`. This seems very similar to a conditional expression used with `if`, but there’s a big difference: with `if`, the condition needs to evaluate to a Boolean value, but here it can be any type. The type of `coin` in this example is the `Coin` enum that we defined on the first line.
 
-Далі йдуть рукави `match`. Рукав має дві частини: шаблон і код. Перший рукав має шаблон, що є значенням `Coin::Penny`, після чого оператор `=>` відокремлює шаблон і код, що буде виконано. Код у цьому випадку - просто значення `1`. Кожен рукав відокремлений від наступного комою.
+Next are the `match` arms. An arm has two parts: a pattern and some code. The first arm here has a pattern that is the value `Coin::Penny` and then the `=>` operator that separates the pattern and the code to run. The code in this case is just the value `1`. Each arm is separated from the next with a comma.
 
-Коли виконується вираз `match`, значення по черзі порівнюється із шаблоном кожного рукава. Якщо шаблон відповідає значенню, виконується пов'язаний із цим шаблоном код. Якщо шаблон не відповідає значенню, виконання передається наступному рукаву, як монетка в сортувальній машині. Рукавів може бути стільки, скільки нам потрібно: у Блоці коду 6-3 `match` має чотири рукави.
+When the `match` expression executes, it compares the resultant value against the pattern of each arm, in order. If a pattern matches the value, the code associated with that pattern is executed. If that pattern doesn’t match the value, execution continues to the next arm, much as in a coin-sorting machine. We can have as many arms as we need: in Listing 6-3, our `match` has four arms.
 
-Код, пов'язаний з кожним рукавом, є виразом, і кінцеве значення виразу у відповідному рукаві є значенням, яке повертається для всього виразу `match`.
+The code associated with each arm is an expression, and the resultant value of the expression in the matching arm is the value that gets returned for the entire `match` expression.
 
-Фігурні дужки зазвичай не використовуються, якщо код рукава match невеликий, як у Блоці коду 6-3, де кожен рукав просто повертає значення. Якщо ви хочете виконати багато рядків коду у рукаві match, то маєте скористатися фігурними дужками, кома після яких в такому разі не обов'язкова. Наприклад, наступний код виводитиме “Lucky penny!” кожного разу, коли метод викличуть для `Coin::Penny`, але також поверне останнє значення блоку, тобто `1`:
+We don’t typically use curly brackets if the match arm code is short, as it is in Listing 6-3 where each arm just returns a value. If you want to run multiple lines of code in a match arm, you must use curly brackets, and the comma following the arm is then optional. For example, the following code prints “Lucky penny!” every time the method is called with a `Coin::Penny`, but still returns the last value of the block, `1`:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-08-match-arm-multiple-lines/src/main.rs:here}}
 ```
 
-### Шаблони, які Прив’язуються до Значень
+### Patterns That Bind to Values
 
-Інша корисна властивість рукавів match полягає в тому, що вони можуть зв'язуватися з частинами значення, що відповідає шаблону. Таким чином ми можемо дістати значення з варіантів енумів.
+Another useful feature of match arms is that they can bind to the parts of the values that match the pattern. This is how we can extract values out of enum variants.
 
-Наприклад, змінімо один з варіантів енума, щоб він мав дані усередині. З 1999 по 2008 роки Сполучені Штати карбували четвертаки з різними дизайнами для кожного з 50 штатів на одному боці. Інші монети не мають окремих дизайнів для штатів, тому лише четвертаки мають таке додаткове значення. Ми можемо додати цю інформацію до нашого `енума`, змінивши варіант `Quarter`, аби він містив у собі значення `UsState`, що й зроблено в Блоці коду 6-4.
+As an example, let’s change one of our enum variants to hold data inside it. From 1999 through 2008, the United States minted quarters with different designs for each of the 50 states on one side. No other coins got state designs, so only quarters have this extra value. We can add this information to our `enum` by changing the `Quarter` variant to include a `UsState` value stored inside it, which we’ve done in Listing 6-4.
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-04/src/main.rs:here}}
@@ -43,21 +43,21 @@ Rust має вкрай потужну конструкцію управлінн�
 
 <span class="caption">Listing 6-4: A `Coin` enum in which the `Quarter` variant also holds a `UsState` value</span>
 
-Уявімо, що наш друг намагається зібрати всі 50 четвертаків різних штатів. Сортуючи дріб'язок по типах монет, ми також будемо називати назви штатів, пов'язаних з кожним четвертаком, щоб, якщо такого наш друг такого не має, він зміг би додати його до своєї колекції.
+Let’s imagine that a friend is trying to collect all 50 state quarters. While we sort our loose change by coin type, we’ll also call out the name of the state associated with each quarter so that if it’s one our friend doesn’t have, they can add it to their collection.
 
-У виразі match у цьому коді ми додаємо змінну, що зветься `state` до шаблону, що відповідає значенню варіанту `Coin::Quarter`. Коли шаблон `Coin::Quarter` буде відповідним до виразу, змінна `state` зв'яжеться зі значенням штату цього четвертака. Тоді ми можемо використати `state` у коді цього рукава, ось так:
+In the match expression for this code, we add a variable called `state` to the pattern that matches values of the variant `Coin::Quarter`. When a `Coin::Quarter` matches, the `state` variable will bind to the value of that quarter’s state. Then we can use `state` in the code for that arm, like so:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-09-variable-in-pattern/src/main.rs:here}}
 ```
 
-Якщо ми викличемо `value_in_cents(Coin::Quarter(UsState::Alaska))`, значення `coin` буде `Coin::Quarter(UsState::Alaska)`. Коли ми порівняємо це значення з усіма рукавами, то не підійде жоден, поки ми не дістанемося `Coin::Quarter(state)`. У цьому місці `state` буде зв'язане зі значенням `UsState::Alaska`. Ми зможемо тоді скористатися цим зв'язуванням у виразі `println!`, отримавши таким чином внутрішнє значення штату з енума `Coin` для варіанту `Quarter`.
+If we were to call `value_in_cents(Coin::Quarter(UsState::Alaska))`, `coin` would be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each of the match arms, none of them match until we reach `Coin::Quarter(state)`. At that point, the binding for `state` will be the value `UsState::Alaska`. We can then use that binding in the `println!` expression, thus getting the inner state value out of the `Coin` enum variant for `Quarter`.
 
-### Зіставлення з `Option<T>`
+### Matching with `Option<T>`
 
-У попередньому підрозділі ми хотіли дістати внутрішнє значення типу `T` з варіанту `Some`, коли працювали з `Option<T>`; з `Option<T>` ми теж можемо скористатися конструкцією `match`, так само як робили з енумом `Coin`! Замість монет ми порівнюватимемо варіанти `Option<T>`, але вираз `match` при цьому працює тим самим чином.
+In the previous section, we wanted to get the inner `T` value out of the `Some` case when using `Option<T>`; we can also handle `Option<T>` using `match`, as we did with the `Coin` enum! Instead of comparing coins, we’ll compare the variants of `Option<T>`, but the way the `match` expression works remains the same.
 
-Хай, скажімо, ми хочемо написати функцію, що приймає `Option<i32>`, і якщо він містить значення, додає один до цього значення. А якщо там немає значення всередині, функція має повертати значення `None` і не намагатися виконати жодних дій.
+Let’s say we want to write a function that takes an `Option<i32>` and, if there’s a value inside, adds 1 to that value. If there isn’t a value inside, the function should return the `None` value and not attempt to perform any operations.
 
 This function is very easy to write, thanks to `match`, and will look like Listing 6-5.
 
@@ -66,63 +66,63 @@ This function is very easy to write, thanks to `match`, and will look like Listi
 ```
 
 
-<span class="caption">Блок коду 6-5: функція, що застосовує вираз `match` до `Option<i32>`</span>
+<span class="caption">Listing 6-5: A function that uses a `match` expression on an `Option<i32>`</span>
 
-Розгляньмо детальніше перше виконання `plus_one`. Коли ми викликаємо `plus_one(five)`, змінна `x` у тілі `plus_one` матиме значення `Some(5)`. Далі ми порівнюємо це значення з кожним рукавом match:
+Let’s examine the first execution of `plus_one` in more detail. When we call `plus_one(five)`, the variable `x` in the body of `plus_one` will have the value `Some(5)`. We then compare that against each match arm:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 
-Значення `Some(5)` не відповідає шаблону `None`, тому ми переходимо до наступного рукава:
+The `Some(5)` value doesn’t match the pattern `None`, so we continue to the next arm:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:second_arm}}
 ```
 
-Чи відповідає `Some(5)` шаблону `Some(i)`? Так! Ми маємо той самий варіант. Змінна `i` зв'язується зі значенням, що міститься в `Some`, тобто `i` набуває значення `5`. Далі виконується код у рукаві match, тобто додається один до значення `i` і створюється нове значення `Some` із результатом `6` всередині.
+Does `Some(5)` match `Some(i)`? It does! We have the same variant. The `i` binds to the value contained in `Some`, so `i` takes the value `5`. The code in the match arm is then executed, so we add 1 to the value of `i` and create a new `Some` value with our total `6` inside.
 
-Тепер розгляньмо другий виклик `plus_one` у Блоці коду 6-5, де `x` дорівнює `None`. Ми входимо в `match` і порівнюємо перший рукав:
+Now let’s consider the second call of `plus_one` in Listing 6-5, where `x` is `None`. We enter the `match` and compare to the first arm:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 
-Підходить! Немає значення, до якого треба додавати, і програма зупиняється і повертає значення `None`, що стоїть праворуч від `=>`. Оскільки перший рукав відповідає значенню, решта рукавів не перевіряються.
+It matches! There’s no value to add to, so the program stops and returns the `None` value on the right side of `=>`. Because the first arm matched, no other arms are compared.
 
-Комбінування `match` і енумів корисне в багатьох ситуаціях. Ви часто бачитимете цей шаблон у коді Rust: `match` із енумом, зв'язування змінної з даними усередині, і виконання коду відповідно до цього. Це спершу трохи мудровано, але щойно ви звикнете до цього, то бажатимете мати таку конструкцію в усіх мовах. Ця конструкція - незмінний улюбленець користувачів Rust.
+Combining `match` and enums is useful in many situations. You’ll see this pattern a lot in Rust code: `match` against an enum, bind a variable to the data inside, and then execute code based on it. It’s a bit tricky at first, but once you get used to it, you’ll wish you had it in all languages. It’s consistently a user favorite.
 
-### Зіставлення є Вичерпними
+### Matches Are Exhaustive
 
-Є ще один бік `match`, що ми маємо обговорити: шаблони рукавів мають покривати всі можливості. Розгляньте таку версію нашої функції `plus_one`, в якій є вада і вона не скомпілюється:
+There’s one other aspect of `match` we need to discuss: the arms’ patterns must cover all possibilities. Consider this version of our `plus_one` function, which has a bug and won’t compile:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/src/main.rs:here}}
 ```
 
-Ми не обробили варіанту `None`, тому цей код призводить до вади. На щастя, Rust знає, як виявляти такі вади. Якщо ми спробуємо скомпілювати цей код, то отримаємо таке повідомлення про помилку:
+We didn’t handle the `None` case, so this code will cause a bug. Luckily, it’s a bug Rust knows how to catch. If we try to compile this code, we’ll get this error:
 
 ```console
 {{#include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/output.txt}}
 ```
 
-Rust знає, що ми не покрили усі можливі випадки, і навіть знає, який саме шаблон ми забули! Match в Rust *вичерпні*: ми маємо вичерпати всі можливі ситуації, щоб код був коректним. Особливо у випадку з `Option<T>`, коли Rust, запобігаючи тому, щоб ми забули явно обробити випадок `None`, захищає нас від припущення, що ми маємо значення, коли ми можемо мати null, таким чином припускаючись помилки на мільярд доларів, про яку ми говорили вище.
+Rust knows that we didn’t cover every possible case, and even knows which pattern we forgot! Matches in Rust are *exhaustive*: we must exhaust every last possibility in order for the code to be valid. Especially in the case of `Option<T>`, when Rust prevents us from forgetting to explicitly handle the `None` case, it protects us from assuming that we have a value when we might have null, thus making the billion-dollar mistake discussed earlier impossible.
 
-### Шаблони для Всіх Випадків і Заповнювач `_`
+### Catch-all Patterns and the `_` Placeholder
 
-При роботі з енумами нам може знадобитися особлива дія для кількох конкретних значень, а для всіх інших значень - одна дія за замовчуванням. Уявіть, що ми розробляємо гру, де, якщо ви викинули 3 на кубику, ваш гравець не рухається, а отримує нового модного капелюха. Якщо ви викинете 7, ваш гравець втратить модного капелюха. Для всіх інших значень, ваш гравець рухається на цю кількість клітинок на ігровому полі. Ось `match`, що реалізовує цю логіку, де результат кидання кубика жорстко задано замість випадкового значення, і решта логіки представлена функціями без тіл, бо ми насправді реалізуємо їх поза областю видимості цього прикладу:
+Using enums, we can also take special actions for a few particular values, but for all other values take one default action. Imagine we’re implementing a game where, if you roll a 3 on a dice roll, your player doesn’t move, but instead gets a new fancy hat. If you roll a 7, your player loses a fancy hat. For all other values, your player moves that number of spaces on the game board. Here’s a `match` that implements that logic, with the result of the dice roll hardcoded rather than a random value, and all other logic represented by functions without bodies because actually implementing them is out of scope for this example:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-15-binding-catchall/src/main.rs:here}}
 ```
 
-У перших двох рукавів шаблони - літерали зі значеннями `3` і `7`. У останнього рукава, що покриває всі інші можливі значення. шаблон - це змінна, яку ми вирішили назвати `other`. Код, що виконується в цьому рукаві, використовує змінну `other`, передаючи її у функцію `move_player`.
+For the first two arms, the patterns are the literal values `3` and `7`. For the last arm that covers every other possible value, the pattern is the variable we’ve chosen to name `other`. The code that runs for the `other` arm uses the variable by passing it to the `move_player` function.
 
-Цей код компілюється, хоча ми не перерахували усі можливі значення, яких може набути `u8`, бо останній шаблон відповідає всім значенням, які не були вказані окремо. Цей шаблон для всіх випадків задовольняє вимозі вичерпності `match`. Зверніть увагу, що шаблон для всіх випадків розміщується останнім, бо шаблони обчислюються послідовно. Якщо ми розмістимо рукав для всіх випадків раніше, решта рукавів ніколи не запустяться, тому Rust попередить нас, якщо ми після нього додамо ще рукави!
+This code compiles, even though we haven’t listed all the possible values a `u8` can have, because the last pattern will match all values not specifically listed. This catch-all pattern meets the requirement that `match` must be exhaustive. Note that we have to put the catch-all arm last because the patterns are evaluated in order. If we put the catch-all arm earlier, the other arms would never run, so Rust will warn us if we add arms after a catch-all!
 
-Rust також має шаблон, яким можна скористатися, коли нам потрібно обробити всі випадки, але ми не хочемо *використовувати* значення у шаблоні для всіх випадків: `_` є спеціальним шаблоном, що відповідає будь-якому значенню і не зв'язується із цим значенням. Це каже Rust, що ми не збираємося використовувати це значення, і тому він не попереджатиме про невикористану змінну.
+Rust also has a pattern we can use when we want a catch-all but don’t want to *use* the value in the catch-all pattern: `_` is a special pattern that matches any value and does not bind to that value. This tells Rust we aren’t going to use the value, so Rust won’t warn us about an unused variable.
 
-Змінімо правила гри: тепер, якщо ви викинете щось, крім 3 чи 7, то маєте кидати кубик знову. Нам більше не потрібне значення для всіх випадків, тож ми можемо змінити наш код і скористатися `_` замість змінної на ім'я `other`:
+Let’s change the rules of the game: now, if you roll anything other than a 3 or a 7, you must roll again. We no longer need to use the catch-all value, so we can change our code to use `_` instead of the variable named `other`:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-16-underscore-catchall/src/main.rs:here}}
@@ -130,16 +130,15 @@ Rust також має шаблон, яким можна скористатис�
 
 This example also meets the exhaustiveness requirement because we’re explicitly ignoring all other values in the last arm; we haven’t forgotten anything.
 
-Нарешті, змінимо правила гри ще раз, так щоб нічого не ставалося на вашому ході, якщо ви викинули щось інше, крім 3 чи 7. Це можна виразити одиничним значенням (тип порожнього кортежу, який ми згадували у підрозділі [“Тип кортеж”][tuples]<!-- ignore --> ) у коді, що знаходиться у рукаві `_`:
+Finally, we’ll change the rules of the game one more time so that nothing else happens on your turn if you roll anything other than a 3 or a 7. We can express that by using the unit value (the empty tuple type we mentioned in [“The Tuple Type”][tuples]<!-- ignore --> section) as the code that goes with the `_` arm:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-17-underscore-unit/src/main.rs:here}}
 ```
 
-Тут ми явно говоримо Rust, що не збираємося використовувати жодного іншого значення, яке б не відповідало шаблону якогось з попередніх рукавів, і ми не хочемо виконувати жодного коду в цьому випадку.
+Here, we’re telling Rust explicitly that we aren’t going to use any other value that doesn’t match a pattern in an earlier arm, and we don’t want to run any code in this case.
 
-Більш детально про шаблони і зіставлення з ними йдеться у [Розділі 18][ch18-00-patterns]<!-- ignore -->. Ну а поки що ми перейдемо до конструкції `if let`, яка може бути корисною в ситуаціях, де вираз `match` буде надто багатослівним.
+There’s more about patterns and matching that we’ll cover in [Chapter 18][ch18-00-patterns]<!-- ignore -->. For now, we’re going to move on to the `if let` syntax, which can be useful in situations where the `match` expression is a bit wordy.
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
-[ch18-00-patterns]: ch18-00-patterns.html
 [ch18-00-patterns]: ch18-00-patterns.html

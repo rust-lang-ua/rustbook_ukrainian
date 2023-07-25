@@ -1,35 +1,36 @@
-## Лаконічний Потік Виконання з `if let`
+## Concise Control Flow with `if let`
 
-Конструкція `if let` дозволяє вам комбінувати `if` та `let` менш багатослівно, щоб обробляти значення, що відповідають одному шаблону, і ігнорувати інші. Розглянемо програму у Блоці коду 6-6, що працює зі значенням `Option<u8>` у змінній `config_max`, але хоче виконувати код лише коли значення є варіантом `Some`.
+The `if let` syntax lets you combine `if` and `let` into a less verbose way to handle values that match one pattern while ignoring the rest. Consider the program in Listing 6-6 that matches on an `Option<u8>` value in the `config_max` variable but only wants to execute code if the value is the `Some` variant.
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-06/src/main.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 6-6: `match`, що виконує код лише зі значенням `Some`</span>
+<span class="caption">Listing 6-6: A `match` that only cares about executing code when the value is `Some`</span>
 
-Якщо значення є `Some`, ми виводимо значення у варіанті `Some`, зв'язавши у шаблоні це значення зі змінною `max`. Ми не хочемо нічого робити зі значенням `None`. Щоб задовольнити вираз `match`, нам доводиться додати `_ =>()` після обробки лише одного варіанту, що є набридливо надлишковим.
+If the value is `Some`, we print out the value in the `Some` variant by binding the value to the variable `max` in the pattern. We don’t want to do anything with the `None` value. To satisfy the `match` expression, we have to add `_ =>
+()` after processing just one variant, which is annoying boilerplate code to add.
 
-Натомість ми можемо записати це коротше за допомогою `if let`. Наступний код робить те саме, що й `match` з Блоку коду 6-6:
+Instead, we could write this in a shorter way using `if let`. The following code behaves the same as the `match` in Listing 6-6:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-12-if-let/src/main.rs:here}}
 ```
 
-Конструкція `if let` бере шаблон і вираз, розділені знаком рівності. Вона працює так само як і `match`, де вираз стоїть після `match`, а шаблон є його першим рукавом. У цьому випадку шаблоном буде `Some(max)`, і `max` зв'язується зі значенням всередині `Some`. Тепер ми можемо використати `max` у тілі блоку `if let` так само як ми використали `max` у відповідному рукаві `match`. Код у блоці `if let` не буде виконано, якщо значення не відповідає шаблону.
+The syntax `if let` takes a pattern and an expression separated by an equal sign. It works the same way as a `match`, where the expression is given to the `match` and the pattern is its first arm. In this case, the pattern is `Some(max)`, and the `max` binds to the value inside the `Some`. We can then use `max` in the body of the `if let` block in the same way we used `max` in the corresponding `match` arm. The code in the `if let` block isn’t run if the value doesn’t match the pattern.
 
-Використання `if let` означає, що вам треба менше друкувати, менше ставити відступів і писати менше зайвого коду. Разом з тим, ми втрачаємо перевірку на вичерпність, до якої зобов'язує `match`. Вибір між `match` та `if let` залежить від того, що ви робите у конкретній ситуації та чи лаконічність варта втрати перевірки на вичерпність.
+Using `if let` means less typing, less indentation, and less boilerplate code. However, you lose the exhaustive checking that `match` enforces. Choosing between `match` and `if let` depends on what you’re doing in your particular situation and whether gaining conciseness is an appropriate trade-off for losing exhaustive checking.
 
 In other words, you can think of `if let` as syntax sugar for a `match` that runs code when the value matches one pattern and then ignores all other values.
 
-У `if let` можна також додати `else`. Блок, що іде після `else` - це той самий блок, що був би у випадку `_` у виразу `match`, еквівалентному нашому `if let` та `else`. Згадаємо визначення енума `Coin` у Блоці коду 6-4, де варіант `Quarter` також включав значення `UsState`. Якби ми захотіли полічити усе, крім четвертаків, і водночас виводити штат з четвертаків, ми могли б зробити це за допомогою десь такого виразу `match`:
+We can include an `else` with an `if let`. The block of code that goes with the `else` is the same as the block of code that would go with the `_` case in the `match` expression that is equivalent to the `if let` and `else`. Recall the `Coin` enum definition in Listing 6-4, where the `Quarter` variant also held a `UsState` value. If we wanted to count all non-quarter coins we see while also announcing the state of the quarters, we could do that with a `match` expression, like this:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-13-count-and-announce-match/src/main.rs:here}}
 ```
 
-Або ж ми могли б скористатися виразом `if let` та `else` ось таким чином:
+Or we could use an `if let` and `else` expression, like this:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-14-count-and-announce-if-let-else/src/main.rs:here}}
@@ -37,11 +38,11 @@ In other words, you can think of `if let` as syntax sugar for a `match` that run
 
 If you have a situation in which your program has logic that is too verbose to express using a `match`, remember that `if let` is in your Rust toolbox as well.
 
-## Підсумок
+## Summary
 
-Ми щойно розібрали, як використовувати енуми для створення власних типів, які можуть набувати одне з множини перелічених значень. Ми показали, як тип `Option<T>` зі стандартної бібліотеки допомагає використовувати систему типів для уникання помилок. Коли значення енума мають дані всередині, можна скористатися `match` чи `if let`, щоб витягти та використати ці значення, залежно від того, скільки різних варіантів вам треба обробити.
+We’ve now covered how to use enums to create custom types that can be one of a set of enumerated values. We’ve shown how the standard library’s `Option<T>` type helps you use the type system to prevent errors. When enum values have data inside them, you can use `match` or `if let` to extract and use those values, depending on how many cases you need to handle.
 
-Ваші програми Rust тепер можуть виражати концепції з проблемної області за допомогою структур та енумів. Створення власних типів для використання у вашому API гарантує безпеку типів: компілятор забезпечить, що ваші функції отримають лише значення тих типів, на які ці функції очікують.
+Your Rust programs can now express concepts in your domain using structs and enums. Creating custom types to use in your API ensures type safety: the compiler will make certain your functions only get values of the type each function expects.
 
 In order to provide a well-organized API to your users that is straightforward to use and only exposes exactly what your users will need, let’s now turn to Rust’s modules.
 

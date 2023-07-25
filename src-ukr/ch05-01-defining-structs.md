@@ -1,21 +1,21 @@
-## Визначення та Створення Екземпляра Структури
+## Defining and Instantiating Structs
 
-Структури подібні до кортежів, про які ми говорили в підрозділі [“Тип кортеж”][tuples]<!--
-ignore --> Розділу 3, бо обидва складаються з кількох пов'язаних значень. Як і у кортежах, частини структур можуть бути різних типів. На відміну від кортежів, у структурі ви називаєте кожен елемент даних, щоб було зрозуміло, що ці значення означають. Завдяки цим іменам структури гнучкіші за кортежі: ви не мусите покладатися на порядок даних, щоб визначати чи отримувати доступ до значень екземпляра.
+Structs are similar to tuples, discussed in [“The Tuple Type”][tuples]<!--
+ignore --> section, in that both hold multiple related values. Like tuples, the pieces of a struct can be different types. Unlike with tuples, in a struct you’ll name each piece of data so it’s clear what the values mean. Adding these names means that structs are more flexible than tuples: you don’t have to rely on the order of the data to specify or access the values of an instance.
 
-Для визначення структури, ми вводимо ключове слово `struct` і називаємо всю структуру. Ім'я структури має описувати сенс групування цих елементів даних. Потім, у фігурних дужках, ми визначаємо імена і типи елементів даних, які звуться *полями*. Наприклад, Блок коду 5-1 показує структуру, що зберігає інформацію про обліковий запис користувача.
+To define a struct, we enter the keyword `struct` and name the entire struct. A struct’s name should describe the significance of the pieces of data being grouped together. Then, inside curly brackets, we define the names and types of the pieces of data, which we call *fields*. For example, Listing 5-1 shows a struct that stores information about a user account.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-01/src/main.rs:here}}
 ```
 
-<span class="caption">Блок коду 5-1: Визначення структури `User`</span>
+<span class="caption">Listing 5-1: A `User` struct definition</span>
 
-Щоб скористатися структурою по визначенню, ми створюємо *екземпляр* цієї структури, визначаючи конкретні значення для кожного поля. Ми створюємо екземпляр, вказуючи назву структури, а потім додаємо фігурні дужки, що містять пари *ключ: значення*, де ключі - це імена полів, а значення - дані, які ми хочемо зберігати в цих полях. Поля не обов'язково вказувати у тому ж порядку, в якому вони були проголошені в структурі. Іншими словами, визначення структури - це загальний шаблон типу, а екземпляри заповнюють цей шаблон конкретними даними, щоб створити значення цього типу. Наприклад, ми можемо проголосити конкретного користувача, як показано в Блоці коду 5-2.
+To use a struct after we’ve defined it, we create an *instance* of that struct by specifying concrete values for each of the fields. We create an instance by stating the name of the struct and then add curly brackets containing *key: value* pairs, where the keys are the names of the fields and the values are the data we want to store in those fields. We don’t have to specify the fields in the same order in which we declared them in the struct. In other words, the struct definition is like a general template for the type, and instances fill in that template with particular data to create values of the type. For example, we can declare a particular user as shown in Listing 5-2.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-02/src/main.rs:here}}
@@ -24,22 +24,22 @@ ignore --> Розділу 3, бо обидва складаються з кіл�
 
 <span class="caption">Listing 5-2: Creating an instance of the `User` struct</span>
 
-Щоб отримати конкретне значення зі структури, використовують записом через точку. Якщо ми хочемо отримати адресу електронної пошти користувача, ми можемо написати `user1.email`. Якщо екземпляр є мутабельним, ми можемо змінити значення за допомогою запису через точку і присвоюванням конкретному полю. Блок коду 5-3 показує, як змінити значення поля `email` мутабельного екземпляра `User`.
+To get a specific value from a struct, we use dot notation. For example, to access this user’s email address, we use `user1.email`. If the instance is mutable, we can change a value by using the dot notation and assigning into a particular field. Listing 5-3 shows how to change the value in the `email` field of a mutable `User` instance.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-03/src/main.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 5-3: Зміна значення поля `email` екземпляру `User`</span>
+<span class="caption">Listing 5-3: Changing the value in the `email` field of a `User` instance</span>
 
-Зверніть увагу, що мутабельним має бути весь екземпляр; Rust не дозволяє позначати лише окремі поля як мутабельні. Як і з будь-яким виразом, ми можемо написати новий екземпляр останнім виразом у тілі функції, щоб неявно повернути цей новий екземпляр.
+Note that the entire instance must be mutable; Rust doesn’t allow us to mark only certain fields as mutable. As with any expression, we can construct a new instance of the struct as the last expression in the function body to implicitly return that new instance.
 
-Блок коду 5-4 демонструє функцію `build_user`, що повертає екземпляр `User` зі встановленими адресою та ім'ям. Поле `active` отримує значення `true`, а `sign_in_count` - значення `1`.
+Listing 5-4 shows a `build_user` function that returns a `User` instance with the given email and username. The `active` field gets the value of `true`, and the `sign_in_count` gets a value of `1`.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-04/src/main.rs:here}}
@@ -48,89 +48,89 @@ ignore --> Розділу 3, бо обидва складаються з кіл�
 
 <span class="caption">Listing 5-4: A `build_user` function that takes an email and username and returns a `User` instance</span>
 
-Має сенс називати аргументи такої функції тими ж іменами, що й імена відповідних полів структури, але необхідність повторювати імена полів `email` та `username` утомлює. Якщо у структурі більше полів, повторення кожного імені дратує ще більше. На щастя, є зручне скорочення!
+It makes sense to name the function parameters with the same name as the struct fields, but having to repeat the `email` and `username` field names and variables is a bit tedious. If the struct had more fields, repeating each name would get even more annoying. Luckily, there’s a convenient shorthand!
 
 <!-- Old heading. Do not remove or links may break. -->
 <a id="using-the-field-init-shorthand-when-variables-and-fields-have-the-same-name"></a>
 
-### Скорочена Ініціалізація Полів
+### Using the Field Init Shorthand
 
-Оскільки назви параметрів та полів структури є абсолютно однаковими у Блоці коду 5-4, ми можемо використати синтаксис *скороченої ініціалізації полів* для переписування `build_user` так, щоб він поводився точно так само, але не містив повторення `username` і `email`, як показано у Блоці коду 5-5.
+Because the parameter names and the struct field names are exactly the same in Listing 5-4, we can use the *field init shorthand* syntax to rewrite `build_user` so it behaves exactly the same but doesn’t have the repetition of `username` and `email`, as shown in Listing 5-5.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-05/src/main.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 5-5: функція `build_user`, що використовує скорочену ініціалізацію полів, бо параметри `username` і `email` мають такі самі назви, як і поля структури</span>
+<span class="caption">Listing 5-5: A `build_user` function that uses field init shorthand because the `username` and `email` parameters have the same name as struct fields</span>
 
-Ми створюємо новий екземпляр структури `User`, яка має поле з назвою `email`. Ми хочемо встановити значення поля `email` у значення параметра `email` функції `build_user`. Оскільки поле `email` і параметр `email` мають одну назву, можна писати скорочено `email` замість `email: email`.
+Here, we’re creating a new instance of the `User` struct, which has a field named `email`. We want to set the `email` field’s value to the value in the `email` parameter of the `build_user` function. Because the `email` field and the `email` parameter have the same name, we only need to write `email` rather than `email: email`.
 
-### Створення Екземплярів Структур з Інших Екземплярів Використовуючи Синтаксис Оновлення
+### Creating Instances from Other Instances with Struct Update Syntax
 
-Часто буває корисним створити новий екземпляр структури, що бере більшу частину даних з екземпляра, що вже існує, проте деякі змінює. Ви можете зробити так за допомогою *синтаксису оновлення структури*.
+It’s often useful to create a new instance of a struct that includes most of the values from another instance, but changes some. You can do this using *struct update syntax*.
 
-Для початку, Блок коду 5-6 показує, як створити новий екземпляр `User`, що зветься `user2`, без синтаксису оновлення. Ми виставляємо нове значення поля `email`, проте решта полів використовує значення зі структури `user1`, створеної у Блоці коду 5-2.
+First, in Listing 5-6 we show how to create a new `User` instance in `user2` regularly, without the update syntax. We set a new value for `email` but otherwise use the same values from `user1` that we created in Listing 5-2.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 5-6: Створення нового екземпляру `User` з деякими значеннями з `user1`</span>
+<span class="caption">Listing 5-6: Creating a new `User` instance using one of the values from `user1`</span>
 
-Синтаксис оновлення структури дає той самий результат із меншою кількістю коду, як показано у Блоці коду 5-7. Запис `..` позначає, що решта полів, що їх не було явно виставлено, отримають ті значення, що були в заданому екземплярі.
+Using struct update syntax, we can achieve the same effect with less code, as shown in Listing 5-7. The syntax `..` specifies that the remaining fields not explicitly set should have the same value as the fields in the given instance.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-07/src/main.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 5-7: використання синтаксису оновлення структури для встановлення нового значення `email` у екземплярі `User`, але використовуючи решту значень з `user1`</span>
+<span class="caption">Listing 5-7: Using struct update syntax to set a new `email` value for a `User` instance but to use the rest of the values from `user1`</span>
 
-Код у Блоці коду 5-7 також створює екземпляр `user2`, що має відмінне значення `email`, але має ті ж значення `username`, `active` та `sign_in_count`, що й `user1`. Запис `..user1` має бути останнім, щоб позначити, що решта полів отримають значення з відповідних полів у `user1`, але ми можемо зазначати значення для будь-якої кількості полів у будь-якому порядку, без урахування того, як вони йдуть у визначенні структури.
+The code in Listing 5-7 also creates an instance in `user2` that has a different value for `email` but has the same values for the `username`, `active`, and `sign_in_count` fields from `user1`. The `..user1` must come last to specify that any remaining fields should get their values from the corresponding fields in `user1`, but we can choose to specify values for as many fields as we want in any order, regardless of the order of the fields in the struct’s definition.
 
-Зверніть увагу, що синтаксис оновлення структури використовує `=`, як при присвоєнні; це тому, що він переміщує дані, як показано в підрозділі ["Способи взаємодії змінних і даних: переміщення"][move]<!-- ignore --> . У цьому прикладі, ми більше не зможемо використовувати `user1` після створення `user2`, бо `String` з поля `username` структури `user1` було переміщено у `user2`. Якби ми надали `user2` нові значення типу `String` для обох `email` і `username` і таким чином використали тільки значення `active` і `sign_in_count` з `user1`, тоді `user1` все ще був би коректним після створення `user2`. Типи полів `active` і `sign_in_count` реалізовують трейт `Copy`, тому застосовується поведінка, яку ми обговорювали в підрозділі ["Дані в стеку: копіювання"][copy]<!-- ignore --> .
+Note that the struct update syntax uses `=` like an assignment; this is because it moves the data, just as we saw in the [“Variables and Data Interacting with Move”][move]<!-- ignore --> section. In this example, we can no longer use `user1` as a whole after creating `user2` because the `String` in the `username` field of `user1` was moved into `user2`. If we had given `user2` new `String` values for both `email` and `username`, and thus only used the `active` and `sign_in_count` values from `user1`, then `user1` would still be valid after creating `user2`. Both `active` and `sign_in_count` are types that implement the `Copy` trait, so the behavior we discussed in the [“Stack-Only Data: Copy”][copy]<!-- ignore --> section would apply.
 
-### Використання Структур-Кортежів без Названих Полів для Створення Нових Типів
+### Using Tuple Structs Without Named Fields to Create Different Types
 
-Rust також підтримує структури, які виглядають схожими на кортежі, що звуться *структури-кортежі* (tuple struct). Структури-кортежі надають значення структурі, бо мають назву, але не мають назв полів, тільки типи. Структури-кортежі корисні, коли ви хочете дати кортежу ім'я і зробити кортеж окремим типом, але називати кожне поле, як у звичайній структурі, буде надто багатослівним чи надмірним.
+Rust also supports structs that look similar to tuples, called *tuple structs*. Tuple structs have the added meaning the struct name provides but don’t have names associated with their fields; rather, they just have the types of the fields. Tuple structs are useful when you want to give the whole tuple a name and make the tuple a different type from other tuples, and when naming each field as in a regular struct would be verbose or redundant.
 
-Щоб визначити структуру-кортеж, треба вказати ключове слово `struct` і ім'я структури, а потім типи в кортежі. Наприклад, ось визначення і приклади застосування двох структур-кортежів, що звуться `Color` і `Point`:
+To define a tuple struct, start with the `struct` keyword and the struct name followed by the types in the tuple. For example, here we define and use two tuple structs named `Color` and `Point`:
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-01-tuple-structs/src/main.rs}}
 ```
 
-Зауважте, що значення `black` та `origin` мають різні типи, бо вони є екземплярами різних структур-кортежів. Кожна визначена нами структура має свій власний тип, навіть якщо поля структур мають однакові типи. Наприклад, функція, що приймає параметр типу `Color`, не може прийняти аргументом `Point`, хоча обидва типи складаються з трьох значень `i32`. В іншому ж структури-кортежі поводяться як кортежі: ви можете деструктуризувати їх на окремі шматки, і ви можете використовувати `.` з індексом, щоб отримати доступ до окремого значення.
+Note that the `black` and `origin` values are different types because they’re instances of different tuple structs. Each struct you define is its own type, even though the fields within the struct might have the same types. For example, a function that takes a parameter of type `Color` cannot take a `Point` as an argument, even though both types are made up of three `i32` values. Otherwise, tuple struct instances are similar to tuples in that you can destructure them into their individual pieces, and you can use a `.` followed by the index to access an individual value.
 
-### Одиничні Структури без Полів
+### Unit-Like Structs Without Any Fields
 
-Також можна визначати структури без жодних полів! Вони звуться *одинично-подібні структури* (unit-like struct), бо поводяться аналогічно до `()`, одничного типу, згаданого в підрозділі [“Тип кортеж”][tuples]<!-- ignore --> . Одинично-подібні структури можуть бути корисними в ситуаціях, коли вам потрібно реалізувати трейт на якомусь типі, але у вас немає потреби зберігати якісь дані в цьому типі. Про трейти ми поговоримо в Розділі 10. Ось приклад проголошення та створення одиничної структури під назвою `AlwaysEqual`:
+You can also define structs that don’t have any fields! These are called *unit-like structs* because they behave similarly to `()`, the unit type that we mentioned in [“The Tuple Type”][tuples]<!-- ignore --> section. Unit-like structs can be useful when you need to implement a trait on some type but don’t have any data that you want to store in the type itself. We’ll discuss traits in Chapter 10. Here’s an example of declaring and instantiating a unit struct named `AlwaysEqual`:
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-04-unit-like-structs/src/main.rs}}
 ```
 
-Щоб визначити `AlwaysEqual`, ми використовуємо ключове слово `struct`, назву структури та крапку з комою. Дужки не потрібні - ані звичайні, ані фігурні! Тоді ми можемо створити екземпляр з `AlwaysEqual` у змінній `subject` у схожий спосіб: використовуючи ім'я, яке ми визначили, без будь-яких - звичайних чи фігурних - дужок. Уявімо, що згодом ми реалізуємо поведінку для цього типу, так що кожен екземпляр `AlwaysEqual` завжди дорівнює будь-якому екземпляру будь-якого іншого типу, скажімо, щоб мати завжди відомий результат для тестування. Нам не потрібні жодні дані для реалізації такої поведінки! У Розділі 10 ви побачите, як визначити трейти і реалізувати їх на будь-якому типі, включно з одинично-подібними структурами.
+To define `AlwaysEqual`, we use the `struct` keyword, the name we want, and then a semicolon. No need for curly brackets or parentheses! Then we can get an instance of `AlwaysEqual` in the `subject` variable in a similar way: using the name we defined, without any curly brackets or parentheses. Imagine that later we’ll implement behavior for this type such that every instance of `AlwaysEqual` is always equal to every instance of any other type, perhaps to have a known result for testing purposes. We wouldn’t need any data to implement that behavior! You’ll see in Chapter 10 how to define traits and implement them on any type, including unit-like structs.
 
-> ### Володіння Даними Структури
+> ### Ownership of Struct Data
 > 
-> У структурі `User` з Блоку коду 5-1 ми використовували тип `String`, що має володіння, а не стрічковий слайс `&str`. Це свідомий вибір, бо ми хочемо, щоб екземпляри цієї структури володіли всіма своїми даними і щоб ці дані були коректними, поки структури в цілому коректна.
+> In the `User` struct definition in Listing 5-1, we used the owned `String` type rather than the `&str` string slice type. This is a deliberate choice because we want each instance of this struct to own all of its data and for that data to be valid for as long as the entire struct is valid.
 > 
-> Структура також може зберігати посилання на дані, якими володіє хтось інший, але це потребує використання *часу життя*, особливості Rust, що обговорюється у Розділі 10. Час життя гарантує, що дані, на які посилається структура, будуть коректними весь час існування структури. Наприклад, якщо ви спробуєте зберегти посилання у структурі без уточнення часу життя, ось так, то дістанете помилку:
+> It’s also possible for structs to store references to data owned by something else, but to do so requires the use of *lifetimes*, a Rust feature that we’ll discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct is valid for as long as the struct is. Let’s say you try to store a reference in a struct without specifying lifetimes, like the following; this won’t work:
 > 
-> <span class="filename">Файл: src/main.rs</span>
+> <span class="filename">Filename: src/main.rs</span>
 > 
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
 > 
@@ -152,7 +152,7 @@ Rust також підтримує структури, які виглядают
 > }
 > ```
 > 
-> Компілятор поскаржиться, що потрібно зазначити час існування:
+> The compiler will complain that it needs lifetime specifiers:
 > 
 > ```console
 > $ cargo run
@@ -188,7 +188,7 @@ Rust також підтримує структури, які виглядают
 > error: could not compile `structs` due to 2 previous errors
 > ```
 > 
-> Ми обговоримо, як це виправити, щоб можна було зберігати посилання у структурах, у Розділі 10, а поки що будемо виправляти подібні помилки за допомогою типів, що володіють своїми даними, на кшталт `String`, замість посилань на кшталт `&str`.
+> In Chapter 10, we’ll discuss how to fix these errors so you can store references in structs, but for now, we’ll fix errors like these using owned types like `String` instead of references like `&str`.
 
 <!-- manual-regeneration
 for the error above

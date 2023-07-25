@@ -1,22 +1,22 @@
-## Як Писати Тести
+## How to Write Tests
 
-Тести - це функції Rust, які перевіряють, чи тестований код працює у очікуваний спосіб. Тіла тестових функцій зазвичай виконують наступні три дії:
+Tests are Rust functions that verify that the non-test code is functioning in the expected manner. The bodies of test functions typically perform these three actions:
 
-1. Встановити будь-яке потрібне значення або стан.
-2. Запустити на виконання код, який ви хочете протестувати.
-3. Переконатися, що отримані результати відповідають вашим очікуванням.
+1. Set up any needed data or state.
+2. Run the code you want to test.
+3. Assert the results are what you expect.
 
-Розгляньмо функціонал, наданий Rust спеціально для написання тестів та виконання зазначених дій, що включає атрибут `test`, декілька макросів, а також атрибут `should_panic`.
+Let’s look at the features Rust provides specifically for writing tests that take these actions, which include the `test` attribute, a few macros, and the `should_panic` attribute.
 
-### Анатомія Тестувальної Функції
+### The Anatomy of a Test Function
 
-У найпростішому випадку тест у Rust - це функція, анотована за допомогою атрибута `test`. Атрибути - це метадані фрагментів коду на Rust; прикладом може бути атрибут `derive`, який ми використовували зі структурами у Розділі 5. Для перетворення звичайної функції на тестувальну функцію додайте `#[test]` у рядок перед `fn`. Коли ви запускаєте ваші тести командою `cargo test`, Rust збирає двійковий файл, що запускає анотовані функції та звітує, чи тестові функції пройшли, чи провалилися.
+At its simplest, a test in Rust is a function that’s annotated with the `test` attribute. Attributes are metadata about pieces of Rust code; one example is the `derive` attribute we used with structs in Chapter 5. To change a function into a test function, add `#[test]` on the line before `fn`. When you run your tests with the `cargo test` command, Rust builds a test runner binary that runs the annotated functions and reports on whether each test function passes or fails.
 
-Кожного разу, коли ми створюємо новий бібліотечний проєкт за допомогою Cargo, він автоматично генерує для нас тестовий модуль з тестовими функціями. Цей модуль надає вам шаблон для написання тестів, а отже вам непотрібно кожного разу при створенні нового проєкту уточнювати їхню структуру та синтаксис. Ви можете додати стільки тестових модулів та тестових функцій, скільки забажаєте!
+Whenever we make a new library project with Cargo, a test module with a test function in it is automatically generated for us. This module gives you a template for writing your tests so you don’t have to look up the exact structure and syntax every time you start a new project. You can add as many additional test functions and as many test modules as you want!
 
-Перш ніж фактично протестувати будь-який код, ми розглянемо деякі аспекти роботи тестів, експериментуючи з шаблоном тесту. Потім ми напишемо декілька реальних тестів, що запускають наш код та підтверджують, що його поведінка є правильною.
+We’ll explore some aspects of how tests work by experimenting with the template test before we actually test any code. Then we’ll write some real-world tests that call some code that we’ve written and assert that its behavior is correct.
 
-Створімо новий бібліотечний проєкт під назвою `adder`, в якому додаються два числа:
+Let’s create a new library project called `adder` that will add two numbers:
 
 ```console
 $ cargo new adder --lib
@@ -24,9 +24,9 @@ $ cargo new adder --lib
 $ cd adder
 ```
 
-Вміст файлу *src/lib.rs* у вашій бібліотеці `adder` має виглядати, як показано в Блоці коду 11-1.
+The contents of the *src/lib.rs* file in your `adder` library should look like Listing 11-1.
 
-<span class="filename">Файл: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 <!-- manual-regeneration
 cd listings/ch11-writing-automated-tests
@@ -43,302 +43,303 @@ cd ../../..
 ```
 
 
-<span class="caption">Блок коду 11-1: тестовий модуль і функція, створена автоматично за допомогою `cargo new`</span>
+<span class="caption">Listing 11-1: The test module and function generated automatically by `cargo new`</span>
 
-Наразі проігноруймо два верхні рядки та зосередимося на функції. Зверніть увагу на анотацію `#[test]`: цей атрибут вказує на те, що функція є тестувальною, тож функціонал для запуску тестів ставитиметься до неї, як до тесту. Ми також можемо мати нетестувальні функції в модулі `tests`, щоб допомогти налаштувати типові сценарії або виконати загальні операції, тому ми завжди повинні позначати анотаціями, які саме функції є тестувальними.
+For now, let’s ignore the top two lines and focus on the function. Note the `#[test]` annotation: this attribute indicates this is a test function, so the test runner knows to treat this function as a test. We might also have non-test functions in the `tests` module to help set up common scenarios or perform common operations, so we always need to indicate which functions are tests.
 
-Тіло функції зі приклада використовує макрос `assert_eq!` для ствердження того, що `result`, який містить результат операції додавання 2 та 2, дорівнює 4. Це ствердження служить типовим зразком формату для тесту. Запустімо його та впевнимось, що тест проходить.
+The example function body uses the `assert_eq!` macro to assert that `result`, which contains the result of adding 2 and 2, equals 4. This assertion serves as an example of the format for a typical test. Let’s run it to see that this test passes.
 
-Команда `cargo test` запускає усі тести з нашого проєкту, як показано у Блоці коду 11-2.
+The `cargo test` command runs all tests in our project, as shown in Listing 11-2.
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-01/output.txt}}
 ```
 
 
-<span class="caption">Блок коду 11-2: виведення після запуску автоматично згенерованого тесту</span>
+<span class="caption">Listing 11-2: The output from running the automatically generated test</span>
 
-Cargo скомпілював та запустив тест. Ми бачимо рядок `running 1 test`. Наступний рядок показує назву згенерованої тестувальної функції `it_works`, а також що результат запуску тесту є `ok`. Загальний результат `test result: ok.` означає, що усі тести пройшли, а частина `1 passed; 0
-failed` показує загальну кількість тестів що були пройдені та провалилися.
+Cargo compiled and ran the test. We see the line `running 1 test`. The next line shows the name of the generated test function, called `it_works`, and that the result of running that test is `ok`. The overall summary `test result: ok.` means that all the tests passed, and the portion that reads `1 passed; 0
+failed` totals the number of tests that passed or failed.
 
-Можна позначити деякі тести як ігноровані, тоді вони не будуть запускатися; ми розглянемо це далі у цьому розділі у підрозділі[ "Ігнорування окремих тестів без спеціального уточнення"][ignoring]<!-- ignore --> . Оскільки ми не позначали жодного тесту для ігнорування, то отримуємо на виході `0 ignored`. Ми також можемо додати до команди `cargo test` аргумент, щоб запускалися лише ті тести, що відповідають певній стрічці; Це називається *фільтрацією* та ми поговоримо про це у підрозділі ["Запуск підмножини тестів за назвою"][subset]<!-- ignore --> . Ми також не маємо відфільтрованих тестів, тому вивід показує `0 filtered out`.
+It’s possible to mark a test as ignored so it doesn’t run in a particular instance; we’ll cover that in the [“Ignoring Some Tests Unless Specifically Requested”][ignoring]<!-- ignore --> section later in this chapter. Because we haven’t done that here, the summary shows `0 ignored`. We can also pass an argument to the `cargo test` command to run only tests whose name matches a string; this is called *filtering* and we’ll cover that in the [“Running a Subset of Tests by Name”][subset]<!-- ignore --> section. We also haven’t filtered the tests being run, so the end of the summary shows `0 filtered out`.
 
-`0 measured` показує статистику бенчмарків, що тестують швидкодію. Бенчмарки на момент написання цієї статті доступні лише у нічних збірках Rust. Дивись [документацію про бенчмарки][bench] для більш детальної інформації.
+The `0 measured` statistic is for benchmark tests that measure performance. Benchmark tests are, as of this writing, only available in nightly Rust. See [the documentation about benchmark tests][bench] to learn more.
 
-Наступна частина виводу `Doc-tests adder` призначена для результатів документаційних тестів. У нас поки що немає документаційних тестів, але Rust може скомпілювати будь-які приклади коду з документації по нашому API. Ця функція допомагає синхронізувати вашу документацію та код! Ми розглянемо, як писати документаційні тести в підрозділі [“Документаційні коментарі як тести”][doc-comments]<!-- ignore --> Розділу 14. Зараз ми проігноруємо частину виводу, присвячену `Doc-tests`.
+The next part of the test output starting at `Doc-tests adder` is for the results of any documentation tests. We don’t have any documentation tests yet, but Rust can compile any code examples that appear in our API documentation. This feature helps keep your docs and your code in sync! We’ll discuss how to write documentation tests in the [“Documentation Comments as Tests”][doc-comments]<!-- ignore --> section of Chapter 14. For now, we’ll ignore the `Doc-tests` output.
 
-Налаштуймо тест для відповідності нашим потребам. Спочатку змінимо назву тестової функції `it_works` на іншу, наприклад `exploration`, ось так:
+Let’s start to customize the test to our own needs. First change the name of the `it_works` function to a different name, such as `exploration`, like so:
 
-<span class="filename">Файл: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/src/lib.rs}}
 ```
 
-Далі знову запустимо `cargo test`. Вивід тепер покаже `exploration` замість `it_works`:
+Then run `cargo test` again. The output now shows `exploration` instead of `it_works`:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/output.txt}}
 ```
 
-Тепер ми додамо інший тест, але цього разу він завершиться зі збоєм! Тести завершуються зі збоєм, коли щось у тестувальній функції викликає паніку. Кожний тест запускається в окремому потоці, та коли головний потік бачить, що тестовий потік упав, то тест позначається як такий невдалий. У Розділі 9 ми розглядали найпростіший спосіб викликати паніку за допомогою виклику макросу `panic!`. Створіть новий тест та назвіть тестувальну функцію `another`, щоб ваш файл *src/lib.rs* виглядав як у Блоці коду 11-3.
+Now we’ll add another test, but this time we’ll make a test that fails! Tests fail when something in the test function panics. Each test is run in a new thread, and when the main thread sees that a test thread has died, the test is marked as failed. In Chapter 9, we talked about how the simplest way to panic is to call the `panic!` macro. Enter the new test as a function named `another`, so your *src/lib.rs* file looks like Listing 11-3.
 
-<span class="filename">Файл: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,panics,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-03/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 11-3: додавання другого тесту, що провалюється, бо ми викликаємо макрос `panic!`</span>
+<span class="caption">Listing 11-3: Adding a second test that will fail because we call the `panic!` macro</span>
 
-Запустіть тест знову, використовуючи `cargo test`. Вивід виглядатиме схоже на Блок коду 11-4, який показує, що тест `exploration` пройшов, а `another` провалився.
+Run the tests again using `cargo test`. The output should look like Listing 11-4, which shows that our `exploration` test passed and `another` failed.
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-03/output.txt}}
 ```
 
 
-<span class="caption">Блок коду 11-4: результати тестів, коли один тест проходить, а другий провалюється</span>
+<span class="caption">Listing 11-4: Test results when one test passes and one test fails</span>
 
-Замість `ok`, рядок `test tests::another` показує `FAILED`. Дві нові секції з'явилися між результатами окремих тестів та загальними результатами: перша показує детальну причину того, чому тест провалився. У цьому випадку ми отримали те, що тест `another` провалився тому, що `panicked at 'Make this test fail'` у рядку 10 у файлі *src/lib.rs*. У наступній секції наведені назви тестів, що провалилися, і це зручно коли у нас багато таких тестів та багато деталей про провали. Ми можемо використати назву тесту для його подальшого зневадження; ми поговоримо більше про запуск тестів у підрозділі [Керування запуском тестів"]()<!-- ignore
---> .
+Instead of `ok`, the line `test tests::another` shows `FAILED`. Two new sections appear between the individual results and the summary: the first displays the detailed reason for each test failure. In this case, we get the details that `another` failed because it `panicked at 'Make this test fail'` on line 10 in the *src/lib.rs* file. The next section lists just the names of all the failing tests, which is useful when there are lots of tests and lots of detailed failing test output. We can use the name of a failing test to run just that test to more easily debug it; we’ll talk more about ways to run tests in the [“Controlling How Tests Are Run”]()<!-- ignore
+--> section.
 
-У кінці показується підсумковий результат тестування: в цілому результат нашого тесту `FAILED`. У нас один тест пройшов, та один провалився.
+The summary line displays at the end: overall, our test result is `FAILED`. We had one test pass and one test fail.
 
-Тепер, коли ви побачили, як виглядають результати тесту в різних сценаріях, розгляньмо деякі макроси, крім `panic!`, які корисні в тестах.
+Now that you’ve seen what the test results look like in different scenarios, let’s look at some macros other than `panic!` that are useful in tests.
 
-### Перевірка Результатів із Макросом `assert!`
+### Checking Results with the `assert!` Macro
 
-Макрос `assert!`, що надається стандартною бібліотекою, широко використовується для того, щоб впевнитися, що деяка умова у тесті приймає значення `true`. Ми даємо макросу `assert!` аргумент, який обчислюється як вираз булевого типу. Якщо значення обчислюється як `true`, нічого поганого не трапляється та тест вважається пройденим. Якщо ж значення буде `false` макрос `assert!` викликає паніку `panic!`, що спричиняє провал тесту. Використання макросу `assert!` допомагає нам перевірити, чи працює наш код в очікуваний спосіб.
+The `assert!` macro, provided by the standard library, is useful when you want to ensure that some condition in a test evaluates to `true`. We give the `assert!` macro an argument that evaluates to a Boolean. If the value is `true`, nothing happens and the test passes. If the value is `false`, the `assert!` macro calls `panic!` to cause the test to fail. Using the `assert!` macro helps us check that our code is functioning in the way we intend.
 
-У Розділі 5, Блок коду 5-15, ми використовували структуру `Rectangle` та метод `can_hold`, які повторюються у Блоці коду 11-5. Розмістімо цей код у файлі *src/lib.rs*, а далі напишемо декілька тестів, використовуючи макрос `assert!`.
+In Chapter 5, Listing 5-15, we used a `Rectangle` struct and a `can_hold` method, which are repeated here in Listing 11-5. Let’s put this code in the *src/lib.rs* file, then write some tests for it using the `assert!` macro.
 
-<span class="filename">Файл: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-05/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 11-5: використання структури `Rectangle` і її методу `can_hold` з Розділу 5</span>
+<span class="caption">Listing 11-5: Using the `Rectangle` struct and its `can_hold` method from Chapter 5</span>
 
-Метод `can_hold` повертає булеве значення, що означає, що це ідеальний варіант використання для макросу `assert!`. У Блоці коду 11-6 ми пишемо тест, який перевіряє метод `can_hold`, створивши екземпляр `Rectangle`, що має ширину 8 і висоту 7, і стверджує, що він може вмістити інший екземпляр `Rectangle`, що має ширину 5 і висоту 1.
+The `can_hold` method returns a Boolean, which means it’s a perfect use case for the `assert!` macro. In Listing 11-6, we write a test that exercises the `can_hold` method by creating a `Rectangle` instance that has a width of 8 and a height of 7 and asserting that it can hold another `Rectangle` instance that has a width of 5 and a height of 1.
 
-<span class="filename">Файл: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-06/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 11-6: тест для `can_hold`, що перевіряє, чи більший прямокутник справді може вмістити менший</span>
+<span class="caption">Listing 11-6: A test for `can_hold` that checks whether a larger rectangle can indeed hold a smaller rectangle</span>
 
-Зверніть увагу, що ми додали новий рядок всередині модуля `tests`: `use super::*;`. Модуль `tests` є звичайним модулем, що слідує звичайним правилам видимості, про які ми розповідали у підрозділі [“Шляхи для посилання на елемент в дереві модулів”][paths-for-referring-to-an-item-in-the-module-tree]<!-- ignore -->
-Розділу 7. Оскільки модуль `tests` є внутрішнім модулем, нам потрібно ввести код для тестування з зовнішнього модуля до області видимості внутрішнього модуля. Ми використовуємо глобальний режим для того, щоб все, що визначене у зовнішньому модулі, було доступним к модулі `tests`.
+Note that we’ve added a new line inside the `tests` module: `use super::*;`. The `tests` module is a regular module that follows the usual visibility rules we covered in Chapter 7 in the [“Paths for Referring to an Item in the Module Tree”][paths-for-referring-to-an-item-in-the-module-tree]<!-- ignore -->
+section. Because the `tests` module is an inner module, we need to bring the code under test in the outer module into the scope of the inner module. We use a glob here so anything we define in the outer module is available to this `tests` module.
 
-Ми назвали наш тест `larger_can_hold_smaller`і створили потрібні нам два екземпляри `Rectangle`. Тоді ми викликали макрос `assert!` і передали йому результат виклику `larger.can_hold(&smaller)`. Цей вираз повинен повернути `true`, тому наш тест повинен пройти. З'ясуймо, чи це так!
+We’ve named our test `larger_can_hold_smaller`, and we’ve created the two `Rectangle` instances that we need. Then we called the `assert!` macro and passed it the result of calling `larger.can_hold(&smaller)`. This expression is supposed to return `true`, so our test should pass. Let’s find out!
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-06/output.txt}}
 ```
 
-Цей тест проходить! Додамо ще один тест, цього разу стверджуючи, що менший прямокутник не може вміститися в більшому:
+It does pass! Let’s add another test, this time asserting that a smaller rectangle cannot hold a larger rectangle:
 
-<span class="filename">Файл: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/src/lib.rs:here}}
 ```
 
-Оскільки правильний результат функції `can_hold` у цьому випадку `false`, нам необхідно обернути результат перед тим, як передати його до макросу `assert!`. В результаті наш тест пройде, якщо `can_hold` повертає `false`:
+Because the correct result of the `can_hold` function in this case is `false`, we need to negate that result before we pass it to the `assert!` macro. As a result, our test will pass if `can_hold` returns `false`:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/output.txt}}
 ```
 
-Проходять вже два тести! Тепер подивімося, що відбувається з результатами тесту, якщо в код додати ваду. Ми змінимо реалізацію методу `can_hold`, замінивши знак більше на менше при порівняння ширин:
+Two tests that pass! Now let’s see what happens to our test results when we introduce a bug in our code. We’ll change the implementation of the `can_hold` method by replacing the greater-than sign with a less-than sign when it compares the widths:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/src/lib.rs:here}}
 ```
 
-Запуск тестів тепер виводить таке:
+Running the tests now produces the following:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/output.txt}}
 ```
 
-Наші тести викрили ваду! Оскільки `larger.width` дорівнює 8, а `smaller.width` дорівнює 5, порівняння ширин у `can_hold` тепер повертає `false`: 8 не є меншим за 5.
+Our tests caught the bug! Because `larger.width` is 8 and `smaller.width` is 5, the comparison of the widths in `can_hold` now returns `false`: 8 is not less than 5.
 
-### Перевірка Рівності з Макросами `assert_eq!` та `assert_ne!`
+### Testing Equality with the `assert_eq!` and `assert_ne!` Macros
 
-Поширеним способом перевірки функціональності є перевірка на рівність між результатом коду, що тестується, і значенням, яке ви очікуєте від коду. Ви можете зробити це за допомогою макросу `assert!`, передавши йому вираз за допомогою оператора `==`. Однак це такий поширений тест, що стандартна бібліотека надає пару макросів — `assert_eq!` та `assert_ne!` — для зручнішого проведення цього тесту. Ці макроси порівнюють два аргументи на рівність або нерівність відповідно. Також вони виводять два значення, якщо ствердження провалюється, що допомагає зрозуміти, *чому* тест провалився; і навпаки, макрос `assert!` лише вказує на те, що отримав значення `false` для виразу `==`, без виведення значень, що призвели до цього `false`.
+A common way to verify functionality is to test for equality between the result of the code under test and the value you expect the code to return. You could do this using the `assert!` macro and passing it an expression using the `==` operator. However, this is such a common test that the standard library provides a pair of macros—`assert_eq!` and `assert_ne!`—to perform this test more conveniently. These macros compare two arguments for equality or inequality, respectively. They’ll also print the two values if the assertion fails, which makes it easier to see *why* the test failed; conversely, the `assert!` macro only indicates that it got a `false` value for the `==` expression, without printing the values that led to the `false` value.
 
-У Блоці коду 11-7 ми пишемо функцію з назвою `add_two`, яка додає до свого параметра `2`, а потім тестуємо цю функцію за допомогою макросу `assert_eq!`.
+In Listing 11-7, we write a function named `add_two` that adds `2` to its parameter, then we test this function using the `assert_eq!` macro.
 
-<span class="filename">Файл: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-07/src/lib.rs}}
 ```
 
 
-<span class="caption">Блок коду 11-7: Тестування функції `add_two` за допомогою макросу `assert_eq!`</span>
+<span class="caption">Listing 11-7: Testing the function `add_two` using the `assert_eq!` macro</span>
 
-Переконаймося, що вона проходить!
+Let’s check that it passes!
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-07/output.txt}}
 ```
 
-Ми передали `4` як аргумент `assert_eq!`, що дорівнює результату виклику `add_two(2)`. Рядок для цього тесту `test tests::it_adds_two ...
-ok`, і текст `ok` позначає, що наш тест пройшов!
+We pass `4` as the argument to `assert_eq!`, which is equal to the result of calling `add_two(2)`. The line for this test is `test tests::it_adds_two ...
+ok`, and the `ok` text indicates that our test passed!
 
-Додамо в наш код ваду, щоб побачити, як виглядає `assert_eq!`, коли тест провалюється. Змініть реалізацію функції `add_two`, щоб натомість додавати `3`:
+Let’s introduce a bug into our code to see what `assert_eq!` looks like when it fails. Change the implementation of the `add_two` function to instead add `3`:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/src/lib.rs:here}}
 ```
 
-Запустимо тести знову:
+Run the tests again:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/output.txt}}
 ```
 
-Наш тест виявив ваду! Тест `it_adds_two` провалився, і повідомлення каже нам про те, що провалене ствердження було `` assertion failed: `(left == right)` `` і значення `left` і `right`. Це повідомлення допомагає нам почати зневадження: аргумент `left` був `4`, але аргумент `right`, де стоїть `add_two(2)`, був `5`. Ви можете собі уявити, що це буде особливо корисно, коли у нас проводиться багато тестів.
+Our test caught the bug! The `it_adds_two` test failed, and the message tells us that the assertion that fails was `` assertion failed: `(left == right)` `` and what the `left` and `right` values are. This message helps us start debugging: the `left` argument was `4` but the `right` argument, where we had `add_two(2)`, was `5`. You can imagine that this would be especially helpful when we have a lot of tests going on.
 
-Зверніть увагу, що в деяких мовах і тестувальних фреймворках параметри функції ствердження рівності називаються `expected` (очікувалося) і `actual` (фактично), і порядок, в якому ми вказуємо аргументи, важливий. Однак у Rust вони називаються `left` і `right`, і порядок, в якому ми вказуємо значення, яке ми очікуємо, і значення, обчислене кодом, не має значення. Ми могли б записати ствердження у цьому тесті як `assert_eq!(add_two(2), 4)`, що призведе до того ж повідомлення про помилку, яке показує `` assertion failed: `(left == right)` ``.
+Note that in some languages and test frameworks, the parameters to equality assertion functions are called `expected` and `actual`, and the order in which we specify the arguments matters. However, in Rust, they’re called `left` and `right`, and the order in which we specify the value we expect and the value the code produces doesn’t matter. We could write the assertion in this test as `assert_eq!(add_two(2), 4)`, which would result in the same failure message that displays `` assertion failed: `(left == right)` ``.
 
-Макрос `assert_ne!` проходить тест, якщо два значення, які ми даємо, не дорівнюють одне одному, і провалюється, якщо вони рівні. Цей макрос найбільш корисний для випадків, коли ми не впевнені яким значення *буде*, але ми знаємо, яким значення безумовно *не повинне* бути. Наприклад, якщо ми тестуємо функцію, яка гарантовано певним чином змінює вхідні параметри, але те, як змінюється вони змінюються, залежить від дня тижня, коли ми проводимо свої тести, найкраще, що може стверджувати — що вихід функції не дорівнює вводу.
+The `assert_ne!` macro will pass if the two values we give it are not equal and fail if they’re equal. This macro is most useful for cases when we’re not sure what a value *will* be, but we know what the value definitely *shouldn’t* be. For example, if we’re testing a function that is guaranteed to change its input in some way, but the way in which the input is changed depends on the day of the week that we run our tests, the best thing to assert might be that the output of the function is not equal to the input.
 
-Під капотом макроси `assert_eq!` і `assert_ne!` використовують оператори `==` and `!=`, відповідно. Коли ствердження провалюється, ці макроси друкують свої аргументи з використанням форматування налагодження, тобто, що значення, які порівнюються, повинні реалізовувати трейти `PartialEq` і `Debug`. Всі примітивні типи та більшість типів зі стандартної бібліотеки реалізовують ці трейти. Для структур та енумів, які ви визначаєте самостійно, вам потрібно буде реалізувати `PartialEq`, щоб стверджувати рівність таких типів. Також потрібно буде реалізувати `Debug` для виведення значень, коли ствердження провалюється. Оскільки обидва ці трейти вивідні, як було зазначено в Блоці коду 5-12 у Розділі 5, зазвичай просто треба додати анотацію `#[derive(PartialEq, Debug)` до визначення вашої структури чи енуму. Дивіться Додаток C, ["Вивідні трейти",][derivable-traits]<!-- ignore --> для детальнішої інформації про ці та інші вивідні трейти.
+Under the surface, the `assert_eq!` and `assert_ne!` macros use the operators `==` and `!=`, respectively. When the assertions fail, these macros print their arguments using debug formatting, which means the values being compared must implement the `PartialEq` and `Debug` traits. All primitive types and most of the standard library types implement these traits. For structs and enums that you define yourself, you’ll need to implement `PartialEq` to assert equality of those types. You’ll also need to implement `Debug` to print the values when the assertion fails. Because both traits are derivable traits, as mentioned in Listing 5-12 in Chapter 5, this is usually as straightforward as adding the `#[derive(PartialEq, Debug)]` annotation to your struct or enum definition. See Appendix C, [“Derivable Traits,”][derivable-traits]<!-- ignore --> for more details about these and other derivable traits.
 
-### Додавання Власних Повідомлень про Збої
+### Adding Custom Failure Messages
 
-Ви також можете додати власне повідомлення, яке буде виведене в консолі разом із повідомленням про помилку, як додаткові аргументи до макросів `assert!`, `assert_eq!`, та `assert_ne!`. Будь-які аргументи, вказані після необхідних аргументів, передаються до макпрсу `format!` (обговорюється у Розділі 8 у підрозділі ["Конкатенація оператором `+` або макросом `format!`"]()<!-- ignore -->
-), тож ви можете передати стрічку форматування, що містить заповнювачі `{}` та значення для підставляння в ці заповнювачі. Користувальницькі повідомлення корисні для документування, що означає ствердження; коли тест провалюється, ви будете мати краще розуміння того, що за проблема з кодом.
+You can also add a custom message to be printed with the failure message as optional arguments to the `assert!`, `assert_eq!`, and `assert_ne!` macros. Any arguments specified after the required arguments are passed along to the `format!` macro (discussed in Chapter 8 in the [“Concatenation with the `+` Operator or the `format!` Macro”]()<!-- ignore -->
+section), so you can pass a format string that contains `{}` placeholders and values to go in those placeholders. Custom messages are useful for documenting what an assertion means; when a test fails, you’ll have a better idea of what the problem is with the code.
 
-Наприклад, припустимо, у нас є функція, яка вітає людей на ім'я, і ми хочемо перевірити, що ім'я, яке ми передаємо, з'являється у вихідній стрічці:
+For example, let’s say we have a function that greets people by name and we want to test that the name we pass into the function appears in the output:
 
-<span class="filename">Файл: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-05-greeter/src/lib.rs}}
 ```
 
-Вимоги до цієї програми ще не були узгоджені, і ми цілком певні, що текст `Hello,` на початку вітання зміниться. Ми вирішили не оновлювати тест при змінах вимог, отже замість перевірки на точну рівність значенню, яке повернула функція `greeting`, ми просто ствердимо, що результат містить текст текст вихідного параметра.
+The requirements for this program haven’t been agreed upon yet, and we’re pretty sure the `Hello` text at the beginning of the greeting will change. We decided we don’t want to have to update the test when the requirements change, so instead of checking for exact equality to the value returned from the `greeting` function, we’ll just assert that the output contains the text of the input parameter.
 
-Тепер введімо ваду у цей код, змінивши `greeting` s виключивши `name`, щоб побачити, як виглядає тест провалу за замовчуванням:
+Now let’s introduce a bug into this code by changing `greeting` to exclude `name` to see what the default test failure looks like:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-06-greeter-with-bug/src/lib.rs:here}}
 ```
 
-Запуск цього тесту виводить таке:
+Running this test produces the following:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-06-greeter-with-bug/output.txt}}
 ```
 
-Цей результат вказує на те, що ствердження провалилося і в якому рядку. Більш корисне повідомлення про помилку може вивести значення з функції `greeting`. Додаймо власне повідомлення про помилку, складене зі стрічки форматування з заповнювачем, заповненим фактичним значенням, яке ми отримали від функції `greeting`:
+This result just indicates that the assertion failed and which line the assertion is on. A more useful failure message would print the value from the `greeting` function. Let’s add a custom failure message composed of a format string with a placeholder filled in with the actual value we got from the `greeting` function:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/src/lib.rs:here}}
 ```
 
-Тепер, коли ми запустимо тест, ми отримаємо більш інформативне повідомлення про помилку:
+Now when we run the test, we’ll get a more informative error message:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/output.txt}}
 ```
 
-Ми можемо бачити значення, яке ми фактично отримали на виході тесту, що допоможе нам налагодити, що сталося замість того, що ми очікували.
+We can see the value we actually got in the test output, which would help us debug what happened instead of what we were expecting to happen.
 
-### Перевірка Наявності Паніки з `should_panic`
+### Checking for Panics with `should_panic`
 
-На додаток до перевірки значень, повернених з функцій, важливо перевірити, чи наш код обробляє помилкові стани, які ми очікуємо. Наприклад, розгляньте тип `Guess`, який ми створили у Блоці коду 9-13 у Розділі 9. Інший код, який використовує `Guess`, залежить від гарантії, що екземпляри `Guess` будуть містити лише значення у діапазоні від 1 до 100. Ми можемо написати тест, який гарантує, що намагання створити екземпляр `Guess` зі значенням поза інтервалом панікує.
+In addition to checking return values, it’s important to check that our code handles error conditions as we expect. For example, consider the `Guess` type that we created in Chapter 9, Listing 9-13. Other code that uses `Guess` depends on the guarantee that `Guess` instances will contain only values between 1 and 100. We can write a test that ensures that attempting to create a `Guess` instance with a value outside that range panics.
 
-Ми робимо це, додаючи атрибут `should_panic` до нашої тестової функції. Тест проходить, якщо код усередині функції панікує; тест провалюється, якщо код усередині функції не запанікував.
+We do this by adding the attribute `should_panic` to our test function. The test passes if the code inside the function panics; the test fails if the code inside the function doesn’t panic.
 
-Блок коду 11-8 показує тест, який перевіряє, що умови помилки `Guess::new` стаються тоді, коли ми очікуємо на них.
+Listing 11-8 shows a test that checks that the error conditions of `Guess::new` happen when we expect them to.
 
-<span class="filename">Файл: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-08/src/lib.rs}}
 ```
 
 
-<span class="caption">Блок коду 11-8: Тестування умови, що призводить до `panic!`</span>
+<span class="caption">Listing 11-8: Testing that a condition will cause a `panic!`</span>
 
-Ми розміщаємо атрибут `#[should_panic]` після `#[test]` перед тестовою функцією, до якої він застосовується. Подивімося на результат, коли цей тест проходить:
+We place the `#[should_panic]` attribute after the `#[test]` attribute and before the test function it applies to. Let’s look at the result when this test passes:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-08/output.txt}}
 ```
 
-Здається, усе гаразд! Тепер додамо ваду у наш код, видаливши умову, що функція `new` запанікує, якщо значення більше за 100:
+Looks good! Now let’s introduce a bug in our code by removing the condition that the `new` function will panic if the value is greater than 100:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-08-guess-with-bug/src/lib.rs:here}}
 ```
 
-Коли ми запустимо тест з Блоку коду 11-8, він провалюється:
+When we run the test in Listing 11-8, it will fail:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-08-guess-with-bug/output.txt}}
 ```
 
-В цьому випадку ми отримуємо не дуже помічне повідомлення, але коли подивитися на тестову функцію, то бачимо, що вона анотована `#[should_panic]`. Отриманий провал означає, що код у тестовій функції не призвів до паніки.
+We don’t get a very helpful message in this case, but when we look at the test function, we see that it’s annotated with `#[should_panic]`. The failure we got means that the code in the test function did not cause a panic.
 
-Тести, що використовують `should_panic`, можуть бути неточними. Тест із `should_panic` пройде, навіть якщо тест запанікує з іншої причини, а не очікуваної. Щоб зробити тести із `should_panic` більш точними, ми можемо додати необов'язковий параметр `expected` до атрибута `should_panic`. Тестова оболонка забезпечить, щоб повідомлення про провал містило наданий текст. Наприклад, розгляньте модифікований код `Guess` у Блоці коду 11-9, де функція `new` панікує з різними повідомленнями залежно від того, значення занадто мале або занадто велике.
+Tests that use `should_panic` can be imprecise. A `should_panic` test would pass even if the test panics for a different reason from the one we were expecting. To make `should_panic` tests more precise, we can add an optional `expected` parameter to the `should_panic` attribute. The test harness will make sure that the failure message contains the provided text. For example, consider the modified code for `Guess` in Listing 11-9 where the `new` function panics with different messages depending on whether the value is too small or too large.
 
-<span class="filename">Файл: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-09/src/lib.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 11-9: тестування `panic!` з повідомленням паніки, що містить зазначену підстрічку</span>
+<span class="caption">Listing 11-9: Testing for a `panic!` with a panic message containing a specified substring</span>
 
-Цей тест пройде, оскільки значення, яке ми додали в параметр `expected` атрибуту `should_panic` є підстрічкою повідомлення, з яким панікує функція `Guess::new`. Ми могли б вказати повне повідомлення паніки, яке очікуємо, яке у цьому випадку буде `Guess value must be less than or equal to
-100, got 200.` Те, що саме ви зазначите, залежить від того, яка частина повідомлення паніки є унікальною чи динамічним і наскільки точним тест ви хочете зробити. У цьому випадку підстрічки повідомлення паніки достатньо, щоб переконатися, що код у тестовій функції обробляє випадок `else if value > 100`.
+This test will pass because the value we put in the `should_panic` attribute’s `expected` parameter is a substring of the message that the `Guess::new` function panics with. We could have specified the entire panic message that we expect, which in this case would be `Guess value must be less than or equal to
+100, got 200.` What you choose to specify depends on how much of the panic message is unique or dynamic and how precise you want your test to be. In this case, a substring of the panic message is enough to ensure that the code in the test function executes the `else if value > 100` case.
 
-Щоб побачити, що трапиться, якщо тест `should_panic` з повідомленням `expected` провалюється, знову додамо ваду у наш код, обмінявши тіла блоків `if value < 1` та `else if value > 100`:
+To see what happens when a `should_panic` test with an `expected` message fails, let’s again introduce a bug into our code by swapping the bodies of the `if value < 1` and the `else if value > 100` blocks:
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/src/lib.rs:here}}
 ```
 
-Цього разу, коли ми запускаємо тест `should_panic`, він провалиться:
+This time when we run the `should_panic` test, it will fail:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/output.txt}}
 ```
 
-Повідомлення про провал вказує на те, що цей тест дійсно панікував, як ми очікували, але повідомлення про паніку не містить очікувану стрічку `'Guess value must be
-less than or equal to 100'`. Повідомлення про паніку, яке ми взяли, в цьому випадку було `Guess value must be greater than or equal to 1, got 200.` Тепер ми можемо почати з'ясуоввати, де знаходиться наша помилка!
+The failure message indicates that this test did indeed panic as we expected, but the panic message did not include the expected string `'Guess value must be
+less than or equal to 100'`. The panic message that we did get in this case was `Guess value must be greater than or equal to 1, got 200.` Now we can start figuring out where our bug is!
 
-### Використання `Result<T, E>` у Тестах
+### Using `Result<T, E>` in Tests
 
-Всі наші тести поки що панікують, коли провалюються. Ми також можемо написати тести, які використовують `Result<T, E>`! Ось тест зі Блоку коду 11-1, переписаний для використання `Result<T,
-E>`, який повертає `Err` замість паніки:
+Our tests so far all panic when they fail. We can also write tests that use `Result<T, E>`! Here’s the test from Listing 11-1, rewritten to use `Result<T,
+E>` and return an `Err` instead of panicking:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-10-result-in-tests/src/lib.rs}}
 ```
 
-Функція `it_works` зараз повертає тип `Result<(), String>`. У тілі функції, замість того, щоб викликати макрос `assert_eq!`, ми повертаємо `Ok(())`, коли тест пройшов і `Err` зі `String` всередині, коли тест провалено.
+The `it_works` function now has the `Result<(), String>` return type. In the body of the function, rather than calling the `assert_eq!` macro, we return `Ok(())` when the test passes and an `Err` with a `String` inside when the test fails.
 
-Написання тестів, щоб вони повертали `Result<T, E>`, дозволить вам використовувати оператор знак питання у тілі тестів, що може бути зручним способом писати тести, що мають провалитися, якщо будь-яка операція всередині них повертає варіант `Err`.
+Writing tests so they return a `Result<T, E>` enables you to use the question mark operator in the body of tests, which can be a convenient way to write tests that should fail if any operation within them returns an `Err` variant.
 
-Ви не можете використовувати анотацію `#[should_panic]` в тестах, які використовують `Result<T,
-E>`. Щоб ствердити, що операція повертає варіант `Err`, *не* використовуйте оператор знак питання значенні на `Result<T, E>`. Натомість, використовуйте `assert!(value.is_err())`.
+You can’t use the `#[should_panic]` annotation on tests that use `Result<T,
+E>`. To assert that an operation returns an `Err` variant, *don’t* use the question mark operator on the `Result<T, E>` value. Instead, use `assert!(value.is_err())`.
 
-Тепер, коли ви знаєте кілька способів писати тести, подивімося на те, що відбувається, коли ми запускаємо наші тести і дослідимо різні опції, як ми можемо використовувати з `cargo test`.
+Now that you know several ways to write tests, let’s look at what is happening when we run our tests and explore the different options we can use with `cargo
+test`.
 ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro ch11-02-running-tests.html#controlling-how-tests-are-run
 
 [bench]: ../unstable-book/library-features/test.html

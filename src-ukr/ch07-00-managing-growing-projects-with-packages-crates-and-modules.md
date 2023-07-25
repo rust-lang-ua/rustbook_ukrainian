@@ -1,20 +1,20 @@
-# Керування Щораз Більшими Проєктами із Пакетами, Крейтами та Модулями
+# Managing Growing Projects with Packages, Crates, and Modules
 
-Що більші програми ви пишете, то більшого значення набуває організація коду. Групуючи повʼязаний функціонал і розділяючи код з не повʼязаними функціями, ви вносите ясність, де шукати код, що реалізовує певний функціонал, і де вносити зміни до нього.
+As you write large programs, organizing your code will become increasingly important. By grouping related functionality and separating code with distinct features, you’ll clarify where to find code that implements a particular feature and where to go to change how a feature works.
 
-Програми, які ми написали раніше, поки знаходилися в одному модулі в єдиному файлі. У міру зростання проєкту вам слід організовувати код, розбиваючи його на кілька модулів і декілька файлів. Пакет може містити багато двійкових крейтів і, можливо, один бібліотечний крейт. Зі зростанням пакета ви можете виділяти його частини в окремі крейти, що стають зовнішніми залежностями. Цей розділ висвітлює усі ці техніки. Для дуже великих проєктів, які містять взаємоповʼязані пакети, що розвиваються разом, Cargo надає *робочі простори*, які будуть висвітлені у підрозділі ["Робочі простори Cargo"][workspaces]<!-- ignore --> у Розділі 14.
+The programs we’ve written so far have been in one module in one file. As a project grows, you should organize code by splitting it into multiple modules and then multiple files. A package can contain multiple binary crates and optionally one library crate. As a package grows, you can extract parts into separate crates that become external dependencies. This chapter covers all these techniques. For very large projects comprising a set of interrelated packages that evolve together, Cargo provides *workspaces*, which we’ll cover in the [“Cargo Workspaces”][workspaces]<!-- ignore --> section in Chapter 14.
 
-Ми також обговоримо інкапсуляцію деталей реалізації, що дозволяє повторно використовувати код на більш високому рівні: щойно ви реалізували операцію, інший код може викликати ваш код через публічний інтерфейс, навіть не знаючи деталей реалізації. Ваш підхід до написання коду визначає, які частини програми є публічними для використання іншим кодом, а які є приватними, деталі реалізації яких ви б хотіли приховати. Це ще один спосіб обмеження кількості деталей, які вам потрібно тримати в голові.
+We’ll also discuss encapsulating implementation details, which lets you reuse code at a higher level: once you’ve implemented an operation, other code can call your code via its public interface without having to know how the implementation works. The way you write code defines which parts are public for other code to use and which parts are private implementation details that you reserve the right to change. This is another way to limit the amount of detail you have to keep in your head.
 
-Повʼязане поняття - область видимості (scope): вкладений контекст, у якому написаний код, має набір назв, про які кажуть, що вони "в області видимості." При читанні, написанні і компілюванні коду, програмісти та компілятори мають знати, чи певна назва в певному місці стосується змінної, функції, структури, енуму, модулю, константи або іншого елементу і що саме цей елемент означає. Ви можете створювати області видимості та визначати, які імена належать до них, а які ні. Але не можна мати два елементи з однаковою назвою в одній області видимості. Існують інструменти для вирішення конфліктів імен.
+A related concept is scope: the nested context in which code is written has a set of names that are defined as “in scope.” When reading, writing, and compiling code, programmers and compilers need to know whether a particular name at a particular spot refers to a variable, function, struct, enum, module, constant, or other item and what that item means. You can create scopes and change which names are in or out of scope. You can’t have two items with the same name in the same scope; tools are available to resolve name conflicts.
 
-Rust має ряд функцій, що дозволяють керувати організацією коду, як-от тим, які деталі робити публічними, які приватними, і які імена будуть в кожній області видимості вашої програми. Ці функції, які інколи називають *модульною системою*, охоплюють:
+Rust has a number of features that allow you to manage your code’s organization, including which details are exposed, which details are private, and what names are in each scope in your programs. These features, sometimes collectively referred to as the *module system*, include:
 
-* **Пакети:** функціонал Cargo, що дозволяє збирати, тестувати і поширювати крейти
-* **Крейти:** дерево модулів, що створює бібліотеку або виконуваний файл
-* **Модулі** та **use:** дозволяють керувати організацією, областю видимості та приватністю шляхів
-* **Шляхи:** спосіб іменування елемента, як-то структура, функція або модуль
+* **Packages:** A Cargo feature that lets you build, test, and share crates
+* **Crates:** A tree of modules that produces a library or executable
+* **Modules** and **use:** Let you control the organization, scope, and privacy of paths
+* **Paths:** A way of naming an item, such as a struct, function, or module
 
-У цьому розділі ми розглянемо весь цей функціонал, подивимось, як він взаємодіє і пояснимо, як його використовувати для керування областю видимості. В результаті у вас має бути ґрунтовне розуміння модульної системи та здатність працювати з областями видимості на рівні професіоналів!
+In this chapter, we’ll cover all these features, discuss how they interact, and explain how to use them to manage scope. By the end, you should have a solid understanding of the module system and be able to work with scopes like a pro!
 
 [workspaces]: ch14-03-cargo-workspaces.html

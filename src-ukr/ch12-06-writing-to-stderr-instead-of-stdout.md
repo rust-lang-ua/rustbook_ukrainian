@@ -1,70 +1,70 @@
-## Написання Повідомлень про Помилки у Помилковий Вивід замість Стандартного Виводу
+## Writing Error Messages to Standard Error Instead of Standard Output
 
-Наразі ми записуємо увесь наш вивід в термінал використовуючи макрос `println!`. В більшості терміналів є два типи виводу: *standard output* (`stdout`) для загальної інформації та *standard error* (`stderr`) для повідомлень про помилки. Це розділення дозволяє користувачам направити вдалий вивід програми в файл, але все ще виводити повідомлення про помилки на екрані.
+At the moment, we’re writing all of our output to the terminal using the `println!` macro. In most terminals, there are two kinds of output: *standard output* (`stdout`) for general information and *standard error* (`stderr`) for error messages. This distinction enables users to choose to direct the successful output of a program to a file but still print error messages to the screen.
 
 The `println!` macro is only capable of printing to standard output, so we have to use something else to print to standard error.
 
-### Перевірка Місця Написання Помилок
+### Checking Where Errors Are Written
 
-Спочатку, нумо побачимо, як контент який `minigrep` виводить в консолі наразі записується в стандартний вивід, включаючи будь-які повідомлення про помилки, які замість цього ми хочемо записувати в Standard Error. Ми зробимо це перенаправивши потік стандартного виводу в файл водночас із навмисним спричиненням помилки. Ми не будемо перенаправляти стандартний помилковій потік, тому будь-який контент відправлений в Standard Error буде продовжувати показуватися на екрані.
+First, let’s observe how the content printed by `minigrep` is currently being written to standard output, including any error messages we want to write to standard error instead. We’ll do that by redirecting the standard output stream to a file while intentionally causing an error. We won’t redirect the standard error stream, so any content sent to standard error will continue to display on the screen.
 
-Очікується, що програми командного рядка надсилатимуть помилкові повідомлення в потік Standard Error, щоб ми все ще могли бачити помилкові повідомлення на екрані, навіть якщо ми перенаправляємо потік стандартного виводу в файл. Наразі наша програма не добре налаштована: ми побачимо, як вона збереже вивід помилкового повідомлення в файл натомість!
+Command line programs are expected to send error messages to the standard error stream so we can still see error messages on the screen even if we redirect the standard output stream to a file. Our program is not currently well-behaved: we’re about to see that it saves the error message output to a file instead!
 
-Щоб продемонструвати цю поведінку, ми запустимо програму з `>` і шляхом до файлу, *output.txt*, якому ми хочемо перенаправити потік стандартного виводу. Ми не будемо передавати аргументи, що спричинить помилку:
+To demonstrate this behavior, we’ll run the program with `>` and the file path, *output.txt*, that we want to redirect the standard output stream to. We won’t pass any arguments, which should cause an error:
 
 ```console
 $ cargo run > output.txt
 ```
 
-Синтаксис `>` вказує shell писати вміст стандартного виводу в *output.txt* замість екрана. Ми не бачимо помилкове повідомлення, яке ми очікували виведеним на екран, тому це означає, що воно опинилося в файлі. Це те, що містить *output.txt*:
+The `>` syntax tells the shell to write the contents of standard output to *output.txt* instead of the screen. We didn’t see the error message we were expecting printed to the screen, so that means it must have ended up in the file. This is what *output.txt* contains:
 
 ```text
 Problem parsing arguments: not enough arguments
 ```
 
-Так, наше помилкове повідомлення виводиться в консолі стандартного виводу. Це набагато корисніше для таких помилкових повідомлень, щоб вони виводилися в консолі Standard Error та щоб тільки дані від вдалих запусків опинялися в файлі. Ми змінимо це.
+Yup, our error message is being printed to standard output. It’s much more useful for error messages like this to be printed to standard error so only data from a successful run ends up in the file. We’ll change that.
 
-### Виведення Помилок у Помилковий Вивід
+### Printing Errors to Standard Error
 
-Ми використаємо код в Блоці Коду 12-24 для зміни виводу помилкових повідомлень в консолі. Через рефакторінг, який ми робили раніше в цьому розділі, увесь код який виводить помилкові повідомлення перебуває в одній функції, `main`. Стандартна бібліотека надає макрос `eprintln!` який виводить в консолі потоку Standard Error, тому змінимо два місця, де ми викликаємо `println!`, використовуючи замість цього `eprintln!` для виводу в консолі.
+We’ll use the code in Listing 12-24 to change how error messages are printed. Because of the refactoring we did earlier in this chapter, all the code that prints error messages is in one function, `main`. The standard library provides the `eprintln!` macro that prints to the standard error stream, so let’s change the two places we were calling `println!` to print errors to use `eprintln!` instead.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-24/src/main.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 12-24: Запис повідомлень про помилки до стандартного помилкового виводу, замість стандартного, за допомогою `eprintln!`</span>
+<span class="caption">Listing 12-24: Writing error messages to standard error instead of standard output using `eprintln!`</span>
 
-Тепер запустимо програму ще раз таким же чином, без будь-яких аргументів і перенаправивши стандартний вивід за допомогою `>`:
+Let’s now run the program again in the same way, without any arguments and redirecting standard output with `>`:
 
 ```console
 $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-Тепер ми бачимо помилку на екрані і *output.txt* нічого не містить, і саме такої поведінки ми очікуємо від програм командного рядка.
+Now we see the error onscreen and *output.txt* contains nothing, which is the behavior we expect of command line programs.
 
-Запустімо програму ще раз з аргументами, які не викликають помилки, але все ж таки перенаправивши стандартний вивід у файл, ось так:
+Let’s run the program again with arguments that don’t cause an error but still redirect standard output to a file, like so:
 
 ```console
 $ cargo run -- to poem.txt > output.txt
 ```
 
-Ми не побачимо жодного виводу в терміналі та *output.txt* буде містити наші результати:
+We won’t see any output to the terminal, and *output.txt* will contain our results:
 
-<span class="filename">Файл: output.txt</span>
+<span class="filename">Filename: output.txt</span>
 
 ```text
 Are you nobody, too?
 How dreary to be somebody!
 ```
 
-Це демонструє, що тепер ми використовуємо стандартний вивід для успішного виводу і стандартну помилку для виводу помилок у відповідних випадках.
+This demonstrates that we’re now using standard output for successful output and standard error for error output as appropriate.
 
-## Підсумок
+## Summary
 
-В цьому розділі ми пригадали деякі основні концепти, які ви вивчили раніше та розглянули як виконувати базові I/O операції в Rust. Використовуючи аргументи командного рядка, файли, змінні середовища та макрос `eprintln!` для виведення помилок в консолі, тепер ви готові написати застосунок для командного рядка. Поєднавши це з концептами з попередніх розділів, ваш код буде добре організованим, ефективно збирати дані в відповідні структури даних, вдало обробляти помилки та буде добре перевіреним.
+This chapter recapped some of the major concepts you’ve learned so far and covered how to perform common I/O operations in Rust. By using command line arguments, files, environment variables, and the `eprintln!` macro for printing errors, you’re now prepared to write command line applications. Combined with the concepts in previous chapters, your code will be well organized, store data effectively in the appropriate data structures, handle errors nicely, and be well tested.
 
-Далі ми детальніше розглянемо деякі функції Rust, на які вплинули функціональні мови: замикання та ітератори.
+Next, we’ll explore some Rust features that were influenced by functional languages: closures and iterators.

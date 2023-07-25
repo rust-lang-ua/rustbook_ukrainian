@@ -1,208 +1,208 @@
-## Що Таке Володіння?
+## What Is Ownership?
 
-*Володіння* - це набір правил, які регулюють, як програма на Rust керує пам'яттю. Усі програми мають керувати тим, як вони використовують пам'ять комп'ютера під час роботи. Деякі мови мають збирача сміття, який постійно шукає пам'ять, що її вже не використовують, під час роботи програми; в інших мовах програміст має явно виділяти та звільняти пам'ять. Rust використовує третій підхід: пам'ять управляється системою володіння з набором правил, які перевіряє компілятор. Якщо якесь із правил порушується, програма не скомпілюється. Жодна з особливостей володіння не сповільніть вашу програму під час виконання.
+*Ownership* is a set of rules that govern how a Rust program manages memory. All programs have to manage the way they use a computer’s memory while running. Some languages have garbage collection that regularly looks for no-longer-used memory as the program runs; in other languages, the programmer must explicitly allocate and free the memory. Rust uses a third approach: memory is managed through a system of ownership with a set of rules that the compiler checks. If any of the rules are violated, the program won’t compile. None of the features of ownership will slow down your program while it’s running.
 
-Оскільки володіння - нова концепція для багатьох програмістів, потрібен деякий час, щоб звикнути до нього. Добра новина - що досвідченішим ви ставатимете в Rust і правилах системи володіння, тим легшим для вас буде природно писати безпечний і ефективний код. Не здавайтеся!
+Because ownership is a new concept for many programmers, it does take some time to get used to. The good news is that the more experienced you become with Rust and the rules of the ownership system, the easier you’ll find it to naturally develop code that is safe and efficient. Keep at it!
 
-Коли ви зрозумієте володіння, ви матимете надійну основу для розуміння особливостей, що роблять Rust унікальною мовою. В цьому розділі ви вивчите володіння, працюючи з прикладами, що зосереджуються на добре відомих структурах даних: рядках.
+When you understand ownership, you’ll have a solid foundation for understanding the features that make Rust unique. In this chapter, you’ll learn ownership by working through some examples that focus on a very common data structure: strings.
 
-> ### Стек і Купа
+> ### The Stack and the Heap
 > 
-> У багатьох мовах програмування програміст нечасто має думати про стек і купу. Але в системних мовах, таких, як Rust, розташування значення в стеку чи в купі впливає на поведінку програми й змушує вас ухвалювати певні рішення. Деталі володіння будуть описані стосовно стека та купи пізніше у цьому розділі, а тут коротке пояснення для підготовки.
+> Many programming languages don’t require you to think about the stack and the heap very often. But in a systems programming language like Rust, whether a value is on the stack or the heap affects how the language behaves and why you have to make certain decisions. Parts of ownership will be described in relation to the stack and the heap later in this chapter, so here is a brief explanation in preparation.
 > 
-> І стек, і купа - частини пам'яті, до яких ваш код має доступ під час виконання, але вони мають різну структуру. Стек зберігає значення в порядку, в якому їх отримує, і видаляє їх у зворотньому порядку. Це зветься *останнім надійшов, першим пішов (last in, first out)*. Стек можна уявити, як стос тарілок: коли ви додаєте тарілки, треба ставити їх зверху, а коли треба зняти тарілку, то доводиться брати теж зверху. Додавання чи прибирання тарілок з середини чи знизу стосу матимуть значно гірший наслідок! Додавання даних також зветься *заштовхуванням у стек (push*), а видалення - відповідно, *виштовхуванням (pop*). Усі дані. що зберігаються в стеку, мають бути відомого і незмінного розміру. Дані, розмір яких невідомий під час компіляції, або може змінитися, мають зберігатися в купі.
+> Both the stack and the heap are parts of memory available to your code to use at runtime, but they are structured in different ways. The stack stores values in the order it gets them and removes the values in the opposite order. This is referred to as *last in, first out*. Think of a stack of plates: when you add more plates, you put them on top of the pile, and when you need a plate, you take one off the top. Adding or removing plates from the middle or bottom wouldn’t work as well! Adding data is called *pushing onto the stack*, and removing data is called *popping off the stack*. All data stored on the stack must have a known, fixed size. Data with an unknown size at compile time or a size that might change must be stored on the heap instead.
 > 
-> Купа менш організована: коли ви розміщуєте дані в купі, то запитуєте певний обсяг місця. Програма-розподілювач знаходить достатньо велику порожню ділянку в купі, позначає, що вона використовується, і повертає *вказівник*, тобто адресу цього місця. Цей процес зветься *розподілом у купі*, що іноді скорочується до простого *розподілом* (заштовхування значень до стека не вважається розподілом). Оскільки вказівник на купу має відомий, постійний розмір, ви можете зберегти цей вказівник у стеку, але коли вам потрібні дані, вам треба перейти за вказівником. Уявіть собі столи в ресторані. Коли ви входите до ресторану, вам треба сказати кількість людей, що прийшли з вами, тоді офіціант знайде вам порожній стіл, за який всі зможуть сісти, і відведе вас до нього. Якщо хтось спізнився, він зможе спитати, де вас розмістили, щоб приєднатися.
+> The heap is less organized: when you put data on the heap, you request a certain amount of space. The memory allocator finds an empty spot in the heap that is big enough, marks it as being in use, and returns a *pointer*, which is the address of that location. This process is called *allocating on the heap* and is sometimes abbreviated as just *allocating* (pushing values onto the stack is not considered allocating). Because the pointer to the heap is a known, fixed size, you can store the pointer on the stack, but when you want the actual data, you must follow the pointer. Think of being seated at a restaurant. When you enter, you state the number of people in your group, and the host finds an empty table that fits everyone and leads you there. If someone in your group comes late, they can ask where you’ve been seated to find you.
 > 
-> Заштовхування до стека швидше за розподіл у купі, оскільки розподілювачу не треба шукати місце для нових даних, бо це місце завжди є вершиною стека. Розподіл місця у купі вимагає порівняно більше роботи, бо розподілювач має спершу знайти достатньо місця для даних, а потім провести облік місця, щоб приготуватися до наступного розподілу.
+> Pushing to the stack is faster than allocating on the heap because the allocator never has to search for a place to store new data; that location is always at the top of the stack. Comparatively, allocating space on the heap requires more work because the allocator must first find a big enough space to hold the data and then perform bookkeeping to prepare for the next allocation.
 > 
-> Доступ доданих у купі повільніший, ніж у стеку, бо треба переходити за вказівником, щоб дістатися туди. Сучасні процесори швидше працюють, якщо відбувається менше переходів у пам'яті. Розвинемо аналогію: уявімо офіціанта у ресторані, який приймає замовлення з багатьох столів. Найефективніше буде > прийняти всі замовлення з одного столу перед тим, як переходити до наступного. Приймати замовлення зі столу A, потім зі столу B, потім знову з A і знову з B буде значно повільніше. З тієї ж причини процесор краще працює з даними, розташованими поруч (як у стеку), ніж далеко (як може статися в купі).
+> Accessing data in the heap is slower than accessing data on the stack because you have to follow a pointer to get there. Contemporary processors are faster if they jump around less in memory. Continuing the analogy, consider a server at a restaurant taking orders from many tables. It’s most efficient to get all the orders at one table before moving on to the next table. Taking an order from table A, then an order from table B, then one from A again, and then one from B again would be a much slower process. By the same token, a processor can do its job better if it works on data that’s close to other data (as it is on the stack) rather than farther away (as it can be on the heap).
 > 
-> Коли ваш код викликає функцію, значення, що передаються у функцію (включно з, можливо, вказівниками на дані у купі) і локальні змінні функції заштовхуються у стек. Коли функція завершується, ці значення виштовхуються зі стека.
+> When your code calls a function, the values passed into the function (including, potentially, pointers to data on the heap) and the function’s local variables get pushed onto the stack. When the function is over, those values get popped off the stack.
 > 
-> Відстеження, які частини коду використовують які дані в купі, мінімізація дублювання даних у купі та очищення даних у купі, що вже не потрібні, щоб не скінчилося місце - ось ті завдання, які покликане розв'язати володіння. Коли ви зрозумієте концепцію володіння, вам більше не треба буде постійно думати про стек і купу, але знання, що причина існування володіння - управління даними у купі, допоможе вам зрозуміти, чому воно працює саме так.
+> Keeping track of what parts of code are using what data on the heap, minimizing the amount of duplicate data on the heap, and cleaning up unused data on the heap so you don’t run out of space are all problems that ownership addresses. Once you understand ownership, you won’t need to think about the stack and the heap very often, but knowing that the main purpose of ownership is to manage heap data can help explain why it works the way it does.
 
-### Правила Володіння
+### Ownership Rules
 
-По-перше, познайомимося із правилами володіння. Тримайте ці правила на увазі, поки ми працюватимемо із прикладами, що їх ілюструють:
+First, let’s take a look at the ownership rules. Keep these rules in mind as we work through the examples that illustrate them:
 
-* Кожне значення в Rust має *власника*.
-* У кожен момент може бути лише один власник.
-* Коли власник виходить зі зони видимості, значення буде скинуто.
+* Each value in Rust has an *owner*.
+* There can only be one owner at a time.
+* When the owner goes out of scope, the value will be dropped.
 
-### Область Видимості Змінної
+### Variable Scope
 
-Тепер, оскільки ми вже знайомі з основами синтаксису Rust, більше не будемо включати всі ці `fn main() {` у приклади, тому, щоб випробувати їх, вам доведеться помістити ці приклади до функції `main` самостійно. Завдяки цьому приклади стануть лаконічнішими і дозволять зосередитися на важливих деталях, а не на шаблонному коді.
+Now that we’re past basic Rust syntax, we won’t include all the `fn main() {` code in examples, so if you’re following along, make sure to put the following examples inside a `main` function manually. As a result, our examples will be a bit more concise, letting us focus on the actual details rather than boilerplate code.
 
-У першому прикладі володіння ми розглянемо *область видимості* деяких змінних. Область видимості - це фрагмент програми, в якому з елементом можна працювати. Нехай ми маємо ось таку змінну:
+As a first example of ownership, we’ll look at the *scope* of some variables. A scope is the range within a program for which an item is valid. Take the following variable:
 
 ```rust
 let s = "hello";
 ```
 
-Змінна `s` посилається на рядковий літерал, де значення рядка закодовано у текст програми. Зі змінною можна працювати з моменту її проголошення до кінця поточної *області видимості*. Коментарі у Блоці коду 4-1 підказують, де змінна `s` доступна.
+The variable `s` refers to a string literal, where the value of the string is hardcoded into the text of our program. The variable is valid from the point at which it’s declared until the end of the current *scope*. Listing 4-1 shows a program with comments annotating where the variable `s` would be valid.
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-01/src/main.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 4-1: Змінна і область видимості, де вона доступна</span>
+<span class="caption">Listing 4-1: A variable and the scope in which it is valid</span>
 
-Іншими словами, є два важливі моменти часу:
+In other words, there are two important points in time here:
 
-* Коли `s` потрапляє *в область видимості*, вона стає доступною.
-* Вона лишається доступною, доки не вийде *з області видимості*.
+* When `s` comes *into* scope, it is valid.
+* It remains valid until it goes *out of* scope.
 
-Поки що стосунки між областями видимості та доступністю змінних такі ж самі, як і в інших мовах програмування. Тепер, спираючися на це розуміння, будемо розвиватися, додавши тип `String`.
+At this point, the relationship between scopes and when variables are valid is similar to that in other programming languages. Now we’ll build on top of this understanding by introducing the `String` type.
 
-### Тип `String`
+### The `String` Type
 
-Щоб проілюструвати правила володіння, нам знадобиться тип даних, складніший за ті, що ми вже розглянули у підрозділі [“Типи даних”][data-types]<!-- ignore --> Розділу 3. Всі типи даних, які ми розглядали раніше, мають заздалегідь відомий розмір, можуть зберігатися в стеку і виштовхуватися звідти, коли їхня область видимості закінчується, і їх можна швидко і просто скопіювати, щоб зробити новий, незалежний екземпляр, коли інша частина коду потребує використати те саме значення в іншій області видимості. Але тепер ми розглянемо дані, що зберігаються в купі та подивимося, як Rust дізнається, коли ці дані треба вичищати, і тип `String` є чудовим прикладом.
+To illustrate the rules of ownership, we need a data type that is more complex than those we covered in the [“Data Types”][data-types]<!-- ignore --> section of Chapter 3. The types covered previously are of a known size, can be stored on the stack and popped off the stack when their scope is over, and can be quickly and trivially copied to make a new, independent instance if another part of code needs to use the same value in a different scope. But we want to look at data that is stored on the heap and explore how Rust knows when to clean up that data, and the `String` type is a great example.
 
-Ми зосередимося на особливостях `String`, що стосуються володіння. Ці аспекти також застосовуються до інших складних типів даних, які надає стандартна бібліотека або ви створюєте самі. Ми поговоримо про `String` більш детально в [Розділі 8][ch8]<!-- ignore -->.
+We’ll concentrate on the parts of `String` that relate to ownership. These aspects also apply to other complex data types, whether they are provided by the standard library or created by you. We’ll discuss `String` in more depth in [Chapter 8][ch8]<!-- ignore -->.
 
-Ми вже бачили рядкові літерали, у яких значення рядка закодоване в нашу програму. Рядкові літерали зручні, але не завжди підходять для різних ситуацій, де виникає потреба скористатися текстом. Одна з причин полягає в тому, що вони є сталими. Інша - що не кожне значення рядка є відомим під час написання коду: наприклад, як взяти те, що ввів користувач, і зберегти його? Для цих ситуацій, Rust має другий рядковий тип, `String`. Цей тип керує даними, розподіленими в купі й, відтак, може зберігати текст, обсяг якого невідомий під час компіляції. Можна створити `String` з рядкового літерала за допомогою функції `from`, ось так:
+We’ve already seen string literals, where a string value is hardcoded into our program. String literals are convenient, but they aren’t suitable for every situation in which we may want to use text. One reason is that they’re immutable. Another is that not every string value can be known when we write our code: for example, what if we want to take user input and store it? For these situations, Rust has a second string type, `String`. This type manages data allocated on the heap and as such is able to store an amount of text that is unknown to us at compile time. You can create a `String` from a string literal using the `from` function, like so:
 
 ```rust
 let s = String::from("hello");
 ```
 
-Оператор подвійна двокрапка `::` дозволяє доступ до простору імен, що надає нам можливість використати, в цьому випадку, функцію `from` з типу `String`, щоб не довелося використовувати назву на кшталт `string_from`. Цей синтаксис детальніше обговорюється у підрозділі [“Синтакис методів”][method-syntax]<!-- ignore --> Розділу 5 і в обговоренні просторів імен в модулях у [“Способи звертання до елементу в модульному дереві”][paths-module-tree]<!-- ignore --> Розділу 7.
+The double colon `::` operator allows us to namespace this particular `from` function under the `String` type rather than using some sort of name like `string_from`. We’ll discuss this syntax more in the [“Method Syntax”][method-syntax]<!-- ignore --> section of Chapter 5, and when we talk about namespacing with modules in [“Paths for Referring to an Item in the Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
 
-Цей тип рядків *може* бути зміненим:
+This kind of string *can* be mutated:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-can-mutate-string/src/main.rs:here}}
 ```
 
-У чому ж різниця? Чому `String` може бути зміненим, але літерали - ні? Різниця полягає в тому, як ці два типи працюють із пам'яттю.
+So, what’s the difference here? Why can `String` be mutated but literals cannot? The difference is in how these two types deal with memory.
 
-### Пам'ять та її Виділення
+### Memory and Allocation
 
-У випадку рядкового літерала ми знаємо його вміст під час компіляції, тому текст жорстко заданий прямо у виконуваному файлі, що робить рядкові літерали швидкими і ефективними. Але ці властивості випливають з незмінності літерала. На жаль, ми не можемо розмістити у двійковому файлі по шмату пам'яті для кожного фрагменту тексту, розмір якого ми не знаємо під час компіляції й чий розмір може змінитися під час виконання програми.
+In the case of a string literal, we know the contents at compile time, so the text is hardcoded directly into the final executable. This is why string literals are fast and efficient. But these properties only come from the string literal’s immutability. Unfortunately, we can’t put a blob of memory into the binary for each piece of text whose size is unknown at compile time and whose size might change while running the program.
 
-Для типу `String`, задля підтримки несталого шматка тексту, що може зростати, нам потрібно розподілити певну кількість пам'яті в купі, невідому під час компіляції, для зберігання вмісту. Це означає:
+With the `String` type, in order to support a mutable, growable piece of text, we need to allocate an amount of memory on the heap, unknown at compile time, to hold the contents. This means:
 
-* Пам'ять має бути запитана в розподілювача під час виконання.
-* Нам потрібен спосіб повернення цієї пам'яті до розподілювача, коли ми закінчили працювати з нашим `String`.
+* The memory must be requested from the memory allocator at runtime.
+* We need a way of returning this memory to the allocator when we’re done with our `String`.
 
-Першу частину робимо ми самі: коли ми викликаємо `String::from`, її реалізація запитує потрібну пам'ять. Так роблять практично всі мови програмування.
+That first part is done by us: when we call `String::from`, its implementation requests the memory it needs. This is pretty much universal in programming languages.
 
-Але друга частина відбувається інакше. У мовах зі *збирачем сміття (garbage collector, GC)*, саме GC стежить і очищує пам'ять, що більше не використовується, і ми, як програмісти, більше можемо не думати про неї. У більшості мов без GC це наша відповідальність - визначити, яка пам'ять більше не потрібна та викликати код для її повернення, так само як до того ми її запитали. Правильно це робити історично є складною задачею у програмуванні. Якщо ми забудемо, ми змарнуємо пам'ять. Якщо ми це зробимо зарано, ми матимемо некоректну змінну. Якщо ми це зробимо двічі, це теж буде помилкою. Потрібно забезпечити, щоб на кожен `розподіл` було рівно одне `звільнення` пам'яті.
+However, the second part is different. In languages with a *garbage collector (GC)*, the GC keeps track of and cleans up memory that isn’t being used anymore, and we don’t need to think about it. In most languages without a GC, it’s our responsibility to identify when memory is no longer being used and to call code to explicitly free it, just as we did to request it. Doing this correctly has historically been a difficult programming problem. If we forget, we’ll waste memory. If we do it too early, we’ll have an invalid variable. If we do it twice, that’s a bug too. We need to pair exactly one `allocate` with exactly one `free`.
 
-Rust іде іншим шляхом: пам'ять автоматично повертається, щойно змінна, що нею володіла, іде з області видимості. Ось версія нашого прикладу з Блоку коду 4-1 із використанням `String` замість рядкового літерала:
+Rust takes a different path: the memory is automatically returned once the variable that owns it goes out of scope. Here’s a version of our scope example from Listing 4-1 using a `String` instead of a string literal:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-02-string-scope/src/main.rs:here}}
 ```
 
-Існує точка, де природно можна повернути пам'ять, використану нашим рядком, розподілювачу: коли `s` іде з області видимості. Коли змінна виходить з області видимості, Rust викликає для нас спеціальну функцію. Ця функція зветься [`drop`][drop]<!-- ignore -->, і саме там автор `String` може розмістити код для повернення пам'яті. Rust викликає `drop` автоматично на закриваючій фігурній дужці.
+There is a natural point at which we can return the memory our `String` needs to the allocator: when `s` goes out of scope. When a variable goes out of scope, Rust calls a special function for us. This function is called [`drop`][drop]<!-- ignore -->, and it’s where the author of `String` can put the code to return the memory. Rust calls `drop` automatically at the closing curly bracket.
 
-> Примітка: в C++ цей шаблон звільнення ресурсів наприкінці життя об'єкта іноді зветься *Отримання ресурсу є ініціалізація (Resource Acquisition Is Initialization, RAII*). Функція Rust `drop` має бути знайома вам, якщо ви користувалися шаблонами RAII.
+> Note: In C++, this pattern of deallocating resources at the end of an item’s lifetime is sometimes called *Resource Acquisition Is Initialization (RAII)*. The `drop` function in Rust will be familiar to you if you’ve used RAII patterns.
 
-Цей шаблон має глибокий вплив на спосіб написання коду Rust. Він наразі може виглядати простим, але поведінка коду може бути неочікуваною у складніших ситуаціях, коли ми працюватимемо із декількома змінними, що використовують дані, розподіленими в купі. Тепер дослідимо деякі з цих ситуацій.
+This pattern has a profound impact on the way Rust code is written. It may seem simple right now, but the behavior of code can be unexpected in more complicated situations when we want to have multiple variables use the data we’ve allocated on the heap. Let’s explore some of those situations now.
 
 <!-- Old heading. Do not remove or links may break. -->
 <a id="ways-variables-and-data-interact-move"></a>
 
-#### Взаємодія Змінних з Даними: Переміщення
+#### Variables and Data Interacting with Move
 
-Різні змінні у Rust можуть взаємодіяти з одними й тими ж даними у різні способи. Подивимося на приклад, що використовує ціле число, у Блоці коду 4-2.
+Multiple variables can interact with the same data in different ways in Rust. Let’s look at an example using an integer in Listing 4-2.
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-02/src/main.rs:here}}
 ```
 
 
-<span class="caption">Блок коду 4-2: Присвоєння цілого значення змінної `x` змінній `y`</span>
+<span class="caption">Listing 4-2: Assigning the integer value of variable `x` to `y`</span>
 
-Ми, мабуть, можемо здогадатися, що робить цей код: "прив'язати значення `5` до `x`; потім зробити копію значення у `x` і прив'язати її до `y`". Тепер ми маємо дві змінні, `x` та `y`, і обидві дорівнюють `5`. І дійсно це так і відбувається, бо цілі - прості значення із відомим, фіксованим розміром, і ці два значення `5` заштовхуються у стек.
+We can probably guess what this is doing: “bind the value `5` to `x`; then make a copy of the value in `x` and bind it to `y`.” We now have two variables, `x` and `y`, and both equal `5`. This is indeed what is happening, because integers are simple values with a known, fixed size, and these two `5` values are pushed onto the stack.
 
-Тепер подивімося на версію зі `String`:
+Now let’s look at the `String` version:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-03-string-move/src/main.rs:here}}
 ```
 
-Це виглядає дуже схожим на попередній код, тому ми можемо припустити, що воно працює так само, тобто другий рядок створить копію значення з `s1` і прив'яже її до `s2`. Але тут відбувається щось трохи інше.
+This looks very similar, so we might assume that the way it works would be the same: that is, the second line would make a copy of the value in `s1` and bind it to `s2`. But this isn’t quite what happens.
 
-Поглянемо на Рисунок 4-1, щоб зрозуміти, що відбувається всередині `String`. `String` складається з трьох частин, показаних ліворуч: вказівника на пам'ять, що зберігає вміст рядка, довжину та місткість. Цей набір даних зберігається в стеку. Праворуч показана пам'ять у купі, що зберігає вміст.
+Take a look at Figure 4-1 to see what is happening to `String` under the covers. A `String` is made up of three parts, shown on the left: a pointer to the memory that holds the contents of the string, a length, and a capacity. This group of data is stored on the stack. On the right is the memory on the heap that holds the contents.
 
-<img alt="Дві таблиці: перша таблиця містить представлення s1 у стеку, що
-складається з довжини (5), місткості (5) і вказівника на перше значення
-у другій таблиці. Друга таблиця містить побайтове представлення 
-стрічкових даних у купі." src="img/trpl04-01.svg" class="center"
+<img alt="Two tables: the first table contains the representation of s1 on the
+stack, consisting of its length (5), capacity (5), and a pointer to the first
+value in the second table. The second table contains the representation of the
+string data on the heap, byte by byte." src="img/trpl04-01.svg" class="center"
 style="width: 50%;" />
 
-<span class="caption">Рисунок 4-1: Представлення в пам'яті `String` зі значенням `"hello"`, прив'язаної до `s1`</span>
+<span class="caption">Figure 4-1: Representation in memory of a `String` holding the value `"hello"` bound to `s1`</span>
 
-Довжина - це кількість пам'яті, в байтах, що вміст `String` наразі використовує. Місткість - це загальний обсяг пам'яті в байтах, що `String` отримала від розподілювача. Різниця між довжиною та місткістю має значення, але не в цьому контексті, тому поки що місткість можна спокійно ігнорувати.
+The length is how much memory, in bytes, the contents of the `String` are currently using. The capacity is the total amount of memory, in bytes, that the `String` has received from the allocator. The difference between length and capacity matters, but not in this context, so for now, it’s fine to ignore the capacity.
 
-Коли ми присвоюємо значення `s1` змінній `s2`, дані `String` копіюються - тобто копіюється вказівник, довжина і місткість, що знаходяться в стеку. Ми не копіюємо даних у купі, на які посилається вказівник. Іншими словами, представлення даних у пам'яті виглядає як на Рисунку 4-2.
+When we assign `s1` to `s2`, the `String` data is copied, meaning we copy the pointer, the length, and the capacity that are on the stack. We do not copy the data on the heap that the pointer refers to. In other words, the data representation in memory looks like Figure 4-2.
 
-<img alt="Три таблиці: таблиці s1 і s2, які представляють ці стрічки у стеку, 
-відповідно, і обидві вони вказують на одну і ту саму стрічку даних у купі."
+<img alt="Three tables: tables s1 and s2 representing those strings on the
+stack, respectively, and both pointing to the same string data on the heap."
 src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Рисунок 4-2: Представлення в пам'яті змінної `s2`, що містить копію вказівника, довжини та місткості з `s1`</span>
+<span class="caption">Figure 4-2: Representation in memory of the variable `s2` that has a copy of the pointer, length, and capacity of `s1`</span>
 
-Представлення *не* виглядає, як показано на Рисунку 4-3, як було б якби Rust дійсно копіювала також і дані в купі. Якби Rust так робила, операція `s2 = s1` була б потенційно дуже витратною з точки зору швидкості виконання, якщо в купі було б багато даних.
+The representation does *not* look like Figure 4-3, which is what memory would look like if Rust instead copied the heap data as well. If Rust did this, the operation `s2 = s1` could be very expensive in terms of runtime performance if the data on the heap were large.
 
-<img alt="Чотири таблиці: дві таблиці, що представляють стекові дані для s1 і s2,
-і кожна вказує на власну копію стрічкових даних у купі."
+<img alt="Four tables: two tables representing the stack data for s1 and s2,
+and each points to its own copy of string data on the heap."
 src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Рисунок 4-3: Інша можливість того, що могло б робити `s2 = s1`, якби Rust копіювала також дані в купі</span>
+<span class="caption">Figure 4-3: Another possibility for what `s2 = s1` might do if Rust copied the heap data as well</span>
 
-Раніше ми казали, що коли змінна виходить з області видимості, Rust автоматично викликає функцію `drop` і очищає пам'ять цієї змінної в купі. Але Рисунок 4-2 показує, що обидва вказівники вказують на одне й те саме місце. Це створює проблему: коли `s2` і `s1` вийдуть з області видимості, вони удвох спробують звільнити одну й ту саму пам'ять. Це зветься помилкою *подвійного звільнення*, і ми про неї вже згадували. Звільнення пам'яті двічі може призвести до пошкодження пам'яті, і, потенційно, до вразливостей у безпеці.
+Earlier, we said that when a variable goes out of scope, Rust automatically calls the `drop` function and cleans up the heap memory for that variable. But Figure 4-2 shows both data pointers pointing to the same location. This is a problem: when `s2` and `s1` go out of scope, they will both try to free the same memory. This is known as a *double free* error and is one of the memory safety bugs we mentioned previously. Freeing memory twice can lead to memory corruption, which can potentially lead to security vulnerabilities.
 
-Для убезпечення пам'яті після рядка `let s2 = s1` Rust розглядає змінну `s1` як більше не коректну. Відтак, Rust тепер не буде нічого звільняти, коли `s1` вийде з області видимості. Перевірте, що станеться, коли ви спробуєте використати `s1` після створення `s2`; це не спрацює:
+To ensure memory safety, after the line `let s2 = s1;`, Rust considers `s1` as no longer valid. Therefore, Rust doesn’t need to free anything when `s1` goes out of scope. Check out what happens when you try to use `s1` after `s2` is created; it won’t work:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/src/main.rs:here}}
 ```
 
-Ви отримаєте помилку на кшталт цієї, бо Rust не допускає використання некоректних посилань:
+You’ll get an error like this because Rust prevents you from using the invalidated reference:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/output.txt}}
 ```
 
-Якщо ви чули терміни *пласка копія* та *глибока копія* (“shallow copy” та “deep copy”), коли працювали з іншими мовами, поняття копіювання вказівника, довжини та місткості без копіювання даних виглядають для вас схожими на пласку копію. Але оскільки Rust також унепридатнює першу змінну, це зветься не пласкою копією, а *переміщенням*. У цьому прикладі ми кажемо, що `s1` було *переміщено* в `s2`. Що фактично відбувається, показано на Рисунку 4-4.
+If you’ve heard the terms *shallow copy* and *deep copy* while working with other languages, the concept of copying the pointer, length, and capacity without copying the data probably sounds like making a shallow copy. But because Rust also invalidates the first variable, instead of being called a shallow copy, it’s known as a *move*. In this example, we would say that `s1` was *moved* into `s2`. So, what actually happens is shown in Figure 4-4.
 
-<img alt="Три таблиці: таблиці s1 і s2, які представляють ці стрічки у стеку, 
-відповідно, і обидві вони вказують на одні й ті самі стрічкові даних у купі.
-Таблиця s1 є затемнена, бо s1 більше не є коректним; лише s2 можна використовувати
-для доступу до даних у купі." src="img/trpl04-04.svg" class="center" style="width:
+<img alt="Three tables: tables s1 and s2 representing those strings on the
+stack, respectively, and both pointing to the same string data on the heap.
+Table s1 is grayed out be-cause s1 is no longer valid; only s2 can be used to
+access the heap data." src="img/trpl04-04.svg" class="center" style="width:
 50%;" />
 
-<span class="caption">Рисунок 4-4: Представлення в пам'яті після унепридатнення `s1`</span>
+<span class="caption">Figure 4-4: Representation in memory after `s1` has been invalidated</span>
 
-Це розв'язує нашу проблему! Якщо коректним зосталося лише `s2`, коли воно вийде з області видимості, то саме звільнить пам'ять, і готово.
+That solves our problem! With only `s2` valid, when it goes out of scope it alone will free the memory, and we’re done.
 
-На додачу, такий дизайн мови неявно гарантує, що Rust ніколи не буде автоматично створювати "глибокі" копії ваших даних. Таким чином, будь-яке *автоматичне* копіювання може вважатися недорогим з точки зору продуктивності під час виконання.
+In addition, there’s a design choice that’s implied by this: Rust will never automatically create “deep” copies of your data. Therefore, any *automatic* copying can be assumed to be inexpensive in terms of runtime performance.
 
 <!-- Old heading. Do not remove or links may break. -->
 <a id="ways-variables-and-data-interact-clone"></a>
 
-#### Взаємодія Змінних з Даними: Клонування
+#### Variables and Data Interacting with Clone
 
-Якщо ми *хочемо* зробити глибоку копію даних `String` у купі, а не лише в стеку, ми можемо використати загальний метод, що зветься `clone`. Синтаксис використання методів буде обговорено в Розділі 5, але оскільки методи є загальною особливістю багатьох мов програмування, ви, швидше за все, вже бачили їх.
+If we *do* want to deeply copy the heap data of the `String`, not just the stack data, we can use a common method called `clone`. We’ll discuss method syntax in Chapter 5, but because methods are a common feature in many programming languages, you’ve probably seen them before.
 
-Ось приклад застосування методу `clone`:
+Here’s an example of the `clone` method in action:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-05-clone/src/main.rs:here}}
 ```
 
-Це чудово працює і явно продукує поведінку, показану на Рисунку 4-3, де дані в купі *дійсно* копіюються.
+This works just fine and explicitly produces the behavior shown in Figure 4-3, where the heap data *does* get copied.
 
-Коли ви бачите виклик `clone`, ви знаєте, що виконується певний визначений код і цей код може коштувати продуктивності. Це візуальний індикатор, що відбувається певна операція.
+When you see a call to `clone`, you know that some arbitrary code is being executed and that code may be expensive. It’s a visual indicator that something different is going on.
 
-#### Стекові Дані: Копіювання
+#### Stack-Only Data: Copy
 
-Є ще одна дрібниця, про яку ми ще не говорили. Цей код, що використовує цілі числа, частина якого вже була показана раніше в Блоці коду 4-2, коректно працює:
+There’s another wrinkle we haven’t talked about yet. This code using integers—part of which was shown in Listing 4-2—works and is valid:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
@@ -210,25 +210,25 @@ src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
 But this code seems to contradict what we just learned: we don’t have a call to `clone`, but `x` is still valid and wasn’t moved into `y`.
 
-Причина у тому, що типи на кшталт цілих, що мають відомий розмір часу компіляції, зберігаються повністю в стеку, тому копіювання їхніх значень відбувається швидко. Це означає, що нема підстав запобігати коректності `x` після створення змінної `y`. Іншими словами, тут немає різниці між глибокою та пласкою копією, і виклик `clone` не зробить нічого відмінного від звичайного плаского копіювання, тож можна його не викликати.
+The reason is that types such as integers that have a known size at compile time are stored entirely on the stack, so copies of the actual values are quick to make. That means there’s no reason we would want to prevent `x` from being valid after we create the variable `y`. In other words, there’s no difference between deep and shallow copying here, so calling `clone` wouldn’t do anything different from the usual shallow copying, and we can leave it out.
 
-Rust має спеціальне позначення, що зветься трейтом `Copy`, який можна додати до типів на кшталт цілих, що зберігаються в стеку (детальніше трейти обговорюються в [Розділі 10][traits]<!-- ignore -->). Якщо тип реалізовує трейт `Copy`, змінні, що використовують його не переміщуються, а банально копіюються, що робить їх коректними після присвоєння іншій змінній.
+Rust has a special annotation called the `Copy` trait that we can place on types that are stored on the stack, as integers are (we’ll talk more about traits in [Chapter 10][traits]<!-- ignore -->). If a type implements the `Copy` trait, variables that use it do not move, but rather are trivially copied, making them still valid after assignment to another variable.
 
-Rust не дозволить позначити тип трейтом `Copy`, якщо тип, чи якась з його частин, реалізовує``трейт`Drop``. Якщо тип потребує чогось особливого, коли змінна виходить з області видимості, і ми додаємо позначення `Copy` до цього типу, ми отримаємо помилку часу компіляції. Щоб дізнатися про те, як додати позначку `Copy` до вашого типу для реалізації трейта, див. ["Придатні до успадкування трейти"][derivable-traits]<!-- ignore --> у Додатку C.
+Rust won’t let us annotate a type with `Copy` if the type, or any of its parts, has implemented the `Drop` trait. If the type needs something special to happen when the value goes out of scope and we add the `Copy` annotation to that type, we’ll get a compile-time error. To learn about how to add the `Copy` annotation to your type to implement the trait, see [“Derivable Traits”][derivable-traits]<!-- ignore --> in Appendix C.
 
-Тож які типи реалізовують трейт `Copy`? Можна перевірити документацію до певного типу, щоб бути певним, але загальне правило таке: будь-яка група простих скалярних значень може реалізовувати `Copy`, і нічого з того, що потребує розподілу пам'яті чи є ресурсом, не є `Copy`. Ось кілька типів, що реалізовують `Copy`:
+So, what types implement the `Copy` trait? You can check the documentation for the given type to be sure, but as a general rule, any group of simple scalar values can implement `Copy`, and nothing that requires allocation or is some form of resource can implement `Copy`. Here are some of the types that implement `Copy`:
 
-* Всі цілі типи, на кшталт `u32`.
-* Булевий тип, `bool`, значення якого `true` та `false`.
-* Всі типи з рухомою комою, на кшталт `f64`.
-* Символьний тип, `char`.
-* Кортежі, якщо вони містять лише типи, що реалізовують `Copy`. Скажімо, `(i32, i32)` реалізовує `Copy`, але `(i32, String)` - ні.
+* All the integer types, such as `u32`.
+* The Boolean type, `bool`, with values `true` and `false`.
+* All the floating-point types, such as `f64`.
+* The character type, `char`.
+* Tuples, if they only contain types that also implement `Copy`. For example, `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
 
-### Володіння та Функції
+### Ownership and Functions
 
-Механіка передачі значень функції подібна до присвоювання значення змінній. Передача змінної функції є переміщенням чи копією, як і присвоювання. Блок коду 4-7 містить приклад з певними поясненнями, що розкривають, де змінні входять і виходять з області видимості.
+The mechanics of passing a value to a function are similar to those when assigning a value to a variable. Passing a variable to a function will move or copy, just as assignment does. Listing 4-3 has an example with some annotations showing where variables go into and out of scope.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-03/src/main.rs}}
@@ -237,36 +237,36 @@ Rust не дозволить позначити тип трейтом `Copy`, я
 
 <span class="caption">Listing 4-3: Functions with ownership and scope annotated</span>
 
-Якби ми спробували використати `s` після виклику `takes_ownership`, Rust повідомив би про помилку часу компіляції. Ці статичні перевірки захищають нас від помилок. Спробуйте додати в `main` код, що використовує `s` та `x`, щоб побачити, де їх можна використовувати, а де правила володіння запобігають цьому.
+If we tried to use `s` after the call to `takes_ownership`, Rust would throw a compile-time error. These static checks protect us from mistakes. Try adding code to `main` that uses `s` and `x` to see where you can use them and where the ownership rules prevent you from doing so.
 
-### Повернення Значень та Область Видимості
+### Return Values and Scope
 
-Повернення значень також передає володіння. Блок коду 4-4 містить приклад функції, що повертає значення, зі схожими на Блок коду 4-3 поясненнями.
+Returning values can also transfer ownership. Listing 4-4 shows an example of a function that returns some value, with similar annotations as those in Listing 4-3.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-04/src/main.rs}}
 ```
 
 
-<span class="caption">Блок коду 4-4: Передача володіння значенням, що повертається</span>
+<span class="caption">Listing 4-4: Transferring ownership of return values</span>
 
-Володіння змінними завше дотримується однакової схеми: присвоєння значення іншій змінній переміщує його. Коли змінна, що включає дані в купі, виходять з області видимості, якщо дані не були переміщені у володіння іншої змінної, значення буде очищене викликом `drop`.
+The ownership of a variable follows the same pattern every time: assigning a value to another variable moves it. When a variable that includes data on the heap goes out of scope, the value will be cleaned up by `drop` unless ownership of the data has been moved to another variable.
 
-Хоча так код працює, все ж взяття володіння і повернення володіння в кожній функції дещо втомлює. Що, як ми хочемо дозволити функції використати значення, але не брати володіння? Потреба повертати все, що ми передаємо в функції, щоб його можна було знову використовувати, разом із даними, утвореними в результаті роботи функції, дратує.
+While this works, taking ownership and then returning ownership with every function is a bit tedious. What if we want to let a function use a value but not take ownership? It’s quite annoying that anything we pass in also needs to be passed back if we want to use it again, in addition to any data resulting from the body of the function that we might want to return as well.
 
-Можна повертати багато значень кортежем, як показано в Блоці коду 4-5.
+Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
 
-<span class="filename">Файл: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-05/src/main.rs}}
 ```
 
-<span class="caption">Блок коду 4-5: Повернення володіння параметрами</span>
+<span class="caption">Listing 4-5: Returning ownership of parameters</span>
 
-Але це б давало забагато ритуальних рухів і зайвої роботи для концепції, що має бути загальновживаною. На щастя для нас, Rust має засіб для використання змінної без передачі володіння, що зветься *посиланнями*.
+But this is too much ceremony and a lot of work for a concept that should be common. Luckily for us, Rust has a feature for using a value without transferring ownership, called *references*.
 
 [data-types]: ch03-02-data-types.html#data-types
 [ch8]: ch08-02-strings.html
