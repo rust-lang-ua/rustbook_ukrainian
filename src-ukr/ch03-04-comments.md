@@ -24,7 +24,7 @@
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
 ```
 
-But you’ll more often see them used in this format, with the comment on a separate line above the code it’s annotating:
+Та частіше ви бачитимете їх у форматі, де коментар знаходиться в окремому рядку перед кодом, якого він стосується:
 
 <span class="filename">Файл: src/main.rs</span>
 
