@@ -81,4 +81,4 @@ $ mdbook test
 [the frozen column]: https://github.com/rust-lang/book/projects/1
 
 ## Український переклад у вебі
-https://pavloslav.github.io/RustBookUkr/
+https://rustlangua.github.io/rustbookua.github.io/
