@@ -1,4 +1,4 @@
-# Мова програмування Rust
+# Мова Програмування Rust
 
 *автори Steve Klabnik та Carol Nichols, за допомогою спільноти Rust*
 
