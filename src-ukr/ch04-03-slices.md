@@ -1,4 +1,4 @@
-## Тип даних слайс
+## Слайси
 
 *Слайси* дозволяють вам посилатися на неперервні послідовності елементів у колекції замість усієї колекції. Слайс - це посилання, тому він не володіє данними.
 
@@ -66,7 +66,7 @@ fn second_word(s: &String) -> (usize, usize) {
 
 На щастя, у Rust є розв'язання цієї проблеми: стрічкові слайси.
 
-### Стрічкові слайси
+### Стрічкові Слайси
 
 *Стрічковий слайс* - це посилання на частину `String`, і виглядає він так:
 
@@ -146,7 +146,7 @@ fn second_word(s: &String) -> &str {
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/src/main.rs:here}}
 ```
 
-Ось текст помилки компілятора:
+Ось помилка компілятора:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
@@ -157,7 +157,7 @@ fn second_word(s: &String) -> &str {
 <!-- Old heading. Do not remove or links may break. -->
 <a id="string-literals-are-slices"></a>
 
-#### Стрічкові літерали як слайси
+#### Стрічкові Літерали як Слайси
 
 Згадайте, що ми говорили про стрічкові літерали, збережені у двійковому файлі. Оскільки тепер ми вже знаємо про слайси, ми можемо як слід зрозуміти стрічкові літерали:
 
@@ -167,22 +167,22 @@ let s = "Hello, world!";
 
 Типом `s` є `&str`: це слайс, що вказує на конкретне місце у двійковому файлі. Це також є причиною, чому стрічкові літерали є немутабельними; `&str` - немутабельне посиланням.
 
-#### Стрічкові слайси як параметри
+#### Стрічкові Слайси як Параметри
 
-Knowing that you can take slices of literals and `String` values leads us to one more improvement on `first_word`, and that’s its signature:
+Знання того, що можна брати слайси як літералів, так і `String` веде нас до ще одного поліпшення `first_word`. Її сигнатура наразі така:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the signature shown in Listing 4-9 instead because it allows us to use the same function on both `&String` values and `&str` values.
+Більш досвідчений растацеанин напише замість цього такий рядок, бо він дозволяє нам використовувати одну й ту саму функцію і для `String` і для `&str`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:here}}
 ```
 
 
-<span class="caption">Listing 4-9: Improving the `first_word` function by using a string slice for the type of the `s` parameter</span>
+<span class="caption">Блок коду 4-9: поліпшення функції `first_word`, використовуючи слайс стрічки як тип параметра `s`</span>
 
 Якщо у нас є слайс стрічки, ми можемо передати його прямо. Якщо у нас є `String`, ми можемо передати слайс цього `String` чи посилання на `String`. Ця гнучкість є можливою завдяки *приведенню при розіменуванні*, особливості, про яку ми розкажемо в підрозділі [“Неявні приведення при розіменуваннях у функціях та методах”][deref-coercions]<!--ignore--> Розділу 15.
 
@@ -194,7 +194,7 @@ A more experienced Rustacean would write the signature shown in Listing 4-9 inst
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:usage}}
 ```
 
-### Інші слайси
+### Інші Слайси
 
 Слайси стрічок, як можна зрозуміти, пов'язані зі стрічками. Але є також і більш загальний тип слайсів. Розгляньмо такий масив:
 
