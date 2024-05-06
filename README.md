@@ -9,7 +9,7 @@
 Це наступна ітерація книжки "Мова програмування Rust" ([сирці][src], 
 [текст онлайн][prod]).
 
-[src]: https://github.com/rust-lang/rust/tree/master/src/doc/book
+[src]: https://github.com/rust-lang/book/tree/main
 [prod]: https://doc.rust-lang.org/book/
 
 ## Вимоги
